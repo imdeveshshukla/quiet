@@ -14,12 +14,18 @@ datasource db {
 }
 
 model User{
-  id String @id @default(uuid())
-  name String?
+  userID String @id @default(uuid())
+  username String @unique
   email String @unique
   password String
-  isVarified Boolean
+  isVarified Boolean @default(false)
   posts Post[]
+}
+model UserVarify{
+  userID String @id @unique
+  otp String
+  createdAt BigInt
+  expiresAt BigInt
 }
 model Post{
   id String @id @default(uuid())
