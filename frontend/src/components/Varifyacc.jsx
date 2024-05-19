@@ -13,22 +13,16 @@ import { useDispatch } from 'react-redux';
 
 
 
-const Resetpass = () => {
+const Varifyacc = () => {
     const passref = useRef();
     const Navigate = useNavigate();
-    const dispatch = useDispatch();
-
-
+    const dispatch = useDispatch()
     const [otpSent, setotpSent] = useState(false)
     const [errorEmail, setErrorEmail] = useState(null);
-    const [errorPass, setErrorPass] = useState(null);
     const [errorOtp, setErrorOtp] = useState(null);
-    const [otpVerify, setOtpVerify] = useState(false);
     const [onSave, setOnSave] = useState(true);
-    const [form, setform] = useState({ email: "", password: "", otp: "" })
-    const [eye, setEye] = useState(false)
+    const [form, setform] = useState({ email: "", otp: "" })
     const [varifyOtpData, setVarifyOtpData] = useState({ userID: "", email: "", otp: "" });
-    const [varifyPassData, setVarifyPassData] = useState({ userID: "", password: "" });
 
 
 
@@ -56,12 +50,12 @@ const Resetpass = () => {
     }
 
     const handleChange = (e) => {
+        console.log(e.target.value);
+        console.log();
+        setVarifyOtpData({ ...varifyOtpData, [e.target.name]: e.target.value })
+        setOnSave(true)
         setErrorOtp(null)
         setErrorEmail(null)
-        setErrorPass(null)
-        setVarifyOtpData({ ...varifyOtpData, [e.target.name]: e.target.value })
-        setVarifyPassData({ ...varifyPassData, [e.target.name]: e.target.value })
-        setOnSave(true)
         setform({ ...form, [e.target.name]: e.target.value })
     }
 
@@ -75,17 +69,22 @@ const Resetpass = () => {
             try {
                 const res = await axios.post("http://localhost:3000/auth/resetpass", form);
                 console.log(res);
-                setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
-                setVarifyPassData({ ...varifyPassData, userID: res.data.userID })
-                setotpSent(true)
-                toast.success("Your OTP is on its way !")
+                if (res.status == 202) {
+                    setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
+                    setotpSent(true)
+                    toast.success("Your OTP is on its way !")
+                }
+
 
             } catch (error) {
                 console.log(error);
 
-                if (error && error.response.status == 404) {
+                if (error.response.status == 404) {
                     setErrorEmail("User doesn't exists !");
                     setOnSave(false)
+                }
+                else if (error.response.status == 500) {
+                    toast.error("Error sending OTP !  Try Again")
                 }
 
             }
@@ -106,10 +105,11 @@ const Resetpass = () => {
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
             }
         } catch (error) {
-            if (error.response.status == 500) {
-                toast.error("Error sending OTP! Try Again.")
-            }
             console.log(error);
+            if (error.response.status == 500) {
+                toast.error("Error sending OTP! Try again.")
+            }
+
         }
         dispatch(loading())
     }
@@ -118,71 +118,38 @@ const Resetpass = () => {
     const varifyOtp = async () => {
         dispatch(loading())
         try {
+
             console.log(varifyOtpData);
             const res = await axios.post("http://localhost:3000/auth/varifyotp", varifyOtpData);
 
             console.log(res);
             console.log(varifyOtpData);
             if (res.status == 202) {
-                setOtpVerify(true)
+                toast.success("Email has been successfully varified!");
+                Navigate("/signin");
             }
+
 
         } catch (error) {
             console.log(error);
             if (error.response.status == 403) {
                 setErrorOtp("Otp is Expired! Resend it.")
+                setform({...form,otp:""})
             } else if (error.response.status == 401) {
                 toast.error("Invalid OTP !")
-                setOnSave(false)
+                setform({...form,otp:""})
+
+                setOnSave(false);
             }
-            setform({...form,otp:""});
-            setVarifyOtpData({...varifyOtpData,otp:""})
+
         }
         dispatch(loading())
     }
 
-    const handleConfirm = async () => {
-        console.log(form.password);
-        if (!validatePassword(form.password)) {
-            setOnSave(false)
-            setErrorPass("* Password must include a-z,A-Z,0-9,symbols and min-length of 8");
-        } else {
-            console.log(varifyOtpData, form.password);
-            dispatch(loading())
-            try {
-                const res = await axios.post("http://localhost:3000/auth/updatepass", varifyPassData);
-                if (res.status == 201) {
-                    toast.success("Password has been updated!");
-                    Navigate("/signin")
-                }
-            } catch (error) {
-                console.log(error);
-                
-                if(error.response.status==304){
-                    toast.error("Could't update! Try Again.")
-                }else if(error.response.status==400){
-                    toast.error("Some error occurred! Try again.")
-                }
-            }
-            dispatch(loading())
-        }
-
-    }
 
 
 
-    const handleEye = () => {
-        console.log("hello");
-        passref.current.type = "text"
-        setEye(true);
 
-    }
-    const handleCloseEye = () => {
-        console.log("ok");
-        passref.current.type = "password"
-        setEye(false);
-
-    }
 
 
     return (
@@ -198,33 +165,25 @@ const Resetpass = () => {
 
                         <div className='flex flex-col gap-8'>
 
-                            {!otpSent && !otpVerify && <div className='relative flex flex-col'>
+                            {!otpSent && <div className='relative flex flex-col'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdOutlineMailLock className=' text-xl' /></span>
-                                <input autoFocus value={form.email} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
+                                <input value={form.email} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorEmail}</div>
                             </div>}
 
-                            {otpSent && !otpVerify && <div className=' flex flex-col gap-5'><div className='relative flex flex-col justify-center items-center'>
+                            {otpSent && <div className=' flex flex-col gap-5'><div className='relative flex flex-col justify-center items-center'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdPassword className=' text-xl' /></span>
                                 <input autoFocus value={form.otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                             </div>
-                                <div className='flex justify-center cursor-pointer'><div onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</div></div>
+                                <div className='flex justify-center cursor-pointer'><button type='button' onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</button></div>
                                 <div className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => resendOtp()}>Resend OTP</div>
                             </div>}
 
-                            {otpVerify && <><div className='relative flex flex-col'>
-                                <span className='absolute left-2 top-[50%] translate-y-[-50%]'><RiLockPasswordFill className=' text-xl' /></span>
-                                <input autoFocus ref={passref} value={form.password} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} placeholder='Enter new Password' type="password" name="password" id="password" />
-                                <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorPass}</div>
-                                <span id='eye' onMouseDown={() => handleEye()} onMouseUp={() => handleCloseEye()} className=' cursor-pointer absolute right-2 top-[50%] translate-y-[-50%] '>{!eye ? <VscEye className='text-xl' /> : <VscEyeClosed />}</span>
 
-                            </div >
-                                <div className='flex  justify-center'>{onSave ? <button onClick={() => handleConfirm()} type="button" className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800'>Confirm</button> : <button onClick={() => handleConfirm()} type="button" className=' cursor-not-allowed disabled:opacity-60 rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800'>Confirm</button>}</div>
-                            </>}
 
                         </div>
-                        {!otpSent && !otpVerify && <div className='flex justify-center items-center flex-col gap-4'>
+                        {!otpSent && <div className='flex justify-center items-center flex-col gap-4'>
                             {onSave ? <button className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' type="submit">Send OTP</button> : <button disabled className=' cursor-not-allowed disabled:opacity-60 rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' type="submit">Send OTP</button>}
 
                         </div>}
@@ -238,4 +197,4 @@ const Resetpass = () => {
     )
 }
 
-export default Resetpass
+export default Varifyacc
