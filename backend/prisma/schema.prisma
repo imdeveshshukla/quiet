@@ -33,7 +33,7 @@ model Post{
   body String
   img String?
   userId String
-  user User @relation(fields: [userId], references: [id])
+  user User @relation(fields: [userId], references: [userID])
   comments Comment[]
 }
 model Comment{
