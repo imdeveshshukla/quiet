@@ -357,4 +357,4 @@ const testing = async (req, res) => {
 };
 const authController={signup, signin, logout, varifyOtp, varifyToken , resendOtp, resetPassword, updatePassword, refreshSignIn,testing}
 
-export default authController;
+export default authController
