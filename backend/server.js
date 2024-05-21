@@ -1,12 +1,15 @@
-const express = require('express')
-const authRouter = require('./routes/auth.js')
-const cookieParser = require('cookie-parser')
-const bodyParser = require('body-parser')
-const cors = require('cors');
+import express from "express";
+import dotenv from "dotenv"
+import router from './routes/auth.js'
+import cookieParser from 'cookie-parser'
+import bodyParser from'body-parser'
+import cors from'cors';
 
 
 
-require('dotenv').config()
+dotenv.config({
+  path: './.env'
+})
 const app = express()
 const port = 3000
 app.use(cors({credentials:true, origin:"http://localhost:5173"}));
@@ -19,7 +22,7 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-app.use('/auth/',authRouter.router);
+app.use('/auth/',router);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)   
