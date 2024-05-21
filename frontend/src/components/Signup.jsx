@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 
 
 const Signup = () => {
-    const dispatch=useDispatch();
+    const dispatch = useDispatch();
     const Navigate = useNavigate();
     const [form, setForm] = useState({ username: "", email: "", password: "" });
     const [onSave, setOnSave] = useState(true);
@@ -27,8 +27,23 @@ const Signup = () => {
     const [errorOtp, setErrorOtp] = useState(null);
     const [errorUsername, setErrorUsername] = useState(null);
     const [varifyOtpData, setVarifyOtpData] = useState({ userID: "", email: "", otp: "" });
+    const [timeLeft, setTimeLeft] = useState(60);
+    const [disable, setdisable] = useState(false);
     const [eye, setEye] = useState(false)
     const passref = useRef();
+
+   
+    useEffect(() => {
+        let timer;
+        if (timeLeft > 0) {
+            timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+        } else {
+            setdisable(false);
+        }
+        return () => clearTimeout(timer);
+    }, [timeLeft]);
+
+
     const handleChange = (e) => {
         setErrorEmail(null)
         setErrorPass(null)
@@ -48,7 +63,7 @@ const Signup = () => {
         try {
             const res = await axios.post("http://localhost:3000/auth/signup", form);
             console.log(res);
-            if(res.status==202){
+            if (res.status == 202) {
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email });
                 toast.success("Your OTP is on its way !");
                 setOtpsent(true);
@@ -56,9 +71,9 @@ const Signup = () => {
             console.log(varifyOtpData);
 
         } catch (error) {
-            if(error.response.status==500){
+            if (error.response.status == 500) {
                 toast.error("Some error occured! Try Again.")
-            }else if(error.response.status==400){
+            } else if (error.response.status == 400) {
                 toast.error("User already exists with this Username and email");
             }
             console.log(error)
@@ -84,6 +99,9 @@ const Signup = () => {
             dispatch(loading());
             await sendOtp();
             dispatch(loading());
+            setdisable(true);
+            setTimeLeft(60)
+
             setForm({ username: "", email: "", password: "" })
             console.log(form);
         }
@@ -91,20 +109,22 @@ const Signup = () => {
 
     const resendOTP = async () => {
         dispatch(loading());
-        
+
         try {
 
             const res = await axios.post("http://localhost:3000/auth/resendotp", varifyOtpData);
-            if(res.status==202){
+            if (res.status == 202) {
+                setTimeLeft(60);
+                setdisable(true)
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email });
                 toast.success("Your OTP is on its way !");
-            }else if(res.status==500){
+            } else if (res.status == 500) {
                 toast.error("Some error occured! Try Again.")
             }
             console.log(res);
 
         } catch (error) {
-            if(error.response.status==500){
+            if (error.response.status == 500) {
                 toast.error("Some error occured! Try Again.")
             }
             console.log(error);
@@ -127,16 +147,16 @@ const Signup = () => {
             }
         } catch (error) {
             console.log(error);
-            if(error.response.status===401){
+            if (error.response.status === 401) {
                 toast.error("Invalid OTP!");
                 setOtp("")
-            }else if(error.response.status==403){
+            } else if (error.response.status == 403) {
                 setErrorOtp("OTP expired! Resend it.")
                 setOtp("")
-            }else{
+            } else {
                 toast.error("Some error occured! Try again")
                 Navigate("/signup")
-            } 
+            }
 
 
         }
@@ -189,11 +209,11 @@ const Signup = () => {
 
 
     return (
-        <Layout form={form} passref={passref} eye={eye} handleEye={handleEye} handleChange={handleChange} handleSubmit={handleSubmit} handleCloseEye={handleCloseEye} errorEmail={errorEmail} errorPass={errorPass} onSave={onSave} errorUsername={errorUsername} otp={otp} otpsent={otpsent} handleOtp={handleOtp} resendOTP={resendOTP} varifyOtp={varifyOtp} errorOtp={errorOtp} />
+        <Layout form={form} passref={passref} eye={eye} handleEye={handleEye} handleChange={handleChange} handleSubmit={handleSubmit} handleCloseEye={handleCloseEye} errorEmail={errorEmail} errorPass={errorPass} onSave={onSave} errorUsername={errorUsername} otp={otp} otpsent={otpsent} handleOtp={handleOtp} resendOTP={resendOTP} varifyOtp={varifyOtp} errorOtp={errorOtp} timeLeft={timeLeft} disable={disable} />
     )
 }
 
-export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handleEye, handleSubmit, errorUsername, errorEmail, errorPass, onSave, otp, otpsent, resendOTP, handleOtp, varifyOtp,errorOtp }) => (
+export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handleEye, handleSubmit, errorUsername, errorEmail, errorPass, onSave, otp, otpsent, resendOTP, handleOtp, varifyOtp, errorOtp, timeLeft, disable }) => (
     <>
         <div className='w-full flex justify-center items-center h-[80vh] m-auto  '>
             <div className='w-[35%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
@@ -207,10 +227,10 @@ export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handl
                         <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                     </div>
                         <div className='flex justify-center cursor-pointer'><div onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</div></div>
-                        <div className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => { resendOTP() }}>Resend OTP</div>
+                        <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => { resendOTP() }}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>
                     </div>
-                    
-                    
+
+
                     </> : <><div className='flex flex-col gap-8'>
 
                         <div className='relative flex flex-col'>
