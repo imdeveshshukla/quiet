@@ -29,8 +29,19 @@ const Resetpass = () => {
     const [eye, setEye] = useState(false)
     const [varifyOtpData, setVarifyOtpData] = useState({ userID: "", email: "", otp: "" });
     const [varifyPassData, setVarifyPassData] = useState({ userID: "", password: "" });
+    const [timeLeft, setTimeLeft] = useState(60);
+    const [disable, setdisable] = useState(false);
 
 
+    useEffect(() => {
+        let timer;
+        if (timeLeft > 0) {
+            timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+        } else {
+            setdisable(false);
+        }
+        return () => clearTimeout(timer);
+    }, [timeLeft]);
 
     const validateEmail = (email) => {
         if (String(email).endsWith("@ietlucknow.ac.in")) {
@@ -78,6 +89,8 @@ const Resetpass = () => {
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
                 setVarifyPassData({ ...varifyPassData, userID: res.data.userID })
                 setotpSent(true)
+                setTimeLeft(60);
+                setdisable(true)
                 toast.success("Your OTP is on its way !")
 
             } catch (error) {
@@ -102,6 +115,8 @@ const Resetpass = () => {
             console.log(varifyOtpData);
 
             if (res.status == 202) {
+                setTimeLeft(60);
+                setdisable(true);
                 toast.success("Your OTP is on its way !");
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
             }
@@ -210,7 +225,7 @@ const Resetpass = () => {
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                             </div>
                                 <div className='flex justify-center cursor-pointer'><div onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</div></div>
-                                <div className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => resendOtp()}>Resend OTP</div>
+                                <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => { resendOtp() }}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>
                             </div>}
 
                             {otpVerify && <><div className='relative flex flex-col'>

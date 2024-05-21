@@ -23,7 +23,20 @@ const Varifyacc = () => {
     const [onSave, setOnSave] = useState(true);
     const [form, setform] = useState({ email: "", otp: "" })
     const [varifyOtpData, setVarifyOtpData] = useState({ userID: "", email: "", otp: "" });
+    const [timeLeft, setTimeLeft] = useState(60);
+    const [disable, setdisable] = useState(false);
 
+
+
+    useEffect(() => {
+        let timer;
+        if (timeLeft > 0) {
+            timer = setTimeout(() => setTimeLeft(timeLeft - 1), 1000);
+        } else {
+            setdisable(false);
+        }
+        return () => clearTimeout(timer);
+    }, [timeLeft]);
 
 
     const validateEmail = (email) => {
@@ -72,6 +85,8 @@ const Varifyacc = () => {
                 if (res.status == 202) {
                     setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
                     setotpSent(true)
+                    setTimeLeft(60)
+                    setdisable(true)
                     toast.success("Your OTP is on its way !")
                 }
 
@@ -101,6 +116,8 @@ const Varifyacc = () => {
             console.log(varifyOtpData);
 
             if (res.status == 202) {
+                setTimeLeft(60);
+                setdisable(true)
                 toast.success("Your OTP is on its way !");
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
             }
@@ -177,7 +194,7 @@ const Varifyacc = () => {
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                             </div>
                                 <div className='flex justify-center cursor-pointer'><button type='button' onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</button></div>
-                                <div className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => resendOtp()}>Resend OTP</div>
+                                <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => { resendOtp() }}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft})</span></button>
                             </div>}
 
 

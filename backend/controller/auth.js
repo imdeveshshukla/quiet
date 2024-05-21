@@ -1,7 +1,8 @@
-const prisma = require("../db/db.config.js");
-const bcrypt = require("bcrypt");
-var jwt = require("jsonwebtoken");
-const nodemailer = require("nodemailer");
+import prisma from "../db/db.config.js";
+import bcrypt from "bcrypt";
+import jwt from "jsonwebtoken" ;
+import nodemailer from "nodemailer" ;
+
 // const { z } =require("zod");
 
 // const User = z.object({
@@ -77,8 +78,7 @@ const sendEmailVarification = async ({ userID, email }, res) => {
     console.log(error);
   }
 };
-
-exports.signup = async (req, res) => {
+const signup = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     if (username == "" || email == "" || password == "") {
@@ -115,8 +115,7 @@ exports.signup = async (req, res) => {
     console.log(error);
   }
 };
-
-exports.varifyOtp = async (req, res) => {
+const  varifyOtp = async (req, res) => {
   try {
     const { userID, otp } = req.body;
     if (userID == "" || otp == "") {
@@ -165,8 +164,7 @@ exports.varifyOtp = async (req, res) => {
     console.log(error);
   }
 };
-
-exports.resendOtp = async (req, res) => {
+const resendOtp = async (req, res) => {
   console.log(req.body);
   try {
     await sendEmailVarification(req.body, res);
@@ -175,7 +173,7 @@ exports.resendOtp = async (req, res) => {
   }
 };
 
-exports.resetPassword = async (req, res) => {
+const resetPassword = async (req, res) => {
   const { email } = req.body;
   console.log(req.body);
 
@@ -191,7 +189,7 @@ exports.resetPassword = async (req, res) => {
   }
 };
 
-exports.updatePassword = async (req, res) => {
+const updatePassword = async (req, res) => {
   const { userID, password } = req.body;
   const user = await prisma.user.findUnique({
     where: {
@@ -220,7 +218,7 @@ exports.updatePassword = async (req, res) => {
   return res.status(201).send(updateUser);
 };
 
-exports.signin = async (req, res) => {
+const signin = async (req, res) => {
   try {
     const { username, email, password } = req.body;
     console.log(req.body);
@@ -273,7 +271,7 @@ exports.signin = async (req, res) => {
   }
 };
 
-exports.varifyToken = (req, res, next) => {
+const varifyToken = (req, res, next) => {
   const token = req.headers.cookie.split("=")[1];
   console.log(token);
   if (!token) {
@@ -286,7 +284,7 @@ exports.varifyToken = (req, res, next) => {
   } else res.status(401).send({ msg: "Invalid Token" });
 };
 
-exports.refreshSignIn = async (req, res) => {
+const refreshSignIn = async (req, res) => {
   console.log(req.headers.cookie);
 
   try {
@@ -310,7 +308,7 @@ exports.refreshSignIn = async (req, res) => {
   }
 };
 
-exports.logout = async (req, res) => {
+const logout = async (req, res) => {
   try {
     const token = req.headers.cookie.split("=")[1];
     console.log(token);
@@ -340,7 +338,7 @@ exports.logout = async (req, res) => {
   }
 };
 
-exports.testing = async (req, res) => {
+const testing = async (req, res) => {
   const deleteUsers = await prisma.user.deleteMany({
     where: {
       email: {
@@ -357,3 +355,6 @@ exports.testing = async (req, res) => {
   });
   res.json({ msg: "deleted" });
 };
+const authController={signup, signin, logout, varifyOtp, varifyToken , resendOtp, resetPassword, updatePassword, refreshSignIn,testing}
+
+export default authController
