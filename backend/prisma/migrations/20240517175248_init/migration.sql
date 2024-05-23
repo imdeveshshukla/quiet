@@ -1,2 +1,0 @@
--- AlterTable
-ALTER TABLE "UserVarify" ALTER COLUMN "otp" SET DATA TYPE TEXT;

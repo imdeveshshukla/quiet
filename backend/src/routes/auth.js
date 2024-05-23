@@ -2,7 +2,11 @@ import express from 'express'
 import authController from '../controller/auth.js';
 const  router = express.Router();
 
-
+router.get("/",(req,res)=>{
+    res.json({
+        msg:"Healthy"
+    });
+})
 router.post('/signup', authController.signup);
 router.post('/varifyotp', authController.varifyOtp);
 router.post('/resendotp', authController.resendOtp);

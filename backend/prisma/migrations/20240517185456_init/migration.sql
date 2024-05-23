@@ -1,3 +1,0 @@
--- AlterTable
-ALTER TABLE "UserVarify" ALTER COLUMN "createdAt" SET DATA TYPE BIGINT,
-ALTER COLUMN "expiresAt" SET DATA TYPE BIGINT;

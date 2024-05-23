@@ -1,0 +1,56 @@
+import prisma from "../../db/db.config.js";
+import zod from 'zod';
+const post = zod.object({
+    title:zod.string(),
+    body:zod.string(),
+    imgUrl:zod.string().optional()
+})
+export const createPost = async (req,res)=>{
+    const postbody = req.body;
+    const userId = req.userId;
+    const parsedBody = post.safeParse(postbody);
+    if(parsedBody.error)res.status(405).json({
+        msg:"Wrong Input"
+    });
+    try{
+        const post = await prisma.post.create({
+            data:{
+                title:parsedBody.data.title,
+                body: parsedBody.data.body,
+                userId:userId//from middleware
+            }
+        })
+        res.status(201).json({
+            msg : "SuccessFully Created",
+            post
+        })
+    }
+    catch(error)
+    {
+        res.status(405).json({
+            msg:"Some Error Occured",
+            error
+        })
+    }
+}
+export const getPost = async(req,res)=>{
+    const userId = req.userId;
+    if(!userId)
+    {
+        res.status(401).json({
+            msg:"Unauthorised"
+        })
+    }
+    try{
+        const posts = await prisma.post.findMany();
+        res.status(200).json({
+            posts
+        })
+    }
+    catch(error)
+    {
+        res.status(401).json({
+            msg:"som"
+        })
+    }
+}

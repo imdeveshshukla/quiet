@@ -1,29 +1,19 @@
 import { PrismaClient } from "@prisma/client"
 import express  from "express"
-import zod from 'zod'
+import { verifyToken } from "../middlewares/verifytoken.js";
+import { createPost, getPost } from "../controller/posts.js";
 const prismacl = new PrismaClient();
-const routes = express.Router();
-routes.get("/",(req,res)=>{
+const postRoutes = express.Router();
+postRoutes.get("/",(req,res)=>{
     res.json({
         "server":"Healthy"
     })
 })
 
-const post = zod.object({
-    title:zod.string,
-    body:zod.string,
 
-})
-routes.get("/posts");
+postRoutes.get("/getPost",verifyToken,getPost);
 
-routes.post("/post",(req,res)=>{
-    const postbody = req.body;
+postRoutes.post("/post",verifyToken,createPost);
 
-    prismacl.post.create({
-        data:{
-            title:postbody.title,
-            body: postbody.body,
-            userId:postbody.usr//from middleware
-        }
-    })
-})
+export default postRoutes;
+

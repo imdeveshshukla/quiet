@@ -1,7 +1,8 @@
-import prisma from "../db/db.config.js";
+import prisma from "../../db/db.config.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken" ;
-import nodemailer from "nodemailer" ;
+
+import transporter from "../utils/transporter.js";
 
 // const { z } =require("zod");
 
@@ -13,13 +14,7 @@ import nodemailer from "nodemailer" ;
 //     isVarified: z.boolean(),
 //   });
 
-const transporter = nodemailer.createTransport({
-  service: "gmail",
-  auth: {
-    user: process.env.AUTH_EMAIL,
-    pass: process.env.AUTH_PASS,
-  },
-});
+
 
 const sendEmailVarification = async ({ userID, email }, res) => {
   try {
@@ -85,20 +80,29 @@ const signup = async (req, res) => {
       res.json({ message: "Credentials cannot be empty" });
     }
     const hashPass = bcrypt.hashSync(password, 10);
+    //here checks --------------
     var token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
-    const isUser = await prisma.user.findUnique({
+    // const isUser = await prisma.user.findUnique({
+    //   where: {
+    //     email: email,
+    //   },
+      
+    // });
+    const isuser = await prisma.user.findFirst({
       where: {
-        email: email,
-      },
+        OR:[
+          {
+            username
+          },
+          {
+            email: email
+          }
+        ]
+      }
     });
-    const isuser = await prisma.user.findUnique({
-      where: {
-        username: username,
-      },
-    });
-    if (isUser || isuser) {
+    if (isuser) {
       res.status(400).json({ res: "User Already Exists" });
     } else {
       const newUser = await prisma.user.create({
@@ -221,7 +225,7 @@ const updatePassword = async (req, res) => {
 const signin = async (req, res) => {
   try {
     const { username, email, password } = req.body;
-    console.log(req.body);
+    // console.log(req.body);
 
     const user = await prisma.user.findMany({
       where: {
@@ -239,7 +243,7 @@ const signin = async (req, res) => {
       return res.status(401).json({ msg: "Incorrect Credentials" });
     }
 
-    var token = jwt.sign({ email: user[0].email }, process.env.SECRET_KEY, {
+    var token = jwt.sign({ userId:user[0].userID,email: user[0].email }, process.env.SECRET_KEY, {
       expiresIn: 24 * 60 * 60,
     });
     console.log(token);
@@ -271,18 +275,7 @@ const signin = async (req, res) => {
   }
 };
 
-const varifyToken = (req, res, next) => {
-  const token = req.headers.cookie.split("=")[1];
-  console.log(token);
-  if (!token) {
-    res.status(401).send({ msg: "No token found" });
-  }
-  let payload = jwt.verify(token, process.env.SECRET_KEY);
-  if (payload.email) {
-    req.email = payload.email;
-    next();
-  } else res.status(401).send({ msg: "Invalid Token" });
-};
+
 
 const refreshSignIn = async (req, res) => {
   console.log(req.headers.cookie);
@@ -355,6 +348,6 @@ const testing = async (req, res) => {
   });
   res.json({ msg: "deleted" });
 };
-const authController={signup, signin, logout, varifyOtp, varifyToken , resendOtp, resetPassword, updatePassword, refreshSignIn,testing}
+const authController={signup, signin, logout, varifyOtp , resendOtp, resetPassword, updatePassword, refreshSignIn,testing}
 
 export default authController
