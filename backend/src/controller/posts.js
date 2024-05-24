@@ -9,9 +9,11 @@ const post = zod.object({
 export const createPost = async (req,res)=>{
     const postbody = req.body;
     const userId = req.userId;
+    var url = null;
     if(req.file){
-        const url =await uploadOnCloudinary(req.file.path);
-    console.log("file Object = "+url);}
+        url =await uploadOnCloudinary(req.file.path);
+        console.log("file Object = "+url);
+    }
     const parsedBody = post.safeParse(postbody);
     if(parsedBody.error)res.status(405).json({
         msg:"Wrong Input"
@@ -21,6 +23,7 @@ export const createPost = async (req,res)=>{
             data:{
                 title:parsedBody.data.title,
                 body: parsedBody.data.body,
+                img:url,
                 userId:userId//from middleware
             }
         })
