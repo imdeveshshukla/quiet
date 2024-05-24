@@ -15,10 +15,11 @@ const uploadOnCloudinary = async (localfilepath)=>{
         if(!localfilepath)return null; //if local file path is null return error ---------------------------------Work has to be done
         const uploadResult = await cloudinary.uploader.upload(localfilepath, {
             public_id: "images",
-            resource_type:"auto"
+            resource_type:"auto",
+            allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{console.log(error)});
         
-        console.log(uploadResult);//uploadResult.url to get url of file path
+        console.log("uploadResult = "+uploadResult);//uploadResult.url to get url of file path
         
         // Optimize delivery by resizing and applying auto-format and auto-quality
         const optimizeUrl = cloudinary.url("images", {
@@ -26,7 +27,7 @@ const uploadOnCloudinary = async (localfilepath)=>{
             quality: 'auto'
         });
         
-        console.log(optimizeUrl);
+        console.log("optimizeUrl "+optimizeUrl);
         
         // Transform the image: auto-crop to square aspect_ratio
         const autoCropUrl = cloudinary.url("images", {
@@ -36,7 +37,8 @@ const uploadOnCloudinary = async (localfilepath)=>{
             height: 500,
         });
         
-        console.log(autoCropUrl);
+        console.log("autoCropUrl = "+autoCropUrl);
+        return optimizeUrl;
     } 
     catch (error) {
         fs.unlinkSync(localfilepath);   //remove the locally saved file as the operate operation has failed
@@ -44,3 +46,4 @@ const uploadOnCloudinary = async (localfilepath)=>{
     }
 }
 
+export default uploadOnCloudinary;

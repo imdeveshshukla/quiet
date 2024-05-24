@@ -1,5 +1,6 @@
 import prisma from "../../db/db.config.js";
 import zod from 'zod';
+import uploadOnCloudinary from "../utils/cloudinary.js";
 const post = zod.object({
     title:zod.string(),
     body:zod.string(),
@@ -8,6 +9,9 @@ const post = zod.object({
 export const createPost = async (req,res)=>{
     const postbody = req.body;
     const userId = req.userId;
+    if(req.file){
+        const url =await uploadOnCloudinary(req.file.path);
+    console.log("file Object = "+url);}
     const parsedBody = post.safeParse(postbody);
     if(parsedBody.error)res.status(405).json({
         msg:"Wrong Input"

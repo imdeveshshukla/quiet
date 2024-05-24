@@ -2,11 +2,12 @@ import multer from "multer"
 
 const storage = multer.diskStorage({
     destination: function (req, file, cb) {
-      cb(null, '../public/img')
+      return cb(null, './public/img')
     },
     filename: function (req, file, cb) {
-      const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9)
-      cb(null, file.originalname + '-' + uniqueSuffix)
+      const uniqueSuffix = Date.now()
+      req.file = file;
+      return cb(null, req.userId+'-'+uniqueSuffix+'-'+file.originalname)
     }
   })
 
