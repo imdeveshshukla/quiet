@@ -227,7 +227,7 @@ const signin = async (req, res) => {
     const { username, email, password } = req.body;
     // console.log(req.body);
 
-    const user = await prisma.user.findMany({
+    const user = await prisma.user.findFirst({
       where: {
         OR: [
           {
@@ -240,16 +240,16 @@ const signin = async (req, res) => {
     console.log(user);
 
     if (!user) {
-      return res.status(401).json({ msg: "Incorrect Credentials" });
+      return res.status(401).json({ msg: "Incorrect Credentials or User not found" });
     }
 
-    var token = jwt.sign({ userId:user[0].userID,email: user[0].email }, process.env.SECRET_KEY, {
+    var token = jwt.sign({ userId:user.userID,email: user.email }, process.env.SECRET_KEY, {
       expiresIn: 24 * 60 * 60,
     });
     console.log(token);
 
-    const hashPass = user[0].password;
-    const isVarified = user[0].isVarified;
+    const hashPass = user.password;
+    const isVarified = user.isVarified;
     const validPass = bcrypt.compareSync(password, hashPass);
     console.log(validPass);
 
@@ -262,14 +262,14 @@ const signin = async (req, res) => {
     }
 
     res
-      .cookie(user[0].userID, token, {
+      .cookie(user.userID, token, {
         path: "/",
         expires: new Date(Date.now() + 1000 * 1 * 24 * 60 * 60),
         httpOnly: true,
         sameSite: "lax",
       })
       .status(202)
-      .send(user[0].email);
+      .send(user.email);
   } catch (error) {
     console.log(error);
   }
