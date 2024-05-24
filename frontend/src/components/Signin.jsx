@@ -11,6 +11,8 @@ import { login } from "../redux/login";
 import { useNavigate } from "react-router-dom";
 import { loading } from '../redux/loading';
 import toast from 'react-hot-toast';
+import { setUserInfo } from '../redux/user';
+
 
 
 const Signin = () => {
@@ -29,6 +31,20 @@ const Signin = () => {
     const passref = useRef();
 
 
+    const getUserData=async(email)=>{ 
+        console.log(location);
+        dispatch(loading())
+        try {
+          const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
+          console.log(res);
+          if(res.status==200){
+            dispatch(setUserInfo(res.data));
+          }
+        } catch (error) {
+          console.log(error);
+        } 
+        dispatch(loading())
+     }
 
 
     const sendRequest = async () => {
@@ -38,6 +54,7 @@ const Signin = () => {
                 const res = await axios.post("http://localhost:3000/auth/signin", { email: form.user, password: form.password });
                 if (res.status == 202) {
                     dispatch(login())
+                    await getUserData(res.data);
                     toast.success("Logged In successfully !")
                     Navigate("/")
                 }
@@ -46,8 +63,9 @@ const Signin = () => {
             else {
                 const res = await axios.post("http://localhost:3000/auth/signin", { username: form.user, password: form.password });
                 if (res.status == 202) {
-                    toast.success("Logged In succesfully!")
                     dispatch(login())
+                    await getUserData(res.data);
+                    toast.success("Logged In succesfully!")
                     Navigate("/")
                 }
                 console.log(res);
@@ -93,7 +111,7 @@ const Signin = () => {
 
         <>
             <div className='w-full flex justify-center items-center h-[80vh] m-auto  '>
-                <div className='w-[35%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
+                <div className='w-[60%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
 
                     <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
                          <><div className='flex flex-col gap-8'>
