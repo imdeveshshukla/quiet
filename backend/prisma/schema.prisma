@@ -14,11 +14,14 @@ datasource db {
 }
 
 model User{
+  dp String?
+  bio String?
   userID String @id @default(uuid())
   username String @unique
   email String @unique
   password String
   isVarified Boolean @default(false)
+  posts Post[]
   posts Post[]
 }
 model UserVarify{

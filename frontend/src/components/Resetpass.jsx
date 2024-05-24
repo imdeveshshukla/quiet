@@ -203,7 +203,7 @@ const Resetpass = () => {
     return (
         <>
             <div className='w-full flex justify-center items-center h-[80vh] m-auto  '>
-                <div className='w-[35%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
+                <div className='w-[45%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
 
                     <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
 

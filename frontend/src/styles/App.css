@@ -10,3 +10,8 @@ body{
     background-color: #6d712e87;
 }
 
+::-webkit-scrollbar{
+    display: none;
+    
+}
+

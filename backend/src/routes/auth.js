@@ -17,4 +17,5 @@ router.post('/refreshsignin', authController.refreshSignIn)
 router.post('/logout', authController.logout)
 router.post('/testing', authController.testing) 
 
-export default router; 
+const authRouter= router
+export default authRouter; 

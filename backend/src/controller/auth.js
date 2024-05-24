@@ -269,7 +269,7 @@ const signin = async (req, res) => {
         sameSite: "lax",
       })
       .status(202)
-      .send(token);
+      .send(user[0].email);
   } catch (error) {
     console.log(error);
   }
@@ -278,12 +278,9 @@ const signin = async (req, res) => {
 
 
 const refreshSignIn = async (req, res) => {
-  console.log(req.headers.cookie);
-
   try {
     if (req.headers.cookie) {
       const token = req.headers.cookie.split("=")[1];
-      console.log(token);
       if (!token) {
         res.status(404).send({ msg: "No token found" });
       }
