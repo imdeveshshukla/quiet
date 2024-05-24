@@ -22,7 +22,6 @@ model User{
   password String
   isVarified Boolean @default(false)
   posts Post[]
-  posts Post[]
 }
 model UserVarify{
   userID String @id @unique
