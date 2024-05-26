@@ -61,3 +61,4 @@ export const getPost = async(req,res)=>{
         })
     }
 }
+
