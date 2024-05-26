@@ -38,6 +38,13 @@ const uploadOnCloudinary = async (localfilepath)=>{
         });
         
         console.log("autoCropUrl = "+autoCropUrl);
+        fs.unlink(localfilepath, (err) => {
+            if (err) {
+                console.error("Failed to delete local file:", err);
+            } else {
+                console.log("Successfully deleted local file:", localFilePath);
+            }
+        });
         return optimizeUrl;
     } 
     catch (error) {

@@ -24,7 +24,6 @@ app.get('/', (req, res) => {
   res.send('Hello World!')
 })
 
-// app.use('/auth',router);
 
 app.use('/auth/',authRouter);
 app.use('/u/',userRouter)

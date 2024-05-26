@@ -3,6 +3,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken" ;
 
 import transporter from "../utils/transporter.js";
+import { z } from "zod";
 
 // const { z } =require("zod");
 
@@ -13,6 +14,15 @@ import transporter from "../utils/transporter.js";
 //     password: z.string(),
 //     isVarified: z.boolean(),
 //   });
+const usersignUpSchema = z.object({
+  username:z.string,
+  email:z.string,
+  password:z.string
+})
+const usersSignInSchema = z.object({
+  email:z.string,
+  password:z.string
+})
 
 
 
@@ -75,6 +85,13 @@ const sendEmailVarification = async ({ userID, email }, res) => {
 };
 const signup = async (req, res) => {
   try {
+    const validity = await usersignUpSchema.safeParse(req.body);
+    if(!validity.success)
+      res.status(500).json({
+        message:"Wrong Inputs",
+      error:validity.error
+      })
+      
     const { username, email, password } = req.body;
     if (username == "" || email == "" || password == "") {
       res.json({ message: "Credentials cannot be empty" });
