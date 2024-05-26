@@ -31,8 +31,8 @@ const Posts = ({username,title, body, media}) => {
           <BiDownvote className='text-2xl hover:text-red-700  cursor-pointer'/>
           </div>
 
-          <div className=' rounded-3xl flex gap-2 items-start justify-center p-2  bg-blue-300'>
-          <GoComment className='text-2xl hover:text-blue-700 cursor-pointer'/>
+          <div className=' rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
+          <GoComment className='text-2xl  '/>
           <span>8.4k</span>
           </div>
 
