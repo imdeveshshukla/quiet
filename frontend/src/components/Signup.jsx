@@ -27,7 +27,7 @@ const Signup = () => {
     const [errorOtp, setErrorOtp] = useState(null);
     const [errorUsername, setErrorUsername] = useState(null);
     const [varifyOtpData, setVarifyOtpData] = useState({ userID: "", email: "", otp: "" });
-    const [timeLeft, setTimeLeft] = useState(60);
+    const [timeLeft, setTimeLeft] = useState(0);
     const [disable, setdisable] = useState(false);
     const [eye, setEye] = useState(false)
     const passref = useRef();
@@ -215,7 +215,7 @@ const Signup = () => {
 
 export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handleEye, handleSubmit, errorUsername, errorEmail, errorPass, onSave, otp, otpsent, resendOTP, handleOtp, varifyOtp, errorOtp, timeLeft, disable }) => (
     <>
-        <div className='w-full flex justify-center items-center h-[80vh] m-auto  '>
+        <div className='w-full flex justify-center items-center h-[89.5vh] m-auto border-x-2 border-black  '>
             <div className='w-[60%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
 
                 <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
@@ -227,7 +227,7 @@ export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handl
                         <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                     </div>
                         <div className='flex justify-center cursor-pointer'><div onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</div></div>
-                        <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => { resendOTP() }}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>
+                        <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() =>resendOTP()}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>
                     </div>
 
 
