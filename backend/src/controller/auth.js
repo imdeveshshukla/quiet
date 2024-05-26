@@ -84,12 +84,7 @@ const signup = async (req, res) => {
     var token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
-    // const isUser = await prisma.user.findUnique({
-    //   where: {
-    //     email: email,
-    //   },
-      
-    // });
+  
     const isuser = await prisma.user.findFirst({
       where: {
         OR:[
