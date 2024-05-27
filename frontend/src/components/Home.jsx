@@ -15,7 +15,7 @@ const Home = () => {
         <div className="post ">
           <Posts/>
         
-          <div className='bg-black h-[0.5px]'></div>
+          <div className='bg-black h-[1px]'></div>
 
         </div>
 

@@ -1,4 +1,4 @@
-import prisma from "../../db/db.config";
+import prisma from "../../db/db.config.js";
 
 export const upvote =async(req,res)=>{
     const { postId } = req.body;
