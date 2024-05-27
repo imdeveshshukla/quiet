@@ -14,8 +14,13 @@ const uploadOnCloudinary = async (localfilepath)=>{
     try {
         if(!localfilepath)return null; //if local file path is null return error ---------------------------------Work has to be done
         console.log("LocalFilePath = "+localfilepath);
+        const uniqueSuffix = Date.now();
+        var mainFolderName = "main"; 
+    // filePathOnCloudinary: path of image we want 
+    // to set when it is uploaded to cloudinary
+    var filePathOnCloudinary =  mainFolderName + "/" + uniqueSuffix; 
         const uploadResult = await cloudinary.uploader.upload(localfilepath, {
-            public_id: localfilepath,
+            public_id: "filePathOnCloudinary",
             resource_type:"auto",
             allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{console.log(error)});
@@ -46,7 +51,7 @@ const uploadOnCloudinary = async (localfilepath)=>{
         //         console.log("Successfully deleted local file:", localfilepath);
         //     }
         // });
-        return optimizeUrl;
+        return uploadResult.url;
     } 
     catch (error) {
         fs.unlinkSync(localfilepath);   //remove the locally saved file as the operate operation has failed
