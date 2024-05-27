@@ -13,13 +13,14 @@ cloudinary.config({
 const uploadOnCloudinary = async (localfilepath)=>{
     try {
         if(!localfilepath)return null; //if local file path is null return error ---------------------------------Work has to be done
+        console.log("LocalFilePath = "+localfilepath);
         const uploadResult = await cloudinary.uploader.upload(localfilepath, {
-            public_id: "images",
+            public_id: localfilepath,
             resource_type:"auto",
             allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{console.log(error)});
         
-        console.log("uploadResult = "+uploadResult);//uploadResult.url to get url of file path
+        console.log("uploadResult = "+uploadResult.url);//uploadResult.url to get url of file path
         
         // Optimize delivery by resizing and applying auto-format and auto-quality
         const optimizeUrl = cloudinary.url("images", {
@@ -38,13 +39,13 @@ const uploadOnCloudinary = async (localfilepath)=>{
         });
         
         console.log("autoCropUrl = "+autoCropUrl);
-        fs.unlink(localfilepath, (err) => {
-            if (err) {
-                console.error("Failed to delete local file:", err);
-            } else {
-                console.log("Successfully deleted local file:", localFilePath);
-            }
-        });
+        // fs.unlinkSync(localfilepath, (err) => {
+        //     if (err) {
+        //         console.error("Failed to delete local file:", err);
+        //     } else {
+        //         console.log("Successfully deleted local file:", localfilepath);
+        //     }
+        // });
         return optimizeUrl;
     } 
     catch (error) {

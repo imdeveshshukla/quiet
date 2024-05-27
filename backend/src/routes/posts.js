@@ -27,6 +27,7 @@ postRoutes.post("/post",createPost);
 postRoutes.post('/comment',createComment);
 postRoutes.post('/comment',getAllComment);
 postRoutes.get('/comment',getUserComment);
+//create getComment according to postID
 
 //Upvotes Routes 
 postRoutes.post('/upvote',upvote);

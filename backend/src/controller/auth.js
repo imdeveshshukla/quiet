@@ -3,25 +3,16 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken" ;
 
 import transporter from "../utils/transporter.js";
-import { z } from "zod";
+import z from "zod";
 
-// const { z } =require("zod");
-
-// const User = z.object({
-//     id: z.string(),
-//     username: z.string(),
-//     email: z.string(),
-//     password: z.string(),
-//     isVarified: z.boolean(),
-//   });
 const usersignUpSchema = z.object({
-  username:z.string,
-  email:z.string,
-  password:z.string
+  username:z.string(),
+  email:z.string(),
+  password:z.string()
 })
 const usersSignInSchema = z.object({
-  email:z.string,
-  password:z.string
+  email:z.string(),
+  password:z.string()
 })
 
 
@@ -85,11 +76,11 @@ const sendEmailVarification = async ({ userID, email }, res) => {
 };
 const signup = async (req, res) => {
   try {
-    const validity = await usersignUpSchema.safeParse(req.body);
+    const validity = usersignUpSchema.safeParse(req.body);
     if(!validity.success)
       res.status(500).json({
         message:"Wrong Inputs",
-      error:validity.error
+        error:validity.error
       })
       
     const { username, email, password } = req.body;
@@ -129,6 +120,10 @@ const signup = async (req, res) => {
     }
   } catch (error) {
     console.log(error);
+    res.json({
+      msg:"Some Error Occured",
+      error
+    });
   }
 };
 const  varifyOtp = async (req, res) => {
