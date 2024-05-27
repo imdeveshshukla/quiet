@@ -25,6 +25,7 @@ export const createPost = async (req,res)=>{
                 body: parsedBody.data.body,
                 img:url,
                 userId:userId//from middleware
+
             }
         })
         res.status(201).json({

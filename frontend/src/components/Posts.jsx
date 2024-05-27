@@ -1,13 +1,33 @@
 import React from 'react'
+import { useEffect } from 'react';
 import { useSelector } from 'react-redux'
 import dp from '../assets/dummydp.png'
 import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
+import { useState } from 'react';
+import axios from 'axios';
 
-const Posts = ({username,title, body, media}) => {
-
+const Posts = ({postId, userId, username,title, body, media}) => {
+  const [upvoteNumber, setUpvote] = useState(0);
+  const [upvoted,setUpvoted] = useState(false);
+  const getUpvote = async (key)=>{
+    const res = await axios.post("http://localhost:3000/posts/upvoteNum",{ postId:key });
+    console.log("upvot "+res.data);
+    setUpvote(res.data.numbers);
+  }
+  const upvote = async(key)=>{
+    const res = await axios.post("http://localhost:3000/posts/upvote",{ postId:key });
+    console.clear();
+    setUpvoted(!upvoted);
+    console.log(res.data);
+  }
+  useEffect(() => {
+    getUpvote(postId);
+    console.log(""+upvoteNumber)
+  }, [])
+  
   const userInfo= useSelector(state=> state.user.userInfo);
 
   return (
@@ -26,8 +46,8 @@ const Posts = ({username,title, body, media}) => {
         </main>
         <footer className='flex py-2 gap-6'>
           <div className=' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400'>
-          <BiUpvote className='text-2xl hover:text-green-700 cursor-pointer'/>
-          <span>8.4k</span>
+          <BiUpvote onClick={()=>{upvote(postId)}} className='text-2xl hover:text-green-700 cursor-pointer'/>
+          <span>{upvoteNumber}</span>
           <BiDownvote className='text-2xl hover:text-red-700  cursor-pointer'/>
           </div>
 

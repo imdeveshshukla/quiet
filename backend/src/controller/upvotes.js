@@ -48,13 +48,14 @@ export const upvote =async(req,res)=>{
 }
 
 export const upvoteNumber =async (req,res)=>{
+    const { postId } = req.body;
     try {
         const upvote = await prisma.upvote.findMany({
             where:{
                 upvoted:true
             }
         });
-        res.status(201).json({
+        res.status(200).json({
             msg:"Success",
             numbers:upvote.length,
             upvote

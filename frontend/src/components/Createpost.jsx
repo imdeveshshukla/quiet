@@ -12,6 +12,7 @@ const Createpost = () => {
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
+    
      const handleChange=(e)=>{
         setImage(e.target.files[0]);
      }
@@ -20,7 +21,7 @@ const Createpost = () => {
     const handleSubmit= async()=>{
         console.log(title+"\n"+description+"\n"+image);
         // e.preventDefault();
-        
+
         const formData = new FormData();
         formData.append('title', title);
         formData.append('body', description);

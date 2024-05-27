@@ -37,7 +37,7 @@ const Home = () => {
         <div className="post ">
         {posts?.map((post)=>{
           return<>
-          <Posts key={post.id} username={post.userId} title={post.title} body={post.body} media={post.img}/>
+          <Posts key={post.id} postId={post.id} userId={post.userId} username={post.userId} title={post.title} body={post.body} media={post.img} />
           <div className='bg-black h-[1px]'></div>
 
           </> 
