@@ -15,7 +15,7 @@ const uploadOnCloudinary = async (localfilepath)=>{
         if(!localfilepath)return null; //if local file path is null return error ---------------------------------Work has to be done
         console.log("LocalFilePath = "+localfilepath);
         const uploadResult = await cloudinary.uploader.upload(localfilepath, {
-            public_id: localfilepath,
+            public_id: "localfilepath",
             resource_type:"auto",
             allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{console.log(error)});

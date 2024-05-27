@@ -23,7 +23,7 @@ const Home = () => {
   }
   useEffect(() => {
     // dispatch(loading());
-    getPost();
+      getPost();
     // dispatch(loading())
     
   }, [])

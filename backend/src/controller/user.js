@@ -24,7 +24,7 @@ const getUser=async(req,res)=>{
         } 
     })
     
-    res.status(200).send({dp:user.dp, boi:user.bio, username:user.username, email:user.email, posts: user.posts});
+    res.status(200).send({dp:user?.dp, bio:user?.bio, username:user.username, email:user.email, posts: user.posts});
 }
 
 const userController={getUser,varifyToken};

@@ -5,11 +5,13 @@ import { BiUpvote } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
+import { combineSlices } from '@reduxjs/toolkit';
 
 const Posts = ({username,title, body, media}) => {
 
   const userInfo= useSelector(state=> state.user.userInfo);
-
+ console.log(media);
+ 
   return (
     <div className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
         <header className='flex gap-2 items-center my-2'>
