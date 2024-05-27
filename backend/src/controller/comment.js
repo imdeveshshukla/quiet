@@ -1,4 +1,4 @@
-import prisma from "../../db/db.config";
+import prisma from "../../db/db.config.js";
 
 export const createComment =async (req,res)=>{
     const { postId, content } = req.body;
