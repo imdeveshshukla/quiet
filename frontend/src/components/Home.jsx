@@ -36,10 +36,13 @@ const Home = () => {
 
         <div className="post ">
         {posts?.map((post)=>{
-          return <Posts key={post.id} username={post.userId} title={post.title} body={post.body} media={post.img}/>
+          return<>
+          <Posts key={post.id} username={post.userId} title={post.title} body={post.body} media={post.img}/>
+          <div className='bg-black h-[1px]'></div>
+
+          </> 
 
         })}
-          <div className='bg-black h-[0.5px]'></div>
 
         </div>
 
