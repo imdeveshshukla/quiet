@@ -16,13 +16,13 @@ const Posts = ({username,title, body, media}) => {
           <img  src={userInfo&&userInfo.dp? userInfo.dp:dp}
           alt="Profile"
           className="w-8 h-8 rounded-full   bg-white" />
-          <span className=' font-semibold'>u/Rituraj</span>•<span className=' text-xs text-gray-700'>8 hrs ago</span>
+          <span className=' font-semibold'>u/{username}</span>•<span className=' text-xs text-gray-700'>8 hrs ago</span>
           
         </header>
         <main className=''>
-          <div className='text-lg font-bold my-2'>Lorem ipsum dolor sit, amet consectetur adipisicing elit. Omnis, quae voluptatem.</div>
-          <div className='my-2 '>Lorem ipsum dolor sit amet consectetur, adipisicing elit. Eligendi praesentium nam non reiciendis. Eius voluptatem vel, eum assumenda officiis blanditiis vitae.</div>
-          <img className=' w-full  max-h-[420px] object-contain py-2 ' src="https://images4.fanpop.com/image/photos/16000000/Beautiful-Cat-cats-16096437-1280-800.jpg" alt="" />
+          <div className='text-lg font-bold my-2'>{title}</div>
+          <div className='my-2 '>{body}</div>
+          <img className=' w-full  max-h-[420px] object-contain py-2 ' src={media} alt="postImg" />
         </main>
         <footer className='flex py-2 gap-6'>
           <div className=' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400'>
