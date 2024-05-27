@@ -39,6 +39,7 @@ model Post{
   body String
   img String?
   userId String
+  username String
   user User @relation(fields: [userId], references: [userID])
   upvotes Upvote[]
   comments Comment[]

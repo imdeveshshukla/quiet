@@ -4,29 +4,15 @@ import { useDispatch, useSelector } from 'react-redux'
 import Posts from './Posts';
 import axios from 'axios';
 import loading from '../redux/loading';
+import setPost  from '../redux/Post';
 
 
 const Home = () => {
+
+  const posts = useSelector(state=>state.post.posts);
   const isLogin= useSelector(state=> state.login.value);
   const dispatch = useDispatch();
-  const [posts , setPosts] = useState([]);
-  const getPost = async()=>{
-    try {
-      const res = await axios.get('http://localhost:3000/posts/getPost');
-      setPosts(res.data.posts);
-      if(res.status==200)
-        {
-        }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-  useEffect(() => {
-    // dispatch(loading());
-      getPost();
-    // dispatch(loading())
-    
-  }, [])
+  
   console.log(posts);
   return (
     <div className=' h-full overflow-auto border-x-2 border-black pl-16'>
@@ -36,8 +22,9 @@ const Home = () => {
 
         <div className="post ">
         {posts?.map((post)=>{
+          
           return<>
-          <Posts key={post.id} username={post.userId} title={post.title} body={post.body} media={post.img}/>
+          <Posts key={post.id} username={post.username} title={post.title} body={post.body} media={post.img}/>
           <div className='bg-black h-[1px]'></div>
 
           </> 

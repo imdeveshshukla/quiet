@@ -4,10 +4,13 @@ import { loading } from '../redux/loading';
 import { GrGallery } from "react-icons/gr";
 import dp from '../assets/dummydp.png';
 import axios from 'axios';
+import { setPost } from '../redux/Post';
+
+
 const Createpost = () => {
     const userInfo = useSelector((state) => state.user.userInfo);
     const selectFile= useRef(null);
-    // const [post, setPost] = useState({title:"", body:"", media:""})
+    
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -25,18 +28,24 @@ const Createpost = () => {
         formData.append('title', title);
         formData.append('body', description);
         formData.append('postImg', image);
+        formData.append('username', userInfo.username);
+                
+
+        dispatch(loading())
         try {
-          dispatch(loading())
           const response = await axios.post('http://localhost:3000/posts/postWithImg', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
-          console.log('Post created:', response.data);
-          dispatch(loading())
+          console.log(response.data.post);
+          if(response.status==201){
+            dispatch(setPost(response.data.post));
+          }
         } catch (error) {
           console.error('Error uploading the post:', error);
         }
+        dispatch(loading())
         
     }
   return (

@@ -23,6 +23,7 @@ import Overview from './components/Overview'
 import Upvoted from './components/Upvoted'
 import Commented from './components/Commented'
 import Profilecard from './components/Profilecard'
+import { setPost } from './redux/Post'
 
 
 
@@ -37,7 +38,7 @@ function App() {
   const location = useLocation();
 
   const getUserData=async(email)=>{ 
-    console.log(location);
+ 
     dispatch(loading())
     try {
       const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
@@ -53,6 +54,21 @@ function App() {
  }
 
 
+ const getPost = async()=>{
+  try {
+    const res = await axios.get('http://localhost:3000/posts/getPost');
+    if(res.status==200)
+      {
+        dispatch(setPost(res.data.posts));
+        console.log(Array.isArray(res.data.posts));
+        
+      }
+  } catch (error) {
+    console.log(error);
+  }
+}
+
+
   const sendReq = async () => {
 
   dispatch(loading());
@@ -62,6 +78,7 @@ function App() {
         toast.success("Loggin Session Restored")
         dispatch(login());
           getUserData(res.data);
+          getPost();
       }
     } catch (error) {
       console.log(error);

@@ -20,7 +20,7 @@ const uploadOnCloudinary = async (localfilepath)=>{
     // to set when it is uploaded to cloudinary
     var filePathOnCloudinary =  mainFolderName + "/" + uniqueSuffix; 
         const uploadResult = await cloudinary.uploader.upload(localfilepath, {
-            public_id: localfilepath,
+            public_id: filePathOnCloudinary,
             resource_type:"auto",
             allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{console.log(error)});
@@ -44,13 +44,13 @@ const uploadOnCloudinary = async (localfilepath)=>{
         });
         
         console.log("autoCropUrl = "+autoCropUrl);
-        // fs.unlinkSync(localfilepath, (err) => {
-        //     if (err) {
-        //         console.error("Failed to delete local file:", err);
-        //     } else {
-        //         console.log("Successfully deleted local file:", localfilepath);
-        //     }
-        // });
+        fs.unlinkSync(localfilepath, (err) => {
+            if (err) {
+                console.error("Failed to delete local file:", err);
+            } else {
+                console.log("Successfully deleted local file:", localfilepath);
+            }
+        });
         return uploadResult.url;
     } 
     catch (error) {

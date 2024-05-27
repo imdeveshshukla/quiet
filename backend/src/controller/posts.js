@@ -4,11 +4,13 @@ import uploadOnCloudinary from "../utils/cloudinary.js";
 const post = zod.object({
     title:zod.string(),
     body:zod.string(),
-    imgUrl:zod.string().optional()
+    imgUrl:zod.string().optional(),
+    username:zod.string(),
 })
 export const createPost = async (req,res)=>{
     const postbody = req.body;
     const userId = req.userId;
+    
     let url = null;
     if(req.file){
         url =await uploadOnCloudinary(req.file.path);
@@ -24,6 +26,7 @@ export const createPost = async (req,res)=>{
                 title:parsedBody.data.title,
                 body: parsedBody.data.body,
                 img:url,
+                username:parsedBody.data.username,
                 userId:userId//from middleware
             }
         })

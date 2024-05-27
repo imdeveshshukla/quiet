@@ -10,7 +10,7 @@ import { combineSlices } from '@reduxjs/toolkit';
 const Posts = ({username,title, body, media}) => {
 
   const userInfo= useSelector(state=> state.user.userInfo);
- console.log(media);
+
  
   return (
     <div className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
@@ -31,10 +31,10 @@ const Posts = ({username,title, body, media}) => {
           <BiUpvote className='text-2xl hover:text-green-700 cursor-pointer'/>
           <span>8.4k</span>
           <BiDownvote className='text-2xl hover:text-red-700  cursor-pointer'/>
-          </div>
+          </div>    
 
           <div className=' rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
-          <GoComment className='text-2xl  '/>
+          <GoComment className='text-2xl '/> 
           <span>8.4k</span>
           </div>
 
