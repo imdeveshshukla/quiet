@@ -9,7 +9,7 @@ const post = zod.object({
 export const createPost = async (req,res)=>{
     const postbody = req.body;
     const userId = req.userId;
-    var url = null;
+    let url = null;
     if(req.file){
         url =await uploadOnCloudinary(req.file.path);
         console.log("file Object = "+url);

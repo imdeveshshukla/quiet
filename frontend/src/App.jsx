@@ -61,7 +61,7 @@ function App() {
       if (res.status == 200){
         toast.success("Loggin Session Restored")
         dispatch(login());
-        getUserData(res.data);
+          getUserData(res.data);
       }
     } catch (error) {
       console.log(error);

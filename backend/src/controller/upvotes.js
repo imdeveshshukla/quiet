@@ -4,17 +4,41 @@ export const upvote =async(req,res)=>{
     const { postId } = req.body;
     const uId = req.userId;
     try {
-        const upvte = await prisma.upvote.update({
-            where:{
-                userId:uId,
-                postId
+        const existingUpvote = await prisma.upvote.findFirst({
+            where: {
+                userId: uId,
+                postId: postId,
             },
-            upvoted:false
-        })
-        res.status(201).json({
-            msg:"Success",
-            upvte
-        })
+        });
+
+        if (existingUpvote) {
+            // Toggle the upvote status
+            const upvte = await prisma.upvote.update({
+                where: {
+                    id: existingUpvote.id,
+                },
+                data: {
+                    upvoted: !existingUpvote.upvoted,
+                },
+            });
+            res.status(201).json({
+                msg:"Success",
+                upvte
+            })
+        }
+        else{
+            const newUpvote = await prisma.upvote.create({
+                data:{
+                    userId: uId,
+                    postId: postId,
+                    upvoted:true
+                }
+            })
+            res.status(201).json({
+                msg:"Done",
+                newUpvote
+            })
+        }
     } catch (error) {
         res.status(500).json({
             msg:"Failed",
