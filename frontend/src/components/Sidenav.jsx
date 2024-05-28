@@ -2,13 +2,12 @@ import React from 'react'
 import { IoHome } from "react-icons/io5";
 import { HiOutlineChartSquareBar } from "react-icons/hi";
 import { LuArrowUpRightSquare } from "react-icons/lu";
-import { NavLink, useLocation } from 'react-router-dom';
+import { NavLink } from 'react-router-dom';
 import { RiCommunityLine } from "react-icons/ri";
-
 
 const Sidenav = () => {
   return (
-    <div   className="sidenav h-full overflow-auto ">
+    <div className="sidenav max-h-[89.5vh]  overflow-auto ">
             <div className='p-3 m-2 border-b-2 border-gray-600'>
                 <NavLink to={"/"}   className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]':'w-full flex rounded items-center gap-2 px-4 py-2'}}><IoHome/><span>Home</span></NavLink>
                 <NavLink to={"/popular"}  className={(e)=>{return e.isActive?'flex w-full rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]':'flex w-full rounded items-center gap-2 px-4 py-2'}}><LuArrowUpRightSquare/><span>Popular</span></NavLink>
