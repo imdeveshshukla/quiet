@@ -23,7 +23,11 @@ const getUser=async(req,res)=>{
             email:req.params.email,
         } ,
         include:{
-          posts:true,
+          posts:{
+            include:{
+              comments:true
+            }
+          },
           upvotes:true,
           comments:true,
         }

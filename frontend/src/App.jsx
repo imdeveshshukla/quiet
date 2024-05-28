@@ -63,6 +63,8 @@ function App() {
     const res = await axios.get('http://localhost:3000/posts/getPost');
     if(res.status==200)
       {
+        console.log("getpost", res.data.posts);
+        
          dispatch(setPost(res.data.posts));
         //  console.log(res.data.posts);
         //  console.log( String(location.pathname).split("/posts/")[1])
@@ -70,6 +72,7 @@ function App() {
          let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
          console.log(post);
          dispatch(setPostDetail(post))
+
          }
         
       }
@@ -130,7 +133,7 @@ function App() {
           <Route path='/varifyaccount' element={<Varifyacc />} />
           <Route path='/profile/' element={<Profile/>}>
             <Route path='overview' element={<Overview/>}/>
-            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img}/>)}/>
+            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments.length}/>)}/>
             <Route path='commented' element={<Commented/>}/>
             <Route path='upvoted' element={<Upvoted/>}/>
             

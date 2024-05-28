@@ -10,7 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import { setPostDetail } from '../redux/Postdetail';
 
 
-const Posts = ({username,id,title, body, media}) => {
+const Posts = ({username,id,title, body, media,countComment}) => {
 
   const userInfo= useSelector(state=> state.user.userInfo);
   const posts= useSelector(state=> state.post.posts);
@@ -20,11 +20,13 @@ const Posts = ({username,id,title, body, media}) => {
 
     if(id){
       let post= await  Array.from(posts).find(post=>post.id==id);
-      console.log(post);
+     
       dispatch(setPostDetail(post))
       Navigate(`/posts/${id}`);
     }
   }
+
+
 
  
   return (<>
@@ -44,13 +46,13 @@ const Posts = ({username,id,title, body, media}) => {
         <footer className='flex py-2 gap-6'>
           <div className=' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400'>
           <BiUpvote className='text-2xl hover:text-green-700 cursor-pointer'/>
-          <span>8.4k</span>
+          <span>123k</span>
           <BiDownvote className='text-2xl hover:text-red-700  cursor-pointer'/>
           </div>    
 
           <div onClick={()=>handleComment(id)} className=' rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
           <GoComment className='text-2xl '/> 
-          <span>8.4k</span>
+          <span>{countComment}</span>
           </div>
 
           <div className=' rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>

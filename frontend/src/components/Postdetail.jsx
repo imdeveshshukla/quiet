@@ -7,6 +7,7 @@ import axios from 'axios';
 import toast from 'react-hot-toast';
 import { setComment } from '../redux/Postdetail';
 import dp from '../assets/dummydp.png'
+import { setPostComment } from '../redux/Post';
 
 
 
@@ -33,7 +34,8 @@ const Postdetail = () => {
             if(res.status==201){
                 console.log(res.data.newComment);
                 dispatch(setComment(res.data.newComment))
-
+                dispatch(setPostComment(res.data.newComment))
+                
                 console.log(post);
                 
                 toast.success("Comment Added.")
@@ -62,7 +64,7 @@ const Postdetail = () => {
 
   return (<>
     <div className='h-full overflow-auto border-x-2 border-black pl-16'>
-      <Posts key={post?.id}  username={post?.username} id={post?.id} title={post?.title} body={post?.body} media={post?.img}/>
+      <Posts key={post?.id}  username={post?.username} id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments.length}/>
 
       <div className=' m-4'>
         {isLogin?  <div className={isComment?'border bg-[#e2e4c6]  rounded-3xl border-black':'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >

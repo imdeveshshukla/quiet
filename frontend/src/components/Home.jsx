@@ -13,7 +13,6 @@ const Home = () => {
   const isLogin= useSelector(state=> state.login.value);
   const dispatch = useDispatch();
   
-  console.log(posts);
   return (
     <div className=' h-full overflow-auto border-x-2 border-black pl-16'>
         
@@ -23,7 +22,7 @@ const Home = () => {
         <div className="post ">
         {posts?.map((post)=>{
           return<>
-          <Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} />
+          <Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments.length} />
 
           </> 
 

@@ -16,10 +16,15 @@ export const postState = createSlice({
         state.posts=action.payload; 
       }
     },
-    
+    setPostComment:(state,action)=>{
+      let post= state.posts.find(post=>post.id==action.payload.postId);
+      console.log(post);
+      
+      post.comments= [...post.comments, action.payload];
+    }
   },
 })
 
-export const { setPost} = postState.actions
+export const { setPost,setPostComment} = postState.actions
 
 export default postState.reducer
