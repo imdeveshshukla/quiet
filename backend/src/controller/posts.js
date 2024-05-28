@@ -45,14 +45,19 @@ export const createPost = async (req,res)=>{
 }
 export const getPost = async(req,res)=>{
     const userId = req.userId;
-    if(!userId)
-    {
-        res.status(401).json({
-            msg:"Unauthorised"
-        })
-    }
+    // if(!userId)
+    // {
+    //     res.status(401).json({
+    //         msg:"Unauthorised"
+    //     })
+    // }
     try{
-        const posts = await prisma.post.findMany();
+        const posts = await prisma.post.findMany({
+            include:{
+                comments:true,
+                upvotes:true,
+            }
+        });
         res.status(200).json({
             posts
         })

@@ -24,6 +24,8 @@ import Upvoted from './components/Upvoted'
 import Commented from './components/Commented'
 import Profilecard from './components/Profilecard'
 import { setPost } from './redux/Post'
+import Postdetail from './components/Postdetail'
+import { setPostDetail } from './redux/Postdetail'
 
 
 
@@ -35,6 +37,8 @@ function App() {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loading.value);
   const isLogin = useSelector((state) => state.login.value);
+  const userInfo=  useSelector(state=>state.user.userInfo);
+  const posts= useSelector(state=> state.post.posts)
   const location = useLocation();
 
   const getUserData=async(email)=>{ 
@@ -59,8 +63,14 @@ function App() {
     const res = await axios.get('http://localhost:3000/posts/getPost');
     if(res.status==200)
       {
-        dispatch(setPost(res.data.posts));
-        console.log(Array.isArray(res.data.posts));
+         dispatch(setPost(res.data.posts));
+        //  console.log(res.data.posts);
+        //  console.log( String(location.pathname).split("/posts/")[1])
+         if(String(location.pathname).split("/posts/")[1]){
+         let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
+         console.log(post);
+         dispatch(setPostDetail(post))
+         }
         
       }
   } catch (error) {
@@ -77,11 +87,14 @@ function App() {
       if (res.status == 200){
         toast.success("Loggin Session Restored")
         dispatch(login());
-          getUserData(res.data);
-          getPost();
+         await  getUserData(res.data);
+         await getPost();
+
       }
     } catch (error) {
       console.log(error);
+      await getPost();
+
       if(error.response.status==404){
         console.log("token not found");
       }else if(error.response.status==401){
@@ -90,8 +103,6 @@ function App() {
     }
     dispatch(loading())
   }
-
-
 
 
 
@@ -119,12 +130,13 @@ function App() {
           <Route path='/varifyaccount' element={<Varifyacc />} />
           <Route path='/profile/' element={<Profile/>}>
             <Route path='overview' element={<Overview/>}/>
-            <Route path='posts' element={<Posts/>}/>
+            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img}/>)}/>
             <Route path='commented' element={<Commented/>}/>
             <Route path='upvoted' element={<Upvoted/>}/>
             
           </Route>
           <Route path='/setting/' element={<Settings />} />
+          <Route path='/posts/:id' element={<Postdetail />} />
         </Routes>
         {String(location.pathname).includes("/profile/")? <Profilecard/>: ''}
       </div>

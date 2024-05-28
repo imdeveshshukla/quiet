@@ -4,11 +4,11 @@ const initialState = {
   posts:null,
 }
 
-export const postState = createSlice({
-  name: 'post',
+export const userPostState = createSlice({
+  name: 'userPost',
   initialState,
   reducers: {
-    setPost: (state,action) => {
+    setUserPost: (state,action) => {
       if(state.posts && !Array.isArray(action.payload)){
         state.posts= [...state.posts, action.payload];
       }
@@ -16,10 +16,9 @@ export const postState = createSlice({
         state.posts=action.payload; 
       }
     },
-    
   },
 })
 
-export const { setPost} = postState.actions
+export const { setPost} = userPostState.actions
 
-export default postState.reducer
+export default userPostState.reducer

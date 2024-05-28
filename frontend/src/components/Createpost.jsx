@@ -5,6 +5,9 @@ import { GrGallery } from "react-icons/gr";
 import dp from '../assets/dummydp.png';
 import axios from 'axios';
 import { setPost } from '../redux/Post';
+import toast from 'react-hot-toast';
+import { setUserPost } from '../redux/user';
+
 
 
 const Createpost = () => {
@@ -41,8 +44,14 @@ const Createpost = () => {
           console.log(response.data.post);
           if(response.status==201){
             dispatch(setPost(response.data.post));
+            dispatch(setUserPost(response.data.post))
+            toast.success("Successfully Posted!")
+            setTitle("")
+            setDescription("")
+            setImage(null)
           }
         } catch (error) {
+          toast.error("Error uploading the post!")
           console.error('Error uploading the post:', error);
         }
         dispatch(loading())
@@ -63,8 +72,9 @@ const Createpost = () => {
                 <input onChange={(e)=>handleChange(e)} accept='image/*' ref={selectFile} type="file" name="media" id="media" hidden/>
             </div>
             <div className='flex justify-center'>
-                <button onClick={()=>handleSubmit()} className='border-2 border-[#656923] py-1 px-4 bg-[#939851] rounded-3xl hover:shadow-lg hover:text-white' type="submit">Post</button>
+                <button onClick={()=>handleSubmit()} className='  py-1 px-4  bg-blue-600 rounded-3xl hover:shadow-lg hover:text-white' type="submit">Post</button>
             </div>
+            
       </div>
     </div>)
 

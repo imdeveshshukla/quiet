@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken" ;
 
 const varifyToken = (req, res, next) => {
     const token = req.headers.cookie.split("=")[1];
-    console.log(token);
+
     if (!token) {
       res.status(401).send({ msg: "No token found" });
     }
@@ -21,10 +21,17 @@ const getUser=async(req,res)=>{
     const user= await prisma.user.findUnique({
         where:{
             email:req.params.email,
-        } 
+        } ,
+        include:{
+          posts:true,
+          upvotes:true,
+          comments:true,
+        }
     })
+    console.log(user);
     
-    res.status(200).send({dp:user?.dp, bio:user?.bio, username:user.username, email:user.email, posts: user.posts});
+    
+    res.status(200).send({dp:user?.dp, bio:user?.bio, username:user.username, email:user.email, posts: user.posts, upvotes:user.upvotes, comments:user.comments});
 }
 
 const userController={getUser,varifyToken};
