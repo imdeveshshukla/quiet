@@ -52,7 +52,8 @@ export const upvoteNumber =async (req,res)=>{
     try {
         const upvote = await prisma.upvote.findMany({
             where:{
-                upvoted:true
+                upvoted:true,
+                postId
             }
         });
         res.status(200).json({
@@ -61,6 +62,25 @@ export const upvoteNumber =async (req,res)=>{
             upvote
         });
 
+
+    } catch (error) {
+        res.status(500).json({
+            msg:"Failed",
+            error
+        })
+    }
+}
+export const getUpvote = async(req,res)=>{
+    try {
+        const upvote = await prisma.upvote.findFirst({
+            where:{
+                userId:req.userId
+            }
+        });
+        res.status(200).json({
+            msg:"Success",
+            upvoted:upvote.upvoted
+        })
     } catch (error) {
         res.status(500).json({
             msg:"Failed",

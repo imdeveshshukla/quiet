@@ -2,7 +2,7 @@ import React from 'react'
 import { useEffect } from 'react';
 import { useSelector } from 'react-redux'
 import dp from '../assets/dummydp.png'
-import { BiUpvote } from "react-icons/bi";
+import { BiUpvote,BiUpArrow } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
@@ -14,19 +14,32 @@ const Posts = ({postId, userId, username,title, body, media}) => {
   const [upvoted,setUpvoted] = useState(false);
   const getUpvote = async (key)=>{
     const res = await axios.post("http://localhost:3000/posts/upvoteNum",{ postId:key });
-    console.log("upvot "+res.data);
+    const res2 = await axios.get('http://localhost:3000/posts/upvotewitUId');
+    console.log("upvot "+title+" "+res.data);
+    console.log(res2.data.upvoted);
     setUpvote(res.data.numbers);
+    if(res2.data.upvoted){
+      setUpvoted(res2.data.upvoted);
+    }
+
   }
   const upvote = async(key)=>{
+    if(!upvoted)
+    {
+      setUpvoted(!upvoted);
+      setUpvote(upvoteNumber+1)
+    }
+    else{
+      setUpvoted(false);
+      setUpvote(upvoteNumber-1);
+    }
     const res = await axios.post("http://localhost:3000/posts/upvote",{ postId:key });
     console.clear();
-    setUpvoted(!upvoted);
     console.log(res.data);
   }
   useEffect(() => {
     getUpvote(postId);
-    console.log(""+upvoteNumber)
-  }, [])
+  }, []);
   
   const userInfo= useSelector(state=> state.user.userInfo);
 
@@ -46,7 +59,7 @@ const Posts = ({postId, userId, username,title, body, media}) => {
         </main>
         <footer className='flex py-2 gap-6'>
           <div className=' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400'>
-          <BiUpvote onClick={()=>{upvote(postId)}} className='text-2xl hover:text-green-700 cursor-pointer'/>
+          <BiUpvote onClick={()=>{upvote(postId)}} className={upvoted?'text-2xl hover:text-neutral-950 text-green-700 cursor-pointer':'text-2xl hover:text-green-700 text-neutral-950 cursor-pointer'}/>
           <span>{upvoteNumber}</span>
           <BiDownvote className='text-2xl hover:text-red-700  cursor-pointer'/>
           </div>

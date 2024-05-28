@@ -4,7 +4,7 @@ import { verifyToken } from "../middlewares/verifytoken.js";
 import { createPost, getPost } from "../controller/posts.js";
 import { upload } from "../middlewares/multer.js";
 import { createComment, getAllComment, getUserComment } from "../controller/comment.js";
-import { upvote, upvoteNumber } from "../controller/upvotes.js";
+import { getUpvote, upvote, upvoteNumber } from "../controller/upvotes.js";
 const prismacl = new PrismaClient();
 const postRoutes = express.Router();
 
@@ -32,7 +32,7 @@ postRoutes.get('/comment',getUserComment);
 //Upvotes Routes 
 postRoutes.post('/upvote',upvote);
 postRoutes.post('/upvoteNum',upvoteNumber);
-
+postRoutes.get('/upvotewitUId',getUpvote)
 
 
 export default postRoutes;
