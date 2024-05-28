@@ -27,7 +27,7 @@ const Signup = () => {
     const [errorOtp, setErrorOtp] = useState(null);
     const [errorUsername, setErrorUsername] = useState(null);
     const [varifyOtpData, setVarifyOtpData] = useState({ userID: "", email: "", otp: "" });
-    const [timeLeft, setTimeLeft] = useState(60);
+    const [timeLeft, setTimeLeft] = useState(0);
     const [disable, setdisable] = useState(false);
     const [eye, setEye] = useState(false)
     const passref = useRef();
@@ -215,7 +215,7 @@ const Signup = () => {
 
 export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handleEye, handleSubmit, errorUsername, errorEmail, errorPass, onSave, otp, otpsent, resendOTP, handleOtp, varifyOtp, errorOtp, timeLeft, disable }) => (
     <>
-        <div className='w-full flex justify-center items-center h-[80vh] m-auto  '>
+        <div className='w-full flex justify-center items-center h-[89.5vh] m-auto border-x-2 border-black  '>
             <div className='w-[60%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
 
                 <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
@@ -223,11 +223,11 @@ export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handl
 
                     {otpsent ? <><div className=' flex flex-col gap-5'><div className='relative flex flex-col justify-center items-center'>
                         <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdPassword className=' text-xl' /></span>
-                        <input value={otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
+                        <input autoFocus value={otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
                         <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                     </div>
                         <div className='flex justify-center cursor-pointer'><div onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</div></div>
-                        <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => { resendOTP() }}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>
+                        <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() =>resendOTP()}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>
                     </div>
 
 
