@@ -20,7 +20,7 @@ const uploadOnCloudinary = async (localfilepath)=>{
     // to set when it is uploaded to cloudinary
     var filePathOnCloudinary =  mainFolderName + "/" + uniqueSuffix; 
         const uploadResult = await cloudinary.uploader.upload(localfilepath, {
-            public_id: "filePathOnCloudinary",
+            public_id: filePathOnCloudinary,
             resource_type:"auto",
             allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{console.log(error)});
