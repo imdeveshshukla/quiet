@@ -10,38 +10,92 @@ import { useState } from 'react';
 import axios from 'axios';
 
 const Posts = ({postId, userId, username,title, body, media}) => {
+  const userInfo= useSelector(state=> state.user.userInfo);
+
   const [upvoteNumber, setUpvote] = useState(0);
   const [upvoted,setUpvoted] = useState(false);
+  const [downvoteNum,setDownvotenum] = useState(0);
+  const [downvote,setDownVote] = useState(false);
   const getUpvote = async (key)=>{
+    
     const res = await axios.post("http://localhost:3000/posts/upvoteNum",{ postId:key });
-    const res2 = await axios.get('http://localhost:3000/posts/upvotewitUId');
-    console.log("upvot "+title+" "+res.data);
-    console.log(res2.data.upvoted);
+    // console.clear();
+    console.clear();
+    console.log(userInfo);
+    console.log(res);
+    const upvoteArr = res.data.upvote;
+    const downvoteArr = res.data.downvote;
     setUpvote(res.data.numbers);
-    if(res2.data.upvoted){
-      setUpvoted(res2.data.upvoted);
+    setDownvotenum(res.data.downVoteNum)
+    
+    // console.log(upvoteArr);
+    if(upvoteArr)
+    {
+      upvoteArr.map((mp)=>{
+        if(mp?.userId == userInfo?.userId){
+          console.log(upvoted);
+          setUpvoted(true);
+          console.log(upvoted);
+        }
+      })
+    }
+    if(downvoteArr)
+    {
+      downvoteArr.map((mp)=>{
+        if(mp?.userId == userInfo?.userId){
+          setDownVote(true);
+        }
+      })
     }
 
   }
+  useEffect(() => {
+    console.log("Under UseEffecy");
+    getUpvote(postId);
+  }, []);
   const upvote = async(key)=>{
+    let val= 0;
     if(!upvoted)
     {
-      setUpvoted(!upvoted);
-      setUpvote(upvoteNumber+1)
+      setUpvoted(true);
+      if(downvote)setDownvotenum((val)=>val-1);
+      setDownVote(false);
+      val = 1;
+      setUpvote((upvoteNumber)=>upvoteNumber+1);
     }
     else{
       setUpvoted(false);
-      setUpvote(upvoteNumber-1);
+      val = 0;
+      setUpvote((upvoteNumber)=>upvoteNumber-1)
     }
-    const res = await axios.post("http://localhost:3000/posts/upvote",{ postId:key });
+    const res = await axios.post("http://localhost:3000/posts/vote",{ postId:key, val});
     console.clear();
     console.log(res.data);
   }
-  useEffect(() => {
-    getUpvote(postId);
-  }, []);
+  const downVoteFunc = async(key)=>{
+    let val= 0;
+    if(!downvote)
+    {
+      setDownVote(true);
+      if(upvoted){
+        setUpvote((val)=>val-1);
+        setUpvoted(false);
+      }
+      val = -1;
+      setDownvotenum((downvote)=>downvote+1);
+    }
+    else{
+      setDownVote(false);
+      val = 0;
+      setDownvotenum((upvoteNumber)=>upvoteNumber-1)
+    }
+    const res = await axios.post("http://localhost:3000/posts/vote",{ postId:key, val});
+    console.clear();
+    console.log(res.data);
+  }
+ 
   
-  const userInfo= useSelector(state=> state.user.userInfo);
+  
 
   return (
     <div className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
@@ -61,7 +115,8 @@ const Posts = ({postId, userId, username,title, body, media}) => {
           <div className=' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400'>
           <BiUpvote onClick={()=>{upvote(postId)}} className={upvoted?'text-2xl hover:text-neutral-950 text-green-700 cursor-pointer':'text-2xl hover:text-green-700 text-neutral-950 cursor-pointer'}/>
           <span>{upvoteNumber}</span>
-          <BiDownvote className='text-2xl hover:text-red-700  cursor-pointer'/>
+          <BiDownvote onClick={()=>{downVoteFunc(postId)}} className={downvote?'text-2xl hover:text-neutral-950 text-red-700  cursor-pointer':'text-2xl hover:text-red-700  cursor-pointer'}/>
+          <span>{downvoteNum}</span>
           </div>
 
           <div className=' rounded-3xl flex gap-2 items-start justify-center p-2  bg-blue-300'>

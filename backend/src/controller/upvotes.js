@@ -1,7 +1,7 @@
 import prisma from "../../db/db.config.js";
 
-export const upvote =async(req,res)=>{
-    const { postId } = req.body;
+export const vote =async(req,res)=>{
+    const { postId,val } = req.body;
     const uId = req.userId;
     try {
         const existingUpvote = await prisma.upvote.findFirst({
@@ -18,7 +18,7 @@ export const upvote =async(req,res)=>{
                     id: existingUpvote.id,
                 },
                 data: {
-                    upvoted: !existingUpvote.upvoted,
+                    upvotes: val,
                 },
             });
             res.status(201).json({
@@ -31,11 +31,11 @@ export const upvote =async(req,res)=>{
                 data:{
                     userId: uId,
                     postId: postId,
-                    upvoted:true
+                    upvotes:val
                 }
             })
             res.status(201).json({
-                msg:"Done",
+                msg:"create",
                 newUpvote
             })
         }
@@ -52,35 +52,25 @@ export const upvoteNumber =async (req,res)=>{
     try {
         const upvote = await prisma.upvote.findMany({
             where:{
-                upvoted:true,
+                upvotes:1,
+                postId
+            }
+        });
+        const downVote = await prisma.upvote.findMany({
+            where:{
+                upvotes:-1,
                 postId
             }
         });
         res.status(200).json({
             msg:"Success",
             numbers:upvote.length,
-            upvote
+            downVoteNum:downVote.length,
+            upvote:upvote,
+            downvote:downVote
         });
 
 
-    } catch (error) {
-        res.status(500).json({
-            msg:"Failed",
-            error
-        })
-    }
-}
-export const getUpvote = async(req,res)=>{
-    try {
-        const upvote = await prisma.upvote.findFirst({
-            where:{
-                userId:req.userId
-            }
-        });
-        res.status(200).json({
-            msg:"Success",
-            upvoted:upvote.upvoted
-        })
     } catch (error) {
         res.status(500).json({
             msg:"Failed",

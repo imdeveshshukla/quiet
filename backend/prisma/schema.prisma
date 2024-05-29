@@ -57,7 +57,7 @@ model Comment{
 }
 model Upvote{
   id Int @id @default(autoincrement())
-  upvoted Boolean @default(false)
+  upvotes Int @default(0)
   postId String
   post Post @relation(fields: [postId],references: [id])
   userId String 

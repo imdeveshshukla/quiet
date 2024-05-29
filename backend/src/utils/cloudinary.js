@@ -25,7 +25,7 @@ const uploadOnCloudinary = async (localfilepath)=>{
             allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{console.log(error)});
         
-        console.log("uploadResult = "+uploadResult.url);//uploadResult.url to get url of file path
+        // console.log("uploadResult = "+uploadResult.url);//uploadResult.url to get url of file path
         
         // Optimize delivery by resizing and applying auto-format and auto-quality
         const optimizeUrl = cloudinary.url("images", {
@@ -33,7 +33,7 @@ const uploadOnCloudinary = async (localfilepath)=>{
             quality: 'auto'
         });
         
-        console.log("optimizeUrl "+optimizeUrl);
+        // console.log("optimizeUrl "+optimizeUrl);
         
         // Transform the image: auto-crop to square aspect_ratio
         const autoCropUrl = cloudinary.url("images", {
@@ -43,14 +43,14 @@ const uploadOnCloudinary = async (localfilepath)=>{
             height: 500,
         });
         
-        console.log("autoCropUrl = "+autoCropUrl);
-        // fs.unlinkSync(localfilepath, (err) => {
-        //     if (err) {
-        //         console.error("Failed to delete local file:", err);
-        //     } else {
-        //         console.log("Successfully deleted local file:", localfilepath);
-        //     }
-        // });
+        // console.log("autoCropUrl = "+autoCropUrl);
+        fs.unlinkSync(localfilepath, (err) => {
+            if (err) {
+                console.error("Failed to delete local file:", err);
+            } else {
+                console.log("Successfully deleted local file:", localfilepath);
+            }
+        });
         return uploadResult.url;
     } 
     catch (error) {
