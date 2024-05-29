@@ -26,6 +26,7 @@ import Profilecard from './components/Profilecard'
 import { setPost } from './redux/Post'
 import Postdetail from './components/Postdetail'
 import { setPostDetail } from './redux/Postdetail'
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -133,7 +134,7 @@ function App() {
           <Route path='/varifyaccount' element={<Varifyacc />} />
           <Route path='/profile/' element={<Profile/>}>
             <Route path='overview' element={<Overview/>}/>
-            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments.length}/>)}/>
+            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={uuidv4()} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments.length}/>)}/>
             <Route path='commented' element={<Commented/>}/>
             <Route path='upvoted' element={<Upvoted/>}/>
             

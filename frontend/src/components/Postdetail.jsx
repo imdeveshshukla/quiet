@@ -8,7 +8,7 @@ import toast from 'react-hot-toast';
 import { setComment } from '../redux/Postdetail';
 import dp from '../assets/dummydp.png'
 import { setPostComment } from '../redux/Post';
-
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -64,7 +64,7 @@ const Postdetail = () => {
 
   return (<>
     <div className='h-full overflow-auto border-x-2 border-black pl-16'>
-      <Posts key={post?.id}  username={post?.username} id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments.length}/>
+      <Posts key={uuidv4()}  username={post?.username} id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments.length}/>
 
       <div className=' m-4'>
         {isLogin?  <div className={isComment?'border bg-[#e2e4c6]  rounded-3xl border-black':'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >

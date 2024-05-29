@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import Createpost from './Createpost'
 import { useDispatch, useSelector } from 'react-redux'
 import Posts from './Posts';
+import { v4 as uuidv4 } from 'uuid';
 import axios from 'axios';
 import loading from '../redux/loading';
 import setPost  from '../redux/Post';
@@ -21,10 +22,9 @@ const Home = () => {
 
         <div className="post ">
         {posts?.map((post)=>{
-          return<>
-          <Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments.length} />
-
-          </> 
+          return(
+          <Posts key={uuidv4()} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments.length} />
+          )
 
         })}
 
