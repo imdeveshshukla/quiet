@@ -8,7 +8,7 @@ import { upvote, upvoteNumber } from "../controller/upvotes.js";
 const prismacl = new PrismaClient();
 const postRoutes = express.Router();
 
-postRoutes.use(verifyToken);
+// postRoutes.use(verifyToken);
 
 postRoutes.get("/",(req,res)=>{
     res.json({
@@ -19,13 +19,13 @@ postRoutes.get("/",(req,res)=>{
 
 //Post Routes 
 postRoutes.get("/getPost",getPost);
-postRoutes.post("/postWithImg",upload.single('postImg'),createPost);
-postRoutes.post("/post",createPost);
+postRoutes.post("/postWithImg",verifyToken,upload.single('postImg'),createPost);
+postRoutes.post("/post",verifyToken,createPost);
 
 
 //Comments Routes 
-postRoutes.post('/comment',createComment);
-postRoutes.post('/comment',getAllComment);
+postRoutes.post('/createcomment',verifyToken,createComment);
+postRoutes.post('/getallcomment',getAllComment);
 postRoutes.get('/comment',getUserComment);
 //create getComment according to postID
 

@@ -1,13 +1,15 @@
 import prisma from "../../db/db.config.js";
 
 export const createComment =async (req,res)=>{
-    const { postId, content } = req.body;
+    const { postId, content,dp,username } = req.body;
     try {
         const newComment = await prisma.comment.create({
             data: {
                 body: content,
                 postId: postId,
                 userId: req.userId,
+                dp:dp,
+                username:username
             },
         });
         res.status(201).json({
@@ -16,7 +18,6 @@ export const createComment =async (req,res)=>{
         });
     } catch (error) {
         res.status(500).json({ 
-            
             msg: "Failed to create comment",
             error
      });
@@ -35,7 +36,6 @@ export const getAllComment = async (req,res)=>{
         })
     }catch (error) {
         res.status(500).json({ 
-            
             msg: "Failed to fetch comments",
             error
      });

@@ -4,10 +4,16 @@ import { loading } from '../redux/loading';
 import { GrGallery } from "react-icons/gr";
 import dp from '../assets/dummydp.png';
 import axios from 'axios';
+import { setPost } from '../redux/Post';
+import toast from 'react-hot-toast';
+import { setUserPost } from '../redux/user';
+
+
+
 const Createpost = () => {
     const userInfo = useSelector((state) => state.user.userInfo);
     const selectFile= useRef(null);
-    // const [post, setPost] = useState({title:"", body:"", media:""})
+    
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -25,18 +31,30 @@ const Createpost = () => {
         formData.append('title', title);
         formData.append('body', description);
         formData.append('postImg', image);
+        formData.append('username', userInfo.username);
+                
+
+        dispatch(loading())
         try {
-          dispatch(loading())
           const response = await axios.post('http://localhost:3000/posts/postWithImg', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
             },
           });
-          console.log('Post created:', response.data);
-          dispatch(loading())
+          console.log(response.data.post);
+          if(response.status==201){
+            dispatch(setPost(response.data.post));
+            dispatch(setUserPost(response.data.post))
+            toast.success("Successfully Posted!")
+            setTitle("")
+            setDescription("")
+            setImage(null)
+          }
         } catch (error) {
+          toast.error("Error uploading the post!")
           console.error('Error uploading the post:', error);
         }
+        dispatch(loading())
         
     }
   return (
@@ -54,8 +72,9 @@ const Createpost = () => {
                 <input onChange={(e)=>handleChange(e)} accept='image/*' ref={selectFile} type="file" name="media" id="media" hidden/>
             </div>
             <div className='flex justify-center'>
-                <button onClick={()=>handleSubmit()} className='border-2 border-[#656923] py-1 px-4 bg-[#939851] rounded-3xl hover:shadow-lg hover:text-white' type="submit">Post</button>
+                <button onClick={()=>handleSubmit()} className='  py-1 px-4  bg-blue-600 rounded-3xl hover:shadow-lg hover:text-white' type="submit">Post</button>
             </div>
+            
       </div>
     </div>)
 
