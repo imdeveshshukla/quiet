@@ -1,7 +1,6 @@
 import React from 'react'
 import { useSelector,useDispatch } from 'react-redux'
 import { useEffect } from 'react';
-import { useSelector } from 'react-redux'
 import dp from '../assets/dummydp.png'
 import { BiUpvote,BiUpArrow } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
@@ -14,9 +13,7 @@ import { setPostDetail } from '../redux/Postdetail';
 import { useState } from 'react';
 import axios from 'axios';
 
-const Posts = ({username,id,title, body, media,countComment}) => {
-
-const Posts = ({postId, userId, username,title, body, media}) => {
+const Posts = ({id, userId, username,title, body, media,countComment}) => {
   const userInfo= useSelector(state=> state.user.userInfo);
   const posts= useSelector(state=> state.post.posts);
   const Navigate= useNavigate();
@@ -30,13 +27,6 @@ const Posts = ({postId, userId, username,title, body, media}) => {
       Navigate(`/posts/${id}`);
     }
   }
-
-
-
- 
-  return (<>
-    <div  className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
-        <header  className='flex gap-2 items-center my-2'>
 
   const [upvoteNumber, setUpvote] = useState(0);
   const [upvoted,setUpvoted] = useState(false);
@@ -77,9 +67,10 @@ const Posts = ({postId, userId, username,title, body, media}) => {
   }
   useEffect(() => {
     console.log("Under UseEffecy");
-    getUpvote(postId);
+    getUpvote(id);
   }, []);
   const upvote = async(key)=>{
+    console.log(key);
     let val= 0;
     if(!upvoted)
     {
@@ -119,11 +110,12 @@ const Posts = ({postId, userId, username,title, body, media}) => {
     console.clear();
     console.log(res.data);
   }
+
  
   
   
 
-  return (
+  return (<>
     <div className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
         <header className='flex gap-2 items-center my-2'>
           <img  src={userInfo&&userInfo.dp? userInfo.dp:dp}
@@ -140,9 +132,9 @@ const Posts = ({postId, userId, username,title, body, media}) => {
         <footer className='flex py-2 gap-6'>
           <div className=' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400'>
           
-          <BiUpvote onClick={()=>{upvote(postId)}} className={upvoted?'text-2xl hover:text-neutral-950 text-green-700 cursor-pointer':'text-2xl hover:text-green-700 text-neutral-950 cursor-pointer'}/>
+          <BiUpvote onClick={()=>{upvote(id)}} className={upvoted?'text-2xl hover:text-neutral-950 text-green-700 cursor-pointer':'text-2xl hover:text-green-700 text-neutral-950 cursor-pointer'}/>
           <span>{upvoteNumber}</span>
-          <BiDownvote onClick={()=>{downVoteFunc(postId)}} className={downvote?'text-2xl hover:text-neutral-950 text-red-700  cursor-pointer':'text-2xl hover:text-red-700  cursor-pointer'}/>
+          <BiDownvote onClick={()=>{downVoteFunc(id)}} className={downvote?'text-2xl hover:text-neutral-950 text-red-700  cursor-pointer':'text-2xl hover:text-red-700  cursor-pointer'}/>
           <span>{downvoteNum}</span>
           </div>
 
@@ -163,4 +155,4 @@ const Posts = ({postId, userId, username,title, body, media}) => {
   )
 }
 
-export default Posts
+export default Posts;

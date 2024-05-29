@@ -30,8 +30,8 @@ postRoutes.get('/comment',getUserComment);
 //create getComment according to postID
 
 //Upvotes Routes 
-postRoutes.post('/vote',vote);
-postRoutes.post('/upvoteNum',upvoteNumber);
+postRoutes.post('/vote',verifyToken,vote);
+postRoutes.post('/upvoteNum',verifyToken,upvoteNumber);
 
 
 export default postRoutes;

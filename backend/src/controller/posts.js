@@ -69,5 +69,5 @@ export const getPost = async(req,res)=>{
             msg:"som"
         })
     }
-}
+}   
 

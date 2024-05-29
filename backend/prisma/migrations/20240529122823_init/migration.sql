@@ -30,10 +30,7 @@ CREATE TABLE "Post" (
     "body" TEXT NOT NULL,
     "img" TEXT,
     "userId" TEXT NOT NULL,
-<<<<<<<< HEAD:backend/prisma/migrations/20240528213056_init/migration.sql
-========
     "username" TEXT NOT NULL,
->>>>>>>> rituraj:backend/prisma/migrations/20240527205329_init/migration.sql
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -46,6 +43,8 @@ CREATE TABLE "Comment" (
     "body" TEXT NOT NULL,
     "postId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
+    "dp" TEXT,
+    "username" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
@@ -55,11 +54,7 @@ CREATE TABLE "Comment" (
 -- CreateTable
 CREATE TABLE "Upvote" (
     "id" SERIAL NOT NULL,
-<<<<<<<< HEAD:backend/prisma/migrations/20240528213056_init/migration.sql
     "upvotes" INTEGER NOT NULL DEFAULT 0,
-========
-    "upvoted" BOOLEAN NOT NULL DEFAULT false,
->>>>>>>> rituraj:backend/prisma/migrations/20240527205329_init/migration.sql
     "postId" TEXT NOT NULL,
     "userId" TEXT NOT NULL,
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,

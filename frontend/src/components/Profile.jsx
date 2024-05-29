@@ -9,7 +9,7 @@ import { PiCameraPlusLight } from "react-icons/pi";
 const Profile = () => {
 
   const userInfo = useSelector((state) => state.user.userInfo);
-
+  const selectFile= useRef(null);
   const handleDpChange=()=>{
     
   }
@@ -24,8 +24,9 @@ const Profile = () => {
               alt="Profile"
               className="w-36 h-36 rounded-full   bg-white " />
               
-            
-              <button onClick={()=>handleDpChange()} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight/></button>
+              
+              <button onClick={()=>selectFile.current?.click()} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight/></button>
+              <input onChange={(e)=>handleDpChange(e)} accept='image/*' ref={selectFile} type="file" name="media" id="media" hidden/>
           </div>
           <div>
             <h2 className=' text-3xl font-bold '>{userInfo && userInfo.username ? userInfo.username : 'Anonymous'}</h2>
