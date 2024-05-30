@@ -12,14 +12,21 @@ import { setPostDetail } from '../redux/Postdetail';
 
 import { useState } from 'react';
 import axios from 'axios';
+import toast from 'react-hot-toast';
 
-const Posts = ({id, userId, username,title, body, media,countComment}) => {
+const Posts = ({id, userId, username,title, body, media,countComment,time}) => {
   const userInfo= useSelector(state=> state.user.userInfo);
+  const isLogin= useSelector(state=> state.login.value);
   const posts= useSelector(state=> state.post.posts);
   const Navigate= useNavigate();
   const dispatch= useDispatch();
   const handleComment=async(id)=>{
-
+    if(!isLogin)
+      {
+        toast.dismiss();
+        toast.error("Sign In First");
+        return;
+      }
     if(id){
       let post= await  Array.from(posts).find(post=>post.id==id);
      
@@ -70,26 +77,39 @@ const Posts = ({id, userId, username,title, body, media,countComment}) => {
     getUpvote(id);
   }, []);
   const upvote = async(key)=>{
-    console.log(key);
-    let val= 0;
-    if(!upvoted)
+    if(isLogin)
     {
-      setUpvoted(true);
-      if(downvote)setDownvotenum((val)=>val-1);
-      setDownVote(false);
-      val = 1;
-      setUpvote((upvoteNumber)=>upvoteNumber+1);
+      console.log(key);
+      let val= 0;
+      if(!upvoted)
+      {
+        setUpvoted(true);
+        if(downvote)setDownvotenum((val)=>val-1);
+        setDownVote(false);
+        val = 1;
+        setUpvote((upvoteNumber)=>upvoteNumber+1);
+      }
+      else{
+        setUpvoted(false);
+        val = 0;
+        setUpvote((upvoteNumber)=>upvoteNumber-1)
+      }
+      const res = await axios.post("http://localhost:3000/posts/vote",{ postId:key, val});
+      console.clear();
+      console.log(res.data);
     }
     else{
-      setUpvoted(false);
-      val = 0;
-      setUpvote((upvoteNumber)=>upvoteNumber-1)
+      toast.dismiss();
+      toast.error("Sign IN First");
     }
-    const res = await axios.post("http://localhost:3000/posts/vote",{ postId:key, val});
-    console.clear();
-    console.log(res.data);
   }
   const downVoteFunc = async(key)=>{
+    if(!isLogin)
+    {
+      toast.dismiss();
+      toast.error("Sign In First");
+      return; 
+    }
     let val= 0;
     if(!downvote)
     {
@@ -121,14 +141,15 @@ const Posts = ({id, userId, username,title, body, media,countComment}) => {
           <img  src={userInfo&&userInfo.dp? userInfo.dp:dp}
           alt="Profile"
           className="w-8 h-8 rounded-full cursor-pointer   bg-white" />
-          <span className=' font-semibold cursor-pointer'>u/{username}</span>•<span className=' text-xs text-gray-700'>8 hrs ago</span>
+        <span className=' font-semibold cursor-pointer'>u/{username}</span>•<span className=' text-xs text-gray-700'>{`${time} ago`}</span>
           
         </header>
         <main onClick={()=>handleComment(id,username,title,body,media)} className=' cursor-pointer'>
           <div className='text-lg font-bold my-2'>{title}</div>
           <div className='my-2 '>{body}</div>
+          {!media?"":
           <img className=' w-full  max-h-[420px] object-contain py-2 ' src={media} alt="postImg" />
-        </main>
+          }</main>
         <footer className='flex py-2 gap-6'>
           <div className=' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400'>
           

@@ -38,6 +38,7 @@ const Createpost = () => {
 
         // dispatch(loading())
         setLoading(true);
+        toast.loading("Posting....");
         try {
           const response = await axios.post('http://localhost:3000/posts/postWithImg', formData, {
             headers: {
@@ -48,6 +49,7 @@ const Createpost = () => {
           if(response.status==201){
             dispatch(setPost(response.data.post));
             dispatch(setUserPost(response.data.post))
+            toast.dismiss();
             toast.success("Successfully Posted!")
             setTitle("")
             setDescription("")
@@ -58,6 +60,7 @@ const Createpost = () => {
           console.error('Error uploading the post:', error);
         }
         // dispatch(loading())
+        
         setLoading(false);
         
     }
@@ -78,6 +81,7 @@ const Createpost = () => {
             <div className='flex justify-center'>
                 <button onClick={()=>handleSubmit()} className='  py-1 px-5  bg-blue-600 rounded-3xl hover:shadow-lg hover:text-white' type="submit">{Btnloading?<SmallLoader/>:"Post"}</button>
             </div>
+            
             
       </div>
     </div>)

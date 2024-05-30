@@ -28,9 +28,11 @@ export const createPost = async (req,res)=>{
                 img:url,
                 username:parsedBody.data.username,
                 userId:userId//from middleware
-
             }
         })
+        console.log("post");
+        console.log(post);
+        // post = post.reverse();
         res.status(201).json({
             msg : "SuccessFully Created",
             post
@@ -50,6 +52,9 @@ export const getPost = async(req,res)=>{
             include:{
                 comments:true,
                 upvotes:true,
+            },
+            orderBy:{
+                id:'desc'
             }
         });
         res.status(200).json({

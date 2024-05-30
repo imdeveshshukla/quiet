@@ -64,7 +64,8 @@ function App() {
     const res = await axios.get('http://localhost:3000/posts/getPost');
     if(res.status==200)
       {
-        console.log("getpost", res.data.posts);
+
+        // console.log("getpost", res.data.posts);
         
          dispatch(setPost(res.data.posts));
          if(String(location.pathname).split("/posts/")[1]){
