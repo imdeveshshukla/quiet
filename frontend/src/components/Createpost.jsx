@@ -7,13 +7,14 @@ import axios from 'axios';
 import { setPost } from '../redux/Post';
 import toast from 'react-hot-toast';
 import { setUserPost } from '../redux/user';
-
+import SmallLoader from '../components/SmallLoader'
 
 
 const Createpost = () => {
     const userInfo = useSelector((state) => state.user.userInfo);
     const selectFile= useRef(null);
-    
+    const [Btnloading,setLoading] = useState(false);
+
     const dispatch = useDispatch();
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
@@ -35,7 +36,8 @@ const Createpost = () => {
         formData.append('username', userInfo.username);
                 
 
-        dispatch(loading())
+        // dispatch(loading())
+        setLoading(true);
         try {
           const response = await axios.post('http://localhost:3000/posts/postWithImg', formData, {
             headers: {
@@ -55,7 +57,8 @@ const Createpost = () => {
           toast.error("Error uploading the post!")
           console.error('Error uploading the post:', error);
         }
-        dispatch(loading())
+        // dispatch(loading())
+        setLoading(false);
         
     }
   return (
@@ -73,7 +76,7 @@ const Createpost = () => {
                 <input onChange={(e)=>handleChange(e)} accept='image/*' ref={selectFile} type="file" name="media" id="media" hidden/>
             </div>
             <div className='flex justify-center'>
-                <button onClick={()=>handleSubmit()} className='  py-1 px-4  bg-blue-600 rounded-3xl hover:shadow-lg hover:text-white' type="submit">Post</button>
+                <button onClick={()=>handleSubmit()} className='  py-1 px-5  bg-blue-600 rounded-3xl hover:shadow-lg hover:text-white' type="submit">{Btnloading?<SmallLoader/>:"Post"}</button>
             </div>
             
       </div>
