@@ -26,7 +26,10 @@ const getUser=async(req,res)=>{
           posts:{
             include:{
               comments:true
-            }
+            },
+            orderBy:{
+              id:'desc'
+          }
           },
           upvotes:true,
           comments:true,

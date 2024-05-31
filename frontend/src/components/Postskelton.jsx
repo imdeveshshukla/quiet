@@ -1,6 +1,6 @@
 const Postskelton = ()=>{
     return <>
-        <div class="rounded-3xl m-6 p-4 bg-gray-200 animate-pulse">
+        <div class=" h-full rounded-3xl m-6 p-4 bg-[#a3a674f0] animate-pulse">
         <header class='flex gap-2 items-center my-2'>
             <div class="w-8 h-8 rounded-full bg-white"></div>
             <div class='h-4 bg-gray-300 w-32 my-2 rounded'></div>
@@ -10,6 +10,8 @@ const Postskelton = ()=>{
             <div class='h-5 bg-gray-300 w-1/2 my-2 rounded'></div>
             <div class='h-4 bg-gray-300 w-3/4 my-2 rounded'></div>
             <div class='w-full max-h-[420px] object-contain py-2 bg-gray-300 rounded'></div>
+            <div class='w-full h-[30vh] object-contain py-2 bg-gray-300 rounded'></div>
+           
         </main>
   
         <footer class='flex py-2 gap-6'>

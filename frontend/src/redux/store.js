@@ -3,7 +3,7 @@ import loginReducer from './login'
 import loadingReducer from './loading'
 import userReduser from './user'
 import postReducer from './Post'
-import userPostReducer from './Userpost'
+import skeltonReducer from './skelton'
 import postDetailReducer from './Postdetail'
 
 export const store = configureStore({
@@ -12,7 +12,7 @@ export const store = configureStore({
     loading: loadingReducer,
     user: userReduser,
     post: postReducer,
-    userPost: userPostReducer,
+    skelton: skeltonReducer,
     postDetail: postDetailReducer,
   },
 })

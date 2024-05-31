@@ -12,6 +12,8 @@ import { useNavigate } from "react-router-dom";
 import { loading } from '../redux/loading';
 import toast from 'react-hot-toast';
 import { setUserInfo } from '../redux/user';
+import { setSkeltonLoader } from '../redux/skelton';
+
 
 
 
@@ -33,7 +35,8 @@ const Signin = () => {
 
     const getUserData=async(email)=>{ 
         console.log(location);
-        dispatch(loading())
+        // dispatch(loading())
+        dispatch(setSkeltonLoader())
         try {
           const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
           console.log(res);
@@ -43,34 +46,40 @@ const Signin = () => {
         } catch (error) {
           console.log(error);
         } 
-        dispatch(loading())
+        // dispatch(loading())
+        dispatch(setSkeltonLoader())
      }
 
 
     const sendRequest = async () => {
 
+        toast.loading("Signing In...");
         try {
             if (String(form.user).endsWith("@ietlucknow.ac.in")) {
                 const res = await axios.post("http://localhost:3000/auth/signin", { email: form.user, password: form.password });
+                toast.dismiss()
                 if (res.status == 202) {
+                    toast.dismiss()
                     dispatch(login())
+                    Navigate("/")
                     await getUserData(res.data);
                     toast.success("Logged In successfully !")
-                    Navigate("/")
                 }
                 console.log(res);
             }
             else {
                 const res = await axios.post("http://localhost:3000/auth/signin", { username: form.user, password: form.password });
                 if (res.status == 202) {
+                    toast.dismiss()
                     dispatch(login())
+                    Navigate("/")
                     await getUserData(res.data);
                     toast.success("Logged In succesfully!")
-                    Navigate("/")
                 }
                 console.log(res);
             }
         } catch (error) {
+            toast.dismiss()
             console.log(error);
             if(error.response.status==401){
                 toast.error("Invalid Credentials")

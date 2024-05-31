@@ -26,9 +26,9 @@ import Profilecard from './components/Profilecard'
 import { setPost } from './redux/Post'
 import Postdetail from './components/Postdetail'
 import { setPostDetail } from './redux/Postdetail'
-
 import Postskelton from './components/Postskelton'
-
+import { setSkeltonLoader } from './redux/skelton'
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -43,10 +43,14 @@ function App() {
   const userInfo=  useSelector(state=>state.user.userInfo);
   const posts= useSelector(state=> state.post.posts)
   const location = useLocation();
+  const isSkelton= useSelector(state=>state.skelton.value);
+  
 
   const getUserData=async(email)=>{ 
  
-    dispatch(loading())
+    // dispatch(loading())
+ 
+    
     try {
       const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
       console.log(res);
@@ -57,11 +61,14 @@ function App() {
       console.log(error);
       
     } 
-    dispatch(loading())
+    // dispatch(loading())
+ 
+
  }
 
 
  const getPost = async()=>{
+
   try {
     const res = await axios.get('http://localhost:3000/posts/getPost');
     if(res.status==200)
@@ -81,12 +88,16 @@ function App() {
   } catch (error) {
     console.log(error);
   }
+
+
 }
 
 
   const sendReq = async () => {
 
-  dispatch(loading());
+  // dispatch(loading());
+  dispatch(setSkeltonLoader());
+
     try {
       const res = await axios.post("http://localhost:3000/auth/refreshsignin", {withCredentials: true});
       if (res.status == 200){
@@ -106,7 +117,9 @@ function App() {
         console.log("Invalid token");
       }
     }
-    dispatch(loading())
+    // dispatch(loading())
+  dispatch(setSkeltonLoader());
+
   }
 
 
@@ -126,7 +139,7 @@ function App() {
           <Sidenav/>
         <Routes>
          
-          <Route path='/' exact element={<Home/>} />
+          <Route path='/' element={<Home/>} />
 
          
           <Route path='/signup' element={<Signup />} />
@@ -136,14 +149,20 @@ function App() {
           <Route path='/profile/' element={<Profile/>}>
             <Route path='overview' element={<Overview/>}/>
 
-            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length}/>)}/>
+            <Route path='posts' element={ userInfo?.posts==null?<Postskelton/>: userInfo.posts.map(post=>{
+                return (
+                  isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt}/>
+                )
+              }
+              )}
+            />
             <Route path='commented' element={<Commented/>}/>
             <Route path='upvoted' element={<Upvoted/>}/>
             
           </Route>
           <Route path='/setting/' element={<Settings />} />
-          {/* <Route path="/test/" element={<Postskelton/>}/> */}
-          <Route path='/posts/:id' element={<Postdetail />} />
+          <Route path="/test/" element={<Postskelton/>}/>
+          <Route path='/posts/:id' element={isSkelton?<Postskelton/>:<Postdetail />} />
         </Routes>
         {String(location.pathname).includes("/profile/")? <Profilecard/>: ''}
       </div>

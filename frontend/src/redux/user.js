@@ -12,7 +12,7 @@ export const userState = createSlice({
         state.userInfo=action.payload;
     },
     setUserPost:(state,action)=>{
-        state.userInfo.posts= [...state.userInfo.posts, action.payload]
+        state.userInfo.posts= [action.payload, ...state.userInfo.posts]
     },
     setUserComment:(state,action)=>{
       let post= Array.from(state.userInfo.posts).find(post=>post.id==action.payload.postId);

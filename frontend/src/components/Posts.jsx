@@ -14,22 +14,41 @@ import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 
-const Posts = ({id, userId, username,title, body, media,countComment,time}) => {
+const Posts = ({id, userId, username,title, body, media,countComment, createdAt}) => {
   const userInfo= useSelector(state=> state.user.userInfo);
   const isLogin= useSelector(state=> state.login.value);
   const posts= useSelector(state=> state.post.posts);
   const Navigate= useNavigate();
   const dispatch= useDispatch();
+
+
+  const getTime=(createdAt)=>{
+    const postDate = new Date(createdAt).getTime();
+          const crrTime = new Date().getTime();
+     
+          let sec= Math.floor((crrTime-postDate)/1000);
+          let min= Math.floor(sec/60);
+          let hours=Math.floor(sec/3600)
+          let day= Math.floor(sec/(60*60*24))
+          let month = Math.floor(sec/(60*60*24*30));
+          let years= Math.floor(sec/(60*60*24*30*12));
+          const ans = years>0?years+' year':(month>0?month+' month':day>0?day+" days":hours>0?hours+" hours":min>0?min+" minutes":sec>0?sec+" seconds":0+" seconds");
+          
+          return ans;
+  }
+
+
+
+
   const handleComment=async(id)=>{
     if(!isLogin)
       {
-        toast.dismiss();
+        toast.dismiss()
         toast.error("Sign In First");
         return;
       }
     if(id){
       let post= await  Array.from(posts).find(post=>post.id==id);
-     
       dispatch(setPostDetail(post))
       Navigate(`/posts/${id}`);
     }
@@ -43,7 +62,7 @@ const Posts = ({id, userId, username,title, body, media,countComment,time}) => {
     
     const res = await axios.post("http://localhost:3000/posts/upvoteNum",{ postId:key });
     // console.clear();
-    console.clear();
+  
     console.log(userInfo);
     console.log(res);
     const upvoteArr = res.data.upvote;
@@ -76,6 +95,8 @@ const Posts = ({id, userId, username,title, body, media,countComment,time}) => {
     console.log("Under UseEffect");
     getUpvote(id);
   }, []);
+
+  
   const upvote = async(key)=>{
     if(isLogin)
     {
@@ -141,7 +162,7 @@ const Posts = ({id, userId, username,title, body, media,countComment,time}) => {
           <img  src={userInfo&&userInfo.dp? userInfo.dp:dp}
           alt="Profile"
           className="w-8 h-8 rounded-full cursor-pointer   bg-white" />
-        <span className=' font-semibold cursor-pointer'>u/{username}</span>•<span className=' text-xs text-gray-700'>{`${time} ago`}</span>
+        <span className=' font-semibold cursor-pointer'>u/{username}</span>•<span className=' text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
           
         </header>
         <main onClick={()=>handleComment(id,username,title,body,media)} className=' cursor-pointer'>
