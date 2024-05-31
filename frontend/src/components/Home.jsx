@@ -22,7 +22,7 @@ const Home = () => {
         <div className="post ">
         {posts?.map((post)=>{
           return(
-          <Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments.length} />
+          <Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post?.comments?.length} />
         )
 
         })}

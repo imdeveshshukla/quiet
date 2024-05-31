@@ -9,6 +9,7 @@ import { setComment } from '../redux/Postdetail';
 import dp from '../assets/dummydp.png'
 import { setPostComment } from '../redux/Post';
 import { v4 as uuidv4 } from 'uuid';
+import { setUserComment } from '../redux/user';
 
 
 
@@ -35,7 +36,7 @@ const Postdetail = () => {
                 console.log(res.data.newComment);
                 dispatch(setComment(res.data.newComment))
                 dispatch(setPostComment(res.data.newComment))
-                
+                dispatch(setUserComment(res.data.newComment))
                 console.log(post);
                 
                 toast.success("Comment Added.")

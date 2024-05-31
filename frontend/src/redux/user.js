@@ -14,12 +14,18 @@ export const userState = createSlice({
     setUserPost:(state,action)=>{
         state.userInfo.posts= [...state.userInfo.posts, action.payload]
     },
+    setUserComment:(state,action)=>{
+      let post= Array.from(state.userInfo.posts).find(post=>post.id==action.payload.postId);
+      if(post){
+        post.comments=[...post.comments,action.payload];
+      }
+    },
     clearUserInfo:(state)=>{
         state.userInfo=null;
     }
   },
 })
 
-export const { setUserInfo,clearUserInfo,setUserPost} = userState.actions
+export const { setUserInfo,clearUserInfo,setUserPost,setUserComment} = userState.actions
 
 export default userState.reducer

@@ -6,7 +6,7 @@ import { BiUpvote,BiUpArrow } from "react-icons/bi";
 import { BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
-import { combineSlices } from '@reduxjs/toolkit';
+
 import { useNavigate } from 'react-router-dom';
 import { setPostDetail } from '../redux/Postdetail';
 
@@ -66,7 +66,7 @@ const Posts = ({id, userId, username,title, body, media,countComment}) => {
 
   }
   useEffect(() => {
-    console.log("Under UseEffecy");
+    console.log("Under UseEffect");
     getUpvote(id);
   }, []);
   const upvote = async(key)=>{
@@ -140,7 +140,7 @@ const Posts = ({id, userId, username,title, body, media,countComment}) => {
 
           <div onClick={()=>handleComment(id)} className=' rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
           <GoComment className='text-2xl '/> 
-          <span>{countComment}</span>
+          <span>{countComment?countComment:0}</span>
           </div>
 
           <div className=' rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>

@@ -46,12 +46,7 @@ export const createPost = async (req,res)=>{
 }
 export const getPost = async(req,res)=>{
     const userId = req.userId;
-    // if(!userId)
-    // {
-    //     res.status(401).json({
-    //         msg:"Unauthorised"
-    //     })
-    // }
+ 
     try{
         const posts = await prisma.post.findMany({
             include:{
