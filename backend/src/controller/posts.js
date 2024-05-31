@@ -28,9 +28,11 @@ export const createPost = async (req,res)=>{
                 img:url,
                 username:parsedBody.data.username,
                 userId:userId//from middleware
-
             }
         })
+        console.log("post");
+        console.log(post);
+        // post = post.reverse();
         res.status(201).json({
             msg : "SuccessFully Created",
             post
@@ -46,12 +48,20 @@ export const createPost = async (req,res)=>{
 }
 export const getPost = async(req,res)=>{
     const userId = req.userId;
- 
+    // if(!userId)
+    // {
+    //     res.status(401).json({
+    //         msg:"Unauthorised"
+    //     })
+    // }
     try{
         const posts = await prisma.post.findMany({
             include:{
                 comments:true,
                 upvotes:true,
+            },
+            orderBy:{
+                id:'desc'
             }
         });
         res.status(200).json({
@@ -60,8 +70,8 @@ export const getPost = async(req,res)=>{
     }
     catch(error)
     {
-        res.status(401).json({
-            msg:"som"
+        res.status(500).json({
+            msg:"some error occured"
         })
     }
 }   

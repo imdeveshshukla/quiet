@@ -8,8 +8,12 @@ import toast from 'react-hot-toast';
 import { setComment } from '../redux/Postdetail';
 import dp from '../assets/dummydp.png'
 import { setPostComment } from '../redux/Post';
-import { v4 as uuidv4 } from 'uuid';
+
 import { setUserComment } from '../redux/user';
+
+import SmallLoader from './SmallLoader';
+
+
 
 
 
@@ -24,10 +28,12 @@ const Postdetail = () => {
     const [isComment,setIsComment]= useState(false)
     const [comment, setcomment] = useState("")
     const dispatch= useDispatch()
-
+    const [loading,setLoading] = useState(false);
     
 
     const addComment= async ()=>{
+        toast.loading("Adding your comment...");
+        setLoading(true);
         console.log(comment);
         try {
             const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment, dp:userInfo?.dp, username: userInfo.username});
@@ -38,7 +44,8 @@ const Postdetail = () => {
                 dispatch(setPostComment(res.data.newComment))
                 dispatch(setUserComment(res.data.newComment))
                 console.log(post);
-                
+                toast.dismiss();
+
                 toast.success("Comment Added.")
                 setcomment("");
             }
@@ -49,6 +56,7 @@ const Postdetail = () => {
                 toast.error("Failed to add comment")
             }
         }   
+        setLoading(false);
     }
 
     const getAllComment=async()=>{
@@ -74,7 +82,7 @@ const Postdetail = () => {
                 <button onClick={()=>{setIsComment(false)
                     setcomment("")
                 }} className='px-4 py-2 rounded-3xl bg-gray-500 ' type="button">Cancel</button>
-                <button onClick={()=>addComment()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">Comment</button> 
+                <button onClick={()=>addComment()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{!loading?"Comment":<SmallLoader/>}</button> 
                 </div>}
             </div>
 

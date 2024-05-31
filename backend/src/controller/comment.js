@@ -29,6 +29,9 @@ export const getAllComment = async (req,res)=>{
         const comments = await prisma.comment.findMany({
             where:{
                 postId:postId
+            },
+            orderBy:{
+                id:"desc"
             }
         });
         res.status(201).json({
@@ -48,6 +51,9 @@ export const getUserComment = async (req,res)=>{
         const comments = await prisma.comment.findMany({
             where:{
                 userId:uId,
+            },
+            orderBy:{
+                id:'desc'
             }
         });
         res.status(201).json({

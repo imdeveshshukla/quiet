@@ -25,7 +25,7 @@ CREATE TABLE "UserVarify" (
 
 -- CreateTable
 CREATE TABLE "Post" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "title" TEXT NOT NULL,
     "body" TEXT NOT NULL,
     "img" TEXT,
@@ -39,9 +39,9 @@ CREATE TABLE "Post" (
 
 -- CreateTable
 CREATE TABLE "Comment" (
-    "id" TEXT NOT NULL,
+    "id" SERIAL NOT NULL,
     "body" TEXT NOT NULL,
-    "postId" TEXT NOT NULL,
+    "postId" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "dp" TEXT,
     "username" TEXT NOT NULL,
@@ -55,7 +55,7 @@ CREATE TABLE "Comment" (
 CREATE TABLE "Upvote" (
     "id" SERIAL NOT NULL,
     "upvotes" INTEGER NOT NULL DEFAULT 0,
-    "postId" TEXT NOT NULL,
+    "postId" INTEGER NOT NULL,
     "userId" TEXT NOT NULL,
     "createAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
@@ -70,6 +70,12 @@ CREATE UNIQUE INDEX "User_email_key" ON "User"("email");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "UserVarify_userID_key" ON "UserVarify"("userID");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Post_id_key" ON "Post"("id");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Comment_id_key" ON "Comment"("id");
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;

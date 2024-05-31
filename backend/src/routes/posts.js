@@ -31,7 +31,7 @@ postRoutes.get('/comment',getUserComment);
 
 //Upvotes Routes 
 postRoutes.post('/vote',verifyToken,vote);
-postRoutes.post('/upvoteNum',verifyToken,upvoteNumber);
+postRoutes.post('/upvoteNum',upvoteNumber);
 
 
 export default postRoutes;

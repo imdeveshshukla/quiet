@@ -26,7 +26,9 @@ import Profilecard from './components/Profilecard'
 import { setPost } from './redux/Post'
 import Postdetail from './components/Postdetail'
 import { setPostDetail } from './redux/Postdetail'
-import { v4 as uuidv4 } from 'uuid';
+
+import Postskelton from './components/Postskelton'
+
 
 
 
@@ -64,11 +66,10 @@ function App() {
     const res = await axios.get('http://localhost:3000/posts/getPost');
     if(res.status==200)
       {
-        console.log("getpost", res.data.posts);
+
+        // console.log("getpost", res.data.posts);
         
          dispatch(setPost(res.data.posts));
-        //  console.log(res.data.posts);
-        //  console.log( String(location.pathname).split("/posts/")[1])
          if(String(location.pathname).split("/posts/")[1]){
          let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
          console.log(post);
@@ -134,12 +135,14 @@ function App() {
           <Route path='/varifyaccount' element={<Varifyacc />} />
           <Route path='/profile/' element={<Profile/>}>
             <Route path='overview' element={<Overview/>}/>
-            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={uuidv4()} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length}/>)}/>
+
+            <Route path='posts' element={ userInfo?.posts?.map(post=><Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length}/>)}/>
             <Route path='commented' element={<Commented/>}/>
             <Route path='upvoted' element={<Upvoted/>}/>
             
           </Route>
           <Route path='/setting/' element={<Settings />} />
+          {/* <Route path="/test/" element={<Postskelton/>}/> */}
           <Route path='/posts/:id' element={<Postdetail />} />
         </Routes>
         {String(location.pathname).includes("/profile/")? <Profilecard/>: ''}

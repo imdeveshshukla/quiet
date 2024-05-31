@@ -316,7 +316,7 @@ const logout = async (req, res) => {
       const user = await prisma.user.findUnique({
         where: { email: payload.email },
       });
-      console.log(user.email);
+      console.log(user?.email);
 
       res
         .cookie(user.userID, "", {
