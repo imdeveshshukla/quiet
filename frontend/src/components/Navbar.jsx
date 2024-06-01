@@ -9,6 +9,7 @@ import {setUserInfo, clearUserInfo} from '../redux/user'
 import {loading} from '../redux/loading';
 import { IoIosLogOut } from "react-icons/io";
 import dp from '../assets/dummydp.png'
+import toast from 'react-hot-toast';
 
 axios.defaults.withCredentials = true
 
@@ -50,19 +51,22 @@ const Navbar = () => {
   
 
     const logOut  = async () => {
-        dispatch(loading())
+        
         try {
-          setIsOpen(!isOpen);
+
+            toast.loading("Logging out...")
+            setIsOpen(!isOpen); 
             const res = await axios.post("http://localhost:3000/auth/logout", {  withCredentials: true})
             if(res.status==200){
             dispatch(logout());
             dispatch(clearUserInfo());
+            toast.dismiss()
             Navigate("/signin");
         }
         } catch (error) {
             console.log(error);
         }
-        dispatch(loading())
+        
     }
 
     const handleSubmit=(e)=>{

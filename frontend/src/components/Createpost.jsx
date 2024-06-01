@@ -27,7 +27,7 @@ const Createpost = () => {
 
     const handleSubmit= async()=>{
         console.log(title+"\n"+description+"\n"+image);
-        // e.preventDefault();
+
 
         const formData = new FormData();
         formData.append('title', title);
@@ -35,8 +35,6 @@ const Createpost = () => {
         formData.append('postImg', image);
         formData.append('username', userInfo.username);
                 
-
-        // dispatch(loading())
         setLoading(true);
         toast.loading("Posting....");
         try {
@@ -59,7 +57,7 @@ const Createpost = () => {
           toast.error("Error uploading the post!")
           console.error('Error uploading the post:', error);
         }
-        // dispatch(loading())
+
         
         setLoading(false);
         

@@ -10,7 +10,7 @@ export const postState = createSlice({
   reducers: {
     setPost: (state,action) => {
       if(state.posts && !Array.isArray(action.payload)){
-        state.posts= [...state.posts, action.payload];
+        state.posts= [action.payload,...state.posts];
       }
       else{
         state.posts=action.payload; 
@@ -20,7 +20,7 @@ export const postState = createSlice({
       let post= state.posts.find(post=>post.id==action.payload.postId);
       console.log(post);
       
-      post.comments= [...post.comments, action.payload];
+      post.comments= [ action.payload,...post.comments];
     }
   },
 })

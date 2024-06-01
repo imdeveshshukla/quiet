@@ -8,7 +8,12 @@ import toast from 'react-hot-toast';
 import { setComment } from '../redux/Postdetail';
 import dp from '../assets/dummydp.png'
 import { setPostComment } from '../redux/Post';
+
+import { setUserComment } from '../redux/user';
+
 import SmallLoader from './SmallLoader';
+import Postskelton from './Postskelton';
+
 
 
 
@@ -35,10 +40,11 @@ const Postdetail = () => {
             const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment, dp:userInfo?.dp, username: userInfo.username});
             console.log(res);
             if(res.status==201){
+                setIsComment(false)
                 console.log(res.data.newComment);
                 dispatch(setComment(res.data.newComment))
                 dispatch(setPostComment(res.data.newComment))
-                
+                dispatch(setUserComment(res.data.newComment))
                 console.log(post);
                 toast.dismiss();
 
@@ -69,7 +75,7 @@ const Postdetail = () => {
 
   return (<>
     <div className='h-full overflow-auto border-x-2 border-black pl-16'>
-      <Posts key={post?.id}  username={post?.username} id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments.length}/>
+      {post?<Posts key={post?.id}  username={post?.username} id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments.length} createdAt={post?.createdAt}/>:<Postskelton/>}
 
       <div className=' m-4'>
         {isLogin?  <div className={isComment?'border bg-[#e2e4c6]  rounded-3xl border-black':'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >

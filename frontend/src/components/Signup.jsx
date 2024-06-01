@@ -109,6 +109,7 @@ const Signup = () => {
 
     const resendOTP = async () => {
         dispatch(loading());
+        setErrorOtp(null)
 
         try {
 
@@ -116,6 +117,7 @@ const Signup = () => {
             if (res.status == 202) {
                 setTimeLeft(60);
                 setdisable(true)
+                setOnSave(true)
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email });
                 toast.success("Your OTP is on its way !");
             } else if (res.status == 500) {
