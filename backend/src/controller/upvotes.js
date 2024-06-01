@@ -13,6 +13,7 @@ export const vote =async(req,res)=>{
 
         if (existingUpvote) {
             // Toggle the upvote status
+
             const upvte = await prisma.upvote.update({
                 where: {
                     id: existingUpvote.id,
@@ -23,7 +24,7 @@ export const vote =async(req,res)=>{
             });
             res.status(201).json({
                 msg:"Success",
-                upvte
+                newUpvote:upvte
             })
         }
         else{

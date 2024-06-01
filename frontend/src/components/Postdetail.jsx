@@ -47,7 +47,6 @@ const Postdetail = () => {
                 dispatch(setUserComment(res.data.newComment))
                 console.log(post);
                 toast.dismiss();
-
                 toast.success("Comment Added.")
                 setcomment("");
             }
