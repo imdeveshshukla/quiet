@@ -2,7 +2,10 @@ import React from 'react'
 
 const Profilecard = () => {
   return (
-    <div>
+    <div className='p-4'>
+      <div className=' rounded-3xl  '>
+
+      </div>
       
     </div>
   )

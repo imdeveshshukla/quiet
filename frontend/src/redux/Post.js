@@ -28,10 +28,7 @@ export const postState = createSlice({
       let upvotes= post.upvotes;
       
       let index= upvotes.findIndex(vote=> vote.userId==action.payload.userId)
-      console.log(index,upvotes);
-      
 
-      
       if(index!=-1){
         upvotes[index]= action.payload;
 

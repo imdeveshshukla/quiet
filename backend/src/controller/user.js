@@ -1,5 +1,6 @@
 import prisma from '../../db/db.config.js'
 import jwt from "jsonwebtoken" ;
+import uploadOnCloudinary from "../utils/cloudinary.js";
 
 
 // const varifyToken = (req, res, next) => {
@@ -42,21 +43,29 @@ const getUser=async(req,res)=>{
 
 }
 const uploadImg = async(req,res)=>{
-  const imgurl = req.file.path;
+  let imgurl=null;
   const userId = req.userId;
+
+  if(req.file){
+    imgurl =await uploadOnCloudinary(req.file.path);
+    console.log("file Object = "+imgurl);
+}
   try {
-    const res = await prisma.user.update({
+    const user = await prisma.user.update({
       where:{
         userID:userId
       },
       data:{
-        dp
+        dp:imgurl,
       }
     })
+    res.status(202).json(user);
   } catch (error) {
-    
+    res.status(403).send(error)
   }
 }
+
+
 
 // const userController={getUser,varifyToken};
 const userController = {getUser, uploadImg};
