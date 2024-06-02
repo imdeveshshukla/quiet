@@ -104,7 +104,7 @@ const Postdetail = () => {
   )
 }
 export const Comment=({username,pic,dp,body})=>(<>
-   <div>
+   <div className='p-2'>
         <header className='flex items-center gap-2'>
             <img src={pic? pic:dp}
               alt="Profile"
