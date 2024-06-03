@@ -17,7 +17,7 @@ const Home = () => {
   const isLogin= useSelector(state=> state.login.value);
   const isSkelton= useSelector(state=>state.skelton.value);
   const dispatch = useDispatch();
-  // console.log("Posts");
+  
   // console.log(posts);
   return (
     <div className=' h-full overflow-auto border-x-2 border-black pl-16'>
@@ -27,7 +27,8 @@ const Home = () => {
 
         <div className="post">
         {posts==null? <Postskelton/> : posts.map((post)=>{
-          return isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} />
+
+          return isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post?.user} />
         })}
 
         </div>

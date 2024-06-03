@@ -68,13 +68,30 @@ const Postdetail = () => {
     useEffect(() => {
         getAllComment();
     }, [])
+
+
+
+    const getTime = (createdAt) => {
+        const postDate = new Date(createdAt).getTime();
+        const crrTime = new Date().getTime();
+    
+        let sec = Math.floor((crrTime - postDate) / 1000);
+        let min = Math.floor(sec / 60);
+        let hours = Math.floor(sec / 3600)
+        let day = Math.floor(sec / (60 * 60 * 24))
+        let month = Math.floor(sec / (60 * 60 * 24 * 30));
+        let years = Math.floor(sec / (60 * 60 * 24 * 30 * 12));
+        const ans = years > 0 ? years + ' year' : (month > 0 ? month + ' month' : day > 0 ? day + " days" : hours > 0 ? hours + " hours" : min > 0 ? min + " minutes" : sec > 0 ? sec + " seconds" : 0 + " seconds");
+    
+        return ans;
+      }
     
     
 
 
   return (<>
     <div className='h-full overflow-auto border-x-2 border-black pl-16'>
-      {post?<Posts key={post?.id}  username={post?.username} id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments.length} createdAt={post?.createdAt}/>:<Postskelton/>}
+      {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user}/>:<Postskelton/>}
 
       <div className=' m-4'>
         {isLogin?  <div className={isComment?'border bg-[#e2e4c6]  rounded-3xl border-black':'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >
@@ -93,8 +110,10 @@ const Postdetail = () => {
     <div className=' bg-gray-700 h-[1px]'></div>
     
     <div className='m-4'>
-        {post?.comments.map(comment=>{
-            return <Comment key={comment.id} dp={dp} pic={comment.dp} body={comment.body} username={comment.username} />
+        {post?.comments?.map(comment=>{
+            console.log(comment);
+            
+            return <Comment key={comment.id} dp={dp}  body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
         })}
             
     </div>
@@ -103,13 +122,13 @@ const Postdetail = () => {
     </>
   )
 }
-export const Comment=({username,pic,dp,body})=>(<>
+export const Comment=({dp,body,user,createdAt,getTime})=>(<>
    <div className='p-2'>
         <header className='flex items-center gap-2'>
-            <img src={pic? pic:dp}
+            <img src={user.dp? user.dp:dp}
               alt="Profile"
               className="w-8 h-8 rounded-full   bg-white "  />
-              <span className=' text-sm  font-medium'>u/{username}</span>•<span className=' text-xs text-gray-600'>{`8hrs ago`}</span>
+              <span className=' text-sm  font-medium'>u/{user.username}</span>•<span className=' text-xs text-gray-600'>{getTime(createdAt)} ago</span>
         </header>
         <main className='p-2'>
             {body}

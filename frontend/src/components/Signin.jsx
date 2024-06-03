@@ -98,9 +98,9 @@ const Signin = () => {
 
     const handleSubmit = async(e) => {
         e.preventDefault();
-        dispatch(loading());
+        // dispatch(loading());
         await sendRequest();
-        dispatch(loading());
+        // dispatch(loading());
         console.log(form);
     }
     const handleEye = () => {

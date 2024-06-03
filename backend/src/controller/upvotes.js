@@ -28,11 +28,17 @@ export const vote =async(req,res)=>{
             })
         }
         else{
-            const newUpvote = await prisma.upvote.create({
+            const newupvote = await prisma.upvote.create({
                 data:{
                     userId: uId,
                     postId: postId,
                     upvotes:val
+                }
+            })
+
+            const  newUpvote= await prisma.upvote.findUnique({
+                where:{
+                    id: newupvote.id,
                 }
             })
             res.status(201).json({

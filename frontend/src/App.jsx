@@ -62,8 +62,6 @@ function App() {
       
     } 
     // dispatch(loading())
- 
-
  }
 
 
@@ -74,7 +72,8 @@ function App() {
     if(res.status==200)
       {
 
-        // console.log("getpost", res.data.posts);
+
+        console.log("getpost", res.data.posts);
         
          dispatch(setPost(res.data.posts));
          if(String(location.pathname).split("/posts/")[1]){
@@ -151,7 +150,7 @@ function App() {
 
             <Route path='posts' element={ userInfo?.posts==null?<Postskelton/>: userInfo.posts.map(post=>{
                 return (
-                  isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt}/>
+                  isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user}/>
                 )
               }
               )}

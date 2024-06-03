@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 import {toggleUpvote } from '../redux/Post';
 
 
-const Posts = ({ id, userId, username, title, body, media, countComment, createdAt }) => {
+const Posts = ({ id, username, title, body, media, countComment, createdAt, user }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -149,20 +149,18 @@ const Posts = ({ id, userId, username, title, body, media, countComment, created
     if(res.status==201){
       dispatch(toggleUpvote(res.data.newUpvote))
     }
-    
+
   }
 
 
-
-
-
+  
   return (<>
     <div className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
       <header className='flex gap-2 items-center my-2'>
-        <img src={userInfo && userInfo.dp ? userInfo.dp : dp}
+        <img src={user && user.dp ? user.dp : dp}
           alt="Profile"
           className="w-8 h-8 rounded-full cursor-pointer   bg-white" />
-        <span className=' font-semibold cursor-pointer'>u/{username}</span>•<span className=' text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
+        <span className=' font-semibold cursor-pointer'>u/{user?.username}</span>•<span className=' text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
 
       </header>
       <main onClick={() => handleComment(id, username, title, body, media)} className=' cursor-pointer'>

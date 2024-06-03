@@ -6,8 +6,10 @@ import dp from '../assets/dummydp.png';
 import axios from 'axios';
 import { setPost } from '../redux/Post';
 import toast from 'react-hot-toast';
-import { setUserPost } from '../redux/user';
+import { setUserInfo, setUserPost } from '../redux/user';
 import SmallLoader from '../components/SmallLoader'
+import { setSkeltonLoader } from '../redux/skelton';
+
 
 
 const Createpost = () => {
@@ -27,8 +29,6 @@ const Createpost = () => {
 
     const handleSubmit= async()=>{
         console.log(title+"\n"+description+"\n"+image);
-
-
         const formData = new FormData();
         formData.append('title', title);
         formData.append('body', description);
@@ -45,23 +45,71 @@ const Createpost = () => {
           });
           console.log(response.data.post);
           if(response.status==201){
-            dispatch(setPost(response.data.post));
-            dispatch(setUserPost(response.data.post))
+            // dispatch(setPost(response.data.post));
+            // dispatch(setUserPost(response.data.post))
             toast.dismiss();
             toast.success("Successfully Posted!")
             setTitle("")
             setDescription("")
             setImage(null)
+            getUserData(userInfo.email);
+            getPost();
           }
         } catch (error) {
+          toast.dismiss()
           toast.error("Error uploading the post!")
           console.error('Error uploading the post:', error);
         }
-
-        
         setLoading(false);
         
     }
+
+
+    const getUserData=async(email)=>{ 
+ 
+      // dispatch(loading())
+   
+      
+      try {
+        const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
+        console.log(res);
+        if(res.status==200){
+          dispatch(setUserInfo(res.data));
+        }
+      } catch (error) {
+        console.log(error);
+        
+      } 
+      // dispatch(loading())
+   }
+
+
+   const getPost = async()=>{
+        dispatch(setSkeltonLoader(true))
+    try {
+      const res = await axios.get('http://localhost:3000/posts/getPost');
+      if(res.status==200)
+        {
+          console.log("getpost", res.data.posts);
+          
+           dispatch(setPost(res.data.posts));
+          //  if(String(location.pathname).split("/posts/")[1]){
+          //  let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
+          //  console.log(post);
+          //  dispatch(setPostDetail(post))
+          //  }
+        }
+    } catch (error) {
+      console.log(error);
+    }
+    dispatch(setSkeltonLoader(false))
+  }
+
+
+
+
+
+
   return (
     <div  className=' p-8 flex relative justify-center gap-4'>
       <div className=''>

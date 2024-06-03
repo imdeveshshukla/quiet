@@ -26,6 +26,7 @@ const getUser=async(req,res)=>{
         include:{
           posts:{
             include:{
+              user:true,
               comments:true
             },
             orderBy:{
@@ -33,7 +34,11 @@ const getUser=async(req,res)=>{
           }
           },
           upvotes:true,
-          comments:true,
+          comments:{
+            include:{
+              user:true,
+            }
+          },
         }
     })
     console.log(user);
@@ -64,6 +69,8 @@ const uploadImg = async(req,res)=>{
     res.status(403).send(error)
   }
 }
+
+
 
 
 
