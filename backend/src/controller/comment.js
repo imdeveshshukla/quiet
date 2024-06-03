@@ -3,7 +3,7 @@ import prisma from "../../db/db.config.js";
 export const createComment =async (req,res)=>{
     const { postId, content,dp,username } = req.body;
     try {
-        const newComment = await prisma.comment.create({
+        const comment = await prisma.comment.create({
             data: {
                 body: content,
                 postId: postId,
@@ -12,11 +12,25 @@ export const createComment =async (req,res)=>{
                 username:username
             },
         });
+        
+        const newComment= await prisma.comment.findUnique({
+            where:{
+                id:comment.id,
+            },
+            include:{
+                user:true,
+                post:true,
+            },
+        })
+        console.log(newComment);
+        
         res.status(201).json({
             msg:"Successfully Created",
-            newComment
+            newComment:newComment,
         });
     } catch (error) {
+        console.log(error);
+        
         res.status(500).json({ 
             msg: "Failed to create comment",
             error
@@ -29,6 +43,10 @@ export const getAllComment = async (req,res)=>{
         const comments = await prisma.comment.findMany({
             where:{
                 postId:postId
+            },
+            include:{
+                user:true,
+                post:true,
             },
             orderBy:{
                 id:"desc"
@@ -51,6 +69,10 @@ export const getUserComment = async (req,res)=>{
         const comments = await prisma.comment.findMany({
             where:{
                 userId:uId,
+            },
+            include:{
+                user:true,
+                post:true,
             },
             orderBy:{
                 id:'desc'
