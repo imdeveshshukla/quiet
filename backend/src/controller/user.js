@@ -72,6 +72,8 @@ const uploadImg = async(req,res)=>{
 
 
 
+
+
 // const userController={getUser,varifyToken};
 const userController = {getUser, uploadImg};
 export default userController;

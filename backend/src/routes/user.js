@@ -8,5 +8,6 @@ const  router = express.Router();
 router.get('/:email',verifyToken, userController.getUser );
 router.post('/uploadImg',verifyToken,upload.single("profileImg"),userController.uploadImg)
 
+
 const userRouter= router
 export default userRouter; 

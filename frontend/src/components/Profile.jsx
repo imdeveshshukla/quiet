@@ -42,7 +42,7 @@ const Profile = () => {
     }
     setBtnLoading(false)
 
-    console.log(res);
+ 
 
   }
 
@@ -59,13 +59,16 @@ const Profile = () => {
     };
   }, []);
 
-  const handleDpUpdate=(e)=>{
-    setdpLoc(e.target.files[0]);
-    console.log(e.target.files[0]);
-    
-    // if(dpLoc){
-    //   dpRef.current.src= `${dpLoc}`
-    // }
+  const handleDpUpdate=async(e)=>{
+    const file = e.target.files[0];
+    setdpLoc(e.target.files[0])
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        dpRef.current.src=reader.result;
+      };
+      reader.readAsDataURL(file);
+    }
   }
 
   return (
