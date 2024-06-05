@@ -5,7 +5,6 @@ const post = zod.object({
   title: zod.string(),
   body: zod.string(),
   imgUrl: zod.string().optional(),
-  username: zod.string(),
 });
 export const createPost = async (req, res) => {
   const postbody = req.body;
@@ -29,7 +28,6 @@ export const createPost = async (req, res) => {
         title: parsedBody.data.title,
         body: parsedBody.data.body,
         img: url,
-        username: parsedBody.data.username,
         userId: userId, //from middleware
       },
     });
@@ -52,8 +50,8 @@ export const createPost = async (req, res) => {
         },
         
       });
-    console.log("post");
-    console.log(post);
+    // console.log("post");
+    // console.log(post);
     // post = post.reverse();
     res.status(201).json({
       msg: "SuccessFully Created",
@@ -70,6 +68,11 @@ export const createPost = async (req, res) => {
 };
 export const getPost = async (req, res) => {
   const userId = req.userId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+  console.log(offset, limit);
+  
 
   try {
     const posts = await prisma.post.findMany({
@@ -83,9 +86,13 @@ export const getPost = async (req, res) => {
         upvotes: true,
       },
       orderBy: {
-        id: "desc",
+        createdAt: "desc",
       },
+      skip: offset,
+      take: limit,
     });
+    console.log(posts);
+    
 
     res.status(200).json({
       posts,

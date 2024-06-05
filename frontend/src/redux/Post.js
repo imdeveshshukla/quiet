@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
-  posts: null,
+  posts:[],
 };
 
 export const postState = createSlice({
@@ -9,11 +9,7 @@ export const postState = createSlice({
   initialState,
   reducers: {
     setPost: (state, action) => {
-      if (state.posts && !Array.isArray(action.payload)) {
-        state.posts = [action.payload, ...state.posts];
-      } else {
-        state.posts = action.payload;
-      }
+      state.posts = [...state.posts, ...action.payload];
     },
     setPostComment: (state, action) => {
       let post = state.posts.find((post) => post.id == action.payload.postId);
@@ -43,9 +39,12 @@ export const postState = createSlice({
         console.log("else", upvotes);
       }
     },
+    clearPostsInfo:(state)=>{
+      state.posts= [];
+    }
   },
 });
 
-export const { setPost, setPostComment, toggleUpvote } = postState.actions;
+export const { setPost, setPostComment, toggleUpvote,clearPostsInfo } = postState.actions;
 
 export default postState.reducer;

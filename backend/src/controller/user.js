@@ -41,7 +41,7 @@ const getUser=async(req,res)=>{
           },
         }
     })
-    console.log(user);
+    // console.log(user);
     
     
     res.status(200).send({dp:user?.dp, userId:user?.userID, bio:user?.bio, username:user.username, email:user.email, posts: user.posts, upvotes:user.upvotes, comments:user.comments});

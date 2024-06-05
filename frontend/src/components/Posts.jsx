@@ -16,7 +16,7 @@ import toast from 'react-hot-toast';
 import {toggleUpvote } from '../redux/Post';
 
 
-const Posts = ({ id, username, title, body, media, countComment, createdAt, user }) => {
+const Posts = ({ id, title, body, media, countComment, createdAt, user }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -69,10 +69,10 @@ const Posts = ({ id, username, title, body, media, countComment, createdAt, user
     const upvotes = post?.upvotes;
     
     const upvoteArr = await upvotes?.filter(vote => vote.upvotes == 1);
-    console.log(upvoteArr);
+    // console.log(upvoteArr);
 
     const downvoteArr = await upvotes?.filter(vote => vote.upvotes == -1);
-    console.log(downvoteArr);
+    // console.log(downvoteArr);
 
     setUpvote(upvoteArr?.length);
     setDownvotenum(downvoteArr?.length);
@@ -96,8 +96,8 @@ const Posts = ({ id, username, title, body, media, countComment, createdAt, user
 
   const upvote = async (key) => {
     if(isLogin) {
-      console.clear()
-      console.log(key);
+      // console.clear()
+      // console.log(key);
       let val = 1;
       if (!upvoted) {
         setUpvoted(true);
@@ -153,7 +153,7 @@ const Posts = ({ id, username, title, body, media, countComment, createdAt, user
   }
 
 
-  
+
   return (<>
     <div className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
       <header className='flex gap-2 items-center my-2'>
@@ -163,7 +163,7 @@ const Posts = ({ id, username, title, body, media, countComment, createdAt, user
         <span className=' font-semibold cursor-pointer'>u/{user?.username}</span>•<span className=' text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
 
       </header>
-      <main onClick={() => handleComment(id, username, title, body, media)} className=' cursor-pointer'>
+      <main onClick={() => handleComment(id)} className=' cursor-pointer'>
         <div className='text-lg font-bold my-2'>{title}</div>
         <div className='my-2 '>{body}</div>
         {!media ? "" :

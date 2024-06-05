@@ -4,17 +4,19 @@ import { loading } from '../redux/loading';
 import { GrGallery } from "react-icons/gr";
 import dp from '../assets/dummydp.png';
 import axios from 'axios';
-import { setPost } from '../redux/Post';
+import { clearPostsInfo, setPost } from '../redux/Post';
 import toast from 'react-hot-toast';
 import { setUserInfo, setUserPost } from '../redux/user';
 import SmallLoader from '../components/SmallLoader'
 import { setSkeltonLoader } from '../redux/skelton';
+import { useNavigate } from 'react-router-dom';
 
 
 
-const Createpost = () => {
+const Createpost = ({handleNewPost}) => {
     const userInfo = useSelector((state) => state.user.userInfo);
     const selectFile= useRef(null);
+    const Navigate= useNavigate()
     const [Btnloading,setLoading] = useState(false);
 
     const dispatch = useDispatch();
@@ -33,7 +35,7 @@ const Createpost = () => {
         formData.append('title', title);
         formData.append('body', description);
         formData.append('postImg', image);
-        formData.append('username', userInfo.username);
+
                 
         setLoading(true);
         toast.loading("Posting....");
@@ -53,7 +55,7 @@ const Createpost = () => {
             setDescription("")
             setImage(null)
             getUserData(userInfo.email);
-            getPost();
+            handleNewPost()
           }
         } catch (error) {
           toast.dismiss()
@@ -82,29 +84,6 @@ const Createpost = () => {
       } 
       // dispatch(loading())
    }
-
-
-   const getPost = async()=>{
-        dispatch(setSkeltonLoader(true))
-    try {
-      const res = await axios.get('http://localhost:3000/posts/getPost');
-      if(res.status==200)
-        {
-          console.log("getpost", res.data.posts);
-          
-           dispatch(setPost(res.data.posts));
-          //  if(String(location.pathname).split("/posts/")[1]){
-          //  let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
-          //  console.log(post);
-          //  dispatch(setPostDetail(post))
-          //  }
-        }
-    } catch (error) {
-      console.log(error);
-    }
-    dispatch(setSkeltonLoader(false))
-  }
-
 
 
 

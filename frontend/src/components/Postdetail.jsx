@@ -37,7 +37,7 @@ const Postdetail = () => {
         setLoading(true);
         console.log(comment);
         try {
-            const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment, dp:userInfo?.dp, username: userInfo.username});
+            const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment});
             console.log(res);
             if(res.status==201){
                 setIsComment(false)

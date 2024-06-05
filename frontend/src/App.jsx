@@ -23,7 +23,7 @@ import Overview from './components/Overview'
 import Upvoted from './components/Upvoted'
 import Commented from './components/Commented'
 import Profilecard from './components/Profilecard'
-import { setPost } from './redux/Post'
+
 import Postdetail from './components/Postdetail'
 import { setPostDetail } from './redux/Postdetail'
 import Postskelton from './components/Postskelton'
@@ -65,31 +65,29 @@ function App() {
  }
 
 
- const getPost = async()=>{
+//  const getPost = async()=>{
 
-  try {
-    const res = await axios.get('http://localhost:3000/posts/getPost');
-    if(res.status==200)
-      {
+//   try {
+//     const res = await axios.get('http://localhost:3000/posts/getPost');
+//     if(res.status==200)
+//       {
 
 
-        console.log("getpost", res.data.posts);
+//         console.log("getpost", res.data.posts);
         
-         dispatch(setPost(res.data.posts));
-         if(String(location.pathname).split("/posts/")[1]){
-         let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
-         console.log(post);
-         dispatch(setPostDetail(post))
+//          dispatch(setPost(res.data.posts));
+//          if(String(location.pathname).split("/posts/")[1]){
+//          let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
+//          console.log(post);
+//          dispatch(setPostDetail(post))
 
-         }
+//          }
         
-      }
-  } catch (error) {
-    console.log(error);
-  }
-
-
-}
+//       }
+//   } catch (error) {
+//     console.log(error);
+//   }
+// }
 
 
   const sendReq = async () => {
@@ -103,12 +101,12 @@ function App() {
         toast.success("Loggin Session Restored")
         dispatch(login());
          await  getUserData(res.data);
-         await getPost();
+        //  await getPost();
 
       }
     } catch (error) {
       console.log(error);
-      await getPost();
+      // await getPost();
 
       if(error.response.status==404){
         console.log("token not found");
@@ -134,7 +132,7 @@ function App() {
         {isLoading && <Loader />}
 
         <Navbar />
-        <div className=' grid grid-cols-[1fr_3fr_1.3fr] h-[89.5vh] max-h-[89.5vh] relative'>
+        <div className=' grid grid-cols-[1fr_3fr_1.3fr] relative'>
           <Sidenav/>
         <Routes>
          
@@ -150,7 +148,7 @@ function App() {
 
             <Route path='posts' element={ userInfo?.posts==null?<Postskelton/>: userInfo.posts.map(post=>{
                 return (
-                  isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} username={post.username} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user}/>
+                  isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user}/>
                 )
               }
               )}
