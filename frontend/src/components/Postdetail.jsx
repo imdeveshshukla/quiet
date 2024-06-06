@@ -2,17 +2,15 @@ import React, { useState,useEffect } from 'react'
 import Posts from './Posts'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlinePlus } from "react-icons/ai";
-import {  useNavigate } from 'react-router-dom';
+import {  useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import { setComment } from '../redux/Postdetail';
+import { clearPostDetail, setComment, setPostDetail } from '../redux/Postdetail';
 import dp from '../assets/dummydp.png'
 import { setPostComment } from '../redux/Post';
-
-import { setUserComment } from '../redux/user';
-
 import SmallLoader from './SmallLoader';
 import Postskelton from './Postskelton';
+import { setUserPostComment } from '../redux/userposts';
 
 
 
@@ -30,6 +28,8 @@ const Postdetail = () => {
     const [comment, setcomment] = useState("")
     const dispatch= useDispatch()
     const [loading,setLoading] = useState(false);
+    const location = useLocation();
+    
     
 
     const addComment= async ()=>{
@@ -37,14 +37,14 @@ const Postdetail = () => {
         setLoading(true);
         console.log(comment);
         try {
-            const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment, dp:userInfo?.dp, username: userInfo.username});
+            const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment});
             console.log(res);
             if(res.status==201){
                 setIsComment(false)
                 console.log(res.data.newComment);
                 dispatch(setComment(res.data.newComment))
+                dispatch(setUserPostComment(res.data.newComment))
                 dispatch(setPostComment(res.data.newComment))
-                dispatch(setUserComment(res.data.newComment))
                 console.log(post);
                 toast.dismiss();
                 toast.success("Comment Added.")
@@ -60,14 +60,36 @@ const Postdetail = () => {
         setLoading(false);
     }
 
-    const getAllComment=async()=>{
-        console.log(post);
-        
-    }
 
-    useEffect(() => {
-        getAllComment();
-    }, [])
+    const getApost=async(id)=>{
+        try {
+          const res = await axios.get("http://localhost:3000/posts/getapost", { 
+            params:{
+              id
+            }
+          });
+          console.log(res);
+          
+          if(res.status==200){
+            dispatch(setPostDetail(res.data.post))
+          }
+        } catch (error) {
+          console.log(error);
+          
+        }
+      }
+ 
+      useEffect(() => {
+        dispatch(clearPostDetail())
+        let loc=String(location.pathname)
+        if(loc.includes("/posts/")){
+            let id= loc.split("/posts/")[1];
+            console.log("postDetailID",id);
+            getApost(id)   
+        }
+      },[])
+      
+
 
 
 
@@ -91,7 +113,7 @@ const Postdetail = () => {
 
   return (<>
     <div className='h-full overflow-auto border-x-2 border-black pl-16'>
-      {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user}/>:<Postskelton/>}
+      {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes}/>:<Postskelton/>}
 
       <div className=' m-4'>
         {isLogin?  <div className={isComment?'border bg-[#e2e4c6]  rounded-3xl border-black':'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >

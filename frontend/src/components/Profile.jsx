@@ -99,7 +99,7 @@ const Profile = () => {
 
       </div>}
 
-      <div className=' border-x-2 border-black pl-20 py-8 overflow-auto max-h-[89.5vh]'>
+      <div className='overflow-auto '>
 
         <div className=' border-b-2 mr-2 border-black'>
           <div className='flex items-center gap-6'>
@@ -128,9 +128,7 @@ const Profile = () => {
           </div>
         </div>
 
-        <div className=' '>
-          <Outlet />
-        </div>
+        
 
 
 
