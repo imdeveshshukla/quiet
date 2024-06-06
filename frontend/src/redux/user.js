@@ -11,15 +11,7 @@ export const userState = createSlice({
     setUserInfo:(state,action)=>{
         state.userInfo=action.payload;
     },
-    setUserPost:(state,action)=>{
-        state.userInfo.posts= [action.payload, ...state.userInfo.posts]
-    },
-    setUserComment:(state,action)=>{
-      let post= Array.from(state.userInfo.posts).find(post=>post.id==action.payload.postId);
-      if(post){
-        post.comments=[...post.comments,action.payload];
-      }
-    },
+    
     clearUserInfo:(state)=>{
         state.userInfo=null;
     }

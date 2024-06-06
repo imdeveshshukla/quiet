@@ -1,11 +1,11 @@
 
 import Navbar from './components/Navbar'
-import { BrowserRouter, Routes, Route, useLocation} from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import './styles/App.css'
 import Home from './components/Home'
 import Signup from './components/Signup'
 import Signin from './components/Signin'
-import { useEffect,useState } from "react"
+import { useEffect, useState } from "react"
 import axios from "axios"
 import Resetpass from './components/Resetpass'
 import Varifyacc from './components/Varifyacc'
@@ -14,7 +14,7 @@ import Loader from './components/Loader'
 import { login } from "./redux/login"
 import { loading } from './redux/loading'
 import { useSelector, useDispatch } from 'react-redux'
-import { setUserInfo } from './redux/user'
+import User, { setUserInfo } from './redux/user'
 import Settings from './components/Settings'
 import Profile from './components/Profile'
 import Sidenav from './components/Sidenav'
@@ -23,12 +23,14 @@ import Overview from './components/Overview'
 import Upvoted from './components/Upvoted'
 import Commented from './components/Commented'
 import Profilecard from './components/Profilecard'
-
 import Postdetail from './components/Postdetail'
-import { setPostDetail } from './redux/Postdetail'
 import Postskelton from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
 import { v4 as uuidv4 } from 'uuid';
+import Userpost from './components/Userpost'
+
+
+
 
 
 
@@ -40,67 +42,46 @@ function App() {
   const dispatch = useDispatch();
   const isLoading = useSelector((state) => state.loading.value);
   const isLogin = useSelector((state) => state.login.value);
-  const userInfo=  useSelector(state=>state.user.userInfo);
-  const posts= useSelector(state=> state.post.posts)
-  const location = useLocation();
-  const isSkelton= useSelector(state=>state.skelton.value);
-  
+  const userInfo = useSelector(state => state.user.userInfo);
 
-  const getUserData=async(email)=>{ 
- 
+  const posts = useSelector(state => state.post.posts)
+  const location = useLocation();
+  const isSkelton = useSelector(state => state.skelton.value);
+
+
+
+  const getUserData = async (email) => {
+
     // dispatch(loading())
- 
-    
+
     try {
-      const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
-      console.log(res);
-      if(res.status==200){
-        dispatch(setUserInfo(res.data));
+      const res = await axios.get(`http://localhost:3000/u/${email}`, { withCredentials: true });
+      console.log(res.data.user);
+      if (res.status == 200) {
+        dispatch(setUserInfo(res.data.user));
       }
     } catch (error) {
       console.log(error);
-      
-    } 
+
+    }
     // dispatch(loading())
- }
+  }
 
 
-//  const getPost = async()=>{
 
-//   try {
-//     const res = await axios.get('http://localhost:3000/posts/getPost');
-//     if(res.status==200)
-//       {
-
-
-//         console.log("getpost", res.data.posts);
-        
-//          dispatch(setPost(res.data.posts));
-//          if(String(location.pathname).split("/posts/")[1]){
-//          let post= await  Array.from(res.data.posts).find(post=>post.id==String(location.pathname).split("/posts/")[1]);
-//          console.log(post);
-//          dispatch(setPostDetail(post))
-
-//          }
-        
-//       }
-//   } catch (error) {
-//     console.log(error);
-//   }
-// }
 
 
   const sendReq = async () => {
 
-  // dispatch(loading());
-  dispatch(setSkeltonLoader());
+    // dispatch(loading());
+    dispatch(setSkeltonLoader());
 
     try {
-      const res = await axios.post("http://localhost:3000/auth/refreshsignin", {withCredentials: true});
-      if (res.status == 200){
+      const res = await axios.post("http://localhost:3000/auth/refreshsignin", { withCredentials: true });
+      if (res.status == 200) {
         toast.success("Loggin Session Restored")
         dispatch(login());
-         await  getUserData(res.data);
+        getUserData(res.data);
         //  await getPost();
 
       }
@@ -108,14 +89,14 @@ function App() {
       console.log(error);
       // await getPost();
 
-      if(error.response.status==404){
+      if (error.response.status == 404) {
         console.log("token not found");
-      }else if(error.response.status==401){
+      } else if (error.response.status == 401) {
         console.log("Invalid token");
       }
     }
     // dispatch(loading())
-  dispatch(setSkeltonLoader());
+    dispatch(setSkeltonLoader());
 
   }
 
@@ -126,60 +107,62 @@ function App() {
   }, [])
 
 
+
+
+
   return (
     <>
-     
-        {isLoading && <Loader />}
 
-        <Navbar />
-        <div className=' grid grid-cols-[1fr_3fr_1.3fr] relative'>
-          <Sidenav/>
+      {isLoading && <Loader />}
+
+      <Navbar />
+      <div className=' grid grid-cols-[1fr_3fr_1.3fr] relative'>
+        <Sidenav />
         <Routes>
-         
-          <Route path='/' element={<Home/>} />
 
-         
+          <Route path='/' element={<Home />} />
+
+
           <Route path='/signup' element={<Signup />} />
           <Route path='/signin' element={<Signin />} />
           <Route path='/resetpassword' element={<Resetpass />} />
           <Route path='/varifyaccount' element={<Varifyacc />} />
-          <Route path='/profile/' element={<Profile/>}>
-            <Route path='overview' element={<Overview/>}/>
+         
+            <Route path='/profile/overview' element={<Overview />} />
+            <Route path='/profile/posts' element={<Userpost/>}/>
+            <Route path='/profile/commented' element={<Commented />} />
+            <Route path='/profile/upvoted' element={<Upvoted />} />
 
-            <Route path='posts' element={ userInfo?.posts==null?<Postskelton/>: userInfo.posts.map(post=>{
-                return (
-                  isSkelton?<Postskelton key={uuidv4()}/>:<Posts key={post.id} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user}/>
-                )
-              }
-              )}
-            />
-            <Route path='commented' element={<Commented/>}/>
-            <Route path='upvoted' element={<Upvoted/>}/>
-            
-          </Route>
           <Route path='/setting/' element={<Settings />} />
-          <Route path="/test/" element={<Postskelton/>}/>
-          <Route path='/posts/:id' element={isSkelton?<Postskelton/>:<Postdetail />} />
+          <Route path="/test/" element={<Postskelton />} />
+          <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
         </Routes>
-        {String(location.pathname).includes("/profile/")? <Profilecard/>: ''}
+        {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''}
       </div>
-        <Toaster position="bottom-center"
-          reverseOrder={false} toastOptions={{
-            className: '',
-            style: {
-             
-              width: '100vw',
-              border: '1px solid #713200',
-              padding: '16px',
-              backgroundColor: '#000000',
-              color: '#ffff',
-            }
-          }} />
+      <Toaster position="bottom-center"
+        reverseOrder={false} toastOptions={{
+          className: '',
+          style: {
 
+            width: '100vw',
+            border: '1px solid #713200',
+            padding: '16px',
+            backgroundColor: '#000000',
+            color: '#ffff',
+          }
+        }} />
 
-   
     </>
   )
 }
 
 export default App
+
+
+// userInfo?.posts == null ? <Postskelton /> :
+                //   userInfo.posts.map(post => {
+                //     return (
+                //       isSkelton ? <Postskelton key={uuidv4()} /> : <Posts key={post.id} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} />
+                //     )
+                //   }
+                //   )

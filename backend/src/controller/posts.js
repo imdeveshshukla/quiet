@@ -71,7 +71,7 @@ export const getPost = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
-  console.log(offset, limit);
+  // console.log(offset, limit);
   
 
   try {
@@ -91,11 +91,48 @@ export const getPost = async (req, res) => {
       skip: offset,
       take: limit,
     });
-    console.log(posts);
+   
     
 
     res.status(200).json({
       posts,
+    });
+  } catch (error) {
+    console.log(error);
+
+    res.status(500).json({
+      msg: "some error occured",
+    });
+  }
+};
+
+
+export const getAPost = async (req, res) => {
+  
+  // console.log(offset, limit);
+  
+
+  try {
+    const post = await prisma.post.findUnique({
+      where:{
+        id:parseInt(req.query.id),
+      },
+      include: {
+        user: true,
+        comments:{
+          include:{
+            user:true,
+          }
+        },
+        upvotes: true,
+      },
+      
+    });
+   
+    
+
+    res.status(200).json({
+      post,
     });
   } catch (error) {
     console.log(error);

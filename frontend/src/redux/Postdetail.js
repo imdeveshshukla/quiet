@@ -15,10 +15,13 @@ export const postDetailState = createSlice({
       state.post.comments=[...state.post.comments, action.payload]
       console.log(action.payload);
       
+    },
+    clearPostDetail:(state)=>{
+      state.post=null;
     }
   },
 })
 
-export const { setPostDetail,setComment} = postDetailState.actions
+export const { setPostDetail,setComment,clearPostDetail} = postDetailState.actions
 
 export default postDetailState.reducer

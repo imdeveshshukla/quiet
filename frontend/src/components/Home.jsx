@@ -8,6 +8,7 @@ import Createpost from './Createpost';
 import Posts from './Posts';
 import Postskelton from './Postskelton';
 import { clearPostsInfo, setPost } from '../redux/Post';
+import { setSkeltonLoader } from '../redux/skelton';
 
 
 const Home = () => {
@@ -20,6 +21,7 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
 
   const getPost = async () => {
+    dispatch(setSkeltonLoader())
     console.log(`Fetching posts for page: ${page}`);
     if(page==1){
       dispatch(clearPostsInfo())
@@ -45,6 +47,7 @@ const Home = () => {
       console.error(error);
       setHasMore(false); // Stop fetching if there's an error
     }
+    dispatch(setSkeltonLoader())
   };
 
   const handleNewPost=()=>{
@@ -76,7 +79,7 @@ const Home = () => {
 
       
         <div className="post">
-          {posts == null ? (
+          {isSkelton ? (
             <Postskelton />
           ) : (
             posts.map((post) =>
@@ -86,12 +89,14 @@ const Home = () => {
                 <Posts
                   key={post.id}
                   id={post.id}
+                  post={post}
                   title={post.title}
                   body={post.body}
                   media={post.img}
                   countComment={post.comments?.length}
                   createdAt={post.createdAt}
                   user={post?.user}
+                  upvotes={post?.upvotes}
                 />
               )
             )

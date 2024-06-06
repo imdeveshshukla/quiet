@@ -10,6 +10,7 @@ import {loading} from '../redux/loading';
 import { IoIosLogOut } from "react-icons/io";
 import dp from '../assets/dummydp.png'
 import toast from 'react-hot-toast';
+import { clearPostsInfo } from '../redux/Post';
 
 axios.defaults.withCredentials = true
 
@@ -60,6 +61,7 @@ const Navbar = () => {
             if(res.status==200){
             dispatch(logout());
             dispatch(clearUserInfo());
+            dispatch(clearPostsInfo())
             toast.dismiss()
             Navigate("/signin");
         }
