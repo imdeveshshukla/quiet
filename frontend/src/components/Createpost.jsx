@@ -13,7 +13,7 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-const Createpost = ({handleNewPost}) => {
+const Createpost = ({onNewPost}) => {
     const userInfo = useSelector((state) => state.user.userInfo);
     const selectFile= useRef(null);
     const Navigate= useNavigate()
@@ -54,8 +54,8 @@ const Createpost = ({handleNewPost}) => {
             setTitle("")
             setDescription("")
             setImage(null)
-            getUserData(userInfo.email);
-            handleNewPost()
+            // getUserData(userInfo.email);
+            onNewPost()
           }
         } catch (error) {
           toast.dismiss()
