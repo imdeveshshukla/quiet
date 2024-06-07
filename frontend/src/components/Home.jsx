@@ -81,13 +81,10 @@ const Home = () => {
 
       
         <div className="post">
-          {isSkelton ? (
+          { (!posts)||(page==1 && isSkelton) ? (
             <Postskelton />
           ) : (
-            posts.map((post) =>
-              isSkelton ? (
-                <Postskelton key={uuidv4()} />
-              ) : (
+            posts.map((post) => (
                 <Posts
                   key={post.id}
                   id={post.id}

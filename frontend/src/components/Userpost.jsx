@@ -25,7 +25,7 @@ const Userpost = () => {
 
 
     const getUserPost = async () => {
-        dispatch(setSkeltonLoader())
+        
         console.log("get");
         if(page==1){
             dispatch(clearPostsInfo())
@@ -54,7 +54,7 @@ const Userpost = () => {
             console.log(error);
             
         }
-        dispatch(setSkeltonLoader())
+       
 
       
     }
@@ -79,22 +79,19 @@ const Userpost = () => {
                 dataLength={userPost.length}
                 next={fetchMoreData}
                 hasMore={hasMore}
-                loader={<Postskelton/>}
+                loader={<div className='pl-20 py-8 border-x-2  border-black'><Postskelton/></div>}
                 endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}
             >
-                <div className=' pl-20 py-8 border-x-2 min-h-screen border-black'>
+                <div className=' pl-20 py-8 border-x-2 border-black'>
                 <Profile/>
 
-                <div className=''>
-
-                {isSkelton ? <Postskelton />:
+                {(!userPost)||(page==1 && isSkelton)? <Postskelton />:
                     userPost.map(post => {
                         return (
-                            isSkelton ? <Postskelton key={uuidv4()} /> : <Posts key={uuidv4()} post={post} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
+                            <Posts key={uuidv4()} post={post} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
                         )
                     }
                 )}
-                </div>
                 </div>
             </InfiniteScroll>
         
