@@ -41,7 +41,7 @@ const Signin = () => {
           const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
           console.log(res);
           if(res.status==200){
-            dispatch(setUserInfo(res.data));
+            dispatch(setUserInfo(res.data.user));
           }
         } catch (error) {
           console.log(error);
