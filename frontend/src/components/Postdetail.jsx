@@ -11,6 +11,7 @@ import { setPostComment } from '../redux/Post';
 import SmallLoader from './SmallLoader';
 import Postskelton from './Postskelton';
 import { setUserPostComment } from '../redux/userposts';
+import { CommentBody, CommentBody2, CommentBox } from './Comments';
 
 
 
@@ -21,45 +22,11 @@ axios.defaults.withCredentials = true
 
 const Postdetail = () => {
     const post= useSelector(state=>state.postDetail.post);
-    const userInfo= useSelector(state=>state.user.userInfo);
+    // const userInfo= useSelector(state=>state.user.userInfo);
     const isLogin= useSelector(state=>state.login.value);
     const Navigate= useNavigate()
-    const [isComment,setIsComment]= useState(false)
-    const [comment, setcomment] = useState("")
     const dispatch= useDispatch()
-    const [loading,setLoading] = useState(false);
     const location = useLocation();
-    
-    
-
-    const addComment= async ()=>{
-        toast.loading("Adding your comment...");
-        setLoading(true);
-        console.log(comment);
-        try {
-            const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment});
-            console.log(res);
-            if(res.status==201){
-                setIsComment(false)
-                console.log(res.data.newComment);
-                dispatch(setComment(res.data.newComment))
-                dispatch(setUserPostComment(res.data.newComment))
-                dispatch(setPostComment(res.data.newComment))
-                console.log(post);
-                toast.dismiss();
-                toast.success("Comment Added.")
-                setcomment("");
-            }
-        } catch (error) {
-            console.log(error);
-            
-            if(error.response?.status==500){
-                toast.error("Failed to add comment")
-            }
-        }   
-        setLoading(false);
-    }
-
 
     const getApost=async(id)=>{
         try {
@@ -116,15 +83,7 @@ const Postdetail = () => {
       {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes}/>:<Postskelton/>}
 
       <div className=' m-4'>
-        {isLogin?  <div className={isComment?'border bg-[#e2e4c6]  rounded-3xl border-black':'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >
-            <textarea onClick={()=>setIsComment(true)} onChange={(e)=> setcomment(e.target.value)} value={comment} className='w-full bg-transparent outline-none rounded-3xl px-4 py-2 '  placeholder='Add a Comment' name="comment" id="comment"></textarea>
-            {isComment&& <div className='flex gap-3 p-3 justify-end'>
-                <button onClick={()=>{setIsComment(false)
-                    setcomment("")
-                }} className='px-4 py-2 rounded-3xl bg-gray-500 ' type="button">Cancel</button>
-                <button onClick={()=>addComment()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{!loading?"Comment":<SmallLoader/>}</button> 
-                </div>}
-            </div>
+        {isLogin?  <CommentBox/>
 
         :<button onClick={()=>Navigate("/signin")} className='flex items-center gap-2 border border-black rounded-3xl px-4 py-2' type="button"><AiOutlinePlus className='text-2xl'/><span>Add a comment</span></button> }
         
@@ -135,7 +94,7 @@ const Postdetail = () => {
         {post?.comments?.map(comment=>{
             console.log(comment);
             
-            return <Comment key={comment.id} dp={dp}  body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
+            return <CommentBody2 key={comment.id} dp={dp}  body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
         })}
             
     </div>
@@ -144,21 +103,4 @@ const Postdetail = () => {
     </>
   )
 }
-export const Comment=({dp,body,user,createdAt,getTime})=>(<>
-   <div className='p-2'>
-        <header className='flex items-center gap-2'>
-            <img src={user.dp? user.dp:dp}
-              alt="Profile"
-              className="w-8 h-8 rounded-full   bg-white "  />
-              <span className=' text-sm  font-medium'>u/{user.username}</span>•<span className=' text-xs text-gray-600'>{getTime(createdAt)} ago</span>
-        </header>
-        <main className='p-2'>
-            {body}
-        </main>
-   </div>
-   <div className=' bg-gray-700 h-[1px]'></div>
-
-   </>
-)
-
 export default Postdetail

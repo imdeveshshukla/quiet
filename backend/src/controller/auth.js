@@ -319,7 +319,7 @@ const logout = async (req, res) => {
       console.log(user?.email);
 
       res
-        .cookie(user.userID, "", {
+        .cookie(user?.userID, "", {
           path: "/",
           expires: new Date(Date.now() + 1000 * 1),
           httpOnly: true,
@@ -328,7 +328,7 @@ const logout = async (req, res) => {
         .status(200)
         .send(user.email);
     } else res.status(401).send({ msg: "Invalid Token" });
-    console.log(req.body.email);
+    // console.log(req.body.email);
   } catch (error) {
     throw error;
   }
