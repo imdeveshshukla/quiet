@@ -20,22 +20,31 @@ const Createpost = ({onNewPost}) => {
     const [Btnloading,setLoading] = useState(false);
 
     const dispatch = useDispatch();
+   
+    
+    const [selectedOption, setSelectedOption] = useState('');
     const [title, setTitle] = useState('');
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
     
-     const handleChange=(e)=>{
-        setImage(e.target.files[0]);
-     }
-
+    const handleChange=(e)=>{
+      setImage(e.target.files[0]);
+    }
+    
+    const handleSelectChange = (event) => {
+      console.log(event.target.value);
+      setSelectedOption(event.target.value);
+    };
 
     const handleSubmit= async()=>{
-        console.log(title+"\n"+description+"\n"+image);
+        console.log(title+"\n"+description+"\n"+selectedOption);
         const formData = new FormData();
         formData.append('title', title);
+        formData.append('topic', selectedOption);
         formData.append('body', description);
         formData.append('postImg', image);
-
+        console.log(formData);
+        
                 
         setLoading(true);
         toast.loading("Posting....");
@@ -53,6 +62,7 @@ const Createpost = ({onNewPost}) => {
             toast.success("Successfully Posted!")
             setTitle("")
             setDescription("")
+            setSelectedOption("")
             setImage(null)
             // getUserData(userInfo.email);
             onNewPost()
@@ -90,6 +100,29 @@ const Createpost = ({onNewPost}) => {
 
 
   return (
+    <>
+<div className='flex mt-6 px-28 justify-start  '>
+<div className='flex  hover:bg-[#808449cf]  items-center px-2 py-1  rounded-full border-[1px] border-black '>
+    
+    <span className=' rounded-full border-2 border-white'>
+    <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="15" cy="15" r="15" fill="black" />
+    <text x="50%" y="50%" font-size="18" text-anchor="middle" fill="white" font-family="Arial, sans-serif" dominant-baseline="middle">q/</text>
+   </svg>
+</span>
+    <select className=' cursor-pointer bg-transparent py-2 px-4   outline-none'  id="options" value={selectedOption} onChange={(e)=>handleSelectChange(e)}>
+      
+      <option className='bg-[#808449] text-white font-extralight text-lg' value="">Select a Topic</option>
+      <option className='bg-[#808449] text-white font-extralight text-lg' value="sports">Sports</option>
+      <option className='bg-[#808449] text-white font-extralight text-lg' value="dsa">DSA</option>
+      <option className='bg-[#808449] text-white font-extralight text-lg' value="iet">IET</option>
+      <option className='bg-[#808449] text-white font-extralight text-lg' value="entertainment">Entertainment</option>
+      <option className='bg-[#808449] text-white font-extralight text-lg' value="lifestyle">Lifestyle</option>
+      <option className='bg-[#808449] text-white font-extralight text-lg' value="lucknow">Lucknow</option>
+    </select>
+  
+  </div>
+</div>
     <div  className=' p-8 flex relative justify-center gap-4'>
       <div className=''>
         <img src={userInfo && userInfo.dp ? userInfo.dp : dp}
@@ -109,7 +142,8 @@ const Createpost = ({onNewPost}) => {
             
             
       </div>
-    </div>)
+    </div>
+    </>)
 
 }
 

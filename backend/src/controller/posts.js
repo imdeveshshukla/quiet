@@ -2,12 +2,15 @@ import prisma from "../../db/db.config.js";
 import zod from "zod";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 const post = zod.object({
+  topic: zod.string().optional(),
   title: zod.string(),
   body: zod.string(),
   imgUrl: zod.string().optional(),
 });
 export const createPost = async (req, res) => {
   const postbody = req.body;
+  console.log(postbody);
+  
   const userId = req.userId;
 
   let url = null;
@@ -16,6 +19,8 @@ export const createPost = async (req, res) => {
     console.log("file Object = " + url);
   }
   const parsedBody = post.safeParse(postbody);
+  console.log(parsedBody);
+  
   if (parsedBody.error)
     res.status(405).json({
       msg: "Wrong Input",
@@ -26,6 +31,7 @@ export const createPost = async (req, res) => {
     const newpost = await prisma.post.create({
       data: {
         title: parsedBody.data.title,
+        topic: parsedBody.data.topic,
         body: parsedBody.data.body,
         img: url,
         userId: userId, //from middleware
