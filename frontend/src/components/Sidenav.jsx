@@ -4,6 +4,7 @@ import { HiOutlineChartSquareBar } from "react-icons/hi";
 import { LuArrowUpRightSquare } from "react-icons/lu";
 import { NavLink, useLocation } from 'react-router-dom';
 import { RiCommunityLine } from "react-icons/ri";
+import Qicon from '../assets/q.svg';
 
 
 const Sidenav = () => {
@@ -17,14 +18,14 @@ const Sidenav = () => {
             </div>
 
             <div className='p-2 m-2 border-b-2 border-gray-600'>
-                <h6 className=' opacity-70   flex items-center gap-4 '><RiCommunityLine className=' text-2xl'/><span>COMMUNITIES</span></h6>
-                <ul className='m-4 p-1'>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
-                    <li>1</li>
+                <h6 className=' opacity-70   flex items-center gap-4 '><RiCommunityLine className=' text-2xl '/><span className='font-medium'>HOT-TOPICS</span></h6>
+                <ul className='m-4 p-1 '>
+                    <NavLink to={"/q/sports"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}> <img src={Qicon} alt="" />Sports</NavLink>
+                    <NavLink to={"/q/dsa"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}><img src={Qicon} alt="" />DSA</NavLink>
+                    <NavLink to={"/q/iet"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}><img src={Qicon} alt="" />IET</NavLink>
+                    <NavLink to={"/q/entertainment"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}><img src={Qicon} alt="" />Entertainment</NavLink>
+                    <NavLink to={"/q/lifestyle"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}><img src={Qicon} alt="" />Lifestyle</NavLink>
+                    <NavLink to={"/q/lucknow"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}><img src={Qicon} alt="" />Lucknow</NavLink>
                 </ul>
             </div>
             
