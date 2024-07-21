@@ -1,7 +1,46 @@
 import prisma from "../../db/db.config.js";
 
 export const createComment =async (req,res)=>{
-    const { postId, content } = req.body;
+    const { postId,commentId, content } = req.body;
+    // console.log("request "+req);
+    if(commentId)
+    {
+        try {
+            
+            const comment = await prisma.comment.create({
+                data:{
+                    body:content,
+                    postId:postId,
+                    parentId:commentId,
+                    userId: req.userId
+                    
+                },
+                include:{
+                    user:true,
+                    post:true,
+                },
+            })
+            const newComment= await prisma.comment.findUnique({
+                where:{
+                    id:comment.id,
+                },
+                include:{
+                    user:true,
+                    post:true,
+                },
+            })
+            // console.log("Child Comment = "+newComment.body+" ParentID "+newComment.parentId);
+            return res.status(201).json({
+                msg:"Successfully Created",
+                newComment:newComment,
+            });
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({ 
+                msg: "Failed to create comment",
+                error
+        });}
+    }
     try {
         const comment = await prisma.comment.create({
             data: {
@@ -10,7 +49,7 @@ export const createComment =async (req,res)=>{
                 userId: req.userId,
             },
         });
-        
+        console.log(comment);
         const newComment= await prisma.comment.findUnique({
             where:{
                 id:comment.id,
@@ -20,7 +59,7 @@ export const createComment =async (req,res)=>{
                 post:true,
             },
         })
-        console.log(newComment);
+        // console.log(newComment);
         
         res.status(201).json({
             msg:"Successfully Created",

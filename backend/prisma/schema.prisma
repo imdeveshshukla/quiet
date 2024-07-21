@@ -40,7 +40,7 @@ model Post{
   body String
   img String?
   userId String
-  user User @relation(fields: [userId], references: [userID])
+  user User @relation(fields: [userId], references: [userID],onDelete: Cascade)
   upvotes Upvote[]
   comments Comment[]
   createdAt   DateTime  @default(now())
@@ -50,24 +50,28 @@ model Comment{
   id Int @id @unique @default(autoincrement())
   body String
   postId String
-  post Post @relation(fields: [postId],references: [id])
+  post Post @relation(fields: [postId],references: [id],onDelete: Cascade)
   userId String
-  user User @relation(fields: [userId],references: [userID])
+  user User @relation(fields: [userId],references: [userID],onDelete: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
-  // upvotes Upvote[]
   
-  // childComment Comment @relation(fields: [id],references: [id])
-  // Children Comment[]
+  parent Comment? @relation("ParentChild",fields: [parentId],references: [id],onDelete: Cascade)
+  child Comment[] @relation("ParentChild")
+  parentId Int?
+
+  //Upvotes
+  upvotes Upvote[]
 }
 model Upvote{
-  id Int @id @default(autoincrement())
+  id String @id @default(uuid())
   upvotes Int @default(0)
   postId String
-  post Post @relation(fields: [postId],references: [id])
+  post Post @relation(fields: [postId],references: [id],onDelete: Cascade)
   userId String 
-  user User @relation(fields: [userId],references: [userID])
+  user User @relation(fields: [userId],references: [userID],onDelete: Cascade)
   createAt DateTime @default(now())
-  // commentId Int
-  // comment Comment @relation(fields: [commentId],references: [id])
+  
+  commentId Int?
+  comment Comment? @relation(fields: [commentId],references: [id])
 }

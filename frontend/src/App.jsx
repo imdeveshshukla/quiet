@@ -20,7 +20,6 @@ import Profile from './components/Profile'
 import Sidenav from './components/Sidenav'
 import Posts from './components/Posts'
 import Overview from './components/Overview'
-import Upvoted from './components/Upvoted'
 import Commented from './components/Comments'
 import Profilecard from './components/Profilecard'
 import Postdetail from './components/Postdetail'
@@ -131,7 +130,6 @@ function App() {
             <Route path='/profile/overview' element={<Overview />} />
             <Route path='/profile/posts' element={<Userpost/>}/>
             <Route path='/profile/commented' element={<Commented />} />
-            <Route path='/profile/upvoted' element={<Upvoted />} />
 
           <Route path='/setting/' element={<Settings />} />
           <Route path="/test/" element={<Postskelton />} />

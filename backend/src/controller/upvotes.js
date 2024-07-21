@@ -1,18 +1,70 @@
 import prisma from "../../db/db.config.js";
 
 export const vote =async(req,res)=>{
-    const { postId,val } = req.body;
+    const { commentId,postId,val } = req.body;
     const uId = req.userId;
+    if(commentId){
+        console.log("Inside comment id "+commentId+" "+postId);
+        try {
+            const existingUpvote = await prisma.upvote.findFirst({
+                where: {
+                    commentId
+                },
+            });
+    
+            if (existingUpvote) {
+    
+                const upvte = await prisma.upvote.update({
+                    where: {
+                        id: existingUpvote.id,
+                    },
+                    data: {
+                        upvotes: val,
+                    },
+                });
+                return res.status(201).json({
+                    msg:"Success",
+                    newUpvote:upvte
+                })
+            }
+            else{
+                const newupvote = await prisma.upvote.create({
+                    data:{
+                        userId: uId,
+                        postId: postId,
+                        commentId,
+                        upvotes:val
+                    }
+                })
+    
+                const  newUpvote= await prisma.upvote.findUnique({
+                    where:{
+                        id: newupvote.id,
+                    }
+                })
+                return res.status(201).json({
+                    msg:"created",
+                    newUpvote
+                })
+            }
+        } catch (error) {
+            console.log(error);
+            return res.status(500).json({
+                msg:"Failed",
+                error
+            })
+        }
+    }
     try {
+        console.log("Inside Post "+commentId+" "+postId);
         const existingUpvote = await prisma.upvote.findFirst({
             where: {
-                userId: uId,
-                postId: postId,
+                postId,
+                commentId:null
             },
         });
 
         if (existingUpvote) {
-            // Toggle the upvote status
 
             const upvte = await prisma.upvote.update({
                 where: {
@@ -42,7 +94,7 @@ export const vote =async(req,res)=>{
                 }
             })
             res.status(201).json({
-                msg:"create",
+                msg:"created",
                 newUpvote
             })
         }

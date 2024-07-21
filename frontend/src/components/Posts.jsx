@@ -13,7 +13,6 @@ import { setPostDetail } from '../redux/Postdetail';
 import { useState } from 'react';
 import axios from 'axios';
 import toast from 'react-hot-toast';
-import {toggleUpvote } from '../redux/Post';
 
 
 
@@ -87,7 +86,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
 
 
   useEffect(() => {
-    console.log("Under UseEffect");
+    // console.log("Under UseEffect");
     getUpvote();
   }, []);
 
@@ -110,7 +109,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
         setUpvote((upvoteNumber) => upvoteNumber - 1)
       }
 
-      const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val });
+      const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val ,commentId:null });
 
       if(res.status==201){
         console.log(res);

@@ -10,36 +10,38 @@ import { setPostComment } from '../redux/Post';
 import { BiDownvote, BiUpvote } from 'react-icons/bi';
 import { GoComment } from 'react-icons/go';
 import { RiShareForwardLine } from 'react-icons/ri';
+import { PiTextUnderlineFill } from 'react-icons/pi';
 //test
 
 
 
 
-export const CommentBox = () => {
-  const [isComment,setIsComment]= useState(false)
-  const [comment, setcomment] = useState("")
-  const dispatch= useDispatch()
-  const [loading,setLoading] = useState(false);
-  const post= useSelector(state=>state.postDetail.post);
-
-  const addComment= async ()=>{
-    toast.loading("Adding your comment...");
-    setLoading(true);
-    console.log(comment);
-    try {
-        const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, content:comment});
-        console.log(res);
-        if(res.status==201){
-            setIsComment(false)
-            console.log(res.data.newComment);
-            dispatch(setComment(res.data.newComment))
-            dispatch(setUserPostComment(res.data.newComment))
-            dispatch(setPostComment(res.data.newComment))
-            console.log(post);
-            toast.dismiss();
-            toast.success("Comment Added.")
-            setcomment("");
-        }
+export const CommentBox = ({commentId = null}) => {
+    const [isComment,setIsComment]= useState(false)
+    const [comment, setcomment] = useState("")
+    const dispatch= useDispatch()
+    const [loading,setLoading] = useState(false);
+    const post= useSelector(state=>state.postDetail.post);
+    console.log("CommentId "+commentId);
+    const addComment= async ()=>{
+        toast.loading("Adding your comment...");
+        setLoading(true);
+        console.log(comment);
+        try {
+            const res= await axios.post(`http://localhost:3000/posts/createcomment`, {withCredentials:true,postId: post?.id, 
+                commentId,content:comment});
+            console.log(res);
+            if(res.status==201){
+                setIsComment(false)
+                console.log(res.data.newComment);
+                dispatch(setComment(res.data.newComment))
+                dispatch(setUserPostComment(res.data.newComment))
+                dispatch(setPostComment(res.data.newComment))
+                console.log(post);
+                toast.dismiss();
+                toast.success("Comment Added.")
+                setcomment("");
+            }
     }
     catch (error) {
         console.log(error);
@@ -65,58 +67,86 @@ export const CommentBox = () => {
   )
 }
 
-export const CommentBody=({dp,body,user,createdAt,getTime})=>(<>        //old one
-    <div className='p-2'>
-         <header className='flex items-center gap-2'>
-             <img src={user.dp? user.dp:dp}
-               alt="Profile"
-               className="w-8 h-8 rounded-full   bg-white " />
-               <span className=' text-sm  font-medium'>u/{user.username}</span>•<span className=' text-xs text-gray-600'>{getTime(createdAt)} ago</span>
-         </header>
-         <main className='p-2'>
-             {body}
-         </main>
-    </div>
- 
-    </>
-)
-export function CommentBody2({dp,body,user,createdAt,getTime}){ //currently using 
-    const [upvoted,isUpvoted] = useState(false);
-    const [downvote,isDownVoted] = useState(false);
+export function CommentBody({comments,getChildren,dp,getTime,postId}){
     
-    const [countComment,setCountCommnet] = useState(0);
-    return(<>   
+    return (<>
+    {comments?.map(comment=>{
+            return <CommentBody2 key={comment.id} id={comment.id} postId={postId} dp={dp} getChildren={getChildren}  body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
+        })}
+    </>
+)}
+export function CommentBody2({id,dp,body,user,createdAt,getTime,getChildren,postId}){ //currently using 
+    const [upvoted,setUpvoted] = useState(false);
+    const [downvoted,setDownVoted] = useState(false);
+    const [upvotes,setUpvotes] = useState(0);
+    const [downvotes,setDownvote] = useState(0);
+    const [openBox,setOpenBox] = useState(false);
+    const childs = getChildren(id)==undefined?[]:getChildren(id);
+    function handleComment(id)
+    {
+        setOpenBox((openBox)=>!openBox);
+
+    }
+    async function upvote(){
+        let val = 1;
+      if (!upvoted) {
+        setUpvoted(true);
+        if (downvoted) setDownvote((val) => val - 1);
+        setDownVoted(false);
+        val = 1;
+        setUpvotes((upvoteNumber) => upvoteNumber + 1);
+      }
+      else {
+        setUpvoted(false);
+        val = 0;
+        setUpvotes((upvoteNumber) => upvoteNumber - 1)
+      }
+
+      const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId:postId });
+
+      if(res.status==201){
+        console.log(res);
+      }
+    }
+    console.log("key = "+id);
+    return(<>
     {/* <div className='p-1'> */}
-    <div class="relative grid grid-cols-1 gap-4 p-4 mb-5 border rounded-lg bg-[#6d712eb8] shadow-lg">
-    <div class="relative flex gap-4">
-        <img src={dp} class="relative rounded-lg -top-1 -mb-4 bg-[#6d712eb8] border h-12 w-12" alt="" loading="lazy"/>
-        <div class="flex flex-col w-full">
-            <div class="flex flex-row justify-between">
-                <p class="relative text-l whitespace-nowrap truncate overflow-hidden">{user.username}</p>
-                {/* <a class="text-gray-500 text-xl" href="#"><i class="fa-solid fa-trash"></i></a> */}
+    <div className="relative grid grid-cols-1 gap-4 p-4 mb-5 border rounded-lg bg-[#6d712eb8] shadow-lg">
+    <div className="relative flex gap-4">
+        <img src={dp} className="relative rounded-lg -top-1 -mb-4 bg-[#6d712eb8] border h-12 w-12" alt="" loading="lazy"/>
+        <div className="flex flex-col w-full">
+            <div className="flex flex-row justify-between">
+                <p className="relative text-l whitespace-nowrap truncate overflow-hidden">{user.username}</p>
+                {/* <a className="text-gray-500 text-xl" href="#"><i className="fa-solid fa-trash"></i></a> */}
             </div>
-            <p class="text-gray-800 text-sm">{createdAt}</p>
+            <p className="text-gray-800 text-sm">{createdAt}</p>
         </div>
     </div>
         <p class="-mt-4 text-gray-100">{body}</p>
         <div className="btns">
         <footer className='flex gap-6'>
-        <div className={upvoted?' rounded-l flex gap-1 items-start justify-center p-2 bg-green-600 text-white':downvote?' rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white':' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
+        <div className={upvoted?' rounded-l flex gap-1 items-start justify-center p-2 bg-green-600 text-white':downvoted?' rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white':' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
 
-          <BiUpvote onClick={() => { upvote(id) }} className={upvoted ? 'text-l hover:text-neutral-950 text-green-900  cursor-pointer' : 'text-l hover:text-green-700  cursor-pointer'} />
-          <span>{0}</span>
-          <BiDownvote onClick={() => { downVoteFunc(id) }} className={downvote ? 'text-l hover:text-neutral-950 text-red-900  cursor-pointer' : 'text-l hover:text-red-700  cursor-pointer'} />
+          <BiUpvote onClick={() => { upvote() }} className={upvoted ? 'text-l hover:text-neutral-950 text-green-900  cursor-pointer' : 'text-l hover:text-green-700  cursor-pointer'} />
+          <span>{upvotes}</span>
+          <BiDownvote onClick={() => { downVoteFunc(id) }} className={downvoted ? 'text-l hover:text-neutral-950 text-red-900  cursor-pointer' : 'text-l hover:text-red-700  cursor-pointer'} />
           <span>{0}</span>
         </div>
 
-        <div onClick={() => handleComment(id)} className=' rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
+        <div onClick={(id) => handleComment(id)} className=' rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
           <GoComment className='text-l' />
-          <span>{countComment ? countComment : 0}</span>
+          <span>{childs.length}</span>
+        </div>
+        <div>
         </div>
       </footer>
         </div>
+        {openBox && <CommentBox commentId={id}/>}
     </div>
+        <div className='pl-5 border-l-2 border-white divide-x border-solid'>
+            {childs.length != 0 && <CommentBody comments={childs} getChildren={getChildren} dp={dp} getTime={getTime}/>}
 
+        </div>
     </>)}
 
 
