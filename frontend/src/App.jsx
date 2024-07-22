@@ -28,6 +28,22 @@ import Postskelton from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
 import { v4 as uuidv4 } from 'uuid';
 import Userpost from './components/Userpost'
+import HotTopicPosts from './components/HotTopicPosts'
+import sportsdp from './assets/sportsdp.jpg'
+import sportsbg from './assets/sportsbg.jpg'
+import ietdp from './assets/ietdp.png'
+import ietbg from './assets/ietbg.jpeg'
+import dsabg from './assets/dsabg.png'
+import dsadp from './assets/dsadp.jpg'
+import enterdp from './assets/enterdp.jpg'
+import enterbg from './assets/enterbg.png'
+import lkodp from './assets/lkodp.jpg'
+import lkobg from './assets/lkobg.jpg'
+import lifedp from './assets/lifedp.jpeg'
+import lifebg from './assets/lifebg.jpg'
+
+
+
 
 
 
@@ -47,6 +63,12 @@ function App() {
   const posts = useSelector(state => state.post.posts)
   const location = useLocation();
   const isSkelton = useSelector(state => state.skelton.value);
+
+
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [location.pathname]);
 
 
 
@@ -127,11 +149,19 @@ function App() {
           <Route path='/signin' element={<Signin />} />
           <Route path='/resetpassword' element={<Resetpass />} />
           <Route path='/varifyaccount' element={<Varifyacc />} />
-         
-            <Route path='/profile/overview' element={<Overview />} />
-            <Route path='/profile/posts' element={<Userpost/>}/>
-            <Route path='/profile/commented' element={<Commented />} />
-            <Route path='/profile/upvoted' element={<Upvoted />} />
+          <Route path='/profile/overview' element={<Overview />} />
+          <Route path='/profile/posts' element={<Userpost/>}/>
+          <Route path='/profile/commented' element={<Commented />} />
+          <Route path='/profile/upvoted' element={<Upvoted />} />
+
+          <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>
+          <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg}/>}/>
+          <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"IET-Lucnow"} dp={ietdp} bg={ietbg}/>}/>
+          <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg}/>}/>
+          <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg}/>}/>
+          <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
+
+
 
           <Route path='/setting/' element={<Settings />} />
           <Route path="/test/" element={<Postskelton />} />

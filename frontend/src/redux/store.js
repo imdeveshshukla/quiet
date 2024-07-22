@@ -6,7 +6,7 @@ import postReducer from './Post'
 import skeltonReducer from './skelton'
 import postDetailReducer from './Postdetail'
 import userPostReducer  from './userposts'
-
+import  HotPostReducer  from './Hotposts'
 
 export const store = configureStore({
   reducer: {
@@ -17,5 +17,7 @@ export const store = configureStore({
     skelton: skeltonReducer,
     postDetail: postDetailReducer,
     userpost: userPostReducer,
+    hotpost: HotPostReducer,
+
   },
 })
