@@ -91,7 +91,7 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
         next={fetchMoreData}
         hasMore={hasMore}
         loader={<Postskelton />}
-        endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}   
+        endMessage={hotposts.length>0?<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>:<p className=' text-center font-semibold p-4'>No posts available to display!</p>}   
       >
       <Hottopic topic={title} dp={dp} bg={bg} />
 
