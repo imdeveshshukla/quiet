@@ -144,10 +144,9 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
       val = 0;
       setDownvotenum((upvoteNumber) => upvoteNumber - 1)
     }
-    const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val });
+    const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
     if(res.status==201){
       console.log(res);
-      
     }
 
   }

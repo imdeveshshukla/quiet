@@ -22,12 +22,12 @@ axios.defaults.withCredentials = true
 
 const Postdetail = () => {
     const post= useSelector(state=>state.postDetail.post);
-    // const userInfo= useSelector(state=>state.user.userInfo);
+    const userInfo= useSelector(state=>state.user.userInfo);
     const isLogin= useSelector(state=>state.login.value);
     const Navigate= useNavigate()
     const dispatch= useDispatch()
     const location = useLocation();
-
+    // console.log("UserInfo "+userInfo);
     const getApost=async(id)=>{
         try {
           const res = await axios.get("http://localhost:3000/posts/getapost", { 
@@ -35,14 +35,12 @@ const Postdetail = () => {
               id
             }
           });
-          console.log(res);
-          
+
           if(res.status==200){
             dispatch(setPostDetail(res.data.post))
           }
         } catch (error) {
           console.log(error);
-          
         }
       }
  
@@ -102,8 +100,8 @@ const Postdetail = () => {
     <div className=' bg-gray-700 h-[1px]'></div>
     
     <div className='m-4'>
-    {console.log(post?.comments)};
-    <CommentBody comments={groupComments[null]} postId={post?.id} getChildren={getChildren}  dp={dp} getTime={getTime}/>
+    {/* {console.log(post?.comments)}; */}
+    <CommentBody comments={groupComments[null]} postId={post?.id} getChildren={getChildren} userId={userInfo?.userID}  dp={dp} getTime={getTime}/>
     {/* <CommentBody comments={post?.comments} dp={dp} getTime={getTime}/> */}
     </div>
 

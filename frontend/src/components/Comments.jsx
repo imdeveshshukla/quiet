@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import SmallLoader from './SmallLoader';
@@ -67,15 +67,15 @@ export const CommentBox = ({commentId = null}) => {
   )
 }
 
-export function CommentBody({comments,getChildren,dp,getTime,postId}){
+export function CommentBody({comments,getChildren,dp,getTime,postId,userId}){
     
     return (<>
     {comments?.map(comment=>{
-            return <CommentBody2 key={comment.id} id={comment.id} postId={postId} dp={dp} getChildren={getChildren}  body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
+            return <CommentBody2 key={comment.id} id={comment.id} userId={userId} postId={postId} dp={dp} getChildren={getChildren}  body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
         })}
     </>
 )}
-export function CommentBody2({id,dp,body,user,createdAt,getTime,getChildren,postId}){ //currently using 
+export function CommentBody2({id,dp,body,user,createdAt,getTime,getChildren,postId,userId}){ //currently using 
     const [upvoted,setUpvoted] = useState(false);
     const [downvoted,setDownVoted] = useState(false);
     const [upvotes,setUpvotes] = useState(0);
@@ -87,7 +87,25 @@ export function CommentBody2({id,dp,body,user,createdAt,getTime,getChildren,post
         setOpenBox((openBox)=>!openBox);
 
     }
+    async function getUpvote(){
+        const res = await axios.post("http://localhost:3000/posts/upvoteNum",{postId:postId,commentId:id});
+        // console.log("Inside getUPvote = "+JSON.stringify(res.data));
+        setUpvotes(res.data.numbers);
+        res.data.upvote.forEach((item)=>{
+          if(item.userId == userId)setUpvoted(true);
+        })
+        res.data.downvote.forEach((item)=>{
+          if(item.userId == userId)setDownVoted(true);
+        })
+        setDownvote(res.data.downVoteNum)
+    }
+
+    useEffect(() => {
+      getUpvote();
+    }, [])
+    
     async function upvote(){
+        
         let val = 1;
       if (!upvoted) {
         setUpvoted(true);
@@ -108,7 +126,29 @@ export function CommentBody2({id,dp,body,user,createdAt,getTime,getChildren,post
         console.log(res);
       }
     }
-    console.log("key = "+id);
+
+    async function downvote(){
+      let val = -1;
+    if (!downvote) {
+      setDownVoted(true);
+      if (upvoted) {
+        setUpvotes((val) => val - 1);
+        setUpvoted(false);
+      }
+      val = -1;
+      setDownvote((downvote) => downvote + 1);
+    }
+    else {
+      setDownVoted(false);
+      val = 0;
+      setDownvote((upvoteNumber) => upvoteNumber - 1)
+    }
+    const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId:postId  });
+      if(res.status==201){
+        console.log(res);
+      }
+    }
+    // console.log("key = "+id);
     return(<>
     {/* <div className='p-1'> */}
     <div className="relative grid grid-cols-1 gap-4 p-4 mb-5 border rounded-lg bg-[#6d712eb8] shadow-lg">
@@ -122,15 +162,15 @@ export function CommentBody2({id,dp,body,user,createdAt,getTime,getChildren,post
             <p className="text-gray-800 text-sm">{createdAt}</p>
         </div>
     </div>
-        <p class="-mt-4 text-gray-100">{body}</p>
+        <p className="-mt-4 text-gray-100">{body}</p>
         <div className="btns">
         <footer className='flex gap-6'>
         <div className={upvoted?' rounded-l flex gap-1 items-start justify-center p-2 bg-green-600 text-white':downvoted?' rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white':' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
 
           <BiUpvote onClick={() => { upvote() }} className={upvoted ? 'text-l hover:text-neutral-950 text-green-900  cursor-pointer' : 'text-l hover:text-green-700  cursor-pointer'} />
           <span>{upvotes}</span>
-          <BiDownvote onClick={() => { downVoteFunc(id) }} className={downvoted ? 'text-l hover:text-neutral-950 text-red-900  cursor-pointer' : 'text-l hover:text-red-700  cursor-pointer'} />
-          <span>{0}</span>
+          <BiDownvote onClick={() => { downvote() }} className={downvoted ? 'text-l hover:text-neutral-950 text-red-900  cursor-pointer' : 'text-l hover:text-red-700  cursor-pointer'} />
+          <span>{downvotes}</span>
         </div>
 
         <div onClick={(id) => handleComment(id)} className=' rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
@@ -144,7 +184,7 @@ export function CommentBody2({id,dp,body,user,createdAt,getTime,getChildren,post
         {openBox && <CommentBox commentId={id}/>}
     </div>
         <div className='pl-5 border-l-2 border-white divide-x border-solid'>
-            {childs.length != 0 && <CommentBody comments={childs} getChildren={getChildren} dp={dp} getTime={getTime}/>}
+            {childs.length != 0 && <CommentBody comments={childs} getChildren={getChildren} dp={dp} getTime={getTime} postId={postId}/>}
 
         </div>
     </>)}

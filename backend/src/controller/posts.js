@@ -98,7 +98,10 @@ export const getPost = async (req, res) => {
       take: limit,
     });
    
-    
+    posts.forEach((item,index)=>{
+      posts[index].upvotes = posts[index].upvotes?.filter(upvote => upvote.commentId === null);
+    })
+    // console.log("Post Inside GETPOST  "+JSON.stringify(posts[0].upvotes));
 
     res.status(200).json({
       posts,
@@ -134,8 +137,8 @@ export const getAPost = async (req, res) => {
       },
       
     });
-   
-    
+   post.upvotes = post.upvotes.filter(upvote => upvote.commentId === null);
+    console.log("Post Inside GETAPOST  "+(post.upvotes));
 
     res.status(200).json({
       post,

@@ -41,8 +41,6 @@ const Userpost = () => {
                 withCredentials: true 
             });
             
-            console.log(res);
-            
             if (res.status == 200) {
                 if (res.data.posts.length < 10) {
                     setHasMore(false);

@@ -28,8 +28,35 @@ const getUser = async (req, res) => {
       isVarified: true,
       userID: true,
       username: true,
-    },
-  });
+      posts: {
+        select: {
+          id: true,
+          title: true,
+          topic: true,
+          body:true,
+          createdAt: true,
+          updatedAt: true
+        }
+      },
+      comments:{
+        select:{
+          id:true,
+          postId:true,
+          parentId:true,
+          createdAt:true,
+          updatedAt:true
+        }
+      },
+      upvotes:{
+        select:{
+          id:true,
+          upvotes:true,
+          postId:true,
+          commentId:true,
+          createAt:true
+        }
+      }
+  }});
   // console.log(user);
 
   res.status(200).send({

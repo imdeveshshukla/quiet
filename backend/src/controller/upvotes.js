@@ -56,8 +56,8 @@ export const vote =async(req,res)=>{
         }
     }
     try {
-        console.log("Inside Post "+commentId+" "+postId);
-        const existingUpvote = await prisma.upvote.findFirst({
+        // console.log("Inside Post "+commentId+" "+postId);
+        const existingUpvote = await prisma.upvote.findMany({
             where: {
                 postId,
                 commentId:null
@@ -107,12 +107,45 @@ export const vote =async(req,res)=>{
 }
 
 export const upvoteNumber =async (req,res)=>{
-    const { postId } = req.body;
+    const { postId,commentId } = req.body;
+    if(commentId)
+    {
+        try {
+            const upvote = await prisma.upvote.findMany({
+                where:{
+                    upvotes:1,
+                    postId,
+                    commentId
+                }
+            });
+            const downVote = await prisma.upvote.findMany({
+                where:{
+                    upvotes:-1,
+                    postId,
+                    commentId
+                }
+            });
+            return res.status(200).json({
+                msg:"Success",
+                numbers:upvote.length,
+                downVoteNum:downVote.length,
+                upvote:upvote,
+                downvote:downVote
+            });
+    
+        } catch (error) {
+            return res.status(500).json({
+                msg:"Failed",
+                error
+            })
+        }
+    }
     try {
         const upvote = await prisma.upvote.findMany({
             where:{
                 upvotes:1,
-                postId
+                postId,
+                
             }
         });
         const downVote = await prisma.upvote.findMany({

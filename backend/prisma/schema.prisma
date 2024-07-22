@@ -74,4 +74,5 @@ model Upvote{
   
   commentId Int?
   comment Comment? @relation(fields: [commentId],references: [id])
+  @@unique([id,userId])
 }
