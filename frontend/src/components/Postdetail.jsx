@@ -88,7 +88,7 @@ const Postdetail = () => {
     }
   // console.log("Groupd Comments = "+JSON.stringify(groupComments));
   return (<>
-    <div className='h-full overflow-auto border-x-2 border-black pl-16'>
+    <div className=' min-h-screen overflow-auto border-x-2 border-black pl-16'>
       {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes}/>:<Postskelton/>}
 
       <div className=' m-4'>
