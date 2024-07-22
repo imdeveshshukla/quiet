@@ -66,10 +66,10 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
 
     
     const upvoteArr = await upvotes?.filter(vote => vote.upvotes == 1);
-    // console.log(upvoteArr);
+    console.log("upvoteArr",upvoteArr);
 
     const downvoteArr = await upvotes?.filter(vote => vote.upvotes == -1);
-    // console.log(downvoteArr);
+    console.log("downvotearr",downvoteArr);
 
     setUpvote(upvoteArr?.length);
     setDownvotenum(downvoteArr?.length);

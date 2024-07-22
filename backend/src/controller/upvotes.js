@@ -3,6 +3,8 @@ import prisma from "../../db/db.config.js";
 export const vote =async(req,res)=>{
     const { commentId,postId,val } = req.body;
     const uId = req.userId;
+    console.log(req.body);
+    
     if(commentId){
         console.log("Inside comment id "+commentId+" "+postId);
         try {
@@ -56,15 +58,19 @@ export const vote =async(req,res)=>{
         }
     }
     try {
-        // console.log("Inside Post "+commentId+" "+postId);
-        const existingUpvote = await prisma.upvote.findMany({
+        console.log("Inside Post "+commentId+" "+postId);
+        const existingUpvote = await prisma.upvote.findFirst({
             where: {
                 postId,
-                commentId:null
+                commentId: null
             },
         });
+        console.log("existing",existingUpvote);
+        
 
         if (existingUpvote) {
+            console.log("upvote exists");
+            
 
             const upvte = await prisma.upvote.update({
                 where: {
@@ -74,12 +80,16 @@ export const vote =async(req,res)=>{
                     upvotes: val,
                 },
             });
+            console.log(upvte);
+            
             res.status(201).json({
                 msg:"Success",
                 newUpvote:upvte
             })
         }
         else{
+            console.log("newvotecreating");
+            
             const newupvote = await prisma.upvote.create({
                 data:{
                     userId: uId,
@@ -87,6 +97,9 @@ export const vote =async(req,res)=>{
                     upvotes:val
                 }
             })
+
+            console.log(newupvote);
+            
 
             const  newUpvote= await prisma.upvote.findUnique({
                 where:{
