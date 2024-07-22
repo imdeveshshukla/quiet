@@ -16,6 +16,12 @@ import { IoArrowDownCircleOutline } from "react-icons/io5";
 import { IoArrowUpCircleOutline } from "react-icons/io5";
 import { IoIosArrowUp } from "react-icons/io";
 import { IoIosArrowDown } from "react-icons/io";
+import { RiReplyLine } from "react-icons/ri";
+
+import { IoIosHeart } from "react-icons/io";
+import { IoIosHeartEmpty } from "react-icons/io";
+
+
 
 //test
 
@@ -79,10 +85,10 @@ export const CommentBox = ({ commentId = null }) => {
 export function CommentBody({ comments, getChildren, dp, getTime, postId, userId }) {
 
   return (<>
-  <div className=' flex flex-col  gap-2'>
-    {comments?.map(comment => {
-      return <CommentBody2 key={comment.id} id={comment.id} userId={userId} postId={postId} dp={dp} getChildren={getChildren} body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
-    })}
+    <div className=' flex flex-col  gap-2'>
+      {comments?.map(comment => {
+        return <CommentBody2 key={comment.id} id={comment.id} userId={userId} postId={postId} dp={dp} getChildren={getChildren} body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
+      })}
     </div>
   </>
   )
@@ -103,14 +109,12 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
   async function getUpvote() {
     const res = await axios.post("http://localhost:3000/posts/upvoteNum", { postId: postId, commentId: id });
     // console.log("Inside getUPvote = "+JSON.stringify(res.data));
+    console.log("upvotesdetail", res.data);
+
     setUpvotes(res.data.numbers);
     res.data.upvote.forEach((item) => {
-      if (item.userId == userId) setUpvoted(true);
+      if (item.userId == user.userID) setUpvoted(true);
     })
-    res.data.downvote.forEach((item) => {
-      if (item.userId == userId) setDownVoted(true);
-    })
-    setDownvote(res.data.downVoteNum)
   }
 
   useEffect(() => {
@@ -122,46 +126,29 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
     let val = 1;
     if (!upvoted) {
       setUpvoted(true);
-      if (downvoted) setDownvote((val) => val - 1);
-      setDownVoted(false);
       val = 1;
       setUpvotes((upvoteNumber) => upvoteNumber + 1);
     }
     else {
       setUpvoted(false);
       val = 0;
-      setUpvotes((upvoteNumber) => upvoteNumber - 1)
+      setUpvotes((upvoteNumber) => upvoteNumber - 1);
     }
 
-    const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
+    try {
+      const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
 
-    if (res.status == 201) {
-      console.log(res);
-    }
-  }
-
-  async function downvote() {
-    let val = -1;
-    if (!downvote) {
-      setDownVoted(true);
-      if (upvoted) {
-        setUpvotes((val) => val - 1);
-        setUpvoted(false);
+      if (res.status == 201) {
+        console.log(res);
       }
-      val = -1;
-      setDownvote((downvote) => downvote + 1);
+    } catch (error) {
+      
     }
-    else {
-      setDownVoted(false);
-      val = 0;
-      setDownvote((upvoteNumber) => upvoteNumber - 1)
-    }
-    const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
-    if (res.status == 201) {
-      console.log(res);
-    }
+
   }
-  // console.log("key = "+id);
+
+
+
   return (<>
 
     <div className="relative flex flex-col gap-2 py-2 px-14  border rounded-2xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
@@ -180,25 +167,24 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       <div className=' mx-10  whitespace-pre-wrap break-words'>{body}</div>
       <div className="btns">
         <footer className='flex gap-4 items-center'>
-          <div className={upvoted ? ' rounded-3xl flex gap-1 items-center justify-center px-3 bg-green-600 text-white' : downvoted ? ' rounded-3xl flex gap-1 items-center justify-center px-3 bg-red-600 text-white' : ' rounded-3xl flex gap-1 items-center justify-center px-3 bg-zinc-400 text-black'}>
+          <div className={'  flex gap-1 items-center justify-center   '}>
 
-            <BiUpvote onClick={() => { upvote() }} className={upvoted ? 'text-lg hover:text-neutral-950 text-green-900  cursor-pointer' : 'text-lg hover:text-green-700  cursor-pointer'} />
+
+            {upvoted ? <IoIosHeart onClick={() => { upvote() }} className='text-2xl cursor-pointer text-red-600 hover:text-red-600' /> : <IoIosHeartEmpty onClick={() => { upvote() }} className='text-2xl hover:text-red-600 cursor-pointer' />}
             <span className=''>{upvotes}</span>
-            <BiDownvote onClick={() => { downvote() }} className={downvoted ? 'text-lg hover:text-neutral-950 text-red-900  cursor-pointer' : 'text-lg hover:text-red-700  cursor-pointer'} />
-            <span>{downvotes}</span>
           </div>
 
           <div onClick={(id) => handleComment(id)} className=' rounded-3xl flex gap-2 items-center justify-center px-2  cursor-pointer hover:text-blue-700 bg-blue-300'>
-            <GoComment className='text-lg' />
+            <RiReplyLine className='text-lg' />
             <span>{childs.length}</span>
           </div>
 
-          {(childs.length!=0 )&& (showChild?<span onClick={()=>setShowChild(false)} className=' flex items-center gap-1 text-2xl cursor-pointer'><IoIosArrowUp/><span className=' text-xs text-blue-800 font-medium '>Hide replies</span></span>:<span onClick={()=>setShowChild(true)} className='flex items-center gap-1 text-2xl cursor-pointer'><IoIosArrowDown/><span className=' text-xs text-blue-800 font-medium '>Show replies</span></span>)}
+          {(childs.length != 0) && (showChild ? <span onClick={() => setShowChild(false)} className=' flex items-center gap-1 text-2xl cursor-pointer'><IoIosArrowUp /><span className=' text-xs text-blue-800 font-medium '>Hide replies</span></span> : <span onClick={() => setShowChild(true)} className='flex items-center gap-1 text-2xl cursor-pointer'><IoIosArrowDown /><span className=' text-xs text-blue-800 font-medium '>Show replies</span></span>)}
           <div>
           </div>
         </footer>
       </div>
-      
+
     </div>
     {openBox && <CommentBox commentId={id} />}
 
