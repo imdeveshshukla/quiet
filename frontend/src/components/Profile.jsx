@@ -73,7 +73,7 @@ const Profile = () => {
 
   return (
     <>
-      {isOpen && <div className='fixed z-10 h-full w-full  backdrop-blur-sm'>
+      {isOpen && <div className='fixed top-0 left-0 z-10 min-h-screen min-w-full  backdrop-blur-sm'>
         <div ref={dpUploadRef} className='absolute left-[50%] top-[50%] rounded-3xl shadow-md w-[30vw] h-[40vh] translate-x-[-50%] translate-y-[-50%] bg-[#808449] p-4 flex items-center justify-center '>
 
           <div className=' rounded-2xl flex flex-col items-center justify-between gap-4'>
