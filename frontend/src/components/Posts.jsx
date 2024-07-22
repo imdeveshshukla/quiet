@@ -65,19 +65,19 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
   const getUpvote = async () => {
 
     
-    const upvoteArr = await upvotes?.filter(vote => vote.upvotes == 1);
+    const upvoteArr = await upvotes?.filter(vote => (vote.upvotes == 1 && vote.commentId==null));
     console.log("upvoteArr",upvoteArr);
 
-    const downvoteArr = await upvotes?.filter(vote => vote.upvotes == -1);
+    const downvoteArr = await upvotes?.filter(vote => (vote.upvotes == -1 && vote.commentId==null));
     console.log("downvotearr",downvoteArr);
 
     setUpvote(upvoteArr?.length);
     setDownvotenum(downvoteArr?.length);
 
-    if(await upvoteArr?.find(vote=> vote.userId==userInfo?.userID)){
+    if(await upvoteArr?.find(vote=> (vote.userId==userInfo?.userID ) )){
       setUpvoted(true);
     }
-    if(await downvoteArr?.find(vote=> vote.userId==userInfo?.userID)){
+    if(await downvoteArr?.find(vote=> (vote.userId==userInfo?.userID ))){
       setDownVote(true)
     }
 
