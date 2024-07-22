@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect, useMemo } from 'react'
 import Posts from './Posts'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlinePlus } from "react-icons/ai";
@@ -22,12 +22,12 @@ axios.defaults.withCredentials = true
 
 const Postdetail = () => {
     const post= useSelector(state=>state.postDetail.post);
-    // const userInfo= useSelector(state=>state.user.userInfo);
+    const userInfo= useSelector(state=>state.user.userInfo);
     const isLogin= useSelector(state=>state.login.value);
     const Navigate= useNavigate()
     const dispatch= useDispatch()
     const location = useLocation();
-
+    // console.log("UserInfo "+userInfo);
     const getApost=async(id)=>{
         try {
           const res = await axios.get("http://localhost:3000/posts/getapost", { 
@@ -35,14 +35,12 @@ const Postdetail = () => {
               id
             }
           });
-          console.log(res);
-          
+
           if(res.status==200){
             dispatch(setPostDetail(res.data.post))
           }
         } catch (error) {
           console.log(error);
-          
         }
       }
  
@@ -75,9 +73,20 @@ const Postdetail = () => {
         return ans;
       }
     
-    
+    const groupComments = useMemo(()=>{
+      const group = {}
+      const temp = []
+      post?.comments.forEach((comment)=>{
+          group[comment.parentId] ||= [];
+          group[comment.parentId].push(comment);
+      })
+      return group;
+    },[post?.comments])
 
-
+    function getChildren(id){
+        return groupComments[id]
+    }
+  // console.log("Groupd Comments = "+JSON.stringify(groupComments));
   return (<>
     <div className=' min-h-screen overflow-auto border-x-2 border-black pl-16'>
       {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes}/>:<Postskelton/>}
@@ -91,12 +100,9 @@ const Postdetail = () => {
     <div className=' bg-gray-700 h-[1px]'></div>
     
     <div className='m-4'>
-        {post?.comments?.map(comment=>{
-            console.log(comment);
-            
-            return <CommentBody2 key={comment.id} dp={dp}  body={comment.body} user={comment.user} createdAt={comment.createdAt} getTime={getTime} />
-        })}
-            
+    {/* {console.log(post?.comments)}; */}
+    <CommentBody comments={groupComments[null]} postId={post?.id} getChildren={getChildren} userId={userInfo?.userID}  dp={dp} getTime={getTime}/>
+    {/* <CommentBody comments={post?.comments} dp={dp} getTime={getTime}/> */}
     </div>
 
     </div>

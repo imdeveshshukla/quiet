@@ -92,6 +92,9 @@ export const getPost = async (req, res) => {
       skip: offset,
       take: limit,
     });
+    posts.forEach((item,index)=>{
+      posts[index].upvotes = posts[index].upvotes?.filter(upvote => upvote.commentId === null);
+    })
 
     res.status(200).json({
       posts,
@@ -123,7 +126,7 @@ export const getAPost = async (req, res) => {
         upvotes: true,
       },
     });
-
+    post.upvotes = post.upvotes.filter(upvote => upvote.commentId === null);
     res.status(200).json({
       post,
     });
