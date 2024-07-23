@@ -13,6 +13,7 @@ import toast from 'react-hot-toast';
 import { clearPostsInfo } from '../redux/Post';
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoNotificationsSharp } from "react-icons/io5";
+import Notification from './Notification';
 
 
 axios.defaults.withCredentials = true
@@ -23,7 +24,8 @@ const Navbar = () => {
   const isLogin = useSelector((state) => state.login.value);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
-  const [isNtfnOpen, setIsNfnOpen] = useState(true);
+  const [isNtfnOpen, setIsNfnOpen] = useState(false);
+  const notifications= useSelector(state=> state.notification.notifications)
 
 
   const Navigate = useNavigate()
@@ -100,11 +102,10 @@ const Navbar = () => {
         <div ref={ntfndropdownRef}>
           {
             isLogin && <div onClick={() => setIsNfnOpen(!isNtfnOpen)} className='relative'><IoNotificationsOutline className=' text-white font-semibold cursor-pointer text-3xl' />
-              <span className='absolute flex items-center justify-center p-2 -bottom-1 text-[10px] -right-1 h-4 w-4 font-bold text-white bg-red-700 rounded-full'>45</span>
+              <span className='absolute flex items-center justify-center p-2 -top-2 text-[10px] -right-1 h-4 w-4 font-bold text-white bg-red-700 rounded-full'>{notifications.length}</span>
             </div>
           }
-          {isNtfnOpen && <div className='rounded-2xl absolute top-16 right-16 w-[20vw] min-h-[20vh] bg-black'>
-          </div>}
+          {isNtfnOpen && <Notification setIsNfnOpen={setIsNfnOpen}  /> }
         </div>
         {isLogin ? <>
           <div className="relative flex items-center gap-8" ref={dropdownRef} >

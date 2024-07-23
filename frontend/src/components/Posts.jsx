@@ -26,20 +26,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
   const dispatch = useDispatch();
 
 
-  const getTime = (createdAt) => {
-    const postDate = new Date(createdAt).getTime();
-    const crrTime = new Date().getTime();
 
-    let sec = Math.floor((crrTime - postDate) / 1000);
-    let min = Math.floor(sec / 60);
-    let hours = Math.floor(sec / 3600)
-    let day = Math.floor(sec / (60 * 60 * 24))
-    let month = Math.floor(sec / (60 * 60 * 24 * 30));
-    let years = Math.floor(sec / (60 * 60 * 24 * 30 * 12));
-    const ans = years > 0 ? years + ' year' : (month > 0 ? month + ' month' : day > 0 ? day + " days" : hours > 0 ? hours + " hours" : min > 0 ? min + " minutes" : sec > 0 ? sec + " seconds" : 0 + " seconds");
-
-    return ans;
-  }
 
 
 
@@ -197,3 +184,21 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
 }
 
 export default Posts;
+
+
+export const getTime = (createdAt) => {
+  const postDate = new Date(createdAt).getTime();
+  const crrTime = new Date().getTime();
+
+  let sec = Math.floor((crrTime - postDate) / 1000);
+  let min = Math.floor(sec / 60);
+  let hours = Math.floor(sec / 3600)
+  let day = Math.floor(sec / (60 * 60 * 24))
+  let month = Math.floor(sec / (60 * 60 * 24 * 30));
+  let years = Math.floor(sec / (60 * 60 * 24 * 30 * 12));
+  const ans = years > 0 ? years + ' year' : (month > 0 ? month + ' month' : day > 0 ? day + " days" : hours > 0 ? hours + " hours" : min > 0 ? min + " minutes" : sec > 0 ? sec + " seconds" : 0 + " seconds");
+
+  return ans;
+}
+
+
