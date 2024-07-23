@@ -13,7 +13,7 @@ module.exports= {
         },
       },
       animation: {
-        glow: 'glow 1.5s infinite',
+        glow: 'glow 2s infinite',
       },
     },
   },

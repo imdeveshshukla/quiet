@@ -66,10 +66,12 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
         dispatch(setPostComment(res.data.newComment))
         console.log(post);
         toast.dismiss();
-        toast.success("Comment Added.")
+        toast.success("Comment Added.");
         setcomment("");
-        setOpenBox(false)
-        setShowChild(true)
+        if(openBox){
+          setOpenBox(false)
+          setShowChild(true)
+        }
       }
     }
     catch (error) {
