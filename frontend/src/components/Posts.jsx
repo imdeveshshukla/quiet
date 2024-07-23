@@ -155,7 +155,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
 
   return (<>
   
-    <div className=' rounded-3xl  m-6 p-4 hover:bg-[#828a0026] '>
+    <div className='px-4 py-2  border-2 border-[#f9ff86] rounded-2xl   animate-glow m-6'>
 
       <header className='flex gap-2 items-center my-2'>
         <img src={user && user.dp ? user.dp : dp}
