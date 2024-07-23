@@ -45,7 +45,8 @@ const Userpost = () => {
                 if (res.data.posts.length < 10) {
                     setHasMore(false);
                 }
-
+                console.log("userspost",res.data.posts);
+                
                 dispatch(setPost(res.data.posts))
             }
         } catch (error) {

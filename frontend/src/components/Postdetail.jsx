@@ -100,6 +100,7 @@ const Postdetail = () => {
     <div className=' bg-gray-700 h-[1px]'></div>
     
     <div className='m-4'>
+      <div className=' text-xl font-bold mb-4 underline'>Comments:</div>
     {/* {console.log(post?.comments)}; */}
     <CommentBody comments={groupComments[null]} postId={post?.id} getChildren={getChildren} userId={userInfo?.userID}  dp={dp} getTime={getTime}/>
     {/* <CommentBody comments={post?.comments} dp={dp} getTime={getTime}/> */}
