@@ -133,10 +133,19 @@ export const upvoteNumber =async (req,res)=>{
                     commentId
                 }
             });
+            const downVote = await prisma.upvote.findMany({
+                where:{
+                    upvotes:-1,
+                    postId,
+                    commentId
+                }
+            });
             return res.status(200).json({
                 msg:"Success",
                 numbers:upvote.length,
+                downVoteNum:downVote.length,
                 upvote:upvote,
+                downvote:downVote
             });
     
         } catch (error) {
