@@ -24,7 +24,7 @@ model User{
   posts Post[]
   upvotes Upvote[]
   comments Comment[]         
-  notifications notification[]   @relation("toUser")
+  myNotifications notification[]   @relation("toUser")
   notificationsto notification[] @relation("fromUser")                                                                                                                                                                                     
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
