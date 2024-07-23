@@ -23,7 +23,9 @@ model User{
   isVarified Boolean @default(false)
   posts Post[]
   upvotes Upvote[]
-  comments Comment[]                                                                                                                                                                                                   
+  comments Comment[]         
+  myNotifications notification[]   @relation("toUser")
+  notificationsto notification[] @relation("fromUser")                                                                                                                                                                                     
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -75,4 +77,18 @@ model Upvote{
   commentId Int?
   comment Comment? @relation(fields: [commentId],references: [id])
   @@unique([id,userId])
+}
+
+model notification{
+  id String @id @default(uuid())
+  title String 
+  body String?
+  createdAt DateTime @default(now())
+  visited Boolean @default(false)
+
+  toUser String
+  user User @relation("toUser",fields: [toUser],references: [userID],onDelete: Cascade)
+  
+  fromUser String
+  user2 User @relation("fromUser",fields: [fromUser],references: [userID],onDelete: Cascade)
 }
