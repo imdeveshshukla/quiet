@@ -51,7 +51,7 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
             dispatch(setHotPost(fetchedPosts));
           }
         } catch (error) {
-          console.error(error);
+          console.log(error);
           setHasMore(false); // Stop fetching if there's an error
         }
         dispatch(setSkeltonLoader())
@@ -62,6 +62,7 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
         setPage(1); // Reset page when topic changes
         setHasMore(true); // Reset hasMore when topic changes
         getPost(); // Fetch posts for the new topic
+        dispatch(clearHotPostsInfo())
       }, [topic]);
 
       

@@ -160,8 +160,6 @@ function App() {
           <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg}/>}/>
           <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
 
-
-=======
          
             <Route path='/profile/overview' element={<Overview />} />
             <Route path='/profile/posts' element={<Userpost/>}/>
