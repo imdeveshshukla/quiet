@@ -18,7 +18,7 @@ const Createpost = ({onNewPost}) => {
     const selectFile= useRef(null);
     const Navigate= useNavigate()
     const [Btnloading,setLoading] = useState(false);
-
+    const buttonRef = useRef(null);
     const dispatch = useDispatch();
    
     
@@ -27,8 +27,11 @@ const Createpost = ({onNewPost}) => {
     const [description, setDescription] = useState('');
     const [image, setImage] = useState(null);
     
+    
     const handleChange=(e)=>{
       setImage(e.target.files[0]);
+      console.log(e.target.files[0].name);
+      
     }
     
     const handleSelectChange = (event) => {
@@ -36,7 +39,10 @@ const Createpost = ({onNewPost}) => {
       setSelectedOption(event.target.value);
     };
 
-    const handleSubmit= async()=>{
+    const handleSubmit= async(e)=>{
+      if (buttonRef.current) {
+        buttonRef.current.disabled = true;
+      }
         console.log(title+"\n"+description+"\n"+selectedOption);
         const formData = new FormData();
         formData.append('title', title);
@@ -73,6 +79,9 @@ const Createpost = ({onNewPost}) => {
           console.error('Error uploading the post:', error);
         }
         setLoading(false);
+        if (buttonRef.current) {
+          buttonRef.current.disabled = false;
+        }
         
     }
 
@@ -133,11 +142,14 @@ const Createpost = ({onNewPost}) => {
             <div className="inputs flex flex-col w-full gap-2 ">
                 <input onChange={(e) => setTitle(e.target.value)} value={title}  className=' bg-[#e2e4c6] border rounded-md w-full outline-none focus:border-b-black p-2 ' type="text" name="title" id="title" placeholder='Title' required/>
                 <textarea  onChange={(e) => setDescription(e.target.value)} required value={description}  className=' bg-[#e2e4c6] border  rounded-md w-full outline-none focus:border-b-black p-2 ' name="body" id="body" placeholder='Body'></textarea>
-                <div><button  onClick={()=>selectFile.current?.click()} className='flex items-center gap-2 border-2 text-blue-800 rounded-3xl border-blue-800 px-3 py-1 bg bg-blue-300 hover:bg-blue-400' type="button"><span>Upload</span><GrGallery/></button></div>
+                <div className=''>
+                  
+                <span className=' line-clamp-1 overflow-clip mb-2 cursor-not-allowed underline text-blue-800 text-sm'>{image?.name}</span>
+                  <button  onClick={()=>selectFile.current?.click()} className='flex items-center gap-2 border-2 text-blue-800 rounded-3xl border-blue-800 px-3 py-1 bg bg-blue-300 hover:bg-blue-400' type="button"><span>Upload</span><GrGallery/></button></div>
                 <input onChange={(e)=>handleChange(e)} accept='image/*' ref={selectFile} type="file" name="media" id="media" hidden/>
             </div>
             <div className='flex justify-center'>
-                <button onClick={()=>handleSubmit()} className='  py-1 px-5  bg-blue-600 rounded-3xl hover:shadow-lg hover:text-white' type="submit">{Btnloading?<SmallLoader/>:"Post"}</button>
+                <button onClick={(e)=>handleSubmit(e)} ref={buttonRef} className='  py-1 px-5  bg-blue-600 rounded-3xl hover:shadow-lg hover:text-white' type="submit">{Btnloading?<SmallLoader/>:"Post"}</button>
             </div>
             
             
