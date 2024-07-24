@@ -145,10 +145,10 @@ function App() {
     let intervalId;
 
     sendReq();
-    intervalId = setInterval(getUserNotification, 30000); // Fetch data every 5000 milliseconds (5 seconds)
+    intervalId = setInterval(getUserNotification, 30000); 
     return () => {
       if (intervalId) {
-        clearInterval(intervalId); // Clear the interval when the component unmounts or shouldFetch changes
+        clearInterval(intervalId); 
       }
     };
   }, []);
@@ -175,8 +175,8 @@ function App() {
           <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
 
 
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/signin' element={<Signin />} />
+          {!isLogin && <Route path='/signup' element={<Signup />} />}
+          {!isLogin && <Route path='/signin' element={<Signin />} />}
           <Route path='/resetpassword' element={<Resetpass />} />
           <Route path='/varifyaccount' element={<Varifyacc />} />
             

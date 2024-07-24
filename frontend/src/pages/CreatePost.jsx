@@ -1,4 +1,4 @@
-import { useRef, useState } from "react";
+import { useRef, useState, useEffect } from "react";
 import { GrGallery } from "react-icons/gr";
 import { IoClose } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -6,7 +6,9 @@ import SmallLoader from "../components/SmallLoader";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const CreatePost = () => {
+const CreatePost = ({setShowCP}) => {
+
+  const createPostRef = useRef(null);
   const navigate = useNavigate();
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
@@ -14,6 +16,7 @@ const CreatePost = () => {
   const [Btnloading, setLoading] = useState(false);
   const location = useLocation();
   const selectFile = useRef(null);
+
   const [selectedOption, setSelectedOption] = useState('');
 
 
@@ -66,13 +69,31 @@ const CreatePost = () => {
     }
     setLoading(false);
 
+
   }
+
+  const handleClickOutside = (event) => {
+    console.log("clicked");
+    
+    if (createPostRef.current && !createPostRef.current.contains(event.target)) {
+      setShowCP(false)
+    }
+  };
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
   return (
-    <div className="fixed z-10 bg-[#0005] top-0 left-0 backdrop-blur-sm h-full w-full flex justify-center items-center pb-10">
-      <div className="w-3/4 bottom-0 overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
-        <div className="heading flex justify-between">
+    <div className="fixed z-10 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-full  pb-10">
+      <div ref={createPostRef}  className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
+        <div  className="heading flex justify-between">
           <h2 className="text-xl font-bold mb-4 text-[#656923]">Write your thoughts....</h2>
-          <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { navigate('/') }}>
+          <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { setShowCP(false) }}>
             <IoClose className="text-[#656923] m-auto" />
           </button>
         </div>

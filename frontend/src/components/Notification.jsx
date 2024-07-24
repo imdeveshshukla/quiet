@@ -47,6 +47,7 @@ const Notification = ({setIsNfnOpen}) => {
 
 
     const handleAllRead = async() => {
+        setIsNfnOpen(false)
         console.log("notify",notifications);
         if(notifications.length==0) return;
         try {
@@ -76,7 +77,7 @@ const Notification = ({setIsNfnOpen}) => {
         }
     }
     return (
-        <div className=' rounded-2xl shadow-md shadow-current absolute top-16 right-20 w-[25vw]  bg-[#c2c7b3] '>
+        <div className=' rounded-2xl shadow-md shadow-current absolute top-20 right-20 w-[25vw]  bg-[#c2c7b3] '>
 
             <span  className=' absolute right-4 top-2 text-white text-xl'>{isLoading?<SmallLoader/>:<FiRefreshCcw className=' cursor-pointer' onClick={()=>handleRefresh()}/>}</span>
 
@@ -84,7 +85,7 @@ const Notification = ({setIsNfnOpen}) => {
             {notifications.length==0 && <div className=' p-4  text-red-950 text-center font-semibold'>You're all caught up! No new notifications.</div>}
             <div className=' max-h-[60vh] overflow-auto scrollable-box'>
             {notifications?.map(item => <>
-                <div onClick={()=>handleClick(item.postId, item.id)} className=' cursor-pointer hover:bg-[#acb499] shadow-sm  shadow-lime-800 px-4 py-2'>
+                <div key={item.id} onClick={()=>handleClick(item.postId, item.id)} className=' cursor-pointer hover:bg-[#acb499] shadow-sm  shadow-lime-800 px-4 py-2'>
                     <div className=' flex items-center justify-between'><span className='text-md '><span className='font-semibold'>{item.user2.username} </span>{item.title}</span><span className=' text-xs text-slate-600'>{getTime(item.createdAt)} ago</span></div>
                     {item.body?<div className=' text-sm line-clamp-3 bg-[#9eb840] overflow-clip px-3 text-white m-1 py-1 rounded-lg'>{item.body}</div>:<></>}
                 </div>
