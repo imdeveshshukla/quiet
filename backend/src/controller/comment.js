@@ -15,10 +15,7 @@ export const createComment =async (req,res)=>{
                     userId: req.userId
                     
                 },
-                include:{
-                    user:true,
-                    post:true,
-                },
+                
             })
             const newComment= await prisma.comment.findUnique({
                 where:{
@@ -27,6 +24,7 @@ export const createComment =async (req,res)=>{
                 include:{
                     user:true,
                     post:true,
+                    parent:true,
                 },
             })
             // console.log("Child Comment = "+newComment.body+" ParentID "+newComment.parentId);

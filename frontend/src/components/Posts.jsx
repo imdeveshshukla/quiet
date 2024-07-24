@@ -78,6 +78,8 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
   }, []);
 
 
+
+
   const upvote = async (key) => {
     if(isLogin) {
       // console.clear()
@@ -99,8 +101,13 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
       const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val ,commentId:null });
 
       if(res.status==201){
-        console.log(res);
-        
+        console.log("newLikeonpost",res.data.newUpvote);
+        const data= res.data.newUpvote
+        if(val ==1){
+          if(data.userId != data.post.userId){
+            sendNotification({postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title:"upvoted your post!"});
+          }
+        }
         // dispatch(toggleUpvote(res.data.newUpvote))
       }
       
@@ -132,9 +139,17 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
       setDownvotenum((upvoteNumber) => upvoteNumber - 1)
     }
     const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
+    console.log(res);
+    
     if(res.status==201){
-      console.log(res);
+      const data= res.data.newUpvote
+      if(val==-1){
+        if(data.userId!= data.post.userId){
+          sendNotification({postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title:"downvoted your post!"});
+        }
+      }
     }
+
 
   }
 
@@ -199,6 +214,17 @@ export const getTime = (createdAt) => {
   const ans = years > 0 ? years + ' year' : (month > 0 ? month + ' month' : day > 0 ? day + " days" : hours > 0 ? hours + " hours" : min > 0 ? min + " minutes" : sec > 0 ? sec + " seconds" : 0 + " seconds");
 
   return ans;
+}
+
+export const sendNotification = async({postId,toUser, fromUser,title,body})=>{
+  try {
+    const res = await axios.post("http://localhost:3000/u/sendnotification", { postId, toUser, fromUser, title, body });
+    console.log(res);
+    return res;
+    
+  } catch (error) {
+    
+  }
 }
 
 

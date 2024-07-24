@@ -1,5 +1,5 @@
 import React, { useState,useEffect, useMemo } from 'react'
-import Posts from './Posts'
+import Posts, { sendNotification } from './Posts'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlinePlus } from "react-icons/ai";
 import {  useLocation, useNavigate } from 'react-router-dom';

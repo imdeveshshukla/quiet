@@ -24,6 +24,7 @@ import { BiLike } from "react-icons/bi";
 import { BiSolidLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BiSolidDislike } from "react-icons/bi";
+import { sendNotification } from './Posts';
 
 
 
@@ -39,7 +40,8 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
   const dispatch = useDispatch()
   const [loading, setLoading] = useState(false);
   const post = useSelector(state => state.postDetail.post);
-  console.log("CommentId " + commentId);
+
+
 
   useEffect(() => {
     if(openBox){
@@ -59,11 +61,25 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
       });
       console.log(res);
       if (res.status == 201) {
+
         setIsComment(false)
         console.log(res.data.newComment);
         dispatch(setComment(res.data.newComment))
         dispatch(setUserPostComment(res.data.newComment))
         dispatch(setPostComment(res.data.newComment))
+        const data =res.data.newComment;
+        if(data.parentId){
+          if(data.userId!=data.post.userId){
+            sendNotification({postId:data.postId, toUser: data.post.userId, fromUser: data.userId, title:"replied to a comment on your post!" , body: data.body});
+          }
+          if(data.userId != data.parent.userId){
+            sendNotification({postId:data.postId, toUser: data.parent.userId, fromUser: data.userId, title: "replied to your comment on a post!", body: data.body})
+          }
+        }else{
+          if(data.userId!= data.post.userId){
+            sendNotification({postId: data.postId, toUser:data.post.userId , fromUser: data.userId , title:"commented on your post!" , body: res.data.newComment.body});
+          }
+        }
         console.log(post);
         toast.dismiss();
         toast.success("Comment Added.");
@@ -120,6 +136,8 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
   const [openBox, setOpenBox] = useState(false);
   const [showChild, setShowChild] = useState(false);
   const childs = getChildren(id) == undefined ? [] : getChildren(id);
+  const userInfo = useSelector(state => state.user.userInfo);
+
 
   function handleComment(id) {
     setOpenBox((openBox) => !openBox);
@@ -132,12 +150,12 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
     setUpvotes(res.data.numbers);
     res.data.upvote.forEach((item) => {
-      if (item.userId == user.userID) setUpvoted(true);
+      if (item.userId == userInfo?.userID) setUpvoted(true);
     })
 
     setDownvote(res.data.downVoteNum);
     res.data.downvote.forEach((item) => {
-      if (item.userId == user.userID) setDownVoted(true);
+      if (item.userId == userInfo?.userID) setDownVoted(true);
     })
   }
 
@@ -163,9 +181,28 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
     try {
       const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
-
+      console.log("commentpelike",res);
+      
       if (res.status == 201) {
-        console.log(res);
+        const data = res.data.newUpvote;
+
+        if(val ==1){
+          if(data.comment.parentId){
+            if(data.userId!= data.comment.userId){
+              sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "liked your reply on a comment!", body: data.comment.body});
+            }
+          }
+          else{
+            if(data.userId!=data.comment.userId){
+              sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "liked your comment on a post!", body: data.comment.body});
+            }
+          }
+          if(data.userId!=data.post.userId){
+            sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "liked a comment on your post!", body:data.comment.body});
+          }
+        }
+
+
       }
     } catch (error) {
 
@@ -191,8 +228,22 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       setDownvote((upvoteNumber) => upvoteNumber - 1)
     }
     const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
-    if (res.status == 201) {
-      console.log(res);
+    console.log("commentpedislike",res);
+    const data= res.data.newUpvote
+
+    if(val==-1){
+      if (res.status == 201) {
+        if(data.comment.parentId){
+          if(data.userId != data.comment.userId)
+          sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your reply on a comment!", body: data.comment.body});
+        }
+        else{
+          if(data.userId != data.comment.userId)
+          sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your comment on a post!", body: data.comment.body});
+        }
+        if(data.userId!= data.post.userId)
+        sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "disliked a comment on your post!", body:data.comment.body});
+      }
     }
   }
 
