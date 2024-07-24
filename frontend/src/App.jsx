@@ -148,7 +148,7 @@ function App() {
   }, [])
 
 
-
+  console.log("HEy this is me");
 
 
   return (
@@ -186,7 +186,6 @@ function App() {
          
             <Route path='/profile/overview' element={<Overview />} />
             <Route path='/profile/posts' element={<Userpost/>}/>
-            <Route path='/profile/commented' element={<Commented />} />
 
           <Route path='/setting/' element={<Settings />} />
           <Route path="/test/" element={<Postskelton />} />
