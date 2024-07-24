@@ -85,8 +85,8 @@ const Notification = ({setIsNfnOpen}) => {
             <div className=' max-h-[60vh] overflow-auto scrollable-box'>
             {notifications?.map(item => <>
                 <div onClick={()=>handleClick(item.postId, item.id)} className=' cursor-pointer hover:bg-[#acb499] shadow-sm  shadow-lime-800 px-4 py-2'>
-                    <div className=' flex items-center justify-between'><span className='text-md '><span className='font-semibold'>{item.user.username} </span>{item.title}</span><span className=' text-xs text-slate-600'>{getTime(item.createdAt)} ago</span></div>
-                    <div className=' text-sm line-clamp-3 overflow-clip px-3 text-blue-900'>{item.body?item.body:''}</div>
+                    <div className=' flex items-center justify-between'><span className='text-md '><span className='font-semibold'>{item.user2.username} </span>{item.title}</span><span className=' text-xs text-slate-600'>{getTime(item.createdAt)} ago</span></div>
+                    {item.body?<div className=' text-sm line-clamp-3 bg-[#9eb840] overflow-clip px-3 text-white m-1 py-1 rounded-lg'>{item.body}</div>:<></>}
                 </div>
             </>
             )}

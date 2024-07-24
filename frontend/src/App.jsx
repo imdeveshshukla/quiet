@@ -141,11 +141,20 @@ function App() {
 
 
 
-
-
   useEffect(() => {
+    let intervalId;
+
     sendReq();
-  }, [])
+    intervalId = setInterval(getUserNotification, 30000); // Fetch data every 5000 milliseconds (5 seconds)
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId); // Clear the interval when the component unmounts or shouldFetch changes
+      }
+    };
+  }, []);
+
+
+  
 
 
   console.log("HEy this is me");
@@ -156,15 +165,14 @@ function App() {
       {isLoading && <Loader />}
 
       <Navbar />
-      <Routes>
-        <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
-      </Routes>
+
       <div className=' grid grid-cols-[0.5fr_3fr] relative mr-2'>
         <Sidenav />
         <Routes>
 
           <Route path='/' element={<Home />} />
 
+          <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
 
 
           <Route path='/signup' element={<Signup />} />
