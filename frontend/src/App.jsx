@@ -2,13 +2,13 @@
 import Navbar from './components/Navbar'
 import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
 import './styles/App.css'
-import Home from './components/Home'
-import Signup from './components/Signup'
-import Signin from './components/Signin'
+import Home from './pages/Home'
+import Signup from './pages/Signup'
+import Signin from './pages/Signin'
 import { useEffect, useState } from "react"
 import axios from "axios"
-import Resetpass from './components/Resetpass'
-import Varifyacc from './components/Varifyacc'
+import Resetpass from './pages/Resetpass'
+import Varifyacc from './pages/Varifyacc'
 import toast, { Toaster } from 'react-hot-toast';
 import Loader from './components/Loader'
 import { login } from "./redux/login"
@@ -19,15 +19,15 @@ import Settings from './components/Settings'
 import Profile from './components/Profile'
 import Sidenav from './components/Sidenav'
 import Posts from './components/Posts'
-import Overview from './components/Overview'
-import Commented from './components/Comments'
+import Overview from './pages/Overview'
+import Comments from './components/Comments'
 import Profilecard from './components/Profilecard'
 import Postdetail from './components/Postdetail'
 import Postskelton from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
 import { v4 as uuidv4 } from 'uuid';
-import Userpost from './components/Userpost'
-import HotTopicPosts from './components/HotTopicPosts'
+import Userpost from './pages/Userpost'
+import HotTopicPosts from './pages/HotTopicPosts'
 import sportsdp from './assets/sportsdp.jpg'
 import sportsbg from './assets/sportsbg.jpg'
 import ietdp from './assets/ietdp.png'
@@ -40,6 +40,7 @@ import lkodp from './assets/lkodp.jpg'
 import lkobg from './assets/lkobg.jpg'
 import lifedp from './assets/lifedp.jpeg'
 import lifebg from './assets/lifebg.jpg'
+import CreatePost from './pages/CreatePost'
 
 
 
@@ -133,15 +134,18 @@ function App() {
 
   return (
     <>
-
       {isLoading && <Loader />}
 
       <Navbar />
-      <div className=' grid grid-cols-[1fr_3fr_1.3fr] relative'>
+      <Routes>
+        <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
+      </Routes>
+      <div className=' grid grid-cols-[0.5fr_3fr] relative mr-2'>
         <Sidenav />
         <Routes>
 
           <Route path='/' element={<Home />} />
+
 
 
           <Route path='/signup' element={<Signup />} />
@@ -151,7 +155,7 @@ function App() {
             
           <Route path='/profile/overview' element={<Overview />} />
           <Route path='/profile/posts' element={<Userpost/>}/>
-          <Route path='/profile/commented' element={<Commented />} />
+          <Route path='/profile/commented' element={<Comments />} />
 
           <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>
           <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg}/>}/>
@@ -161,16 +165,11 @@ function App() {
           <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
 
 
-=======
-         
-            <Route path='/profile/overview' element={<Overview />} />
-            <Route path='/profile/posts' element={<Userpost/>}/>
-            <Route path='/profile/commented' element={<Commented />} />
-
           <Route path='/setting/' element={<Settings />} />
           <Route path="/test/" element={<Postskelton />} />
           <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
         </Routes>
+
         {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''}
       </div>
       <Toaster position="bottom-center"

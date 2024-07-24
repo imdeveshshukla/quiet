@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react'
-import Hottopic from './Hottopic'
+import Hottopic from '../components/Hottopic'
 
 import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import axios from 'axios';
-import Postskelton from './Postskelton';
+import Postskelton from '../components/Postskelton';
 import { setSkeltonLoader } from '../redux/skelton';
 import { clearHotPostsInfo, setHotPost } from '../redux/Hotposts';
-import Posts from './Posts';
+import Posts from '../components/Posts';
 
 
 

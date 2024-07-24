@@ -1,13 +1,13 @@
 import React, { useEffect, useState } from 'react'
-import Posts from './Posts';
-import Postskelton from './Postskelton';
+import Posts from '../components/Posts';
+import Postskelton from '../components/Postskelton';
 import { useSelector, useDispatch } from 'react-redux'
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { setSkeltonLoader } from '../redux/skelton';
 import { clearPostsInfo, setPost } from '../redux/userposts';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
-import Profile from './Profile';
+import Profile from '../components/Profile';
 
 
 

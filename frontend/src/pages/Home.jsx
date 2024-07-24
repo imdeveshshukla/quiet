@@ -4,9 +4,9 @@ import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-import Createpost from './Createpost';
-import Posts from './Posts';
-import Postskelton from './Postskelton';
+import Createpost from '../components/CreatepostButton';
+import Posts from '../components/Posts';
+import Postskelton from '../components/Postskelton';
 import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
 

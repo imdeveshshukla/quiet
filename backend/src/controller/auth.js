@@ -319,9 +319,9 @@ const logout = async (req, res) => {
       console.log(user?.email);
 
       res
-        .cookie(user?.userID, "", {
+        .clearCookie(user?.userID, "", {
           path: "/",
-          expires: new Date(Date.now() + 1000 * 1),
+          // expires: new Date(Date.now() + 1000 * 1),
           httpOnly: true,
           sameSite: "lax",
         })

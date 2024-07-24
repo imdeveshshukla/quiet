@@ -1,6 +1,6 @@
 import React from 'react'
 import { RiCommunityLine } from 'react-icons/ri'
-import Profile from './Profile'
+import Profile from '../components/Profile'
 
 
 const Overview = () => {

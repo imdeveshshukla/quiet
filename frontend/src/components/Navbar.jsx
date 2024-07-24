@@ -61,7 +61,7 @@ const Navbar = () => {
             if(res.status==200){
             dispatch(logout());
             dispatch(clearUserInfo());
-            dispatch(clearPostsInfo())
+            dispatch(clearPostsInfo());
             toast.dismiss()
             Navigate("/signin");
         }
