@@ -201,6 +201,27 @@ const markAllAsRead=async(req,res)=>{
   }
 }
 
+const sendNotification= async (req,res)=>{
+  const {toUser, fromUser, postId, title, body} = req.body;
+  try {
+    const notification= await prisma.notification.create({
+      data:{
+        title,
+        body,
+        postId,
+        toUser,
+        fromUser,
+      }
+    });
+    console.log(notification);
+    res.status(201).send(notification);
+    
+  } catch (error) {
+    console.log(error);
+    res.status(403).send(error);
+  }
+}
+
 // const userController={getUser,varifyToken};
-const userController = { getUser, uploadImg, getUserPost, getNotifications, markAsRead, markAllAsRead };
+const userController = { getUser, uploadImg, getUserPost, getNotifications, markAsRead, markAllAsRead, sendNotification };
 export default userController;
