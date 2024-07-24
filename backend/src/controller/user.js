@@ -16,6 +16,7 @@ import uploadOnCloudinary from "../utils/cloudinary.js";
 //   };
 
 const getUser = async (req, res) => {
+
   const user = await prisma.user.findUnique({
     where: {
       email: req.params.email,
@@ -123,6 +124,83 @@ const getUserPost = async (req, res) => {
   }
 };
 
+const getNotifications= async (req,res)=>{
+
+  const id= req.userId;
+  console.log("id", req.userId);
+  
+  try {
+    const data= await prisma.notification.findMany({
+      where:{
+        AND:[
+          {toUser:id},
+          {visited:false}
+        ]
+      },
+      include:{
+        user: true,
+        user2:true,
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+    });
+    console.log(data);
+    
+    
+    res.status(202).send({msg:"Success", data});
+
+  } catch (error) {
+    console.log(error);
+    res.status(403).send({msg:"Some error occured"});
+  }
+
+}
+
+const markAsRead=async (req,res)=>{
+   const id = req.body.id;
+   console.log(req.body);
+   
+   try {
+    const newData = await prisma.notification.update({
+      where: {
+        id,
+      },
+      data: {
+        visited: true,
+      },
+    })
+    console.log(newData);
+    
+    res.status(201).send(newData);
+   } catch (error) {
+    console.log(error);
+    
+   }
+}
+
+const markAllAsRead=async(req,res)=>{
+  const id= req.userId;
+  try {
+    const newData= await prisma.notification.updateMany({
+      where:{
+        AND:[
+          {toUser:id},
+          {visited:false}
+        ]
+      },
+      data:{
+        visited:true,
+      }
+    })
+    console.log(newData);
+    
+    res.status(202).send(newData)
+  } catch (error) {
+    
+  }
+}
+
 // const userController={getUser,varifyToken};
-const userController = { getUser, uploadImg, getUserPost };
+const userController = { getUser, uploadImg, getUserPost, getNotifications, markAsRead, markAllAsRead };
 export default userController;

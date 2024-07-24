@@ -40,6 +40,8 @@ import lkodp from './assets/lkodp.jpg'
 import lkobg from './assets/lkobg.jpg'
 import lifedp from './assets/lifedp.jpeg'
 import lifebg from './assets/lifebg.jpg'
+import { setNotification } from './redux/Notification'
+
 
 
 
@@ -90,6 +92,18 @@ function App() {
 
 
 
+   const getUserNotification = async()=>{
+    try {
+      const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
+      console.log(res.data);
+      dispatch(setNotification(res.data.data))
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
+
 
 
   const sendReq = async () => {
@@ -103,6 +117,7 @@ function App() {
         toast.success("Loggin Session Restored")
         dispatch(login());
         getUserData(res.data);
+        getUserNotification();
         //  await getPost();
 
       }
@@ -119,7 +134,11 @@ function App() {
     // dispatch(loading())
     dispatch(setSkeltonLoader());
 
+
+
   }
+
+
 
 
 
@@ -160,8 +179,6 @@ function App() {
           <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg}/>}/>
           <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
 
-
-=======
          
             <Route path='/profile/overview' element={<Overview />} />
             <Route path='/profile/posts' element={<Userpost/>}/>
@@ -191,6 +208,8 @@ function App() {
 }
 
 export default App
+
+
 
 
 // userInfo?.posts == null ? <Postskelton /> :

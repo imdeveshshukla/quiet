@@ -52,7 +52,7 @@ const Postdetail = () => {
             console.log("postDetailID",id);
             getApost(id)   
         }
-      },[])
+      },[location])
       
 
 

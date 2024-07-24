@@ -9,7 +9,11 @@ export const HotPostState = createSlice({
   initialState,
   reducers: {
     setHotPost: (state, action) => {
-      state.hotposts = [...state.hotposts, ...action.payload];
+      Array.from(action.payload).map(item=>{
+        let elm= state.hotposts.find(it=> it.id==item.id )
+        if(!elm)
+          state.hotposts.push(item);
+      })
     },
     setHotPostComment: (state, action) => {
       let post = state.hotposts.find((post) => post.id == action.payload.postId);
