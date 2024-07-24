@@ -15,7 +15,7 @@ import { login } from "./redux/login"
 import { loading } from './redux/loading'
 import { useSelector, useDispatch } from 'react-redux'
 import User, { setUserInfo } from './redux/user'
-import Settings from './components/Settings'
+import Settings from './pages/Settings'
 import Profile from './components/Profile'
 import Sidenav from './components/Sidenav'
 import Posts from './components/Posts'

@@ -23,7 +23,14 @@ module.exports= {
         glow: 'glow 2s infinite',
       },
     },
+    
+    // colors:{
+    //   'dark-navy' : '#656923',
+    //   'light-navy':'#a9aa88',
+    // },
   },
-  plugins: [],
+  plugins: [
+    // require('@tailwindcss/forms'),
+  ],
 }
 

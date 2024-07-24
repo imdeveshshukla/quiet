@@ -27,7 +27,7 @@ const Home = () => {
       window.scrollTo(0, 0);
       dispatch(clearPostsInfo())
     }
-    try {
+  try {
       const res = await axios.get('http://localhost:3000/posts/getPost', {
         params: {
           page,
