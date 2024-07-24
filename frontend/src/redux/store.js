@@ -7,6 +7,7 @@ import skeltonReducer from './skelton'
 import postDetailReducer from './Postdetail'
 import userPostReducer  from './userposts'
 import  HotPostReducer  from './Hotposts'
+import NotificationReducer from './Notification'
 
 export const store = configureStore({
   reducer: {
@@ -18,6 +19,7 @@ export const store = configureStore({
     postDetail: postDetailReducer,
     userpost: userPostReducer,
     hotpost: HotPostReducer,
+    notification: NotificationReducer,
 
   },
 })

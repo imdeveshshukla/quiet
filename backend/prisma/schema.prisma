@@ -85,6 +85,7 @@ model notification{
   body String?
   createdAt DateTime @default(now())
   visited Boolean @default(false)
+  postId String?
 
   toUser String
   user User @relation("toUser",fields: [toUser],references: [userID],onDelete: Cascade)

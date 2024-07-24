@@ -9,7 +9,12 @@ export const userPostState = createSlice({
   initialState,
   reducers: {
     setPost: (state, action) => {
-      state.posts = [...state.posts, ...action.payload];
+      Array.from(action.payload).map(item=>{
+        let elm= state.posts.find(it=> it.id==item.id )
+        if(!elm)
+          state.posts.push(item);
+      })
+      // state.posts = [...state.posts, ...action.payload];
     },
     setUserPostComment: (state, action) => {
       let post = state.posts.find((post) => post.id == action.payload.postId);

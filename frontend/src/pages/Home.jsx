@@ -24,6 +24,7 @@ const Home = () => {
     dispatch(setSkeltonLoader())
     console.log(`Fetching posts for page: ${page}`);
     if(page==1){
+      window.scrollTo(0, 0);
       dispatch(clearPostsInfo())
     }
     try {
@@ -65,6 +66,7 @@ const Home = () => {
   const fetchMoreData = () => {
     console.log(`Loading more data, current page: ${page}`);
     setPage((prevPage) => prevPage + 1);
+    
   };
 
   return (
