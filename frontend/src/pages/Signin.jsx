@@ -65,7 +65,7 @@ const Signin = () => {
                     await getUserData(res.data);
                     toast.success("Logged In successfully !")
                 }
-                console.log(res);
+                // console.log(res);
             }
             else {
                 const res = await axios.post("http://localhost:3000/auth/signin", { username: form.user, password: form.password });
@@ -86,7 +86,12 @@ const Signin = () => {
             }else if(error.response.status==403){
                 toast.error("User is not Varified! Varify your email.")
                 Navigate("/varifyaccount")
-            }  
+            } 
+            else if(error.response.status == 425)
+            {
+                toast.error("TimeOut!! Please try again after some times")
+                Navigate("/");
+            }
         }
     }
 

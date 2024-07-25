@@ -150,6 +150,12 @@ const Resetpass = () => {
                 toast.error("Invalid OTP !")
                 setOnSave(false)
             }
+            else if(error.response.status == 425){
+                toast.error("Timeout!Too many request");
+                setOnSave(false);
+                Navigate("/");
+
+            }
             setform({...form,otp:""});
             setVarifyOtpData({...varifyOtpData,otp:""})
         }
