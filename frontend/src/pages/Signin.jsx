@@ -116,11 +116,13 @@ const Signin = () => {
 
     }
 
+    // #6d712eb8
+
     return (
 
         <>
             <div className='w-full flex justify-center items-center h-[89.5vh] m-auto  border-x-2 border-black '>
-                <div className='w-[60%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
+                <div className='w-[60%] h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
 
                     <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
                          <><div className='flex flex-col gap-8'>
