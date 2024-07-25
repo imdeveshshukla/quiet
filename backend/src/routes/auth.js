@@ -31,6 +31,7 @@ router.post('/updatepass', authController.updatePassword);
 router.post('/signin', passLimit,authController.signin);
 router.post('/refreshsignin', authController.refreshSignIn)
 router.post('/logout', authController.logout)
+router.get('/generateusername', authController.generateUsername);
 router.post('/testing', authController.testing) 
 
 const authRouter= router

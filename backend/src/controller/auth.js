@@ -1,9 +1,10 @@
 import prisma from "../../db/db.config.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken" ;
-
 import transporter from "../utils/transporter.js";
 import z from "zod";
+
+import { generateUniqueUsernames } from '../utils/generateUsernames.js';
 
 const usersignUpSchema = z.object({
   username:z.string(),
@@ -14,7 +15,6 @@ const usersSignInSchema = z.object({
   email:z.string(),
   password:z.string()
 })
-
 
 
 
@@ -362,6 +362,19 @@ const testing = async (req, res) => {
   });
   res.json({ msg: "deleted" });
 };
-const authController={signup, signin, logout, varifyOtp , resendOtp, resetPassword, updatePassword, refreshSignIn,testing}
+
+
+const generateUsername=async(req,res)=>{
+  
+  try {
+    const usernames = await generateUniqueUsernames();
+    res.status(201).json({ usernames });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to generate username options' });
+  }
+
+};
+
+const authController={signup, signin, logout, varifyOtp , resendOtp, resetPassword, updatePassword, refreshSignIn,generateUsername,testing}
 
 export default authController

@@ -11,6 +11,10 @@ import { useNavigate } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { loading } from '../redux/loading';
 import toast from 'react-hot-toast';
+import { FiRefreshCcw } from "react-icons/fi";
+import SmallLoader from '../components/SmallLoader';
+
+
 
 
 
@@ -30,6 +34,7 @@ const Signup = () => {
     const [timeLeft, setTimeLeft] = useState(0);
     const [disable, setdisable] = useState(false);
     const [eye, setEye] = useState(false)
+    const [usrnmList, setUsrnmList] = useState([]);
     const passref = useRef();
 
    
@@ -49,6 +54,8 @@ const Signup = () => {
         setErrorPass(null)
         setOnSave(true)
         setForm({ ...form, [e.target.name]: e.target.value });
+        console.log(e.target.value);
+        
     }
 
     const handleOtp = async (e) => {
@@ -74,7 +81,7 @@ const Signup = () => {
             if (error.response.status == 500) {
                 toast.error("Some error occured! Try Again.")
             } else if (error.response.status == 400) {
-                toast.error("User already exists with this Username and email");
+                toast.error("User already exists with this Username or email");
             }
             console.log(error)
         }
@@ -83,6 +90,8 @@ const Signup = () => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();
+        console.log(form);
+        
         if ((form.username.length < 3)) {
             setOnSave(false)
             setErrorUsername("* username must contain more than 3 characters");
@@ -208,17 +217,58 @@ const Signup = () => {
 
 
 
+    
+
+
+
 
 
     return (
-        <Layout form={form} passref={passref} eye={eye} handleEye={handleEye} handleChange={handleChange} handleSubmit={handleSubmit} handleCloseEye={handleCloseEye} errorEmail={errorEmail} errorPass={errorPass} onSave={onSave} errorUsername={errorUsername} otp={otp} otpsent={otpsent} handleOtp={handleOtp} resendOTP={resendOTP} varifyOtp={varifyOtp} errorOtp={errorOtp} timeLeft={timeLeft} disable={disable} />
+        <Layout form={form} setForm={setForm} passref={passref} eye={eye} handleEye={handleEye} handleChange={handleChange} handleSubmit={handleSubmit} handleCloseEye={handleCloseEye} errorEmail={errorEmail} errorPass={errorPass} onSave={onSave} errorUsername={errorUsername} otp={otp} otpsent={otpsent}  handleOtp={handleOtp} resendOTP={resendOTP} varifyOtp={varifyOtp} errorOtp={errorOtp} timeLeft={timeLeft} disable={disable} usrnmList={usrnmList} setUsrnmList={setUsrnmList} />
     )
 }
+export default Signup
 
-export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handleEye, handleSubmit, errorUsername, errorEmail, errorPass, onSave, otp, otpsent, resendOTP, handleOtp, varifyOtp, errorOtp, timeLeft, disable }) => (
+
+
+export const Layout = ({ form,setForm, passref, eye, handleChange, handleCloseEye, handleEye, handleSubmit, errorUsername, errorEmail, errorPass, onSave, otp, otpsent, resendOTP, handleOtp,usrnmList, setUsrnmList, varifyOtp, errorOtp, timeLeft, disable }) =>{
+
+    const [isLoading, setisLoading] = useState(false);
+    const usernameRef= useRef(null);
+
+    const handleClick = ()=>{
+        generateUsername();
+    }
+
+    const generateUsername = async()=>{
+        setisLoading(true);
+        try {
+            const res = await axios.get("http://localhost:3000/auth/generateusername");
+            console.log(res);
+            setUsrnmList(res.data.usernames);
+            
+        } catch (error) {
+            
+        }
+        setisLoading(false)
+    }
+
+    const handleSelect=(username)=>{
+        usernameRef.current.value= username;
+        setForm({...form, username:username});
+        
+    }
+    
+
+
+    useEffect(() => {
+      generateUsername();
+    }, [])
+
+return (
     <>
         <div className='w-full flex justify-center items-center h-[89.5vh] m-auto border-x-2 border-black  '>
-            <div className='w-[60%] h-[60%] bg-[#6d712eb8] rounded-2xl shadow-2xl shadow-current '>
+            <div className='w-[60%] h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
 
                 <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
 
@@ -233,19 +283,30 @@ export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handl
                     </div>
 
 
-                    </> : <><div className='flex flex-col gap-8'>
+                    </> : <><div className='flex flex-col gap-4'>
 
                         <div className='relative flex flex-col'>
-                            <span className='absolute left-2 top-[50%] translate-y-[-50%]'><FaRegUserCircle className=' text-xl' /></span>
-                            <input value={form.username} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="text" name="username" id="username" placeholder='Enter Username' />
+                            <span className='absolute  left-2 top-[50%] translate-y-[-50%]'><FaRegUserCircle className=' text-xl' /></span>
+                            <input ref={usernameRef} value={form.username} className='text-white focus:border-white transition-all ease-in delay-200 outline-none  px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="text" name="username" id="username" placeholder='Enter Username'  readOnly/>
                             <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorUsername}</div>
+                            
                         </div>
+
+                        <div className=' flex gap-2 flex-wrap items-center justify-between'>
+                            {Array.from(usrnmList).map(username=><>
+                                <div onClick={()=>handleSelect(username)} className=' rounded-xl px-2 cursor-pointer bg-[#b1b390] text-gray-900'>{username}</div>
+                            </>
+                            )}
+                            <div className=''>{isLoading?<SmallLoader/>:<FiRefreshCcw cursor={"pointer"} onClick={()=>handleClick()} className=' font-semibold text-xl'/>}</div>
+                        </div>
+
+                        
 
 
 
                         <div className='relative flex flex-col'>
                             <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdOutlineMailLock className=' text-xl' /></span>
-                            <input value={form.email} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
+                            <input value={form.email} className='text-white focus:border-white transition-all ease-in delay-200 outline-none cursor-text px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
                             <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorEmail}</div>
                         </div>
                         <div className='relative flex flex-col'>
@@ -268,5 +329,5 @@ export const Layout = ({ form, passref, eye, handleChange, handleCloseEye, handl
         </div>
     </>
 )
+}
 
-export default Signup

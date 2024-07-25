@@ -11,6 +11,7 @@ import SmallLoader from './SmallLoader'
 import { setSkeltonLoader } from '../redux/skelton';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAddCircleOutline  } from "react-icons/io";
+import CreatePost from '../pages/CreatePost';
 
 
 const Createpost = ({onNewPost}) => {
@@ -18,7 +19,7 @@ const Createpost = ({onNewPost}) => {
     const selectFile= useRef(null);
     const Navigate= useNavigate()
     const [Btnloading,setLoading] = useState(false);
-
+    const [showCP, setShowCP] = useState(false)
     const dispatch = useDispatch();
    
     
@@ -74,12 +75,12 @@ const Createpost = ({onNewPost}) => {
           console.error('Error uploading the post:', error);
         }
         setLoading(false);
-        
     }
 
   return (
     <>
-    <div  className=' p-8 flex relative justify-center gap-4' onClick={()=>{Navigate('/createPost')}}>
+    {showCP && <CreatePost showCP={showCP} setShowCP={setShowCP}/>}
+    <div  className=' p-8 flex relative justify-center gap-4' onClick={()=>{setShowCP(true)}}>
       <div className='w-[60%]'>
             <div className="hover:cursor-pointer hover:bg-[#d1d1ab] relative flex flex-col gap-2 py-2 px-14  border rounded-xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
       <div className="relative flex gap-2 items-center">

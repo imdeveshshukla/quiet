@@ -141,11 +141,20 @@ function App() {
 
 
 
-
-
   useEffect(() => {
+    let intervalId;
+
     sendReq();
-  }, [])
+    intervalId = setInterval(getUserNotification, 30000); 
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId); 
+      }
+    };
+  }, []);
+
+
+  
 
 
   console.log("HEy this is me");
@@ -156,19 +165,18 @@ function App() {
       {isLoading && <Loader />}
 
       <Navbar />
-      <Routes>
-        <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
-      </Routes>
+
       <div className=' grid grid-cols-[0.5fr_3fr] relative mr-2'>
         <Sidenav />
         <Routes>
 
           <Route path='/' element={<Home />} />
 
+          <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
 
 
-          <Route path='/signup' element={<Signup />} />
-          <Route path='/signin' element={<Signin />} />
+          {!isLogin && <Route path='/signup' element={<Signup />} />}
+          {!isLogin && <Route path='/signin' element={<Signin />} />}
           <Route path='/resetpassword' element={<Resetpass />} />
           <Route path='/varifyaccount' element={<Varifyacc />} />
             
