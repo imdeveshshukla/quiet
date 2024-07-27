@@ -9,6 +9,7 @@ import Posts from '../components/Posts';
 import Postskelton from '../components/Postskelton';
 import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
+import CreateRoomBtn from '../components/CreateRoomBtn';
 
 
 
@@ -71,7 +72,7 @@ const Home = () => {
   };
 
   return (
-    <div className=' min-h-screen border-x-2 border-black pl-16'>
+    <div className=' min-h-screen  border-x-2 border-black pl-16'>
     <InfiniteScroll  
         dataLength={posts.length}
         next={fetchMoreData}

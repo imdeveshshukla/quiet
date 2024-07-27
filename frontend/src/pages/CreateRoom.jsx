@@ -1,4 +1,4 @@
-import { useRef, useState } from "react"
+import { useRef, useState, useEffect } from "react"
 import { GrGallery } from "react-icons/gr";
 import {IoClose} from "react-icons/io5"
 import { MdDelete } from "react-icons/md";
@@ -10,15 +10,19 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
     const [title,setTitle] = useState("");
     const [description,setDescription] = useState("");
     const [image,setImage] = useState("");
-    const [Btnloading,setBtnloading] = useState(false)
+    const [Btnloading,setBtnloading] = useState(false);
+    const [privacyOption, setPrivacyOption] = useState('');
+
 
     const selectFile = useRef(null);
+    const roomRef= useRef(null);
     const handleChange = (e) => {
         setImage(e.target.files[0]);
         console.log("Image = " ,e.target.files[0] )
     }
 
     const handleSubmit = ()=>{
+
       if(showRoom1)
       {
         setShow(false);
@@ -26,7 +30,8 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 
       }
       else{
-
+        console.log(privacyOption);
+        
       }
     }
     const prev = ()=>{
@@ -34,10 +39,34 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
       setShow2(false)
     }
 
+    const handlePrivacyChange=(e)=>{
+      setPrivacyOption(e.target.value)
+    }
+
+
+
+
+
+    const handleClickOutside = (event) => {
+      console.log("clicked");
+      
+      if (roomRef.current && !roomRef.current.contains(event.target)) {
+        setShow(false);
+        setShow2(false)
+      }
+    };
+  
+    useEffect(() => {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => {
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }, []);
+
 
     return(
-        <div className="fixed z-10 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-full  pb-10">
-      <div className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
+        <div className="fixed z-50 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-[100vw]  pb-10">
+      <div ref={roomRef} className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
         <div  className="heading flex justify-between">
           <h2 className="text-xl font-bold mb-4 text-[#656923]">{heading}</h2>
           <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { showRoom1?setShow(false):setShow2(false) }}>
@@ -105,19 +134,23 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
               :
               <>
                 <fieldset>
-                <legend className="text-sm font-semibold leading-6 text-gray-900">Privacy</legend>
-                <div className="m-6 space-y-6">
+                
+                <legend className="text-md font-semibold leading-6 text-gray-900">Privacy options:</legend>
+                <div className="my-6 space-y-6">
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
                         id="comments"
                         name="RoomInput"
                         type="radio"
-                        className="h-4 w-4 rounded border-gray-300 text-[#656923] focus:ring-black"
+                        value="public"
+                        checked={privacyOption=="public"}
+                        onChange={(e)=> handlePrivacyChange(e)}
+                        className="h-4 w-4 rounded border-gray-300 cursor-pointer text-[#656923] focus:ring-black"
                       />
                     </div>
                     <div className="text-sm leading-6">
-                      <label htmlFor="comments" className="font-medium text-gray-900">
+                      <label htmlFor="comments" className="font-medium cursor-pointer text-gray-900">
                         Public
                       </label>
                       <p className="text-gray-500">Open For All</p>
@@ -129,11 +162,14 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
                         id="candidates"
                         name="RoomInput"
                         type="radio"
-                        className="h-4 w-4 rounded border-gray-300 text-[#656923] focus:ring-black"
+                        value="private"
+                        checked={privacyOption=="private"}
+                        onChange={(e)=>handlePrivacyChange(e)}
+                        className="h-4 w-4 rounded border-gray-300 text-[#656923] cursor-pointer focus:ring-black"
                       />
                     </div>
                     <div className="text-sm leading-6">
-                      <label htmlFor="candidates" className="font-medium text-gray-900">
+                      <label htmlFor="candidates" className="font-medium cursor-pointer text-gray-900">
                         Private
                       </label>
                       <p className="text-gray-500">Only You can add to people</p>
@@ -141,7 +177,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
                   </div>
                 </div>
               </fieldset>
-              <div className="flex justify-around items">
+              <div className="flex justify-between gap-6">
                 <button
                   onClick={prev}
                   className="bg-[#656923] hover:bg-[#a9aa88] w-20 text-sm text-black py-2 font-bold px-4 rounded focus:outline-none">

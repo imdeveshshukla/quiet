@@ -89,7 +89,7 @@ const CreatePost = ({setShowCP}) => {
 
 
   return (
-    <div className="fixed z-10 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-full  pb-10">
+    <div className="fixed z-40 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-full  pb-10">
       <div ref={createPostRef}  className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
         <div  className="heading flex justify-between">
           <h2 className="text-xl font-bold mb-4 text-[#656923]">Write your thoughts....</h2>
