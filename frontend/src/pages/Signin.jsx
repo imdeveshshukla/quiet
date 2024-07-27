@@ -65,7 +65,7 @@ const Signin = () => {
                     await getUserData(res.data);
                     toast.success("Logged In successfully !")
                 }
-                console.log(res);
+                // console.log(res);
             }
             else {
                 const res = await axios.post("http://localhost:3000/auth/signin", { username: form.user, password: form.password });
@@ -86,7 +86,12 @@ const Signin = () => {
             }else if(error.response.status==403){
                 toast.error("User is not Varified! Varify your email.")
                 Navigate("/varifyaccount")
-            }  
+            } 
+            else if(error.response.status == 425)
+            {
+                toast.error("TimeOut!! Please try again after some times")
+                Navigate("/");
+            }
         }
     }
 
@@ -121,7 +126,7 @@ const Signin = () => {
     return (
 
         <>
-            <div className='w-full flex justify-center items-center h-[89.5vh] m-auto  border-x-2 border-black '>
+            <div className='w-[75%] flex justify-center items-center h-[89.5vh] m-auto  border-x-2 border-black absolute top-0 right-0'>
                 <div className='w-[60%] h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
 
                     <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>

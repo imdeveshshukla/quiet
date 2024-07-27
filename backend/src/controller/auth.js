@@ -19,12 +19,6 @@ const usersSignInSchema = z.object({
 
 
 
-
-
-
-
-
-
 const sendEmailVarification = async ({ userID, email }, res) => {
   try {
     console.log(userID, email);
@@ -136,6 +130,11 @@ const signup = async (req, res) => {
 };
 const  varifyOtp = async (req, res) => {
   try {
+    // console.log("Remaining = "+(req.rateLimit.remaining));
+    if(req.rateLimit.remaining <= 1)
+    {
+      return res.status(425).send({message:"Too Many requests, please try again after some minutes"});
+    }
     const { userID, otp } = req.body;
     if (userID == "" || otp == "") {
       throw Error(" credetials cannot be empty");
@@ -239,6 +238,10 @@ const updatePassword = async (req, res) => {
 
 const signin = async (req, res) => {
   try {
+    if(req.rateLimit.remaining <= 1)
+      {
+        return res.status(425).send({message:"Too Many requests, please try again after some minutes"});
+      }
     const { username, email, password } = req.body;
 
     const user = await prisma.user.findFirst({

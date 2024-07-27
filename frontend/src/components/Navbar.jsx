@@ -14,6 +14,7 @@ import { clearPostsInfo } from '../redux/Post';
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoNotificationsSharp } from "react-icons/io5";
 import Notification from './Notification';
+import CreateRoom from '../pages/CreateRoom';
 
 
 axios.defaults.withCredentials = true
@@ -87,8 +88,9 @@ const Navbar = () => {
     e.preventDefault()
     console.log(search);
   }
+  const [showRoom,setShow] = useState(false);
   return (
-    <nav className="bg-[#6d712eb8]  flex justify-between px-8 sticky top-0 z-10 backdrop-blur-md ">
+    <nav className="bg-[#6d712eb8]  flex justify-between px-8 fixed w-full top-0 z-10 backdrop-blur-md ">
       <div className="logo w-52">
         <Link to={"/"}><img src={logo} alt="" /></Link>
       </div>
@@ -98,7 +100,20 @@ const Navbar = () => {
           <input onChange={(e) => setSearch(e.target.value)} value={search} className="outline-none pl-10 pr-4 py-2 w-[100%] bg-[#656923] text-white rounded-3xl" type="search" name="search" id="search" placeholder='Search' />
         </form>
       </div>
-      <div className='flex gap-8 items-center '>
+
+      <div className='flex gap-8 items-center'>
+      {
+        isLogin && <div onClick={()=>setShow(true)} 
+        className='flex items-center rounded-xl px-2 py-1 font-semibold hover:bg-[#565252] border-2 border-black'>
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="size-6 self-center">
+          <path fillRule="evenodd" d="M12 2.25c-5.385 0-9.75 4.365-9.75 9.75s4.365 9.75 9.75 9.75 9.75-4.365 9.75-9.75S17.385 2.25 12 2.25ZM12.75 9a.75.75 0 0 0-1.5 0v2.25H9a.75.75 0 0 0 0 1.5h2.25V15a.75.75 0 0 0 1.5 0v-2.25H15a.75.75 0 0 0 0-1.5h-2.25V9Z" clipRule="evenodd" />
+          </svg>
+
+          <div className="self-center signin cursor-pointer text-lg ">Rooms</div>
+        </div>}
+        {
+          showRoom && <CreateRoom setShow={setShow}/>
+        }
         <div ref={ntfndropdownRef}>
           {
             isLogin && <div onClick={() => setIsNfnOpen(!isNtfnOpen)} className='relative'><IoNotificationsOutline className=' text-white font-semibold cursor-pointer text-3xl' />

@@ -79,7 +79,7 @@ const Home = () => {
         loader={<Postskelton />}
         endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}   
       >
-      {isLogin && <Createpost onNewPost={handleNewPost} />}
+      {isLogin && <Createpost onNewPost={handleNewPost}/>}
       <div className='bg-gray-700 h-[1px]'></div>
 
       
