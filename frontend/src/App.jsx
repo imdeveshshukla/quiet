@@ -151,7 +151,7 @@ function App() {
         clearInterval(intervalId); 
       }
     };
-  }, []);
+  }, [isLogin]);
 
 
   
