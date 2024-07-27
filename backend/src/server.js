@@ -6,6 +6,7 @@ import cookieParser from 'cookie-parser'
 import bodyParser from'body-parser'
 import cors from'cors';
 import postRoutes from "./routes/posts.js";
+import roomsRouter from "./routes/roomsRouter.js";
 
 
 dotenv.config({
@@ -28,8 +29,9 @@ app.get('/', (req, res) => {
 
 app.use('/auth/',authRouter);
 app.use('/u/',userRouter)
-
 app.use('/posts',postRoutes);
+app.use('/rooms',roomsRouter)
+
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)   
 }) 
