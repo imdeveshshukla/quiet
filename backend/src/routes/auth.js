@@ -16,8 +16,8 @@ const otpLimit = rateLimit({
 })
 
 const passLimit = rateLimit({
-    windowMs:15*60*1000,
-    max:6,//number of times
+    windowMs:5*60*1000,
+    max:10,//number of times
     message:'Too many request, please try again after some times',
     standardHeaders:true,
     legacyHeaders:false

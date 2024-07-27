@@ -72,8 +72,6 @@ function App() {
     window.scrollTo(0, 0);
   }, [location.pathname]);
 
-
-
   const getUserData = async (email) => {
 
     // dispatch(loading())
@@ -141,64 +139,61 @@ function App() {
 
 
 
-  useEffect(() => {
-    let intervalId;
-
-    sendReq();
-    intervalId = setInterval(getUserNotification, 30000); 
-    return () => {
-      if (intervalId) {
-        clearInterval(intervalId); 
-      }
-    };
-  }, []);
-
-
-  
-
-
-  console.log("HEy this is me");
-
+var intervalId;
+useEffect(() => {
+  if(isLogin)
+  {
+      console.log("Login");
+      sendReq();
+      intervalId = setInterval(getUserNotification, 30000); 
+  }
+  else{ 
+    clearInterval(intervalId);
+  }
+  return ()=> clearInterval(intervalId);
+}, [isLogin])
 
   return (
     <>
       {isLoading && <Loader />}
 
       <Navbar />
+      <div className=' grid grid-cols-[0.5fr_3fr] relative top-20 mr-2'>
+        
+          <Sidenav/>
 
-      <div className=' grid grid-cols-[0.5fr_3fr] relative mr-2'>
-        <Sidenav />
-        <Routes>
+        <div className="w-3/4 mx-28">
 
-          <Route path='/' element={<Home />} />
-
-          <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
+          <Routes>
+            <Route path='/' element={ <Home/> } />
+            {/* <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/>  */}
 
 
-          {!isLogin && <Route path='/signup' element={<Signup />} />}
-          {!isLogin && <Route path='/signin' element={<Signin />} />}
-          <Route path='/resetpassword' element={<Resetpass />} />
-          <Route path='/varifyaccount' element={<Varifyacc />} />
-            
-          <Route path='/profile/overview' element={<Overview />} />
-          <Route path='/profile/posts' element={<Userpost/>}/>
-          <Route path='/profile/commented' element={<Comments />} />
-
-          <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>
-          <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg}/>}/>
-          <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"IET-Lucnow"} dp={ietdp} bg={ietbg}/>}/>
-          <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg}/>}/>
-          <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg}/>}/>
-          <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
-
-         
+            {!isLogin && <Route path='/signup' element={<Signup />} />}
+            {!isLogin && <Route path='/signin' element={<Signin />} />}
+            <Route path='/resetpassword' element={<Resetpass />} />
+            <Route path='/varifyaccount' element={<Varifyacc />} />
+              
             <Route path='/profile/overview' element={<Overview />} />
             <Route path='/profile/posts' element={<Userpost/>}/>
+            <Route path='/profile/commented' element={<Comments />} />
 
-          <Route path='/setting/' element={<Settings />} />
-          <Route path="/test/" element={<Postskelton />} />
-          <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
-        </Routes>
+            <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>
+            <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg}/>}/>
+            <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"IET-Lucnow"} dp={ietdp} bg={ietbg}/>}/>
+            <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg}/>}/>
+            <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg}/>}/>
+            <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
+
+          
+              <Route path='/profile/overview' element={<Overview />} />
+              <Route path='/profile/posts' element={<Userpost/>}/>
+
+            <Route path='/setting/' element={<Settings />} />
+            <Route path="/test/" element={<Postskelton />} />
+            <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
+          </Routes>
+        </div>
 
         {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''}
       </div>

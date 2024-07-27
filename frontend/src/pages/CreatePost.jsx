@@ -6,7 +6,7 @@ import SmallLoader from "../components/SmallLoader";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const CreatePost = ({setShowCP}) => {
+const CreatePost = ({setShowCP,onNewPost}) => {
 
   const createPostRef = useRef(null);
   const navigate = useNavigate();
@@ -57,9 +57,10 @@ const CreatePost = ({setShowCP}) => {
         setSelectedOption("")
         setImage(null)
         // getUserData(userInfo.email);
-        //   onNewPost()
+          onNewPost()
         console.log(location.state);
         navigate('/');
+        setShowCP(false);
       }
     } catch (error) {
       toast.dismiss()

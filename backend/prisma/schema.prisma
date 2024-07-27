@@ -93,3 +93,11 @@ model notification{
   fromUser String
   user2 User @relation("fromUser",fields: [fromUser],references: [userID],onDelete: Cascade)
 }
+
+model Community{
+  id String @id @default(uuid())
+  title String
+  desc String?
+  createdAt DateTime @default(now())
+  
+}
