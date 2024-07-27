@@ -27,6 +27,9 @@ const Navbar = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const [isNtfnOpen, setIsNfnOpen] = useState(false);
   const notifications= useSelector(state=> state.notification.notifications)
+  const [showRoom1,setShow] = useState(false);
+  const [showRoom2,setShow2] = useState(false);
+
 
 
   const Navigate = useNavigate()
@@ -88,7 +91,7 @@ const Navbar = () => {
     e.preventDefault()
     console.log(search);
   }
-  const [showRoom,setShow] = useState(false);
+  
   return (
     <nav className="bg-[#6d712eb8]  flex justify-between px-8 fixed w-full top-0 z-10 backdrop-blur-md ">
       <div className="logo w-52">
@@ -112,7 +115,14 @@ const Navbar = () => {
           <div className="self-center signin cursor-pointer text-lg ">Rooms</div>
         </div>}
         {
-          showRoom && <CreateRoom setShow={setShow}/>
+          showRoom1 && <CreateRoom heading={"Details of Your Room"} showRoom1={showRoom1} setShow={setShow} setShow2={setShow2}/>
+        }
+        {
+          showRoom2 && <CreateRoom heading={"What Kind of Room is this?"} showRoom1={showRoom1} setShow={setShow} setShow2={setShow2}/>
+
+        }
+        {
+
         }
         <div ref={ntfndropdownRef}>
           {
