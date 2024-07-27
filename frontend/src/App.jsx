@@ -143,8 +143,8 @@ function App() {
 
   useEffect(() => {
     let intervalId;
-
     sendReq();
+    if(isLogin)
     intervalId = setInterval(getUserNotification, 30000); 
     return () => {
       if (intervalId) {
@@ -171,9 +171,6 @@ function App() {
         <Routes>
 
           <Route path='/' element={<Home />} />
-
-          <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/> 
-
 
           {!isLogin && <Route path='/signup' element={<Signup />} />}
           {!isLogin && <Route path='/signin' element={<Signin />} />}

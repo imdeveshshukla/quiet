@@ -79,7 +79,7 @@ const Createpost = ({onNewPost}) => {
 
   return (
     <>
-    {showCP && <CreatePost showCP={showCP} setShowCP={setShowCP}/>}
+    {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP}/>}
     <div  className=' p-8 flex relative justify-center gap-4' onClick={()=>{setShowCP(true)}}>
       <div className='w-[60%]'>
             <div className="hover:cursor-pointer hover:bg-[#d1d1ab] relative flex flex-col gap-2 py-2 px-14  border rounded-xl bg-[#e2e4c6] shadow-md shadow-current justify-center">

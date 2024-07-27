@@ -342,6 +342,8 @@ const logout = async (req, res) => {
   }
 };
 
+
+
 const testing = async (req, res) => {
   const deleteUsers = await prisma.user.deleteMany({
     where: {

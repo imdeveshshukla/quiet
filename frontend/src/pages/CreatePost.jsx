@@ -6,7 +6,7 @@ import SmallLoader from "../components/SmallLoader";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const CreatePost = ({setShowCP}) => {
+const CreatePost = ({setShowCP, onNewPost}) => {
 
   const createPostRef = useRef(null);
   const navigate = useNavigate();
@@ -49,7 +49,7 @@ const CreatePost = ({setShowCP}) => {
       console.log(response.data.post);
       if (response.status == 201) {
         // dispatch(setPost(response.data.post));
-        // dispatch(setUserPost(response.data.post))
+        // dispatch(setUserPost(response.data.post));
         toast.dismiss();
         toast.success("Successfully Posted!")
         setTitle("")
@@ -59,7 +59,8 @@ const CreatePost = ({setShowCP}) => {
         // getUserData(userInfo.email);
         //   onNewPost()
         console.log(location.state);
-        navigate('/');
+        setShowCP(false)
+        onNewPost()
       }
     } catch (error) {
       toast.dismiss()
