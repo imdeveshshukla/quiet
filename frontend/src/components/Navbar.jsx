@@ -90,7 +90,7 @@ const Navbar = () => {
   }
   const [showRoom,setShow] = useState(false);
   return (
-    <nav className="bg-[#6d712eb8]  flex justify-between px-8 fixed w-full top-0 z-10 backdrop-blur-md ">
+    <nav className="bg-[#6d712eb8]  flex justify-between px-8 sticky w-full top-0 z-10 backdrop-blur-md ">
       <div className="logo w-52">
         <Link to={"/"}><img src={logo} alt="" /></Link>
       </div>
