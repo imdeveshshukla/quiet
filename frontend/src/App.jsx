@@ -169,8 +169,8 @@ function App() {
           <Sidenav/>
 
 
+        <div>
           <Routes>
-        <>
             <Route path='/' element={ <Home/> } />
             {/* <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/>  */}
 
@@ -198,8 +198,8 @@ function App() {
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
             <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
-        </>
           </Routes>
+        </div>
 
           <Rightnav/>
 
