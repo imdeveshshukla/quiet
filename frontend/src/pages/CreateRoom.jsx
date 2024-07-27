@@ -40,7 +40,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
       <div className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
         <div  className="heading flex justify-between">
           <h2 className="text-xl font-bold mb-4 text-[#656923]">{heading}</h2>
-          <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { setShow(false) }}>
+          <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { showRoom1?setShow(false):setShow2(false) }}>
             <IoClose className="text-[#656923] m-auto" />
           </button>
         </div>
@@ -92,22 +92,26 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
             </div>
             <input onChange={(e) => handleChange(e)} accept='image/*' ref={selectFile} type="file" name="media" id="media" hidden />
           </div>
-          <button
-          onClick={handleSubmit}
-          className="bg-[#656923] hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
-          {Btnloading ? <SmallLoader /> : "Save & Next"}
-        </button>
+          <div className="flex justify-end">
+
+            <button
+            onClick={handleSubmit}
+            className="bg-[#656923] hover:bg-[#a9aa88] w-48 text-sm text-black font-bold py-2 px-4 rounded focus:outline-none">
+            {Btnloading ? <SmallLoader /> : "Save & Next"}
+          </button>
+
+          </div>
         </>
               :
               <>
                 <fieldset>
                 <legend className="text-sm font-semibold leading-6 text-gray-900">Privacy</legend>
-                <div className="mt-6 space-y-6">
+                <div className="m-6 space-y-6">
                   <div className="relative flex gap-x-3">
                     <div className="flex h-6 items-center">
                       <input
                         id="comments"
-                        name="comments"
+                        name="RoomInput"
                         type="radio"
                         className="h-4 w-4 rounded border-gray-300 text-[#656923] focus:ring-black"
                       />
@@ -123,7 +127,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
                     <div className="flex h-6 items-center">
                       <input
                         id="candidates"
-                        name="candidates"
+                        name="RoomInput"
                         type="radio"
                         className="h-4 w-4 rounded border-gray-300 text-[#656923] focus:ring-black"
                       />
@@ -137,16 +141,16 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
                   </div>
                 </div>
               </fieldset>
-              <div className="flex justify-between">
+              <div className="flex justify-around items">
                 <button
                   onClick={prev}
-                  className="bg-[#656923] hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
+                  className="bg-[#656923] hover:bg-[#a9aa88] w-20 text-sm text-black py-2 font-bold px-4 rounded focus:outline-none">
                   {Btnloading ? <SmallLoader /> : "Back"}
                 </button>
                 <button
                 onClick={handleSubmit}
-                className="bg-[#656923] hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
-                {Btnloading ? <SmallLoader /> : "Create Room"}
+                className="bg-[#656923] hover:bg-[#a9aa88] w-20 text-sm text-black px-4 py-2 font-bold text-justify rounded focus:outline-none">
+                {Btnloading ? <SmallLoader /> : "Create"}
               </button>
 
               </div>

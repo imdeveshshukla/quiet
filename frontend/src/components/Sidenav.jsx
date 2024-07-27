@@ -9,7 +9,7 @@ import { FaHouseUser } from "react-icons/fa6";
 
 const Sidenav = () => {
   return (
-    <nav className='top-20 max-h-screen overflow-auto  p-3 sticky'>
+    <nav className='top-20 max-h-screen overflow-auto p-3 sticky'>
       <div className="sidenav">
 
             <div className='p-3 m-2 border-b-2 border-gray-600'>

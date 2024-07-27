@@ -25,7 +25,11 @@ model User{
   upvotes Upvote[]
   comments Comment[]         
   myNotifications notification[]   @relation("toUser")
-  notificationsto notification[] @relation("fromUser")                                                                                                                                                                                     
+  notificationsto notification[] @relation("fromUser")
+
+  OwnedRooms Rooms[] @relation("creatorUserId")
+  Room EnrolledRooms[] @relation("UserId")
+
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
@@ -94,10 +98,26 @@ model notification{
   user2 User @relation("fromUser",fields: [fromUser],references: [userID],onDelete: Cascade)
 }
 
-model Community{
+model Rooms{
   id String @id @default(uuid())
   title String
   desc String?
+  img String?
+  privateRoom Boolean
+  CreatorId String
+
   createdAt DateTime @default(now())
+  user User @relation("creatorUserId",fields: [CreatorId],references: [userID],onDelete: Cascade)
+  UsersEnrolled EnrolledRooms[] @relation("RoomsId")
   
+  @@unique([id,title])
+}
+
+model EnrolledRooms{
+  id String @id
+  userId String
+  RoomId String
+
+  user User @relation("UserId",fields: [userId],references: [userID])
+  room Rooms @relation("RoomsId",fields: [RoomId],references: [id])
 }
