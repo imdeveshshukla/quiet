@@ -43,6 +43,7 @@ import lifebg from './assets/lifebg.jpg'
 import { setNotification } from './redux/Notification'
 
 import CreatePost from './pages/CreatePost'
+import Rightnav from './components/Rightnav'
 
 
 
@@ -167,9 +168,9 @@ function App() {
         
           <Sidenav/>
 
-        <div className="">
 
           <Routes>
+        <>
             <Route path='/' element={ <Home/> } />
             {/* <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/>  */}
 
@@ -197,8 +198,12 @@ function App() {
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
             <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
+        </>
           </Routes>
-        </div>
+
+          <Rightnav/>
+
+
 
         {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''}
       </div>

@@ -1,25 +1,16 @@
 import React from 'react'
-import { IoHome } from "react-icons/io5";
-import { HiOutlineChartSquareBar } from "react-icons/hi";
-import { LuArrowUpRightSquare } from "react-icons/lu";
-import { NavLink, useLocation } from 'react-router-dom';
+import { SiFireship } from "react-icons/si";
 import { RiCommunityLine } from "react-icons/ri";
 import Qicon from '../assets/q.svg';
-import { FaHouseUser } from "react-icons/fa6";
+import { NavLink } from 'react-router-dom';
 
-const Sidenav = () => {
+
+
+const Rightnav = () => {
   return (
-    <nav className='top-20 max-h-screen overflow-auto  p-3 sticky'>
-      <div className="sidenav">
-
-            <div className='p-3 m-2 border-b-2 border-gray-600'>
-                <NavLink to={"/"}   className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]':'w-full flex rounded items-center gap-2 px-4 py-2'}}><IoHome/><span>Home</span></NavLink>
-                <NavLink to={"/popular"}  className={(e)=>{return e.isActive?'flex w-full rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]':'flex w-full rounded items-center gap-2 px-4 py-2'}}><LuArrowUpRightSquare/><span>Popular</span></NavLink>
-                <NavLink to={"/all"}  className={(e)=>{return e.isActive?'flex w-full  rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]':'flex w-full  rounded items-center gap-2 px-4 py-2'}}><HiOutlineChartSquareBar/><span>All</span></NavLink>
-            </div>
-
-            <div className='p-2 m-2 border-b-2 border-gray-600'>
-                <h6 className=' opacity-70   flex items-center gap-4 '><RiCommunityLine className=' text-2xl '/><span className='font-medium'>HOT-TOPICS</span></h6>
+    <div className='p-8 max-h-screen sticky top-20'>
+      <div className=' rounded-2xl bg-[#c2c7b3] border-gray-600'>
+                <h6 className='bg-[#6f742bba] rounded-t-2xl  py-2 px-4  flex items-center gap-4 '><SiFireship className=' text-2xl '/><span className='font-medium'>HOT-TOPICS</span></h6>
                 <ul className='m-4 p-1 '>
                     <NavLink to={"/q/sports"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}> <img src={Qicon} alt="" />Sports</NavLink>
                     <NavLink to={"/q/dsa"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}><img src={Qicon} alt="" />DS&A</NavLink>
@@ -29,11 +20,8 @@ const Sidenav = () => {
                     <NavLink to={"/q/lucknow"} className={(e)=>{return e.isActive?'w-full flex rounded-2xl items-center gap-1 px-4 py-2 bg-[#65692375]':'w-full flex items-center gap-1 px-4 py-2 hover:bg-[#838a0060] rounded-2xl'}}><img src={Qicon} alt="" />Lucknow</NavLink>
                 </ul>
             </div>
-            
-            
-        </div>
-    </nav>
+    </div>
   )
 }
 
-export default Sidenav
+export default Rightnav
