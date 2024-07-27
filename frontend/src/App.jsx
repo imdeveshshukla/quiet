@@ -139,30 +139,35 @@ function App() {
 
 
 
-var intervalId;
-useEffect(() => {
-  if(isLogin)
-  {
-      console.log("Login");
-      sendReq();
-      intervalId = setInterval(getUserNotification, 30000); 
-  }
-  else{ 
-    clearInterval(intervalId);
-  }
-  return ()=> clearInterval(intervalId);
-}, [isLogin])
+  useEffect(() => {
+    let intervalId;
+    sendReq();
+    if(isLogin)
+    intervalId = setInterval(getUserNotification, 30000); 
+    return () => {
+      if (intervalId) {
+        clearInterval(intervalId); 
+      }
+    };
+  }, [isLogin]);
+
+
+  
+
+
+  console.log("HEy this is me");
+
 
   return (
     <>
       {isLoading && <Loader />}
 
       <Navbar />
-      <div className=' grid grid-cols-[0.5fr_3fr] relative top-20 mr-2'>
+      <div className=' grid grid-cols-[1fr_3fr_1fr] '>
         
           <Sidenav/>
 
-        <div className="w-3/4 mx-28">
+        <div className="">
 
           <Routes>
             <Route path='/' element={ <Home/> } />

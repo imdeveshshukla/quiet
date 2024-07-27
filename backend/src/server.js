@@ -8,7 +8,6 @@ import cors from'cors';
 import postRoutes from "./routes/posts.js";
 
 
-
 dotenv.config({
   path: './.env'
 })
@@ -25,6 +24,8 @@ app.get('/', (req, res) => {
 })
 
 
+
+
 app.use('/auth/',authRouter);
 app.use('/u/',userRouter)
 
@@ -32,3 +33,7 @@ app.use('/posts',postRoutes);
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)   
 }) 
+
+
+
+

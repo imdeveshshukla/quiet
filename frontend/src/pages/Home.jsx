@@ -11,6 +11,7 @@ import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
 
 
+
 const Home = () => {
   const posts = useSelector((state) => state.post.posts);
   const isLogin = useSelector((state) => state.login.value);
