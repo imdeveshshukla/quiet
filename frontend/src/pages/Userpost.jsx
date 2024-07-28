@@ -82,7 +82,6 @@ const Userpost = () => {
                 endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}
             >
                 <div className=' pl-20 py-8 border-x-2 border-black'>
-                <Profile/>
 
                 {(!userPost)||(page==1 && isSkelton)? <Postskelton />:
                     userPost.map(post => {
