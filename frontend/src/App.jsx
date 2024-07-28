@@ -152,7 +152,7 @@ function App() {
   
 
 
-  console.log("HEy this is me");
+  // console.log("HEy this is me");
 
 
   return (
@@ -172,6 +172,7 @@ function App() {
             {!isLogin && <Route path='/signin' element={<Signin />} />}
             <Route path='/resetpassword' element={<Resetpass />} />
             <Route path='/varifyaccount' element={<Varifyacc />} />
+// <<<<<<< master
 
             <Route path='u/:username' element={<DisplayProfile/>} >
               <Route path='overview' element={<Overview/>} />
@@ -180,6 +181,12 @@ function App() {
               <Route path='commented' element={<ProfileComments/>} />
             </Route>
             
+// =======
+              
+//             <Route path='/profile/overview' element={<Overview />} /> 
+//             <Route path='/profile/posts' element={<Userpost/>}/>
+//             <Route path='/profile/commented' element={<Comments />} />
+// >>>>>>> master
 
             <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>
             <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg}/>}/>
