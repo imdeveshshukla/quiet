@@ -134,11 +134,13 @@ function App() {
 
   }
 
-
-
+  
+  
+  
   useEffect(() => {
-    let intervalId;
+    if(!isLogin)
     sendReq();
+    let intervalId;
     if(isLogin)
     intervalId = setInterval(getUserNotification, 30000); 
     return () => {
@@ -160,7 +162,7 @@ function App() {
       {isLoading && <Loader />}
 
       <Navbar />
-      <div className=' grid grid-cols-[1fr_3fr_1fr] '>
+      <div className=' grid grid-cols-[1fr_3fr_1.5fr] '>
         
           <Sidenav/>
 
@@ -193,7 +195,7 @@ function App() {
           </Routes>
         </div>
 
-          <Rightnav/>
+          {location.pathname.includes("/u/")?<Profilecard/>:<Rightnav/>}
 
 
 

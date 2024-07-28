@@ -15,7 +15,7 @@ import { MdOutlineMovieFilter } from "react-icons/md";
 
 const Rightnav = () => {
   return (
-    <div className='p-8 max-h-screen overflow-auto sticky top-20'>
+    <div className='p-8 max-h-screen overflow-auto sticky top-20 mr-24'>
 
       <div className=' rounded-2xl bg-[#c2c7b3] border-gray-600'>
                 <h6 className='bg-[#6f742bba] rounded-t-2xl  py-2 px-4  flex items-center gap-4 '><SiFireship className=' text-2xl '/><span className='font-medium'>HOT-TOPICS</span></h6>

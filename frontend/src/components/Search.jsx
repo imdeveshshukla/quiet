@@ -11,7 +11,7 @@ const Search = () => {
     const [search, setSearch] = useState("");
     const [menu, setMenu] = useState(false);
     const [users, setUsers] = useState([]);
-    const Navigate= useNavigate()
+    const Navigate = useNavigate()
     const debouncedSearch = useDebounce(search, 500);
 
 
@@ -44,7 +44,7 @@ const Search = () => {
 
 
 
-    const openUserProfile =(username)=>{
+    const openUserProfile = (username) => {
         Navigate(`/u/${username}`);
         setMenu(false);
     }
@@ -73,13 +73,13 @@ const Search = () => {
                 <input onClick={() => setMenu(true)} onChange={(e) => handleSearch(e)} autoComplete='off' value={search} className={`outline-none pl-10 pr-4 py-2 w-[30vw] hover:bg-[#acb23fa3]   rounded-3xl ${menu ? ' bg-[#c2c7b3]' : 'bg-[#656923]'} `} type="search" name="search" id="search" placeholder='Search' />
                 {menu && <div className=' absolute top-0 min-h-20 bg-[#c2c7b3] w-full rounded-3xl -z-10 '>
                     <div className='mt-14 h-[1px] w-full bg-[#4c6011]'></div>
-                    {users.length >0 && <div className=' text-md font-semibold py-1 px-4'>People</div>}
+                    {users.length > 0 ? <div className=' text-md font-semibold py-1 px-4'>People</div> : <div className='text-md font-light py-1 px-4'>Search for people or community.</div>}
                     <div className='py-2 px-4 flex flex-col'>
                         {users.map(user => {
                             return <>
-                                <div key={uuidv4()} onClick={()=>openUserProfile(user.username)} className=' flex items-center gap-4 cursor-pointer hover:bg-[#b9c19e] rounded-lg py-2 px-4'>
+                                <div key={uuidv4()} onClick={() => openUserProfile(user.username)} className=' flex items-center gap-4 cursor-pointer hover:bg-[#b9c19e] rounded-lg py-2 px-4'>
                                     <img
-                                        src={ user.dp? user.dp : dp}
+                                        src={user.dp ? user.dp : dp}
                                         alt="Profile"
                                         className="w-8 h-8 rounded-full   bg-white"
                                     />

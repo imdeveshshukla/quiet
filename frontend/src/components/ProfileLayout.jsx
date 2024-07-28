@@ -12,7 +12,6 @@ import SmallLoader from './SmallLoader'
 
 const ProfileLayout = ({ user }) => {
   const location = useLocation();
-  const currentPath = location.pathname.split('/').pop();
   const userInfo = useSelector((state) => state.user.userInfo);
   const dpUploadRef = useRef(null);
   const dpRef= useRef(null);
@@ -22,7 +21,8 @@ const ProfileLayout = ({ user }) => {
   const dispatch= useDispatch();
   const [btnLoading,setBtnLoading] = useState(false);
 
-
+  const currentPath = location.pathname.split('/').pop();
+  
   const handleDpChange = async() => {
     const formData = new FormData();
     formData.append('profileImg', dpLoc);

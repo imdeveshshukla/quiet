@@ -11,7 +11,7 @@ import CreateRoomBtn from './CreateRoomBtn';
 const Sidenav = () => {
   const isLogin = useSelector(state => state.login.value);
   return (
-    <nav className='top-20 max-h-screen overflow-auto  p-3 z-10 sticky'>
+    <nav className=' max-h-[calc(100vh-74.46px)] overflow-auto  p-3 z-10 sticky top-[74.46px]'>
       <div className="sidenav">
 
         <div className='p-3 m-2 border-b-2 border-gray-600'>
