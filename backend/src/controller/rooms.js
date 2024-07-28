@@ -1,17 +1,19 @@
-import prisma from "../../db/db.config";
+import prisma from "../../db/db.config.js";
 import z from 'zod'
-import uploadOnCloudinary from "../utils/cloudinary";
+import uploadOnCloudinary from "../utils/cloudinary.js";
 
 const roomSchema = z.object({
     title:z.string().min(3,"Name Should contains atleast 5 Characters"),
-    desc:z.string().min(10,"Description Should Contains atleast 10 Characters").optional(),
-    img:z.boolean(),
+    desc:z.string().optional(),
+    img:z.string().optional(),
     privacy:z.boolean()
 })
 export const CreateRoom = async (req,res)=>{
-    const data = req.body;//{title,desc,img,privacy}
+    const data = req.body;          //{title,desc,img,privacy}
     const userId = req.userId;
+    data.privacy = (data.privacy == 'true')?true:false;
     const verifySchema = roomSchema.safeParse(data);
+
     if(!verifySchema.success){
         return res.status(400).json({
         msg:"Wrong Input",
@@ -19,15 +21,17 @@ export const CreateRoom = async (req,res)=>{
             });
     }
     let imgUrl = null;
-    if(data.img){ //req.file.path
-        imgUrl = uploadOnCloudinary(req.file.path);
+    if(data.img && data.img.length > 0){ 
+        imgUrl = await uploadOnCloudinary(req.file.path);
     }
+    console.log("Room Image URL "+imgUrl);
     try{
         await prisma.$transaction(async(tx)=>{
-            const newRoom = await prisma.rooms.create({
+            console.log("Inside Transactions");
+            const newRoom = await tx.rooms.create({
                 data:{
                     title:data.title,
-                    desc:data.desc,
+                    desc:data.desc || "None",
                     img:imgUrl,
                     privateRoom:data.privacy,
                     CreatorId:userId
@@ -35,12 +39,16 @@ export const CreateRoom = async (req,res)=>{
             })
             if(newRoom.id && newRoom.CreatorId)
             {
-                const enrolled = await prisma.enrolledRooms.create({
+                // console.log(newRoom.id+" "+newRoom.CreatorId);
+                const RoomId = newRoom.id;
+                const enrolled = await tx.enrolledRooms.create({
                     data:{
-                        userId:newRoom.CreatorId,
-                        RoomId:newRoom.id
+                        userId,
+                        RoomId
                     }
                 })
+                console.log("created\n");
+                console.log(enrolled);
                 return res.status(201).json({
                     msg:"Successfully Created",
                     newRoom,
@@ -50,7 +58,6 @@ export const CreateRoom = async (req,res)=>{
             else{
                 throw new Error("Server/Database Issue");
             }
-
         })
     }
     catch(err)
@@ -64,7 +71,6 @@ export const CreateRoom = async (req,res)=>{
 
 export const updateRoom = async(req,res)=>{
     const data = req.body;
-    const {update} = req.body;
     const userId = req.userId;
     const id = data.id;
     try{
@@ -74,6 +80,8 @@ export const updateRoom = async(req,res)=>{
             }
         })
         if(!room.id)return res.status(404).json({msg:"Room Not Found!"});
+        console.log("room");
+        console.log(room);
 
         if(room.CreatorId != userId){
             return res.status(401).json({
@@ -81,20 +89,22 @@ export const updateRoom = async(req,res)=>{
             })
         }
         let imgUrl = null;
-        if(data.img) imgUrl = uploadOnCloudinary(req.file.path);
+        console.log("data\n");
+        console.log(data);
+        if(data.img) imgUrl = await uploadOnCloudinary(req.file.path);
 
         const updatedRoom = await prisma.rooms.update({
             where:{
                 id:room.id
             },
             data:{
-                title:data.title,
-                desc:data.desc,
-                img:imgUrl
+                title: data.title || room.title,
+                desc: data.desc || room.desc,
+                img: imgUrl || room.img
             }
         });
 
-        req.status(200).json({
+        res.status(200).json({
             msg:"Success",
             updatedRoom
         })
@@ -110,28 +120,39 @@ export const updateRoom = async(req,res)=>{
     
 }
 
-export const deleteRoom =async(res,req)=>{
+export const deleteRoom =async(req,res)=>{
     const data = req.body;
     const userId = req.userId;
-    if(data.id != userId) return res.status(401).json({msg:"You don't have permission to Perform this Action"});
+
     try{
+        const room = await prisma.rooms.findFirst({
+            where:{
+                id:data.id,
+            }
+        });
+        if(!room)return res.status(401).json({msg:"Room Not Found"});
+
+        if(room.CreatorId != userId) return res.status(401).json({msg:"You don't have permission to Perform this Action"});
+
+        console.log(room);
         await prisma.$transaction(async(tx)=>{
-            const deletedRoom = await prisma.rooms.delete({
+            console.log("Inside Transactions");
+            const deletedRoom = await tx.rooms.delete({
                 where:{
-                    id:data.id,
+                    id:room.id,
                 },
             });
-
-            const enrolled = await prisma.enrolledRooms.delete({
-                where:{
-                    RoomId:data.id,
-                },
-            });
-
+            console.log("deltedRoom");
+            // const enrolled = await tx.enrolledRooms.deleteMany({
+            //     where:{
+            //         RoomId:room.id,
+            //     },
+            // });
+            console.log("Entroldfja");
             return res.status(200).json({
-                msg:"Success".
-                deletedRoom,
-                enrolled
+                msg:"Success",
+                deletedRoom
+                // enrolled
             })
         })
     }
@@ -144,4 +165,73 @@ export const deleteRoom =async(res,req)=>{
     }
 }
 
+export const filterName = async(req,res)=>{
+    const filter = req.query.filter;
+    
+    if(!filter)return res.status(404).json({msg:false});
+    try{
+        const names = await prisma.rooms.findFirst({
+            where:{
+                title:filter
+            }
+        })
+        if(names)return res.status(200).json({msg:false})
+    
+        return res.status(200).json({msg:true});
+    }
+    catch(err){
+        return res.status(500).json({
+            msg:"Server Issue",
+            error:err
+        })
+    }
+}
+
+
+export const getBulk = async(req,res)=>{
+    const filter = req.query.filter;
+    if(!filter)return res.status(404).json({msg:"Not Found",names:[]});
+    try{
+        const names = await prisma.rooms.findMany({
+            where:{
+                title:{
+                    startsWith:filter
+                }
+            }
+        })
+        if(names)return res.status(200).json({msg:"Success",names})
+    
+        return res.status(404).json({msg:"Not Found",names:[]});
+    }
+    catch(err){
+        return res.status(500).json({
+            msg:"Server Issue",
+            names:[],
+            error:err
+        })
+    }
+}
+
+export const getRoom = async(req,res)=>{
+    const title = req.params.title;
+
+    if(!title)return res.status(404).json({msg:"Not Found",room:null});
+
+    try {
+        const room = await prisma.rooms.findFirst({
+            where:{
+                title
+            }
+        })
+        if(!room)return res.status(404).json({msg:"Not Found",room:null});
+
+        return res.status(200).json({msg:"Found",room}); 
+    } catch (error) {
+        return res.status(500).json({
+            msg:"Database/Server Issue",
+            room:null,
+            error
+        })
+    }
+}
 

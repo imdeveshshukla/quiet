@@ -156,7 +156,7 @@ function App() {
   
 
 
-  console.log("HEy this is me");
+  // console.log("HEy this is me");
 
 
   return (
@@ -180,7 +180,7 @@ function App() {
             <Route path='/resetpassword' element={<Resetpass />} />
             <Route path='/varifyaccount' element={<Varifyacc />} />
               
-            <Route path='/profile/overview' element={<Overview />} />
+            <Route path='/profile/overview' element={<Overview />} /> 
             <Route path='/profile/posts' element={<Userpost/>}/>
             <Route path='/profile/commented' element={<Comments />} />
 
