@@ -56,6 +56,25 @@ const getUser = async (req, res) => {
           commentId:true,
           createAt:true
         }
+      },
+      OwnedRooms:{
+        select:{
+          id:true,
+          title:true,
+          desc:true,
+          privateRoom:true,
+          img:true,
+          createdAt:true,
+          bgImg:true,
+          UsersEnrolled:true
+        }
+      },
+      Room:{
+        select:{
+          id:true,
+          userId:true,
+          RoomId:true
+        }
       }
   }});
   // console.log(user);

@@ -5,6 +5,8 @@ import { MdDelete } from "react-icons/md";
 import SmallLoader from "../components/SmallLoader";
 import axios from "axios";
 import toast from 'react-hot-toast';
+import {useDispatch} from 'react-redux'
+// import { setUserInfo } from '../redux/user';
 export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 {
     
@@ -18,7 +20,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
     const [privacyOption, setPrivacyOption] = useState(false);
     const [color,setColor] = useState("black");
     const [firstPage,setFirstPage] = useState(showRoom1);
-    
+    const dispatch = useDispatch();
     const selectFile = useRef(null);
     const roomRef= useRef(null);
     const handleChange = (e) => {
@@ -42,6 +44,8 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
       {
         toast.dismiss();
         toast.success("Room Created Successufully");
+        // dispatch(setUserInfo(res.data.newRoom));
+
       }
       else{
         toast.error("Error :"+res.msg);
