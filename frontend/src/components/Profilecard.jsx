@@ -53,19 +53,19 @@ const Profilecard = () => {
 
           <div className=' grid grid-cols-[1fr_1fr] gap-6 my-4'>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{profileInfo._count.posts}</span>
+              <span className=' font-medium text-sm'>{profileInfo?._count?.posts}</span>
               <span className=' text-sm text-gray-700'>Posts</span>
             </div>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{profileInfo._count.comments}</span>
+              <span className=' font-medium text-sm'>{profileInfo?._count?.comments}</span>
               <span className=' text-sm text-gray-700'>Comments</span>
             </div>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{profileInfo.createdAt.split("T")[0]}</span>
+              <span className=' font-medium text-sm'>{profileInfo?.createdAt?.split("T")[0]}</span>
               <span className=' text-sm text-gray-700'>Cake day</span>
             </div>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{profileInfo._count.upvotes}</span>
+              <span className=' font-medium text-sm'>{profileInfo?._count?.upvotes}</span>
               <span className=' text-sm text-gray-700'>Upvotes</span>
             </div>
           </div>

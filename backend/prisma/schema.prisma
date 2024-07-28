@@ -46,7 +46,7 @@ model Post{
   body String
   img String?
   userId String
-  user User @relation(fields: [userId], references: [userID],onDelete: Cascade)
+  user User @relation(fields: [userId], references: [userID],onDelete: Cascade,onUpdate: Cascade)
   upvotes Upvote[]
   comments Comment[]
   createdAt   DateTime  @default(now())
@@ -56,13 +56,13 @@ model Comment{
   id Int @id @unique @default(autoincrement())
   body String
   postId String
-  post Post @relation(fields: [postId],references: [id],onDelete: Cascade)
+  post Post @relation(fields: [postId],references: [id],onDelete: Cascade,onUpdate: Cascade)
   userId String
-  user User @relation(fields: [userId],references: [userID],onDelete: Cascade)
+  user User @relation(fields: [userId],references: [userID],onDelete: Cascade,onUpdate: Cascade)
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
   
-  parent Comment? @relation("ParentChild",fields: [parentId],references: [id],onDelete: Cascade)
+  parent Comment? @relation("ParentChild",fields: [parentId],references: [id],onDelete: Cascade,onUpdate: Cascade)
   child Comment[] @relation("ParentChild")
   parentId Int?
 
@@ -73,13 +73,13 @@ model Upvote{
   id String @id @default(uuid())
   upvotes Int @default(0)
   postId String
-  post Post @relation(fields: [postId],references: [id],onDelete: Cascade)
+  post Post @relation(fields: [postId],references: [id],onDelete: Cascade,onUpdate: Cascade)
   userId String 
-  user User @relation(fields: [userId],references: [userID],onDelete: Cascade)
+  user User @relation(fields: [userId],references: [userID],onDelete: Cascade,onUpdate: Cascade)
   createAt DateTime @default(now())
   
   commentId Int?
-  comment Comment? @relation(fields: [commentId],references: [id])
+  comment Comment? @relation(fields: [commentId],references: [id],onDelete: Cascade,onUpdate: Cascade)
   @@unique([id,userId])
 }
 
@@ -92,32 +92,35 @@ model notification{
   postId String?
 
   toUser String
-  user User @relation("toUser",fields: [toUser],references: [userID],onDelete: Cascade)
+  user User @relation("toUser",fields: [toUser],references: [userID],onDelete: Cascade,onUpdate: Cascade)
   
   fromUser String
-  user2 User @relation("fromUser",fields: [fromUser],references: [userID],onDelete: Cascade)
+  user2 User @relation("fromUser",fields: [fromUser],references: [userID],onDelete: Cascade,onUpdate: Cascade)
 }
 
 model Rooms{
   id String @id @default(uuid())
   title String
   desc String?
+  bgImg String?
   img String?
   privateRoom Boolean
   CreatorId String
 
   createdAt DateTime @default(now())
-  user User @relation("creatorUserId",fields: [CreatorId],references: [userID],onDelete: Cascade)
+  user User @relation("creatorUserId",fields: [CreatorId],references: [userID],onDelete: Cascade,onUpdate: Cascade)
   UsersEnrolled EnrolledRooms[] @relation("RoomsId")
   
   @@unique([id,title])
 }
 
 model EnrolledRooms{
-  id String @id
+  id Int @id @default(autoincrement())
   userId String
   RoomId String
 
-  user User @relation("UserId",fields: [userId],references: [userID])
-  room Rooms @relation("RoomsId",fields: [RoomId],references: [id])
+  user User @relation("UserId",fields: [userId],references: [userID],onDelete: Cascade,onUpdate: Cascade)
+  room Rooms @relation("RoomsId",fields: [RoomId],references: [id],onDelete: Cascade,onUpdate: Cascade)
+
+  @@unique([userId,RoomId])
 }

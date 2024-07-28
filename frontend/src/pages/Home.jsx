@@ -9,7 +9,6 @@ import Posts from '../components/Posts';
 import Postskelton from '../components/Postskelton';
 import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
-import CreateRoomBtn from '../components/CreateRoomBtn';
 
 
 

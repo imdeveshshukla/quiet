@@ -76,8 +76,7 @@ const Search = () => {
                     {users.length > 0 ? <div className=' text-md font-semibold py-1 px-4'>People</div> : <div className='text-md font-light py-1 px-4'>Search for people or community.</div>}
                     <div className='py-2 px-4 flex flex-col'>
                         {users.map(user => {
-                            return <>
-                                <div key={uuidv4()} onClick={() => openUserProfile(user.username)} className=' flex items-center gap-4 cursor-pointer hover:bg-[#b9c19e] rounded-lg py-2 px-4'>
+                            return <div key={uuidv4()} onClick={() => openUserProfile(user.username)} className=' flex items-center gap-4 cursor-pointer hover:bg-[#b9c19e] rounded-lg py-2 px-4'>
                                     <img
                                         src={user.dp ? user.dp : dp}
                                         alt="Profile"
@@ -85,7 +84,7 @@ const Search = () => {
                                     />
                                     <span className=' text-sm font-semibold'>u/{user.username}</span>
                                 </div>
-                            </>
+
                         })}
                     </div>
                     <div className=' px-4 py-2 flex items-center gap-4 border-t border-[#656923]'><IoSearchOutline className=' text-xl' /><span>search for"{debouncedSearch}"...</span></div>

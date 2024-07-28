@@ -10,6 +10,10 @@ import CreateRoomBtn from './CreateRoomBtn';
 
 const Sidenav = () => {
   const isLogin = useSelector(state => state.login.value);
+  const userData = useSelector(state => state.user.userInfo);
+  // console.log("SIDENAV");
+  // console.log(userData?.OwnedRooms);
+  // const [rooms,setRooms] = 
   return (
     <nav className=' max-h-[calc(100vh-74.46px)] overflow-auto  p-3 z-10 sticky top-[74.46px]'>
       <div className="sidenav">
@@ -23,7 +27,13 @@ const Sidenav = () => {
         <div className='p-3 m-2 border-b-2 border-gray-600'>
           <div className=' flex items-center gap-4'><FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>Rooms</span></div>
           <div className='pl-6 m-4 flex flex-col'>
-            {isLogin && <CreateRoomBtn />}
+            {isLogin &&<> <CreateRoomBtn />
+            {userData?.OwnedRooms?.map(function(room){
+              return <NavLink to={`/${userData.id}/${room.title}}`} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{room.title}</span></NavLink>
+            })}
+              </>
+            }
+            
           </div>
         </div>
 

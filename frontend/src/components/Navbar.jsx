@@ -127,7 +127,7 @@ const Navbar = () => {
                   </li>
                   <li className="px-4 py-2 text-white hover:bg-[#6d712eb8]">
 
-                    <Link onClick={() => setIsOpen(!isOpen)} to={`u/${userInfo.username}`} className="block">Profile</Link>
+                    <Link onClick={() => setIsOpen(!isOpen)} to={`u/${userInfo?.username}`} className="block">Profile</Link>
                   </li>
                   <li className="px-4 py-2 text-white hover:bg-[#6d712eb8]">
                     <Link onClick={() => setIsOpen(!isOpen)} to={"/setting/"} className="block">Settings</Link>

@@ -9,6 +9,9 @@ import { setUserInfo } from '../redux/user';
 import toast from 'react-hot-toast';
 import SmallLoader from './SmallLoader'
 
+axios.defaults.withCredentials = true
+
+
 
 const ProfileLayout = ({ user }) => {
   const location = useLocation();
@@ -28,12 +31,15 @@ const ProfileLayout = ({ user }) => {
     formData.append('profileImg', dpLoc);
     setBtnLoading(true);
     try {
+      console.log("entered");
+      
       const res = await axios.post('http://localhost:3000/u/uploadImg', formData, {
             headers: {
               'Content-Type': 'multipart/form-data',
-            },
+            },withCredentials:true,
           });
-
+          console.log(res.data);
+          
           if(res.status==202){
             dispatch(setUserInfo(res.data));
             toast.success("Profile Picture Updated !")
@@ -43,6 +49,8 @@ const ProfileLayout = ({ user }) => {
       if(error.response.status==403){
         toast.error("Profile picture could't be updated ! ")
       }
+      console.log(error.response.data);
+      
     }
     setBtnLoading(false)
   }
@@ -65,6 +73,8 @@ const ProfileLayout = ({ user }) => {
   const handleDpUpdate=async(e)=>{
     const file = e.target.files[0];
     setdpLoc(e.target.files[0])
+    console.log("dp", e.target.files[0]);
+    
     if (file) {
       const reader = new FileReader();
       reader.onloadend = () => {
