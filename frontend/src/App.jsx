@@ -25,7 +25,6 @@ import Profilecard from './components/Profilecard'
 import Postdetail from './components/Postdetail'
 import Postskelton from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
-import { v4 as uuidv4 } from 'uuid';
 import Userpost from './pages/Userpost'
 import HotTopicPosts from './pages/HotTopicPosts'
 import sportsdp from './assets/sportsdp.jpg'
@@ -41,14 +40,11 @@ import lkobg from './assets/lkobg.jpg'
 import lifedp from './assets/lifedp.jpeg'
 import lifebg from './assets/lifebg.jpg'
 import { setNotification } from './redux/Notification'
-
-import CreatePost from './pages/CreatePost'
 import Rightnav from './components/Rightnav'
-
-
-
-
-
+import DisplayProfile from './pages/DisplayProfile'
+import ProfileComments from './pages/ProfileComments'
+import Profileupvoted from './pages/Profileupvoted'
+import ProfilePosts from './pages/ProfilePosts'
 
 
 
@@ -172,17 +168,25 @@ function App() {
         <div>
           <Routes>
             <Route path='/' element={ <Home/> } />
-            {/* <Route path='/createPost' element={isLogin?<CreatePost/>:<></>}/>  */}
-
-
             {!isLogin && <Route path='/signup' element={<Signup />} />}
             {!isLogin && <Route path='/signin' element={<Signin />} />}
             <Route path='/resetpassword' element={<Resetpass />} />
             <Route path='/varifyaccount' element={<Varifyacc />} />
+// <<<<<<< master
+
+            <Route path='u/:username' element={<DisplayProfile/>} >
+              <Route path='overview' element={<Overview/>} />
+              <Route path='posts' element={<ProfilePosts/>} />
+              <Route path='upvoted' element={ <Profileupvoted/> } />
+              <Route path='commented' element={<ProfileComments/>} />
+            </Route>
+            
+// =======
               
-            <Route path='/profile/overview' element={<Overview />} /> 
-            <Route path='/profile/posts' element={<Userpost/>}/>
-            <Route path='/profile/commented' element={<Comments />} />
+//             <Route path='/profile/overview' element={<Overview />} /> 
+//             <Route path='/profile/posts' element={<Userpost/>}/>
+//             <Route path='/profile/commented' element={<Comments />} />
+// >>>>>>> master
 
             <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>
             <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg}/>}/>
@@ -190,11 +194,6 @@ function App() {
             <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg}/>}/>
             <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg}/>}/>
             <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
-
-          
-              <Route path='/profile/overview' element={<Overview />} />
-              <Route path='/profile/posts' element={<Userpost/>}/>
-
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
             <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />

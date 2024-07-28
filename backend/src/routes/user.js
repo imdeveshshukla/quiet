@@ -10,7 +10,7 @@ router.post('/uploadImg',verifyToken,upload.single("profileImg"),userController.
 router.get('/notification',verifyToken, userController.getNotifications);
 router.post('/markasread', userController.markAsRead );
 router.post('/markallasread',verifyToken, userController.markAllAsRead );
-router.post("/sendnotification",verifyToken,userController.sendNotification)
+router.post("/sendnotification",verifyToken,userController.sendNotification);
 router.get('/:email',verifyToken, userController.getUser );
 
 

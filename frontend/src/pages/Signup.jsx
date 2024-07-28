@@ -268,7 +268,7 @@ export const Layout = ({ form,setForm, passref, eye, handleChange, handleCloseEy
 return (
     <>
         <div className='w-full flex justify-center items-center h-[89.5vh] m-auto border-x-2 border-black  '>
-            <div className='w-[60%] h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
+            <div className='w-[70%] h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
 
                 <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
 
@@ -292,7 +292,7 @@ return (
                             
                         </div>
 
-                        <div className=' flex gap-2 flex-wrap items-center justify-between'>
+                        <div className=' flex gap-2 flex-wrap items-center justify-stretch'>
                             {Array.from(usrnmList).map(username=><>
                                 <div onClick={()=>handleSelect(username)} className=' rounded-xl px-2 cursor-pointer bg-[#b1b390] text-gray-900'>{username}</div>
                             </>
