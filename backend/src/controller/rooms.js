@@ -1,6 +1,6 @@
-import prisma from "../../db/db.config";
+import prisma from "../../db/db.config.js";
 import z from 'zod'
-import uploadOnCloudinary from "../utils/cloudinary";
+import uploadOnCloudinary from "../utils/cloudinary.js";
 
 const roomSchema = z.object({
     title:z.string().min(3,"Name Should contains atleast 5 Characters"),

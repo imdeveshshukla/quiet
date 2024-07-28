@@ -1,6 +1,5 @@
 import React, { useRef, useState, useEffect } from 'react'
 import logo from '../assets/logo.png'
-import { IoSearchOutline } from "react-icons/io5";
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../redux/login'
@@ -14,8 +13,8 @@ import { clearPostsInfo } from '../redux/Post';
 import { IoNotificationsOutline } from "react-icons/io5";
 import { IoNotificationsSharp } from "react-icons/io5";
 import Notification from './Notification';
-import CreateRoom from '../pages/CreateRoom';
-import CreateRoomBtn from './CreateRoomBtn';
+import Search from './Search'
+
 
 
 
@@ -23,7 +22,6 @@ axios.defaults.withCredentials = true
 
 
 const Navbar = () => {
-  const [search, setSearch] = useState("");
   const isLogin = useSelector((state) => state.login.value);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
@@ -88,22 +86,16 @@ const Navbar = () => {
 
   }
 
-  const handleSubmit = (e) => {
-    e.preventDefault()
-    console.log(search);
-  }
+
   
   return (
     <nav className="bg-[#6c712eb8]  flex justify-between px-8 sticky w-full top-0 z-10 backdrop-blur-md ">
       <div className="logo w-52">
         <Link to={"/"}><img src={logo} alt="" /></Link>
       </div>
-      <div className="search flex items-center relative">
-        <span className="absolute left-2"><IoSearchOutline className=" text-2xl" /></span>
-        <form onSubmit={(e) => handleSubmit(e)}>
-          <input onChange={(e) => setSearch(e.target.value)} value={search} className="outline-none pl-10 pr-4 py-2 w-[25vw] bg-[#656923] text-white rounded-3xl" type="search" name="search" id="search" placeholder='Search' />
-        </form>
-      </div>
+
+      <Search/>
+      
 
       <div className='flex gap-8 items-center'>
 

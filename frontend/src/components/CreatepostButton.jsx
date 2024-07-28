@@ -82,7 +82,7 @@ const Createpost = ({ onNewPost }) => {
       {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP} />}
       <div className=' p-8 flex relative justify-center gap-4' >
         <div onClick={() => { setShowCP(true) }} className='w-[60%] cursor-pointer'>
-          <div className="hover:cursor-pointer hover:bg-[#d1d1ab] -z-10 relative flex flex-col gap-2 py-2 px-14  border rounded-xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
+          <div className="hover:cursor-pointer hover:bg-[#4140401b]  relative flex flex-col gap-2 py-2 px-14  border rounded-xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
             <div className="relative flex gap-2 items-center">
               <IoMdAddCircleOutline size={30} className='text-[#656923]' />
               <p className='text-[#353333]  font-bold'>Start a post...</p>

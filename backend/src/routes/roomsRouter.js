@@ -1,6 +1,6 @@
 import express from 'express'
-import { CreateRoom, deleteRoom, updateRoom } from '../controller/rooms';
-import { verifyToken } from '../middlewares/verifytoken';
+import { CreateRoom, deleteRoom, updateRoom } from '../controller/rooms.js';
+import { verifyToken } from '../middlewares/verifytoken.js';
 
 const roomsRouter = express.Router()
 

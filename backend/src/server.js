@@ -7,6 +7,7 @@ import bodyParser from'body-parser'
 import cors from'cors';
 import postRoutes from "./routes/posts.js";
 import roomsRouter from "./routes/roomsRouter.js";
+import searchRouter from "./routes/search.js";
 
 
 dotenv.config({
@@ -28,9 +29,10 @@ app.get('/', (req, res) => {
 
 
 app.use('/auth/',authRouter);
-app.use('/u/',userRouter)
+app.use('/u/',userRouter);
 app.use('/posts',postRoutes);
-app.use('/rooms',roomsRouter)
+app.use('/rooms',roomsRouter);
+app.use('/search/', searchRouter);
 
 app.listen(port, () => {
   console.log(`Example app listening on port ${port}`)   
