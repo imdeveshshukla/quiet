@@ -35,6 +35,8 @@ const Home = () => {
           limit: 10,
         },
       });
+      console.log(res.data);
+      
 
       if (res.status === 200) {
         const fetchedPosts = res.data.posts;
@@ -49,7 +51,9 @@ const Home = () => {
       console.error(error);
       setHasMore(false); // Stop fetching if there's an error
     }
+
     dispatch(setSkeltonLoader())
+    
   };
 
   const handleNewPost=()=>{
@@ -67,11 +71,10 @@ const Home = () => {
   const fetchMoreData = () => {
     console.log(`Loading more data, current page: ${page}`);
     setPage((prevPage) => prevPage + 1);
-    
   };
 
   return (
-    <div className=' min-h-screen  border-x-2 border-black pl-16'>
+    <div className=' min-h-screen xxs:pl-0 xs:pl-8 sm:pl-16'>
     <InfiniteScroll  
         dataLength={posts.length}
         next={fetchMoreData}
@@ -84,10 +87,10 @@ const Home = () => {
 
       
         <div className="post">
-          { (!posts)||(page==1 && isSkelton) ? (
+          { ( isSkelton && posts.length===0) ? (
             <Postskelton />
           ) : (
-            posts.map((post) => (
+            posts?.map((post) => (
                 <Posts
                   key={post.id}
                   id={post.id}

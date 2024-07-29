@@ -162,12 +162,12 @@ function App() {
       {isLoading && <Loader />}
 
       <Navbar />
-      <div className=' grid grid-cols-[1fr_3fr_1.5fr] '>
+      <div className=' grid  md:grid-cols-[3fr_1.5fr]  xl:grid-cols-[1.2fr_3fr_1.5fr] 1_5xl:grid-cols-[1fr_3fr_1.5fr] '>
         
           <Sidenav/>
 
 
-        <div>
+        <div className='  md:border-r-2  xl:border-x-2 border-black'>
           <Routes>
             <Route path='/' element={ <Home/> } />
             {!isLogin && <Route path='/signup' element={<Signup />} />}
@@ -183,9 +183,7 @@ function App() {
             </Route>
             
               
-{/* //             <Route path='/profile/overview' element={<Overview />} /> 
-//             <Route path='/profile/posts' element={<Userpost/>}/>
-//             <Route path='/profile/commented' element={<Comments />} /> */}
+
 
 
             <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>

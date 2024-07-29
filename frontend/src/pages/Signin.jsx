@@ -60,8 +60,8 @@ const Signin = () => {
                 toast.dismiss()
                 if (res.status == 202) {
                     toast.dismiss()
-                    dispatch(login())
                     Navigate("/")
+                    dispatch(login())
                     await getUserData(res.data);
                     toast.success("Logged In successfully !")
                 }
@@ -71,8 +71,8 @@ const Signin = () => {
                 const res = await axios.post("http://localhost:3000/auth/signin", { username: form.user, password: form.password });
                 if (res.status == 202) {
                     toast.dismiss()
-                    dispatch(login())
                     Navigate("/")
+                    dispatch(login())
                     await getUserData(res.data);
                     toast.success("Logged In succesfully!")
                 }

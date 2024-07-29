@@ -70,7 +70,7 @@ const Search = () => {
         <div ref={searchRef} className="search flex items-center relative ">
             <span className="absolute z-10 left-2"><IoSearchOutline className=" text-2xl" /></span>
             <div className='relative'>
-                <input onClick={() => setMenu(true)} onChange={(e) => handleSearch(e)} autoComplete='off' value={search} className={`outline-none pl-10 pr-4 py-2 w-[30vw] hover:bg-[#acb23fa3]   rounded-3xl ${menu ? ' bg-[#c2c7b3]' : 'bg-[#656923]'} `} type="search" name="search" id="search" placeholder='Search' />
+                <input onClick={() => setMenu(true)} onChange={(e) => handleSearch(e)} autoComplete='off' value={search} className={` 2_sm:w-[38vw]  1_5md:w-[35vw] outline-none pl-10 pr-4 py-2  lg:w-[30vw] hover:bg-[#acb23fa3]   rounded-3xl ${menu ? ' bg-[#c2c7b3]' : 'bg-[#656923]'} `} type="search" name="search" id="search" placeholder='Search' />
                 {menu && <div className=' absolute top-0 min-h-20 bg-[#c2c7b3] w-full rounded-3xl -z-10 '>
                     <div className='mt-14 h-[1px] w-full bg-[#4c6011]'></div>
                     {users.length > 0 ? <div className=' text-md font-semibold py-1 px-4'>People</div> : <div className='text-md font-light py-1 px-4'>Search for people or community.</div>}
@@ -82,7 +82,7 @@ const Search = () => {
                                         alt="Profile"
                                         className="w-8 h-8 rounded-full   bg-white"
                                     />
-                                    <span className=' text-sm font-semibold'>u/{user.username}</span>
+                                    <span className=' text-sm font-semibold overflow-clip'>u/{user.username}</span>
                                 </div>
 
                         })}
