@@ -45,7 +45,8 @@ export const CreateRoom = async (req,res)=>{
                 const enrolled = await tx.enrolledRooms.create({
                     data:{
                         userId,
-                        RoomId
+                        RoomId,
+                        joined:true
                     }
                 })
                 console.log("created\n");
@@ -247,26 +248,47 @@ export const addUser = async(req,res)=>{
             },
             select:{
                 id:true,
-                UsersEnrolled:true
+                UsersEnrolled:true,
+                privateRoom:true
             }
         })
-        var found = false;
+        var found = false,waiting = false;
         room.UsersEnrolled.forEach((val)=>{
             if(val.userId == userId){
-                found = true;
+                if(val.joined)found = true;
+                else waiting = true;
                 return;
             }
         })
-        if(found)return res.status(201).json({msg:"User Already joined!","UserEnrolled":room.UsersEnrolled});
+        if(found)return res.status(208).json({msg:"User Already joined!","UserEnrolled":room.UsersEnrolled});
+        if(waiting)return res.status(208).json({msg:"Alrady Send request!Wait for Admin reply","UserEnrolled":room.UsersEnrolled});
 
+        if(room.privateRoom)
+        {
+            const users = await prisma.enrolledRooms.create({
+                data:{
+                    RoomId:room.id,
+                    userId:userId,
+                    joined:false
+                }
+            })
+            return res.status(200).json({
+                msg:"Sent Request",
+                room,
+                users
+            })
+        }
         const users = await prisma.enrolledRooms.create({
             data:{
                 RoomId:room.id,
-                userId:userId
+                userId:userId,
+                joined:true
             }
         })
+
+
         return res.status(200).json({
-            msg:"Success",
+            msg:"Joined",
             room,
             users
         })

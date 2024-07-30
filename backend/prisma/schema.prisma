@@ -124,7 +124,8 @@ model EnrolledRooms{
   id Int @id @default(autoincrement())
   userId String
   RoomId String
-
+  joined Boolean
+  
   user User @relation("UserId",fields: [userId],references: [userID],onDelete: Cascade,onUpdate: Cascade)
   room Rooms @relation("RoomsId",fields: [RoomId],references: [id],onDelete: Cascade,onUpdate: Cascade)
 

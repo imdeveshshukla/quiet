@@ -33,7 +33,7 @@ CREATE TABLE "Post" (
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
-    "subCommunity" TEXT NOT NULL,
+    "subCommunity" TEXT,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
@@ -96,6 +96,7 @@ CREATE TABLE "EnrolledRooms" (
     "id" SERIAL NOT NULL,
     "userId" TEXT NOT NULL,
     "RoomId" TEXT NOT NULL,
+    "joined" BOOLEAN NOT NULL,
 
     CONSTRAINT "EnrolledRooms_pkey" PRIMARY KEY ("id")
 );
