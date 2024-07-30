@@ -33,6 +33,7 @@ CREATE TABLE "Post" (
     "userId" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
+    "subCommunity" TEXT NOT NULL,
 
     CONSTRAINT "Post_pkey" PRIMARY KEY ("id")
 );
@@ -62,6 +63,43 @@ CREATE TABLE "Upvote" (
     CONSTRAINT "Upvote_pkey" PRIMARY KEY ("id")
 );
 
+-- CreateTable
+CREATE TABLE "notification" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "body" TEXT,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    "visited" BOOLEAN NOT NULL DEFAULT false,
+    "postId" TEXT,
+    "toUser" TEXT NOT NULL,
+    "fromUser" TEXT NOT NULL,
+
+    CONSTRAINT "notification_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "Rooms" (
+    "id" TEXT NOT NULL,
+    "title" TEXT NOT NULL,
+    "desc" TEXT,
+    "bgImg" TEXT,
+    "img" TEXT,
+    "privateRoom" BOOLEAN NOT NULL,
+    "CreatorId" TEXT NOT NULL,
+    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
+
+    CONSTRAINT "Rooms_pkey" PRIMARY KEY ("id")
+);
+
+-- CreateTable
+CREATE TABLE "EnrolledRooms" (
+    "id" SERIAL NOT NULL,
+    "userId" TEXT NOT NULL,
+    "RoomId" TEXT NOT NULL,
+
+    CONSTRAINT "EnrolledRooms_pkey" PRIMARY KEY ("id")
+);
+
 -- CreateIndex
 CREATE UNIQUE INDEX "User_username_key" ON "User"("username");
 
@@ -80,8 +118,20 @@ CREATE UNIQUE INDEX "Comment_id_key" ON "Comment"("id");
 -- CreateIndex
 CREATE UNIQUE INDEX "Upvote_id_userId_key" ON "Upvote"("id", "userId");
 
+-- CreateIndex
+CREATE UNIQUE INDEX "Rooms_title_key" ON "Rooms"("title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Rooms_id_title_key" ON "Rooms"("id", "title");
+
+-- CreateIndex
+CREATE UNIQUE INDEX "EnrolledRooms_userId_RoomId_key" ON "EnrolledRooms"("userId", "RoomId");
+
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Post" ADD CONSTRAINT "Post_subCommunity_fkey" FOREIGN KEY ("subCommunity") REFERENCES "Rooms"("title") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Comment" ADD CONSTRAINT "Comment_postId_fkey" FOREIGN KEY ("postId") REFERENCES "Post"("id") ON DELETE CASCADE ON UPDATE CASCADE;
@@ -99,4 +149,19 @@ ALTER TABLE "Upvote" ADD CONSTRAINT "Upvote_postId_fkey" FOREIGN KEY ("postId") 
 ALTER TABLE "Upvote" ADD CONSTRAINT "Upvote_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE CASCADE ON UPDATE CASCADE;
 
 -- AddForeignKey
-ALTER TABLE "Upvote" ADD CONSTRAINT "Upvote_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "Comment"("id") ON DELETE SET NULL ON UPDATE CASCADE;
+ALTER TABLE "Upvote" ADD CONSTRAINT "Upvote_commentId_fkey" FOREIGN KEY ("commentId") REFERENCES "Comment"("id") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "notification" ADD CONSTRAINT "notification_toUser_fkey" FOREIGN KEY ("toUser") REFERENCES "User"("userID") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "notification" ADD CONSTRAINT "notification_fromUser_fkey" FOREIGN KEY ("fromUser") REFERENCES "User"("userID") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "Rooms" ADD CONSTRAINT "Rooms_CreatorId_fkey" FOREIGN KEY ("CreatorId") REFERENCES "User"("userID") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EnrolledRooms" ADD CONSTRAINT "EnrolledRooms_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE CASCADE ON UPDATE CASCADE;
+
+-- AddForeignKey
+ALTER TABLE "EnrolledRooms" ADD CONSTRAINT "EnrolledRooms_RoomId_fkey" FOREIGN KEY ("RoomId") REFERENCES "Rooms"("id") ON DELETE CASCADE ON UPDATE CASCADE;

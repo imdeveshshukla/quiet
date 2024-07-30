@@ -6,7 +6,8 @@ import SmallLoader from "../components/SmallLoader";
 import axios from "axios";
 import toast from 'react-hot-toast';
 import {useDispatch} from 'react-redux'
-// import { setUserInfo } from '../redux/user';
+import { addOwnedRoom } from "../redux/user";
+import SmoothLoader from "../assets/SmoothLoader";
 export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 {
     
@@ -27,33 +28,57 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         setImage(e.target.files[0]);
         console.log("Image = " ,e.target.files[0] )
     }
-
     const handleSubmit = async()=>{
-      const data = {
-        title,
-        desc:description,
-        img:image?image:"",
-        privacy:privacyOption?"true":"false"
+      // const data = {
+      //   title,
+      //   desc:description,
+      //   img:image?image:"",
+      //   privacy:privacyOption?"true":"false"
+      // }
+      // const desc = description;
+      const privacy = privacyOption?"true":"false"
+      // const img = image;
+      const formData = new FormData();
+      try{
+        formData.append('title',title);
+        formData.append('desc',description);
+        formData.append('roomImg',image||"");
+        formData.append('privacy',privacy);
+        // console.log(data);
+        // console.log("Clicked Submit");
+        setBtnloading(true);
+        // toast.loading("Creating...");
+        const res = await axios.post('http://localhost:3000/rooms/create',formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+          },
+        });
+        if(res.status == 201)
+        {
+          // toast.dismiss();
+          toast.success("Room Created Successufully");
+          dispatch(addOwnedRoom(res.data.newRoom));
+          
+  
+        }
+        else{
+          // toast.dismiss();
+          // toast.error("Error :"+res.data.msg);
+          console.log(`${res?.data?.msg} + ${res?.data?.error}`);
+        }
+        
       }
-      // console.log(data);
-      // console.log("Clicked Submit");
-      setBtnloading(true);
-      toast.loading("Creating...");
-      const res = await axios.post('http://localhost:3000/rooms/create',data);
-      if(res.status == 201)
+      catch(e)
       {
-        toast.dismiss();
-        toast.success("Room Created Successufully");
-        // dispatch(setUserInfo(res.data.newRoom));
-
+        // toast.dismiss();
+        // toast.error(e)
+        console.log("IN Catch = "+e);
       }
-      else{
-        toast.error("Error :"+res.msg);
+      finally{
+        setBtnloading(false);
+        setShow(false);
+        setShow2(false);
       }
-      setBtnloading(false);
-      console.log(res.data);
-      setShow(false);
-      setShow2(false);
     }
     const next = ()=>{
       if(titleRequired)return;
@@ -63,8 +88,6 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         setDescription(description);
         setImage(image);
         setFirstPage(false);
-        // setShow(false);
-        // setShow2(true);
 
       }
       else{
@@ -140,7 +163,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }, []);
-    
+    console.log((image)?"true":"false");
     return(
         <div className="fixed z-50 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-[100vw]  pb-10">
       <div ref={roomRef} className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
@@ -159,7 +182,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 
           <div className="mb-4 relative">
               <div className="mb-5">
-                <label for="username-success" 
+                <label htmlFor="username-success" 
                 className={`block mb-2 text-sm font-medium text-[#656923]`}
                 >Room name</label>
                 <input type="text" 
@@ -168,16 +191,16 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
                 value={title}
                 onChange={(e)=>setTitle(e.target.value)}/>
                 <p className={`mt-2 text-sm text-${color}-600`}>
-                  {!titleRequired?<span class="font-medium">Alright!</span>:<></>}
+                  {!titleRequired?<span className="font-medium text-green-700">Alright!</span>:<></>}
                   {error}
                   </p>
               </div>
               <div className="absolute top-9 right-3">
-                {fetching?<SmallLoader/>:<></>}
+                {fetching?<SmoothLoader/>:<></>}
               </div>
           </div>
           <div className="mb-4">
-          <label for="username-success" 
+          <label htmlFor="username-success" 
                 className={`block mb-2 text-sm font-medium text-[#656923]`}
                 >{"Description(Optional)"}</label>
             <textarea
@@ -195,7 +218,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
             <div className="flex">
               <div className=" text-sm text-blue-900 line-clamp-1 ml-2 break-words mb-2 underline cursor-not-allowed block">{image?.name}</div>
               {
-                  (!image)?<button className=" w-5 h-5 rounded-full" onClick={() => { setImage("") }}>
+                  (image)?<button className=" w-5 h-5 rounded-full" onClick={() => { setImage("") }}>
                       <MdDelete  className="text-blue-900 hover:text-black m-auto" />
                   </button>
                   :<></>

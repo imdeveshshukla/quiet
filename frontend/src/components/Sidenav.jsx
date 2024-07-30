@@ -65,8 +65,10 @@ const Sidenav = () => {
           <div className=' flex items-center gap-4'><FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>Rooms</span></div>
           <div className='pl-6 m-4 flex flex-col'>
             {isLogin &&<> <CreateRoomBtn />
-            {userData?.OwnedRooms?.map(function(room){
-              return <NavLink to={`/${userData.id}/${room.title}}`} className={'w-full flex rounded items-center gap-2 pl-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{room.title}</span></NavLink>
+//             {//userData?.OwnedRooms?.map(function(room){
+//               return <NavLink to={`/${userData.id}/${room.title}}`} className={'w-full flex rounded items-center gap-2 pl-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{room.title}</span></NavLink>
+            {isLogin && userData?.OwnedRooms?.map(function(room){
+              return <NavLink key={room.id} to={`/room/${userData?.username}/${room.title}`} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{room.title}</span></NavLink>
             })}
               </>
             }

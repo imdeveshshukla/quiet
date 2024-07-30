@@ -45,6 +45,7 @@ import DisplayProfile from './pages/DisplayProfile'
 import ProfileComments from './pages/ProfileComments'
 import Profileupvoted from './pages/Profileupvoted'
 import ProfilePosts from './pages/ProfilePosts'
+import Room from './pages/Room'
 
 
 
@@ -155,7 +156,7 @@ function App() {
 
 
   // console.log("HEy this is me");
-
+  const shouldHideRightnav = location.pathname.includes('/room');
 
   return (
     <>
@@ -195,10 +196,12 @@ function App() {
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
             <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
+            <Route path='/room/:username/:title' element={<Room/>}/>
           </Routes>
         </div>
-
+             
           {location.pathname.includes("/u/")?<Profilecard/>:<Rightnav/>}
+//           {!shouldHideRightnav && <Rightnav />}
 
 
 

@@ -57,7 +57,7 @@ const CreatePost = ({setShowCP, onNewPost}) => {
         setSelectedOption("")
         setImage(null)
         // getUserData(userInfo.email);
-          onNewPost()
+//           onNewPost()
           setShowCP(false)
         console.log(location.state);
         // navigate('/');
@@ -65,6 +65,7 @@ const CreatePost = ({setShowCP, onNewPost}) => {
     } catch (error) {
       toast.dismiss()
       // navigate('/');
+      setShowCP(false);
       toast.error("Error uploading the post!")
       console.error('Error uploading the post:', error);
     }

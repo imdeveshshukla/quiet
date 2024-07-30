@@ -11,13 +11,15 @@ export const userState = createSlice({
     setUserInfo:(state,action)=>{
         state.userInfo=action.payload;
     },
-    
+    addOwnedRoom:(state,action)=>{
+        state.userInfo.OwnedRooms = [action.payload,...state.userInfo.OwnedRooms]
+    },
     clearUserInfo:(state)=>{
         state.userInfo=null;
     }
   },
 })
 
-export const { setUserInfo,clearUserInfo,setUserPost,setUserComment} = userState.actions
+export const { setUserInfo,addOwnedRoom,clearUserInfo,setUserPost,setUserComment} = userState.actions
 
 export default userState.reducer

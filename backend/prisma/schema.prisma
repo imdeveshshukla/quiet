@@ -47,10 +47,15 @@ model Post{
   img String?
   userId String
   user User @relation(fields: [userId], references: [userID],onDelete: Cascade,onUpdate: Cascade)
+
   upvotes Upvote[]
   comments Comment[]
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  //For Room
+  subCommunity String? 
+  room Rooms? @relation(fields: [subCommunity],references: [title],onDelete: Cascade)
 }
 model Comment{
   id Int @id @unique @default(autoincrement())
@@ -100,7 +105,7 @@ model notification{
 
 model Rooms{
   id String @id @default(uuid())
-  title String
+  title String @unique
   desc String?
   bgImg String?
   img String?
@@ -111,6 +116,7 @@ model Rooms{
   user User @relation("creatorUserId",fields: [CreatorId],references: [userID],onDelete: Cascade,onUpdate: Cascade)
   UsersEnrolled EnrolledRooms[] @relation("RoomsId")
   
+  posts Post[] 
   @@unique([id,title])
 }
 
