@@ -22,6 +22,7 @@ const ProfilePosts = () => {
 
     const getUserPost = async (reset = false) => {
         console.log("fetching");
+        dispatch(setSkeltonLoader());
         
         try {
             if (reset) {
@@ -52,13 +53,14 @@ const ProfilePosts = () => {
         } catch (error) {
             console.log(error);
         }
+        dispatch(setSkeltonLoader());
+
     };
 
     useEffect(() => {
         console.log("usrname eff",user, username);
         
         
-        dispatch(setSkeltonLoader(true));
         getUserPost(true);
     }, [username]);
 

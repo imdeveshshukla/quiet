@@ -83,7 +83,11 @@ const getUser = async (req, res) => {
     user,
   });
 };
+
+
 const uploadImg = async (req, res) => {
+  console.log("in controller");
+  
   let imgurl = null;
   const userId = req.userId;
 

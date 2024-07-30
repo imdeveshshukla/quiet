@@ -6,7 +6,7 @@ import SmallLoader from "../components/SmallLoader";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const CreatePost = ({setShowCP}) => {
+const CreatePost = ({setShowCP, onNewPost}) => {
 
   const createPostRef = useRef(null);
   const navigate = useNavigate();
@@ -57,10 +57,10 @@ const CreatePost = ({setShowCP}) => {
         setSelectedOption("")
         setImage(null)
         // getUserData(userInfo.email);
-          // onNewPost()
-          setShowCP(false);
+//           onNewPost()
+          setShowCP(false)
         console.log(location.state);
-        navigate('/');
+        // navigate('/');
       }
     } catch (error) {
       toast.dismiss()
@@ -168,7 +168,7 @@ const CreatePost = ({setShowCP}) => {
         {/* Submit Button */}
 
         <button
-          onClick={handleSubmit}
+          onClick={()=>handleSubmit()}
           className="bg-[#656923] hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
           {Btnloading ? <SmallLoader /> : "Post"}
         </button>

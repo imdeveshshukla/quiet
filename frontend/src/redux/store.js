@@ -8,6 +8,9 @@ import postDetailReducer from './Postdetail'
 import userPostReducer  from './userposts'
 import  HotPostReducer  from './Hotposts'
 import NotificationReducer from './Notification'
+import profileReducer from './profile'
+import hamburgerReducer from './hamburger'
+
 
 export const store = configureStore({
   reducer: {
@@ -20,6 +23,8 @@ export const store = configureStore({
     userpost: userPostReducer,
     hotpost: HotPostReducer,
     notification: NotificationReducer,
+    profile: profileReducer,
+    hamburger: hamburgerReducer,
 
   },
 })

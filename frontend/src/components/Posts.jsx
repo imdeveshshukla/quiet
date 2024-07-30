@@ -157,7 +157,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
 
   return (<>
   
-    <div className='px-8 py-4  border-2 border-[#f9ff86] rounded-2xl   animate-glow m-8'>
+    <div className='px-4 py-2 xxs:px-8  xxs:py-4  border-2 border-[#f9ff86] rounded-2xl  animate-glow  m-4 xxs:m-8'>
 
       <header className='flex gap-2 items-center my-2'>
         <img src={user && user.dp ? user.dp : dp}
@@ -170,7 +170,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
         <div className='text-lg font-bold my-2'>{title}</div>
         <div className='my-2 '>{body}</div>
         {!media ? "" :
-          <img className=' w-full  max-h-[420px] object-contain py-2 ' src={media} alt="postImg" />
+          <img className='  xxxs:w-screen xs:w-full max-h-[420px] object-contain py-2 ' src={media} alt="postImg" />
         }</main>
       <footer className='flex py-2 gap-6'>
         <div className={upvoted?' rounded-3xl flex gap-1 items-start justify-center p-2 bg-green-600 text-white':downvote?' rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white':' rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
