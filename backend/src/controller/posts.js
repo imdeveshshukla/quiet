@@ -25,6 +25,7 @@ export const createPost = async (req, res) => {
     res.status(405).json({
       msg: "Wrong Input",
     });
+  
   try {
     const newpost = await prisma.post.create({
       data: {

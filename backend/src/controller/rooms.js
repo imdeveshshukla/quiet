@@ -21,13 +21,14 @@ export const CreateRoom = async (req,res)=>{
             });
     }
     let imgUrl = null;
-    if(data.img && data.img.length > 0){ 
-        imgUrl = await uploadOnCloudinary(req.file.path);
-    }
-    console.log("Room Image URL "+imgUrl);
+    console.log(`${req.file}`);
     try{
+        if(req.file){ 
+            imgUrl = await uploadOnCloudinary(req.file.path);
+        }
+        console.log("Room Image URL "+imgUrl);
         await prisma.$transaction(async(tx)=>{
-            console.log("Inside Transactions");
+            // console.log("Inside Transactions");
             const newRoom = await tx.rooms.create({
                 data:{
                     title:data.title,
@@ -80,8 +81,8 @@ export const updateRoom = async(req,res)=>{
             }
         })
         if(!room.id)return res.status(404).json({msg:"Room Not Found!"});
-        console.log("room");
-        console.log(room);
+        // console.log("room");
+        // console.log(room);
 
         if(room.CreatorId != userId){
             return res.status(401).json({
@@ -91,7 +92,7 @@ export const updateRoom = async(req,res)=>{
         let imgUrl = null;
         console.log("data\n");
         console.log(data);
-        if(data.img) imgUrl = await uploadOnCloudinary(req.file.path);
+        if(data.roomImg) imgUrl = await uploadOnCloudinary(req.file.path);
 
         const updatedRoom = await prisma.rooms.update({
             where:{
@@ -231,6 +232,50 @@ export const getRoom = async(req,res)=>{
             msg:"Database/Server Issue",
             room:null,
             error
+        })
+    }
+}
+
+
+export const addUser = async(req,res)=>{
+    const userId = req.userId;
+    const { title } = req.body;
+    try{
+        const room = await prisma.rooms.findFirst({
+            where:{
+                title:title
+            },
+            select:{
+                id:true,
+                UsersEnrolled:true
+            }
+        })
+        var found = false;
+        room.UsersEnrolled.forEach((val)=>{
+            if(val.userId == userId){
+                found = true;
+                return;
+            }
+        })
+        if(found)return res.status(201).json({msg:"User Already joined!","UserEnrolled":room.UsersEnrolled});
+
+        const users = await prisma.enrolledRooms.create({
+            data:{
+                RoomId:room.id,
+                userId:userId
+            }
+        })
+        return res.status(200).json({
+            msg:"Success",
+            room,
+            users
+        })
+    }
+    catch(e)
+    {
+        res.status(500).json({
+            msg:"Server Error",
+            error:e
         })
     }
 }
