@@ -169,8 +169,8 @@ const CreatePost = ({setShowCP, onNewPost}) => {
 
         <button
           onClick={()=>handleSubmit()}
-          className="bg-[#656923] hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
-          {Btnloading ? <SmallLoader /> : "Post"}
+          className="bg-[#656923] flex justify-center hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
+          {Btnloading ? <span className=""><SmallLoader /></span> : "Post"}
         </button>
       </div>
     </div>

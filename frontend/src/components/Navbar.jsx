@@ -14,7 +14,7 @@ import { IoNotificationsOutline } from "react-icons/io5";
 import { IoSearchOutline } from "react-icons/io5";
 import Notification from './Notification';
 import Search from './Search'
-
+import {setShowSearch} from '../redux/search'
 
 
 
@@ -23,14 +23,18 @@ import Search from './Search'
 axios.defaults.withCredentials = true
 
 
+
 const Navbar = () => {
   const isLogin = useSelector((state) => state.login.value);
   const dispatch = useDispatch();
   const userInfo = useSelector((state) => state.user.userInfo);
   const [isNtfnOpen, setIsNfnOpen] = useState(false);
-  const notifications= useSelector(state=> state.notification.notifications)
-  const hamburger= useSelector(state=>  state.hamburger.value)
-
+  const notifications = useSelector(state => state.notification.notifications)
+  const hamburger = useSelector(state => state.hamburger.value);
+  
+  const showSearch= useSelector(state=> state.search.value)
+  
+  
 
 
   const Navigate = useNavigate()
@@ -54,7 +58,11 @@ const Navbar = () => {
     if (ntfndropdownRef.current && !ntfndropdownRef.current.contains(event.target)) {
       setIsNfnOpen(false);
     }
+
   };
+
+
+
 
 
 
@@ -89,30 +97,34 @@ const Navbar = () => {
   }
 
 
- 
 
-  
+
+
   return (
     <nav className="bg-[#6c712eb8] flex justify-between items-center pl-8 pr-2 xxs:pr-4 xs:px-8 sticky w-full top-0 z-10 backdrop-blur-md h-[74.46px]">
-        
 
-      <div className="logo relative w-40 xxs:w-52 flex items-center gap-3">
-        <Link  to={"/"}><img src={logo} alt="" /></Link>
+
+      <div className="logo relative w-36 xxs:w-40 xs:w-52 flex items-center gap-3">
+        <Link to={"/"}><img src={logo} alt="" /></Link>
       </div>
 
       <span className=' hidden 2_sm:block'><Search/></span>
-      
 
-      <div className='flex gap-1 xxs:gap-2 xs:gap-8 2_sm:gap-1 1_5md:gap-8 items-center'>
+
+      <div className={`${isLogin?' gap-6':'xxs:gap-1 sm:gap-2'} flex  1_5md:gap-8 items-center`}>
+
+        <span><IoSearchOutline onClick={() => dispatch(setShowSearch(!showSearch))} className=' cursor-pointer text-3xl 2_sm:hidden' /></span>
 
         
+
+
         <div ref={ntfndropdownRef}>
           {
             isLogin && <div onClick={() => setIsNfnOpen(!isNtfnOpen)} className='relative'><IoNotificationsOutline className=' text-white font-semibold cursor-pointer text-3xl' />
               <span className='absolute flex items-center justify-center p-2 -top-2 text-[10px] -right-1 h-4 w-4 font-bold text-white bg-red-700 rounded-full'>{notifications.length}</span>
             </div>
           }
-          {isNtfnOpen && <Notification setIsNfnOpen={setIsNfnOpen}  /> }
+          {isNtfnOpen && <Notification setIsNfnOpen={setIsNfnOpen} />}
         </div>
         {isLogin ? <>
           <div className="relative flex items-center gap-8" ref={dropdownRef} >
@@ -147,8 +159,8 @@ const Navbar = () => {
             )}
           </div>
         </>
-          : <><Link to={"/signin"}><div className="signin cursor-pointer text-lg px-2 py-1 font-semibold hover:text-[#565252]">Sign in</div></Link>
-            <Link to={"/signup"}><div className="signup cursor-pointer rounded-xl  bg-black text-white px-2 py-1 text-lg  hover:shadow-sm shadow-md shadow-current">Sign up</div></Link></>}
+          : <><Link to={"/signin"}><div className="signin cursor-pointer xxs:text-lg px-2 py-1 font-semibold hover:text-[#565252]">Sign in</div></Link>
+            <Link to={"/signup"}><div className="signup cursor-pointer rounded-xl  bg-black text-white px-2 py-1  xxs:text-lg  hover:shadow-sm shadow-md shadow-current">Sign up</div></Link></>}
       </div>
     </nav>
   )

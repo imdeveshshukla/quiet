@@ -10,7 +10,7 @@ import  HotPostReducer  from './Hotposts'
 import NotificationReducer from './Notification'
 import profileReducer from './profile'
 import hamburgerReducer from './hamburger'
-
+import SearchReducer from './search'
 
 export const store = configureStore({
   reducer: {
@@ -25,6 +25,6 @@ export const store = configureStore({
     notification: NotificationReducer,
     profile: profileReducer,
     hamburger: hamburgerReducer,
-
+    search: SearchReducer,
   },
 })

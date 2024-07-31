@@ -45,8 +45,10 @@ import DisplayProfile from './pages/DisplayProfile'
 import ProfileComments from './pages/ProfileComments'
 import Profileupvoted from './pages/Profileupvoted'
 import ProfilePosts from './pages/ProfilePosts'
+import Search from './components/Search';
+import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
-
+import { useRef } from 'react'
 
 
 
@@ -59,10 +61,12 @@ function App() {
   const isLoading = useSelector((state) => state.loading.value);
   const isLogin = useSelector((state) => state.login.value);
   const userInfo = useSelector(state => state.user.userInfo);
-
+  const searchRef = useRef(null)
   const posts = useSelector(state => state.post.posts)
   const location = useLocation();
   const isSkelton = useSelector(state => state.skelton.value);
+  const showSearch = useSelector(state => state.search.value)
+
 
 
 
@@ -89,14 +93,13 @@ function App() {
 
 
 
-   const getUserNotification = async()=>{
+  const getUserNotification = async () => {
     try {
       const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
       console.log(res.data);
       dispatch(setNotification(res.data.data))
     } catch (error) {
       console.log(error);
-      
     }
   }
 
@@ -135,77 +138,91 @@ function App() {
 
   }
 
-  
-  
-  
+
+
+
   useEffect(() => {
-    if(!isLogin)
-    sendReq();
+    if (!isLogin)
+      sendReq();
     let intervalId;
-    if(isLogin)
-    intervalId = setInterval(getUserNotification, 30000); 
+    if (isLogin)
+      intervalId = setInterval(getUserNotification, 30000);
     return () => {
       if (intervalId) {
-        clearInterval(intervalId); 
+        clearInterval(intervalId);
       }
     };
   }, [isLogin]);
 
 
-  
+  const handleClickOutside = (event) => {
+    if (searchRef.current && !searchRef.current.contains(event.target)) {
+      dispatch(setShowSearch(false))
+    }
+
+  };
+
+
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+
+
 
 
   // console.log("HEy this is me");
-  const shouldHideRightnav = location.pathname.includes('/room');
+
 
   return (
     <>
       {isLoading && <Loader />}
 
       <Navbar />
-      <div className=' grid  md:grid-cols-[3fr_1.5fr]  xl:grid-cols-[1.2fr_3fr_1.5fr] 1_5xl:grid-cols-[1fr_3fr_1.5fr] '>
-        
-          <Sidenav/>
+      <div className=' grid  1_5md:grid-cols-[3fr_1.5fr]  xl:grid-cols-[1.2fr_3fr_1.5fr] 1_5xl:grid-cols-[1fr_3fr_1.5fr] '>
+
+        <Sidenav />
 
 
         <div className='  md:border-r-2  xl:border-x-2 border-black'>
           <Routes>
-            <Route path='/' element={ <Home/> } />
+            <Route path='/' element={<Home />} />
             {!isLogin && <Route path='/signup' element={<Signup />} />}
             {!isLogin && <Route path='/signin' element={<Signin />} />}
             <Route path='/resetpassword' element={<Resetpass />} />
             <Route path='/varifyaccount' element={<Varifyacc />} />
 
-            <Route path='u/:username' element={<DisplayProfile/>} >
-              <Route path='overview' element={<Overview/>} />
-              <Route path='posts' element={<ProfilePosts/>} />
-              <Route path='upvoted' element={ <Profileupvoted/> } />
-              <Route path='commented' element={<ProfileComments/>} />
+            <Route path='u/:username' element={<DisplayProfile />} >
+              <Route path='overview' element={<Overview />} />
+              <Route path='posts' element={<ProfilePosts />} />
+              <Route path='upvoted' element={<Profileupvoted />} />
+              <Route path='commented' element={<ProfileComments />} />
             </Route>
-            
-              
 
 
-
-            <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg}/>}/>
-            <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg}/>}/>
-            <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"IET-Lucnow"} dp={ietdp} bg={ietbg}/>}/>
-            <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg}/>}/>
-            <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg}/>}/>
-            <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg}/>}/>
+            <Route path='/post/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
+            <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg} />} />
+            <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg} />} />
+            <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"IET-Lucnow"} dp={ietdp} bg={ietbg} />} />
+            <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg} />} />
+            <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg} />} />
+            <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
-            <Route path='/posts/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
-            <Route path='/room/:username/:title' element={<Room/>}/>
+            <Route path='/room/:username/:title' element={<Room />} />
           </Routes>
         </div>
-             
-          {location.pathname.includes("/u/")?<Profilecard/>:<Rightnav/>}
-//           {!shouldHideRightnav && <Rightnav />}
+       
+
+          {location.pathname.includes("/u/") ? <Profilecard /> : location.pathname.includes("/room/") ? <></> : <Rightnav />}
+          {/* {!shouldHideRightnav && <Rightnav />} */}
 
 
 
-        {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''}
       </div>
       <Toaster position="bottom-center"
         reverseOrder={false} toastOptions={{
@@ -219,6 +236,14 @@ function App() {
             color: '#ffff',
           }
         }} />
+        {showSearch && (
+        <>
+          <div className="fixed inset-0  bg-black bg-opacity-50 backdrop-blur-sm z-10 w-full h-full"></div>
+          <div ref={searchRef} className="fixed top-[60px] z-50 left-[50%] translate-x-[-50%]">
+            <Search />
+          </div>
+        </>
+      )}
 
     </>
   )
@@ -230,9 +255,9 @@ export default App
 
 
 // userInfo?.posts == null ? <Postskelton /> :
-                //   userInfo.posts.map(post => {
-                //     return (
-                //       isSkelton ? <Postskelton key={uuidv4()} /> : <Posts key={post.id} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} />
-                //     )
-                //   }
-                //   )
+//   userInfo.posts.map(post => {
+//     return (
+//       isSkelton ? <Postskelton key={uuidv4()} /> : <Posts key={post.id} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} />
+//     )
+//   }
+//   )

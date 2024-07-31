@@ -12,23 +12,29 @@ import { setSkeltonLoader } from '../redux/skelton';
 
 
 
+
+
+
+
 const Home = () => {
   const posts = useSelector((state) => state.post.posts);
   const isLogin = useSelector((state) => state.login.value);
   const isSkelton = useSelector((state) => state.skelton.value);
   const dispatch = useDispatch();
 
+
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
+
 
   const getPost = async () => {
     dispatch(setSkeltonLoader())
     console.log(`Fetching posts for page: ${page}`);
-    if(page==1){
+    if (page == 1) {
       window.scrollTo(0, 0);
       dispatch(clearPostsInfo())
     }
-  try {
+    try {
       const res = await axios.get('http://localhost:3000/posts/getPost', {
         params: {
           page,
@@ -36,7 +42,7 @@ const Home = () => {
         },
       });
       console.log(res.data);
-      
+
 
       if (res.status === 200) {
         const fetchedPosts = res.data.posts;
@@ -53,18 +59,17 @@ const Home = () => {
     }
 
     dispatch(setSkeltonLoader())
-    
+
   };
 
-  const handleNewPost=()=>{
-    // dispatch(clearPostsInfo())
+  const handleNewPost = () => {
     setPage(1);
     setHasMore(true);
-    getPost()
+    getPost();
   }
 
   useEffect(() => {
-    console.log("underUse effect getting post for page",page);
+    console.log("underUse effect getting post for page", page);
     getPost();
   }, [page]);
 
@@ -73,42 +78,53 @@ const Home = () => {
     setPage((prevPage) => prevPage + 1);
   };
 
+
+
+
+
+
   return (
     <div className=' min-h-screen xxs:pl-0 xs:pl-8 sm:pl-16'>
-    <InfiniteScroll  
+      <InfiniteScroll
         dataLength={posts.length}
         next={fetchMoreData}
         hasMore={hasMore}
         loader={<Postskelton />}
-        endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}   
+        endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}
       >
-      {isLogin && <Createpost onNewPost={handleNewPost}/>}
-      <div className='bg-gray-700 h-[1px]'></div>
+        {isLogin && <Createpost onNewPost={handleNewPost} />}
+        <div className='bg-gray-700 h-[1px]'></div>
 
-      
+
         <div className="post">
-          { ( isSkelton && posts.length===0) ? (
+          {(isSkelton && posts.length === 0) ? (
             <Postskelton />
           ) : (
             posts?.map((post) => (
-                <Posts
-                  key={post.id}
-                  id={post.id}
-                  post={post}
-                  title={post.title}
-                  body={post.body}
-                  media={post.img}
-                  countComment={post.comments?.length}
-                  createdAt={post.createdAt}
-                  user={post?.user}
-                  upvotes={post?.upvotes}
-                />
-              )
+              <Posts
+                key={post.id}
+                id={post.id}
+                post={post}
+                title={post.title}
+                body={post.body}
+                media={post.img}
+                countComment={post.comments?.length}
+                createdAt={post.createdAt}
+                user={post?.user}
+                upvotes={post?.upvotes}
+              />
+            )
             )
           )}
         </div>
-    </InfiniteScroll>
+      </InfiniteScroll>
+
+      
+
     </div>
+
+
+
   );
 };
 

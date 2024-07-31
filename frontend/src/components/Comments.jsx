@@ -25,6 +25,7 @@ import { BiSolidLike } from "react-icons/bi";
 import { BiDislike } from "react-icons/bi";
 import { BiSolidDislike } from "react-icons/bi";
 import { sendNotification } from './Posts';
+import { getTime } from './Posts';
 
 
 
@@ -251,20 +252,20 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
   return (<>
 
-    <div className="relative flex flex-col gap-2 py-2 px-14  border rounded-2xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
+    <div className="relative flex flex-col gap-2 py-2  px-4 xxs:px-7  xs:px-14  border rounded-2xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
       <div className="relative flex gap-2 items-center">
 
         <img src={user.dp ? user.dp : dp} className="relative rounded-full -top-1 -mb-4  border h-8 w-8 object-contain bg-white" alt="" loading="lazy" />
 
         <div className="flex items-center w-full gap-2">
           <div className="flex flex-row justify-between">
-            <p className="relative  whitespace-nowrap truncate overflow-hidden">u/{user.username}</p>
+            <p className="relative  whitespace-nowrap truncate text-sm xxs:text-base  font-medium overflow-clip">u/{user.username}</p>
             {/* <a className="text-gray-500 text-xl" href="#"><i className="fa-solid fa-trash"></i></a> */}
           </div><span>•</span>
-          <p className="text-gray-500 text-xs">{format(new Date(createdAt), 'MMMM d, yyyy h:mm a')}</p>
+          <p className="text-gray-500 text-[9px] xxs:text-xs  line-clamp-1 overflow-clip">{getTime(createdAt)} ago</p>
         </div>
       </div>
-      <div className=' mx-10  whitespace-pre-wrap break-words'>{body}</div>
+      <div className=' mx-10 text-sm xs:text-base whitespace-pre-wrap break-words'>{body}</div>
       <div className="btns">
         <footer className='flex gap-4 items-center'>
           <div className={'  flex gap-2 items-center justify-center  '}>
@@ -295,7 +296,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
     </div>
     {openBox && <CommentBox commentId={id} setOpenBox={setOpenBox} setShowChild={setShowChild} openBox={openBox} />}
 
-    <div className='pl-5 border-l-2  border-white divide-x border-solid'>
+    <div className=' pl-2 xs:pl-3 sm:pl-5 border-l-2  border-white divide-x border-solid'>
       {showChild && <CommentBody comments={childs} getChildren={getChildren} dp={dp} getTime={getTime} postId={postId} />}
 
     </div>

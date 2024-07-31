@@ -34,13 +34,9 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
 
 
   const handleComment = async (id) => {
-    if (!isLogin) {
-      toast.dismiss()
-      toast.error("Sign In First");
-      return;
-    }
+
     if (id) {
-      Navigate(`/posts/${id}`);
+      Navigate(`/post/${id}`);
     }
   }
 
@@ -168,7 +164,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
       </header>
       <main onClick={() => handleComment(id)} className=' cursor-pointer'>
         <div className='text-lg font-bold my-2'>{title}</div>
-        <div className='my-2 '>{body}</div>
+        <div className='my-2 whitespace-pre-wrap break-words '>{body}</div>
         {!media ? "" :
           <img className='  xxxs:w-screen xs:w-full max-h-[420px] object-contain py-2 ' src={media} alt="postImg" />
         }</main>
@@ -187,7 +183,7 @@ const Posts = ({ id,post, title, body, media, countComment, createdAt, user,upvo
         </div>
 
         <div className=' rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>
-          <RiShareForwardLine className='text-2xl' />
+          <RiShareForwardLine className='text-2xl ' />
           <span>Share</span>
         </div>
       </footer>
