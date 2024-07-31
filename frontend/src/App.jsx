@@ -156,8 +156,7 @@ function App() {
 
 
   // console.log("HEy this is me");
-  const shouldHideRightnav = location.pathname.includes('/room');
-
+  const room = location.pathname.includes('/room');
   return (
     <>
       {isLoading && <Loader />}
@@ -200,13 +199,13 @@ function App() {
           </Routes>
         </div>
              
-          {location.pathname.includes("/u/")?<Profilecard/>:<Rightnav/>}
-//           {!shouldHideRightnav && <Rightnav />}
-
-
-
-        {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''}
+          {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<Rightnav/>}
+           {/*!shouldHideRightnav && <Rightnav />*/}
+        {/* {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''} */}
       </div>
+
+
+
       <Toaster position="bottom-center"
         reverseOrder={false} toastOptions={{
           className: '',

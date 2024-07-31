@@ -13,7 +13,7 @@ cloudinary.config({
 const uploadOnCloudinary = async (localfilepath)=>{
     try {
         if(!localfilepath)return null; //if local file path is null return error ---------------------------------Work has to be done
-        console.log("LocalFilePath = "+localfilepath);
+        // console.log("LocalFilePath = "+localfilepath);
         const uniqueSuffix = Date.now();
         var mainFolderName = "main"; 
     // filePathOnCloudinary: path of image we want 
@@ -23,25 +23,28 @@ const uploadOnCloudinary = async (localfilepath)=>{
             public_id: filePathOnCloudinary,
             resource_type:"auto",
             allowed_formats:['jpg','png','jpeg']
-        }).catch((error)=>{console.log(error)});
+        }).catch((error)=>{
+            console.log("Insise catch = ",error);
+            throw new Error(error.message);
+        });
         
         // console.log("uploadResult = "+uploadResult.url);//uploadResult.url to get url of file path
         
         // Optimize delivery by resizing and applying auto-format and auto-quality
-        const optimizeUrl = cloudinary.url("images", {
-            fetch_format: 'auto',
-            quality: 'auto'
-        });
+        // const optimizeUrl = cloudinary.url("images", {
+        //     fetch_format: 'auto',
+        //     quality: 'auto'
+        // });
         
         // console.log("optimizeUrl "+optimizeUrl);
         
         // Transform the image: auto-crop to square aspect_ratio
-        const autoCropUrl = cloudinary.url("images", {
-            crop: 'auto',
-            gravity: 'auto',
-            width: 500,
-            height: 500,
-        });
+        // const autoCropUrl = cloudinary.url("images", {
+        //     crop: 'auto',
+        //     gravity: 'auto',
+        //     width: 500,
+        //     height: 500,
+        // });
         
         // console.log("autoCropUrl = "+autoCropUrl);
         fs.unlinkSync(localfilepath, (err) => {
@@ -55,7 +58,9 @@ const uploadOnCloudinary = async (localfilepath)=>{
     } 
     catch (error) {
         fs.unlinkSync(localfilepath);   //remove the locally saved file as the operate operation has failed
-        return null; //return error  ---------------------------------Work has to be done
+        console.log("Error",error);
+        throw error; //return error  ---------------------------------Work has to be done
+        return error;
     }
 }
 

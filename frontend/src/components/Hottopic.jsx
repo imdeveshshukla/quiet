@@ -5,7 +5,7 @@ const Hottopic = ({ topic,dp, bg }) => {
     return (
         <>
             
-                <div className=''>
+                <div className='mr-10'>
                     <div className='border-black border-2 relative shadow-lg shadow-slate-300 rounded-2xl h-64 m-4  '>
                         <img className=' w-full h-full object-cover rounded-2xl' src={bg} alt="" />
                         <div className=' absolute left-14 bottom-0 border-4  translate-y-1/2  h-40 w-40 rounded-full overflow-hidden '>
