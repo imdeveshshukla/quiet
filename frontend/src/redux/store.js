@@ -10,6 +10,7 @@ import  HotPostReducer  from './Hotposts'
 import NotificationReducer from './Notification'
 import profileReducer from './profile'
 import hamburgerReducer from './hamburger'
+import SearchReducer from './search'
 import roomReducer from './roomSlice'
 import userRoomsReducer from './userRooms'
 
@@ -27,6 +28,7 @@ export const store = configureStore({
     notification: NotificationReducer,
     profile: profileReducer,
     hamburger: hamburgerReducer,
+    search: SearchReducer,
     room:roomReducer,
     rooms:userRoomsReducer
   },

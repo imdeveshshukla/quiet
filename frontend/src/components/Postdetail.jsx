@@ -47,8 +47,8 @@ const Postdetail = () => {
       useEffect(() => {
         dispatch(clearPostDetail())
         let loc=String(location.pathname)
-        if(loc.includes("/posts/")){
-            let id= loc.split("/posts/")[1];
+        if(loc.includes("/post/")){
+            let id= loc.split("/post/")[1];
             console.log("postDetailID",id);
             getApost(id)   
         }
@@ -88,7 +88,7 @@ const Postdetail = () => {
     }
   // console.log("Groupd Comments = "+JSON.stringify(groupComments));
   return (<>
-    <div className=' min-h-screen overflow-auto border-x-2 border-black pl-16'>
+    <div className=' min-h-screen overflow-auto xs:pl-4 sm:pl-16 1_5md:pl-2  2_md:pl-16'>
       {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes}/>:<Postskelton/>}
 
       <div className=' m-4'>
@@ -99,7 +99,7 @@ const Postdetail = () => {
       </div>
     <div className=' bg-gray-700 h-[1px]'></div>
     
-    <div className='m-4'>
+    <div className=' m-2 xs:m-4'>
       <div className=' text-xl font-bold mb-4 underline'>Comments:</div>
     {/* {console.log(post?.comments)}; */}
     <CommentBody comments={groupComments[null]} postId={post?.id} getChildren={getChildren} userId={userInfo?.userID}  dp={dp} getTime={getTime}/>

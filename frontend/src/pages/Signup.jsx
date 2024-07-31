@@ -268,14 +268,14 @@ export const Layout = ({ form,setForm, passref, eye, handleChange, handleCloseEy
 return (
     <>
         <div className='w-full flex justify-center items-center h-[89.5vh] m-auto border-x-2 border-black  '>
-            <div className='w-[70%] h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
+            <div className=' w-[95%] xxs:w-[90%]  sm:w-[75%]  md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[50%] sm:h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
 
-                <form autoComplete='off' className='flex flex-col justify-evenly px-20 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
+                <form autoComplete='off' className='flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
 
 
                     {otpsent ? <><div className=' flex flex-col gap-5'><div className='relative flex flex-col justify-center items-center'>
                         <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdPassword className=' text-xl' /></span>
-                        <input autoFocus value={otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
+                        <input autoFocus value={otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
                         <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                     </div>
                         <div className='flex justify-center cursor-pointer'><div onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >Varify OTP</div></div>

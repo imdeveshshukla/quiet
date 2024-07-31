@@ -77,17 +77,17 @@ const Notification = ({setIsNfnOpen}) => {
         }
     }
     return (
-        <div className=' rounded-2xl shadow-md shadow-current absolute top-20 right-20 w-[25vw]  bg-[#c2c7b3] '>
+        <div className=' rounded-2xl shadow-md shadow-current absolute top-20 right-2  xxs:right-5 xs:right-20  w-[96vw] xxs:w-[90vw] xs:w-[75vw]  sm:w-[55vw]  2_sm:w-[50vw] md:w-[46vw] 1_5md:w-[43vw]  2_md:w-[40vw]  lg:w-[37vw] 1_5lg:w-[33vw] xl:w-[30vw]  bg-[#c2c7b3] '>
 
             <span  className=' absolute right-4 top-2 text-white text-xl'>{isLoading?<SmallLoader/>:<FiRefreshCcw className=' cursor-pointer' onClick={()=>handleRefresh()}/>}</span>
 
             <div className=' bg-[#6f742b] text-white rounded-t-2xl text-center p-1'>Notifications</div>
             {notifications.length==0 && <div className=' p-4  text-red-950 text-center font-semibold'>You're all caught up! No new notifications.</div>}
-            <div className=' max-h-[60vh] overflow-auto scrollable-box'>
+            <div className=' max-h-[70vh] sm:max-h-[60vh] overflow-auto scrollable-box'>
             {notifications?.map(item => <>
-                <div key={item.id} onClick={()=>handleClick(item.postId, item.id)} className=' cursor-pointer hover:bg-[#acb499] shadow-sm  shadow-lime-800 px-4 py-2'>
+                <div key={item.id} onClick={()=>handleClick(item.postId, item.id)} className=' cursor-pointer hover:bg-[#acb499] shadow-sm  shadow-lime-800 px-2 py-1 xxs:px-4  xxs:py-2'>
                     <div className=' flex items-center justify-between'><span className='text-md '><span className='font-semibold'>{item.user2.username} </span>{item.title}</span><span className=' text-xs text-slate-600'>{getTime(item.createdAt)} ago</span></div>
-                    {item.body?<div className=' text-sm line-clamp-3 bg-[#9eb840] overflow-clip px-3 text-white m-1 py-1 rounded-lg'>{item.body}</div>:<></>}
+                    {item.body?<div className='whitespace-pre-wrap break-words text-sm line-clamp-3 bg-[#9eb840] overflow-clip px-3 text-white m-1 py-1 rounded-lg'>{item.body}</div>:<></>}
                 </div>
             </>
             )}

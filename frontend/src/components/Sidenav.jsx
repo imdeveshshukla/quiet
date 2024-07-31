@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import CreateRoomBtn from './CreateRoomBtn';
 import { setShowSideNav } from '../redux/hamburger'
 import { GrMenu } from "react-icons/gr";
+import { HotTopicNav } from './Rightnav';
 import axios from 'axios';
 import baseAddress from '../utils/localhost';
 import { clearRooms, setRooms } from '../redux/userRooms';
@@ -20,7 +21,7 @@ import { GiConsoleController } from 'react-icons/gi';
 const Sidenav = () => {
   const isLogin = useSelector(state => state.login.value);
   const userData = useSelector(state => state.user.userInfo);
-  const hamburger= useSelector(state=>  state.hamburger.value)
+   const hamburger= useSelector(state=>  state.hamburger.value)
   const myAllRoom = useSelector(state=> state.rooms.rooms);
   const dispatch = useDispatch()
   const [roomLoader,setRoomLoader] = useState(false);
@@ -32,7 +33,7 @@ const Sidenav = () => {
     if (navRef.current && !navRef.current.contains(event.target)) {
       dispatch(setShowSideNav(false))
     }
-   
+
   };
 
   const getRooms = async()=>{
@@ -52,6 +53,15 @@ const Sidenav = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
     }, []);
+// <<<<<<< master
+//   }, []);
+
+//   const handleHamburger = () => {
+//     console.log("hamburger");
+
+//     dispatch(setShowSideNav(!hamburger))
+// =======
+//     }, []);
 
     useEffect(()=>{
       if(isLogin)
@@ -74,9 +84,9 @@ const Sidenav = () => {
 
   console.log("myAllRooms = ",myAllRoom);
   return (<>
-      
-        <nav ref={navRef} className= {` ${hamburger?'left-0':'-left-full'} fixed transition-all duration-400 ease-in-out bg-[#bbc2a5] xl:bg-[#fff0]  border-4 xl:border-none  border-[#dae0cb] xl:sticky xl:left-0  xl:block max-h-[calc(100vh-74.46px)] overflow-auto  p-3 z-20 h-[calc(100vh-74.47px)]  top-[74.46px] `} >
-        <GrMenu onClick={()=>handleHamburger()} className=' cursor-pointer hover:text-gray-700 fixed left-2 top-5 text-3xl block xl:hidden'/>
+
+    <nav ref={navRef} className={` ${hamburger ? 'left-0' : '-left-full'} fixed transition-all duration-400 ease-in-out bg-[#bbc2a5] xl:bg-[#fff0]  border-4 xl:border-none  border-[#dae0cb] xl:sticky xl:left-0  xl:block max-h-[calc(100vh-74.46px)] overflow-auto  p-3 z-20 h-[calc(100vh-74.47px)]  top-[74.46px] `} >
+      <GrMenu onClick={() => handleHamburger()} className=' cursor-pointer hover:text-gray-700 fixed left-2 top-5 text-3xl block xl:hidden' />
       <div className="sidenav">
 
         <div className='p-3 m-2 border-b-2 border-gray-600'>
@@ -88,6 +98,8 @@ const Sidenav = () => {
         <div className='p-3 m-2 border-b-2 border-gray-600'>
           <div className=' flex items-center gap-4'><FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>Rooms</span></div>
           <div className='pl-6 m-4 flex flex-col'>
+          
+          
             {isLogin &&<> <CreateRoomBtn />
             
             {isLogin && roomLoader?<div className="mx-auto"><SmoothLoader/></div>:(myAllRoom?.map(function(val){
@@ -96,18 +108,22 @@ const Sidenav = () => {
             }))}
               </>
             }
-            
+
           </div>
+        </div>
+
+        <div className={`  1_5md::hidden p-3 m-2 border-b-2 border-gray-600`}>
+            <HotTopicNav/>
         </div>
 
 
       </div>
     </nav>
 
-{hamburger && <div className="fixed inset-0 top-[74.46px] bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>}
+    {hamburger && <div className="fixed inset-0 top-[74.46px] bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>}
 
-</>
-    
+  </>
+
   )
 }
 
