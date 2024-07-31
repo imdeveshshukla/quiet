@@ -6,13 +6,17 @@ import { PiShareFat } from "react-icons/pi";
 
 
 
-const Profilecard = () => {
+const Profilecard = ({room}) => {
+  var profileInfo;
+  if(room)
+  {
+    profileInfo = useSelector(state => state.room.roomInfo)
+  }
+  else
+    profileInfo = useSelector(state => state.profile.profileInfo)
 
-  const profileInfo = useSelector(state => state.profile.profileInfo)
-
-
+  console.log("Prfile card = ", profileInfo);
   const profileLink = `${window.location.origin}/u/${profileInfo?.username}`;
-
   const handleShare = async () => {
     console.log(profileInfo);
 
@@ -45,7 +49,7 @@ const Profilecard = () => {
       </div>
 
       <div className=' p-4'>
-          <div className=' text-xl font-bold'>{profileInfo?.username}</div>
+          <div className=' text-xl font-bold'>{room? `Name : ${profileInfo?.title} `: profileInfo?.username}</div>
 
           <div>
             <button className='flex items-center bg-[#99a086] py-2 px-3  text-white my-2 gap-1 rounded-full' onClick={() => handleShare()}><PiShareFat className=' text-xl'/><span className=' text-xs font-medium'>Share</span></button>
@@ -53,21 +57,21 @@ const Profilecard = () => {
 
           <div className=' grid grid-cols-[1fr_1fr] gap-6 my-4'>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{profileInfo?._count?.posts}</span>
-              <span className=' text-sm text-gray-700'>Posts</span>
+              <span className=' font-medium text-sm'>{room?(profileInfo?.posts?.length):profileInfo?._count?.posts}</span>
+              <span className=' text-sm text-gray-700'>{"Posts"}</span>
             </div>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{profileInfo?._count?.comments}</span>
-              <span className=' text-sm text-gray-700'>Comments</span>
+              <span className=' font-medium text-sm'>{room?profileInfo?.UsersEnrolled?.length:profileInfo?._count?.comments}</span>
+              <span className=' text-sm text-gray-700'>{room?"Members":"Comments"}</span>
             </div>
             <div className=' flex flex-col items-start'>
               <span className=' font-medium text-sm'>{profileInfo?.createdAt?.split("T")[0]}</span>
               <span className=' text-sm text-gray-700'>Cake day</span>
             </div>
-            <div className=' flex flex-col items-start'>
+            {room?<></>:<div className=' flex flex-col items-start'>
               <span className=' font-medium text-sm'>{profileInfo?._count?.upvotes}</span>
               <span className=' text-sm text-gray-700'>Upvotes</span>
-            </div>
+            </div>}
           </div>
 
           <div className=' border-b '></div>

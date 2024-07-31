@@ -1,6 +1,7 @@
 import prisma from "../../db/db.config.js";
 import zod from "zod";
 import uploadOnCloudinary from "../utils/cloudinary.js";
+import fs from "fs"
 const post = zod.object({
   topic: zod.string().optional(),
   title: zod.string(),
@@ -15,8 +16,13 @@ export const createPost = async (req, res) => {
 
   let url = null;
   if (req.file) {
-    url = await uploadOnCloudinary(req.file.path);
-    console.log("file Object = " + url);
+    try{
+      url = await uploadOnCloudinary(req.file.path);
+      console.log("file Object = " + url);
+    }
+    catch(err){
+      console.log("Failed To Upload Image\n",err);
+    }
   }
   const parsedBody = post.safeParse(postbody);
   console.log(parsedBody);
@@ -78,6 +84,9 @@ export const getPost = async (req, res) => {
 
   try {
     const posts = await prisma.post.findMany({
+      where:{
+        subCommunity:null
+      },
       include: {
         user: true,
         comments: {

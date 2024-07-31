@@ -328,7 +328,7 @@ const logout = async (req, res) => {
         where: { email: payload.email },
       });
       console.log(user?.email);
-
+      if(!user) return res.status(400).send("User not Found");
       res
         .clearCookie(user?.userID, "", {
           path: "/",
@@ -337,7 +337,7 @@ const logout = async (req, res) => {
           sameSite: "lax",
         })
         .status(200)
-        .send(user.email);
+        .send(user?.email);
     } else res.status(401).send({ msg: "Invalid Token" });
     // console.log(req.body.email);
   } catch (error) {
