@@ -105,40 +105,41 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
 
 
   return (
-    <div className='px-4 py-2 xxs:px-8 xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
-      <header className='flex gap-2 items-center my-2'>
-        <img src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
-        <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
-      </header>
-      <main className='cursor-pointer'>
-        <div className='text-lg font-bold my-2'>{title}</div>
-        <div className={` my-2 whitespace-pre-wrap break-words`}>
-            <ReadMore>
+    <>
+      <div className='px-4 py-2 xxs:px-8 xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
+        <header className='flex gap-2 items-center my-2'>
+          <img src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
+          <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
+        </header>
+        <main className='cursor-pointer'>
+          <div className='text-lg font-bold my-2'>{title}</div>
+          <div className={` my-2 whitespace-pre-wrap break-words`}>
+            <ReadMore children={body} maxLines={media ? 2 : 10} />
+          </div>
+          {media && (
+            <img className='xxxs:w-screen xs:w-full max-h-[420px] object-contain py-2' src={media} alt="postImg" />
+          )}
+        </main>
+        <footer className='flex py-2 gap-6'>
+          <div className={upvoted ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-green-600 text-white' : downvote ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white' : 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
+            <BiUpvote onClick={() => upvote(id)} className={upvoted ? 'text-2xl hover:text-neutral-950 text-green-900 cursor-pointer' : 'text-2xl hover:text-green-700 cursor-pointer'} />
+            <span>{upvoteNumber}</span>
+            <BiDownvote onClick={() => downVoteFunc(id)} className={downvote ? 'text-2xl hover:text-neutral-950 text-red-900 cursor-pointer' : 'text-2xl hover:text-red-700 cursor-pointer'} />
+            <span>{downvoteNum}</span>
+          </div>
+          <div onClick={() => handleComment(id)} className='rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
+            <GoComment className='text-2xl' />
+            <span>{countComment ? countComment : 0}</span>
+          </div>
+          <div className='rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>
+            <RiShareForwardLine className='text-2xl' />
+            <span>Share</span>
+          </div>
+        </footer>
+      </div>
 
-          {body}
-            </ReadMore>
-        </div>
-        {media && (
-          <img className='xxxs:w-screen xs:w-full max-h-[420px] object-contain py-2' src={media} alt="postImg" />
-        )}
-      </main>
-      <footer className='flex py-2 gap-6'>
-        <div className={upvoted ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-green-600 text-white' : downvote ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white' : 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
-          <BiUpvote onClick={() => upvote(id)} className={upvoted ? 'text-2xl hover:text-neutral-950 text-green-900 cursor-pointer' : 'text-2xl hover:text-green-700 cursor-pointer'} />
-          <span>{upvoteNumber}</span>
-          <BiDownvote onClick={() => downVoteFunc(id)} className={downvote ? 'text-2xl hover:text-neutral-950 text-red-900 cursor-pointer' : 'text-2xl hover:text-red-700 cursor-pointer'} />
-          <span>{downvoteNum}</span>
-        </div>
-        <div onClick={() => handleComment(id)} className='rounded-3xl flex gap-2 items-start justify-center p-2 cursor-pointer hover:text-blue-700 bg-blue-300'>
-          <GoComment className='text-2xl' />
-          <span>{countComment ? countComment : 0}</span>
-        </div>
-        <div className='rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>
-          <RiShareForwardLine className='text-2xl' />
-          <span>Share</span>
-        </div>
-      </footer>
-    </div>
+      <div className=' bg-gray-700 h-[1px]'></div>
+    </>
   );
 };
 

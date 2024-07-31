@@ -9,15 +9,20 @@ import { GiBrain } from "react-icons/gi";
 import { GiLifeInTheBalance } from "react-icons/gi";
 import { GiByzantinTemple } from "react-icons/gi";
 import { MdOutlineMovieFilter } from "react-icons/md";
+import Profilecard from './Profilecard';
 
 
 
 
 const Rightnav = () => {
+
+  const room = location.pathname.includes('/room');
+
   return (
     <div className='p-8 max-h-screen overflow-auto sticky top-20 hidden  1_5md:block 2_md:mr-8 1_5lg:mr-24 xl:mr-10 1_5xl:mr-24'>
-      <HotTopicNav/>
       
+      {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<HotTopicNav/>}
+
 
     </div>
   )

@@ -14,7 +14,7 @@ const Postskelton = () => {
 
             </main>
 
-            <footer className='flex py-2 gap-2 xxs:gap-6'>
+            <footer className='flex py-2 gap-2 xs:gap-6'>
                 <div className='rounded-3xl flex gap-1 items-start justify-center p-2 bg-gray-300'>
                     <div className="text-2xl h-6 w-6 rounded bg-white"></div>
                     <div className='h-4 bg-gray-300 w-6 rounded'></div>

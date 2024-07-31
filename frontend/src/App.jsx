@@ -219,8 +219,7 @@ function App() {
        
 
 
-          {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<Rightnav/>}
-    
+<Rightnav/>    
 
 
       </div>

@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 
-const ReadMore = ({ children, maxLines = 6 }) => {
+const ReadMore = ({ children, maxLines = 10 }) => {
   const [isTruncated, setIsTruncated] = useState(true);
   const [isOverflowing, setIsOverflowing] = useState(false);
   const contentRef = useRef(null);
