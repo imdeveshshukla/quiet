@@ -76,7 +76,7 @@ const Sidenav = () => {
           </div>
         </div>
 
-        <div className={`  1_5md::hidden p-3 m-2 border-b-2 border-gray-600`}>
+        <div className={`  1_5md:hidden p-3 m-2 border-b-2 border-gray-600`}>
             <HotTopicNav/>
         </div>
 

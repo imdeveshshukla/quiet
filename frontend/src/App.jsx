@@ -219,7 +219,7 @@ function App() {
        
 
           {location.pathname.includes("/u/") ? <Profilecard /> : location.pathname.includes("/room/") ? <></> : <Rightnav />}
-          {/* {!shouldHideRightnav && <Rightnav />} */}
+
 
 
 
