@@ -218,7 +218,7 @@ function App() {
 
        
 
-//           {location.pathname.includes("/u/") ? <Profilecard /> : location.pathname.includes("/room/") ? <></> : <Rightnav />}
+{/* //           {location.pathname.includes("/u/") ? <Profilecard /> : location.pathname.includes("/room/") ? <></> : <Rightnav />} */}
           {/* {!shouldHideRightnav && <Rightnav />} */}
 
 
@@ -229,7 +229,7 @@ function App() {
           {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<Rightnav/>}
            {/*!shouldHideRightnav && <Rightnav />*/}
         {/* {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''} */}
-      </div>
+      {/* </div> */}
 
 
 
