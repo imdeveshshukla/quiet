@@ -1,7 +1,7 @@
 import prisma from "../../db/db.config.js";
 import z from 'zod'
 import uploadOnCloudinary from "../utils/cloudinary.js";
-
+import fs from 'fs'
 const roomSchema = z.object({
     title:z.string().min(3,"Name Should contains atleast 5 Characters"),
     desc:z.string().optional(),
@@ -75,10 +75,14 @@ export const updateRoom = async(req,res)=>{
     const data = req.body;
     const userId = req.userId;
     const id = data.id;
+    const title = data.title;
     try{
         const room = await prisma.rooms.findFirst({
             where:{
-                id
+                OR:[
+                    {id},
+                    {title}
+                ]
             }
         })
         if(!room.id)return res.status(404).json({msg:"Room Not Found!"});
@@ -90,11 +94,38 @@ export const updateRoom = async(req,res)=>{
                 msg:"You don't have permission to perform changes in this room"
             })
         }
-        let imgUrl = null;
+        let imgUrl = null,bgImgUrl = null;
         console.log("data\n");
         console.log(data);
-        if(data.roomImg) imgUrl = await uploadOnCloudinary(req.file.path);
-
+        if(req.file?.fieldname == 'roomImg')
+        {
+            
+            try {
+                imgUrl = await uploadOnCloudinary(req.file.path);
+            } catch (error) {
+                return res.status(400).json({
+                    // fs.unlinkSync(req.file.path);    //Issue need to resolve
+                    msg:error.message,
+                    error
+                })
+            }
+            
+        }
+        if(req.file?.fieldname == 'bgImg') 
+        {
+            try{
+                bgImgUrl = await uploadOnCloudinary(req.file.path);
+            } catch (error) {
+                console.log("Inside bgImg chatch");
+                // fs.unlinkSync(req.file.path);    //Issue need to resolve
+                return res.status(400).json({
+                    msg: error.message,
+                    error
+                })
+        }
+        }    
+        console.log(bgImgUrl);
+        console.log(`${JSON.stringify(req.file.path)} = ${bgImgUrl}`);
         const updatedRoom = await prisma.rooms.update({
             where:{
                 id:room.id
@@ -102,7 +133,8 @@ export const updateRoom = async(req,res)=>{
             data:{
                 title: data.title || room.title,
                 desc: data.desc || room.desc,
-                img: imgUrl || room.img
+                img: imgUrl || room.img,
+                bgImg: bgImgUrl || room.bgImg
             }
         });
 
@@ -199,6 +231,11 @@ export const getBulk = async(req,res)=>{
                 title:{
                     startsWith:filter
                 }
+            },
+            select:{
+                id:true,
+                title:true,
+                CreatorId:true
             }
         })
         if(names)return res.status(200).json({msg:"Success",names})
@@ -217,12 +254,16 @@ export const getBulk = async(req,res)=>{
 export const getRoom = async(req,res)=>{
     const title = req.params.title;
 
-    if(!title)return res.status(404).json({msg:"Not Found",room:null});
+    if(!title)return res.status(404).json({msg:"Title Not Found",room:null});
 
     try {
         const room = await prisma.rooms.findFirst({
             where:{
                 title
+            },
+            include:{
+                UsersEnrolled:true,
+                posts:true
             }
         })
         if(!room)return res.status(404).json({msg:"Not Found",room:null});
@@ -232,6 +273,38 @@ export const getRoom = async(req,res)=>{
         return res.status(500).json({
             msg:"Database/Server Issue",
             room:null,
+            error
+        })
+    }
+}
+
+export const getAllRoom = async(req,res)=>{
+    const id  = req.params.userID;
+    if(!id) return res.status(404).json({msg:"Username not found",rooms:[]});
+    try {
+        const rooms = await prisma.enrolledRooms.findMany({
+            where:{
+                AND:[
+                    {userId:id},
+                    {joined:true}
+                ]
+            },
+            select:{
+                room:{
+                    include:{
+                        posts:true,
+                        UsersEnrolled:true
+                    }
+                }
+            }
+        })
+        res.status(200).json({
+            msg:"Success",
+            rooms
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg:"Database/Server Issue",
             error
         })
     }
@@ -302,3 +375,83 @@ export const addUser = async(req,res)=>{
     }
 }
 
+export const getPost = async(req,res)=>{
+    const { title } = res.body;
+
+    if(!title) return res.status(404).json({msg:"Title Not Found",posts:[]});
+
+    const page = parseInt(req.query.page) || 1;
+    const limit = parseInt(req.query.limit) || 10;
+    const offset = (page - 1) * limit;
+    // console.log(offset, limit);
+
+    try {
+        const posts = await prisma.post.findMany({
+        where:{
+            subCommunity:title
+        },
+        include: {
+            user: true,
+            comments: {
+            include: {
+                user: true,
+            },
+            },
+            upvotes: true,
+            subCommunity:true
+        },
+        orderBy: {
+            createdAt: "desc",
+        },
+        skip: offset,
+        take: limit,
+        });
+        posts.forEach((item,index)=>{
+        posts[index].upvotes = posts[index].upvotes?.filter(upvote => upvote.commentId === null);
+        })
+        res.status(200).json({
+            msg:"Success",
+            posts
+        });
+    } catch (error) {
+        console.log(error);
+
+        res.status(500).json({
+            msg: "Server/Database Error",
+            error
+        });
+    }
+
+}
+
+export const getAPost = async(req,res)=>{
+    const { title,id } = req.params;
+    try {
+        const post = await prisma.post.findUnique({
+          where: {
+            id
+          },
+          include: {
+            user: true,
+            comments: {
+              include: {
+                user: true,
+              },
+            },
+            upvotes: true,
+            subCommunity:true
+          },
+        });
+        post.upvotes = post.upvotes.filter(upvote => upvote.commentId === null);
+        res.status(200).json({
+          post,
+        });
+      } catch (error) {
+        console.log(error);
+    
+        res.status(500).json({
+          msg: "Database/Server Issue",
+          error
+        });
+      }
+}

@@ -176,8 +176,7 @@ function App() {
 
 
   // console.log("HEy this is me");
-
-
+  const room = location.pathname.includes('/room');
   return (
     <>
       {isLoading && <Loader />}
@@ -216,14 +215,21 @@ function App() {
             <Route path='/room/:username/:title' element={<Room />} />
           </Routes>
         </div>
+
        
 
-          {location.pathname.includes("/u/") ? <Profilecard /> : location.pathname.includes("/room/") ? <></> : <Rightnav />}
 
-
+          {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<Rightnav/>}
+    
 
 
       </div>
+
+             
+
+
+
+
       <Toaster position="bottom-center"
         reverseOrder={false} toastOptions={{
           className: '',
