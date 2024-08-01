@@ -30,8 +30,8 @@ const ReadMore = ({ children, maxLines = 10 }) => {
     <div>
       <div
         ref={contentRef}
-        className={`overflow-hidden ${isTruncated ? `line-clamp-${maxLines}` : ''}`}
-        style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: isTruncated ? maxLines : '', lineHeight: '1.3em' }}
+        className={`overflow-clip whitespace-pre-wrap break-words  ${isTruncated ? ` line-clamp-${maxLines}` : ''}`}
+        style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: isTruncated ? maxLines : '', lineHeight: '1.3em',  wordBreak: 'break-word' }}
       >
         {children}
       </div>

@@ -112,7 +112,7 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
           <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
         </header>
         <main className='cursor-pointer'>
-          <div className='text-lg font-bold my-2'>{title}</div>
+          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip '  style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em',  wordBreak: 'break-word' }}>{title}</div>
           <div className={` my-2 whitespace-pre-wrap break-words`}>
             <ReadMore children={body} maxLines={media ? 2 : 10} />
           </div>
