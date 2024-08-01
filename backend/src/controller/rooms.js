@@ -2,6 +2,7 @@ import prisma from "../../db/db.config.js";
 import z from 'zod'
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import fs from 'fs'
+import { error } from "console";
 const roomSchema = z.object({
     title:z.string().min(3,"Name Should contains atleast 5 Characters"),
     desc:z.string().optional(),
@@ -40,7 +41,7 @@ export const CreateRoom = async (req,res)=>{
             })
             if(newRoom.id && newRoom.CreatorId)
             {
-                // console.log(newRoom.id+" "+newRoom.CreatorId);
+                console.log(newRoom.id+" "+newRoom.CreatorId);
                 const RoomId = newRoom.id;
                 const enrolled = await tx.enrolledRooms.create({
                     data:{
@@ -74,20 +75,24 @@ export const CreateRoom = async (req,res)=>{
 export const updateRoom = async(req,res)=>{
     const data = req.body;
     const userId = req.userId;
-    const id = data.id;
+    
     const title = data.title;
     try{
+        console.log("Inside UpdateRoom");
+        console.log(title);
         const room = await prisma.rooms.findFirst({
             where:{
-                OR:[
-                    {id},
-                    {title}
-                ]
+                title
             }
         })
-        if(!room.id)return res.status(404).json({msg:"Room Not Found!"});
-        // console.log("room");
-        // console.log(room);
+        const temp = await prisma.rooms.findMany();
+        console.log(temp);
+        console.log(room);
+        if(!room?.id)return res.status(404).json({msg:"Room Not Found!"});
+
+
+        console.log("room");
+        console.log(room);
 
         if(room.CreatorId != userId){
             return res.status(401).json({
@@ -114,6 +119,7 @@ export const updateRoom = async(req,res)=>{
         if(req.file?.fieldname == 'bgImg') 
         {
             try{
+                console.log("Uploading bgImg.......");
                 bgImgUrl = await uploadOnCloudinary(req.file.path);
             } catch (error) {
                 console.log("Inside bgImg chatch");
@@ -145,9 +151,15 @@ export const updateRoom = async(req,res)=>{
     }
     catch(err)
     {
+        console.log("Paht ",req.file?.path);
+        
+        if(req.file?.path)fs.unlink(req.file.path,(err)=>
+            console.log("Error While Deleting img = ",err)
+        );
+
         return res.status(500).json({
-            msg:"Database/Server Error",
-            error:err
+            msg:"Database/Server Error",    
+            error:err.message
         })
     }
 

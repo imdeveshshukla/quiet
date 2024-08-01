@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit'
+import { GiConsoleController } from 'react-icons/gi';
 
 const initialState = {
   rooms:[],
@@ -10,7 +11,12 @@ export const userRooms = createSlice({
   reducers: {
     setRooms:(state,action)=>{
         state.rooms = action.payload
-        console.log("Inside setRooms slice");
+    },
+    addNewRoom:(state,action)=>{
+      const lent =state.rooms.push({room:action.payload});
+    },
+    addNewPost:(state,action)=>{
+
     },
     clearRooms:(state)=>{
       state.rooms=[];
@@ -18,6 +24,6 @@ export const userRooms = createSlice({
   },
 })
 
-export const { setRooms,clearRooms } = userRooms.actions;
+export const { setRooms,addNewRoom,clearRooms } = userRooms.actions;
 
 export default userRooms.reducer
