@@ -6,7 +6,7 @@ import SmallLoader from "../components/SmallLoader";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const CreatePost = ({ setShowCP, onNewPost }) => {
+const CreatePost = ({setShowCP, onNewPost, roomTitle}) => {
 
   const createPostRef = useRef(null);
   const navigate = useNavigate();
@@ -38,6 +38,9 @@ const CreatePost = ({ setShowCP, onNewPost }) => {
       formData.append('topic', selectedOption);
       formData.append('body', description);
       formData.append('postImg', image);
+
+      if(roomTitle) formData.append('subCommunity',roomTitle);
+
       console.log(formData);
       setLoading(true);
       toast.loading("Posting....");
@@ -99,7 +102,7 @@ const CreatePost = ({ setShowCP, onNewPost }) => {
             <IoClose className="text-[#656923] m-auto" />
           </button>
         </div>
-        <div className='flex mt-6  xs:px-28 justify-center xs:justify-start   '>
+        {!roomTitle?<div className='flex mt-6 px-28 justify-start  '>
           <div className='flex  hover:bg-[#808449cf]  items-center px-2 py-1  rounded-full border-[1px] border-black '>
 
             <span className=' rounded-full border-2 border-white'>
@@ -121,7 +124,8 @@ const CreatePost = ({ setShowCP, onNewPost }) => {
 
           </div>
         </div>
-
+:<></>
+}
 
 
         {/* Title Input */}

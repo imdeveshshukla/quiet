@@ -20,7 +20,7 @@ const Createpost = ({onNewPost}) => {
     const [Btnloading,setLoading] = useState(false);
     const buttonRef = useRef(null);
     const dispatch = useDispatch();
-   
+    
     
     const [selectedOption, setSelectedOption] = useState('');
     const [title, setTitle] = useState('');
