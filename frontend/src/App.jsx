@@ -16,16 +16,13 @@ import { loading } from './redux/loading'
 import { useSelector, useDispatch } from 'react-redux'
 import User, { setUserInfo } from './redux/user'
 import Settings from './pages/Settings'
-import Profile from './components/Profile'
 import Sidenav from './components/Sidenav'
 import Posts from './components/Posts'
 import Overview from './pages/Overview'
 import Comments from './components/Comments'
-import Profilecard from './components/Profilecard'
 import Postdetail from './components/Postdetail'
 import Postskelton from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
-import Userpost from './pages/Userpost'
 import HotTopicPosts from './pages/HotTopicPosts'
 import sportsdp from './assets/sportsdp.jpg'
 import sportsbg from './assets/sportsbg.jpg'
@@ -49,6 +46,7 @@ import Search from './components/Search';
 import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
 import { useRef } from 'react'
+import NotFound from './pages/NotFound'
 
 
 
@@ -212,24 +210,22 @@ function App() {
             <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
-            <Route path='/room/:CreatorId/:title' element={<Room />} />
+//             <Route path='/room/:username/:title' element={<Room />} />
+            <Route path='*' element={<NotFound/>} />
+              <Route path='/room/:CreatorId/:title' element={<Room />} />
           </Routes>
         </div>
 
        
 
-{/* //           {location.pathname.includes("/u/") ? <Profilecard /> : location.pathname.includes("/room/") ? <></> : <Rightnav />} */}
-          {/* {!shouldHideRightnav && <Rightnav />} */}
 
+<Rightnav/>    
 
           {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<Rightnav/>}
 
       </div>
 
              
-           {/*!shouldHideRightnav && <Rightnav />*/}
-        {/* {String(location.pathname).includes("/profile/") ? <Profilecard /> : ''} */}
-      {/* </div> */}
 
 
 

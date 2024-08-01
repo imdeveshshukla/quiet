@@ -42,8 +42,9 @@ const Profilecard = ({room}) => {
         });
     }
   };
+  // mx-12 xxs:mx-20 xs:mx-28 sm:mx-40 2_sm:mx-52
   return (
-    <div className='m-12 rounded-3xl h-fit bg-[#c2c7b3] '>
+    <div className=' w-[80vw] xxs:w-[75vw] xs:w-[65vw] sm:w-[50vw]  1_5md:w-full mx-0   rounded-3xl  bg-[#c2c7b3] '>
       <div className=' rounded-t-3xl h-32 w-full overflow-hidden'>
         <img className=' w-full h-full object-cover' src={banner} alt="" />
       </div>
@@ -55,7 +56,7 @@ const Profilecard = ({room}) => {
             <button className='flex items-center bg-[#99a086] py-2 px-3  text-white my-2 gap-1 rounded-full' onClick={() => handleShare()}><PiShareFat className=' text-xl'/><span className=' text-xs font-medium'>Share</span></button>
           </div>
 
-          <div className=' grid grid-cols-[1fr_1fr] gap-6 my-4'>
+          <div className=' grid grid-cols-[1fr_1fr] gap-8 my-4'>
             <div className=' flex flex-col items-start'>
               <span className=' font-medium text-sm'>{room?(profileInfo?.posts?.length):profileInfo?._count?.posts}</span>
               <span className=' text-sm text-gray-700'>{"Posts"}</span>

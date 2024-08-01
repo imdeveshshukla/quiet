@@ -8,6 +8,7 @@ import { PiCameraPlusLight } from "react-icons/pi";
 import { setUserInfo } from '../redux/user';
 import toast from 'react-hot-toast';
 import SmallLoader from './SmallLoader'
+import OnclickCard from './OnclickCard';
 
 axios.defaults.withCredentials = true
 
@@ -90,7 +91,7 @@ const ProfileLayout = ({ user }) => {
   return (
     <>
     {isOpen && <div className='fixed top-0 left-0 z-10 min-h-screen min-w-full  backdrop-blur-sm'>
-        <div ref={dpUploadRef} className='absolute left-[50%] top-[50%] rounded-3xl shadow-md w-[30vw] h-[40vh] translate-x-[-50%] translate-y-[-50%] bg-[#808449] p-4 flex items-center justify-center '>
+        <div ref={dpUploadRef} className='absolute left-[50%] top-[50%] w-[80%]  xs:w-[60%]  sm:w-[40%] rounded-3xl shadow-md h-[30%] lg:w-[30%] 2_md:h-[40%] translate-x-[-50%] translate-y-[-50%] bg-[#808449] p-4 flex items-center justify-center '>
 
           <div className=' rounded-2xl flex flex-col items-center justify-between gap-4'>
             <div className='relative  rounded-full'>
@@ -116,35 +117,42 @@ const ProfileLayout = ({ user }) => {
       </div>}
 
 
-    <div className='min-h-screen border-x-2 border-black pl-16'>
-      <div className='flex items-center gap-6 py-6'>
+
+
+    <div className='min-h-screen xs:pl-8 sm:pl-16'>
+      <div className='relative flex items-center gap-3 xxs:gap-6 px-2 xxs:px-4 py-6'>
         <div className='relative  rounded-full'>
         <img
           src={(userInfo?.username=== user?.username && userInfo?.dp)? userInfo.dp :user?.dp ? user.dp : dp}
           alt="Profile"
-          className="w-36 h-36 rounded-full bg-white"
+          className="  w-32 h-32 xs:w-36 xs:h-36 rounded-full bg-white"
           />
           {userInfo?.username ===user.username && <button onClick={() => setIsOpen(true)} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight /></button>}
         </div>
         <div className='flex flex-col gap-1'>
-          <div className='text-3xl font-bold'>{user.username}</div>
-          <div className='font-semibold text-gray-700'>u/{user.username}</div>
+          <div className=' text-lg  xxs:text-2xl break-words xs:text-3xl font-bold'>{user.username}</div>
+          <div className=' text-sm xxs:text-base font-semibold text-gray-700'>u/{user.username}</div>
         </div>
+
+
+
+        <div className=' 1_5md:hidden absolute bottom-2 right-4 xxs:right-8 xs:right-12 sm:bottom-4 sm:right-20'><OnclickCard/></div>
+        
+
       </div>
 
-      <div className='flex m-4 items-center gap-8'>
-        <NavLink to="overview" className={(e) => e.isActive ? 'flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex rounded items-center gap-2 px-4 py-2'}>Overview</NavLink>
-        <NavLink to="posts" className={(e) => e.isActive ? 'flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex rounded items-center gap-2 px-4 py-2'}>Posts</NavLink>
-        <NavLink to="commented" className={(e) => e.isActive ? 'flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex rounded items-center gap-2 px-4 py-2'}>Commented</NavLink>
-        <NavLink to="upvoted" className={(e) => e.isActive ? 'flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex rounded items-center gap-2 px-4 py-2'}>Upvoted</NavLink>
+
+
+      <div className='flex my-4 justify-evenly xs:m-4 items-center  xs:gap-4 sm:gap-8'>
+        <NavLink to="overview" className={(e) => e.isActive ? 'flex rounded-2xl items-center px-3 py-1 xxs:px-4 xxs:py-2 bg-[#65692375]' : 'flex rounded items-center  px-3 py-1 xxs:px-4 xxs:py-2'}>Overview</NavLink>
+        <NavLink to="posts" className={(e) => e.isActive ? 'flex rounded-2xl items-center gap-2 px-3 py-1 xxs:px-4 xxs:py-2 bg-[#65692375]' : 'flex rounded items-center gap-2 px-3 py-1 xxs:px-4 xxs:py-2'}>Posts</NavLink>
+        <NavLink to="commented" className={(e) => e.isActive ? 'flex rounded-2xl items-center gap-2 px-3 py-1 xxs:px-4 xxs:py-2 bg-[#65692375]' : 'flex rounded items-center px-3 py-1 xxs:px-4 xxs:py-2'}>Commented</NavLink>
+        <NavLink to="upvoted" className={(e) => e.isActive ? 'flex rounded-2xl items-center gap-2 px-3 py-1 xxs:px-4 xxs:py-2 bg-[#65692375]' : 'flex rounded items-center px-3 py-1 xxs:px-4 xxs:py-2'}>Upvoted</NavLink>
       </div>
 
-      <div className='border-b-2 border-black mr-2'></div>
+      <div className='border-b-2 border-black  mx-2'></div>
 
-      {currentPath === user.username && <Navigate to="overview" replace /> ||  console.log(user.username, "hello")
-      
-      
-    }
+      {currentPath === user.username && <Navigate to="overview" replace />}
       
       <Outlet context={{user}} />
     </div>
