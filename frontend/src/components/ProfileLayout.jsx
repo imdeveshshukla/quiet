@@ -8,6 +8,7 @@ import { PiCameraPlusLight } from "react-icons/pi";
 import { setUserInfo } from '../redux/user';
 import toast from 'react-hot-toast';
 import SmallLoader from './SmallLoader'
+import OnclickCard from './OnclickCard';
 
 axios.defaults.withCredentials = true
 
@@ -119,7 +120,7 @@ const ProfileLayout = ({ user }) => {
 
 
     <div className='min-h-screen xs:pl-8 sm:pl-16'>
-      <div className='flex items-center gap-3 xxs:gap-6 px-2 xxs:px-4 py-6'>
+      <div className='relative flex items-center gap-3 xxs:gap-6 px-2 xxs:px-4 py-6'>
         <div className='relative  rounded-full'>
         <img
           src={(userInfo?.username=== user?.username && userInfo?.dp)? userInfo.dp :user?.dp ? user.dp : dp}
@@ -132,6 +133,12 @@ const ProfileLayout = ({ user }) => {
           <div className=' text-lg  xxs:text-2xl break-words xs:text-3xl font-bold'>{user.username}</div>
           <div className=' text-sm xxs:text-base font-semibold text-gray-700'>u/{user.username}</div>
         </div>
+
+
+
+        <div className=' 1_5md:hidden absolute bottom-2 right-4 xxs:right-8 xs:right-12 sm:bottom-4 sm:right-20'><OnclickCard/></div>
+        
+
       </div>
 
 
