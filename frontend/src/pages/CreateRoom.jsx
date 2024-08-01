@@ -8,6 +8,7 @@ import toast from 'react-hot-toast';
 import {useDispatch} from 'react-redux'
 import { addOwnedRoom } from "../redux/user";
 import SmoothLoader from "../assets/SmoothLoader";
+import { addNewRoom } from "../redux/userRooms";
 export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 {
     
@@ -28,6 +29,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         setImage(e.target.files[0]);
         console.log("Image = " ,e.target.files[0] )
     }
+    const containsWhitespace = str => /\s/.test(str);
     const handleSubmit = async()=>{
       // const data = {
       //   title,
@@ -56,14 +58,13 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         if(res.status == 201)
         {
           // toast.dismiss();
-          toast.success("Room Created Successufully");
           dispatch(addOwnedRoom(res.data.newRoom));
-          
-  
+          toast.success("Room Created Successufully");
         }
         else{
           // toast.dismiss();
           // toast.error("Error :"+res.data.msg);
+          toast.error("Server Issue");
           console.log(`${res?.data?.msg} + ${res?.data?.error}`);
         }
         
@@ -72,6 +73,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
       {
         // toast.dismiss();
         // toast.error(e)
+        toast.error("Got Some Error");
         console.log("IN Catch = "+e);
       }
       finally{
@@ -103,7 +105,8 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
     
 
     async function sendReq(){
-      const res = await axios.get("http://localhost:3000/rooms/titleNameIsUnique?filter="+title);
+      const title2 = title.trim();
+      const res = await axios.get("http://localhost:3000/rooms/titleNameIsUnique?filter="+title2);
       console.log(res.data);
       if(res.data.msg == true)
       {
@@ -137,6 +140,11 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         setTitleRequired(true);
         setColor("red");
         setError("Title Length Should be greater then 3!");
+      }
+      else if(containsWhitespace(title)){
+        setTitleRequired(true);
+        setColor('red');
+        setError("Title should not contain spaces!!");
       }
       else{
         setError("");

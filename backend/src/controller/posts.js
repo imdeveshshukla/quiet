@@ -7,6 +7,7 @@ const post = zod.object({
   title: zod.string(),
   body: zod.string(),
   imgUrl: zod.string().optional(),
+  subCommunity: zod.string().optional()
 });
 export const createPost = async (req, res) => {
   const postbody = req.body;
@@ -40,6 +41,7 @@ export const createPost = async (req, res) => {
         body: parsedBody.data.body,
         img: url,
         userId: userId, //from middleware
+        subCommunity:(parsedBody.data.subCommunity)||null,
       },
     });
 
