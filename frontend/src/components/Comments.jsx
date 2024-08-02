@@ -26,6 +26,7 @@ import { BiDislike } from "react-icons/bi";
 import { BiSolidDislike } from "react-icons/bi";
 import { sendNotification } from './Posts';
 import { getTime } from './Posts';
+import ReadMore from './ReadMore';
 
 
 
@@ -45,11 +46,11 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
 
 
   useEffect(() => {
-    if(openBox){
+    if (openBox) {
       setIsComment(true)
     }
   }, [])
-  
+
 
   const addComment = async () => {
     toast.loading("Adding your comment...");
@@ -68,24 +69,24 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
         dispatch(setComment(res.data.newComment))
         dispatch(setUserPostComment(res.data.newComment))
         dispatch(setPostComment(res.data.newComment))
-        const data =res.data.newComment;
-        if(data.parentId){
-          if(data.userId!=data.post.userId){
-            sendNotification({postId:data.postId, toUser: data.post.userId, fromUser: data.userId, title:"replied to a comment on your post!" , body: data.body});
+        const data = res.data.newComment;
+        if (data.parentId) {
+          if (data.userId != data.post.userId) {
+            sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "replied to a comment on your post!", body: data.body });
           }
-          if(data.userId != data.parent.userId){
-            sendNotification({postId:data.postId, toUser: data.parent.userId, fromUser: data.userId, title: "replied to your comment on a post!", body: data.body})
+          if (data.userId != data.parent.userId) {
+            sendNotification({ postId: data.postId, toUser: data.parent.userId, fromUser: data.userId, title: "replied to your comment on a post!", body: data.body })
           }
-        }else{
-          if(data.userId!= data.post.userId){
-            sendNotification({postId: data.postId, toUser:data.post.userId , fromUser: data.userId , title:"commented on your post!" , body: res.data.newComment.body});
+        } else {
+          if (data.userId != data.post.userId) {
+            sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "commented on your post!", body: res.data.newComment.body });
           }
         }
         console.log(post);
         toast.dismiss();
         toast.success("Comment Added.");
         setcomment("");
-        if(openBox){
+        if (openBox) {
           setOpenBox(false)
           setShowChild(true)
         }
@@ -104,7 +105,7 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
 
   return (
     <div className={isComment ? 'border bg-[#e2e4c6]  rounded-3xl border-black' : 'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >
-      <textarea onClick={() => setIsComment(true) } onChange={(e) => setcomment(e.target.value)} value={comment} className='w-full bg-transparent outline-none rounded-3xl px-4 py-2 ' placeholder='Add a Comment' name="comment" id="comment"></textarea>
+      <textarea onClick={() => setIsComment(true)} onChange={(e) => setcomment(e.target.value)} value={comment} className='w-full bg-transparent outline-none rounded-3xl px-4 py-2 ' placeholder='Add a Comment' name="comment" id="comment"></textarea>
       {isComment && <div className='flex gap-3 p-3 justify-end'>
         <button onClick={() => {
           setIsComment(false)
@@ -112,7 +113,7 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
           setOpenBox(false)
 
         }} className='px-4 py-2 rounded-3xl bg-gray-500 ' type="button">Cancel</button>
-        <button onClick={() => addComment()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{!loading ? (openBox?"Reply":"Comment") : <SmallLoader />}</button>
+        <button onClick={() => addComment()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{!loading ? (openBox ? "Reply" : "Comment") : <SmallLoader />}</button>
       </div>}
     </div>
   )
@@ -129,6 +130,9 @@ export function CommentBody({ comments, getChildren, dp, getTime, postId, userId
   </>
   )
 }
+
+
+
 export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildren, postId, userId }) { //currently using 
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownVoted] = useState(false);
@@ -182,24 +186,24 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
     try {
       const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
-      console.log("commentpelike",res);
-      
+      console.log("commentpelike", res);
+
       if (res.status == 201) {
         const data = res.data.newUpvote;
 
-        if(val ==1){
-          if(data.comment.parentId){
-            if(data.userId!= data.comment.userId){
-              sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "liked your reply on a comment!", body: data.comment.body});
+        if (val == 1) {
+          if (data.comment.parentId) {
+            if (data.userId != data.comment.userId) {
+              sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "liked your reply on a comment!", body: data.comment.body });
             }
           }
-          else{
-            if(data.userId!=data.comment.userId){
-              sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "liked your comment on a post!", body: data.comment.body});
+          else {
+            if (data.userId != data.comment.userId) {
+              sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "liked your comment on a post!", body: data.comment.body });
             }
           }
-          if(data.userId!=data.post.userId){
-            sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "liked a comment on your post!", body:data.comment.body});
+          if (data.userId != data.post.userId) {
+            sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "liked a comment on your post!", body: data.comment.body });
           }
         }
 
@@ -208,7 +212,6 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
     } catch (error) {
 
     }
-
   }
 
 
@@ -229,21 +232,21 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       setDownvote((upvoteNumber) => upvoteNumber - 1)
     }
     const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
-    console.log("commentpedislike",res);
-    const data= res.data.newUpvote
+    console.log("commentpedislike", res);
+    const data = res.data.newUpvote
 
-    if(val==-1){
+    if (val == -1) {
       if (res.status == 201) {
-        if(data.comment.parentId){
-          if(data.userId != data.comment.userId)
-          sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your reply on a comment!", body: data.comment.body});
+        if (data.comment.parentId) {
+          if (data.userId != data.comment.userId)
+            sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your reply on a comment!", body: data.comment.body });
         }
-        else{
-          if(data.userId != data.comment.userId)
-          sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your comment on a post!", body: data.comment.body});
+        else {
+          if (data.userId != data.comment.userId)
+            sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your comment on a post!", body: data.comment.body });
         }
-        if(data.userId!= data.post.userId)
-        sendNotification({postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "disliked a comment on your post!", body:data.comment.body});
+        if (data.userId != data.post.userId)
+          sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "disliked a comment on your post!", body: data.comment.body });
       }
     }
   }
@@ -265,13 +268,13 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
           <p className="text-gray-500 text-[9px] xxs:text-xs  line-clamp-1 overflow-clip">{getTime(createdAt)} ago</p>
         </div>
       </div>
-      <div className=' mx-10 text-sm xs:text-base whitespace-pre-wrap break-words'>{body}</div>
+      <div className=' mx-10 text-sm xs:text-base whitespace-pre-wrap break-words'><ReadMore maxLines={3} children={body} /></div>
       <div className="btns">
         <footer className='flex gap-4 items-center'>
           <div className={'  flex gap-2 items-center justify-center  '}>
 
             <span className='flex items-center'>
-              <span onClick={() => upvote()} className=' text-xl cursor-pointer hover:text-blue-800'>{upvoted ? <BiSolidLike className='text-blue-600'/> : <BiLike className=''/>}</span>
+              <span onClick={() => upvote()} className=' text-xl cursor-pointer hover:text-blue-800'>{upvoted ? <BiSolidLike className='text-blue-600' /> : <BiLike className='' />}</span>
               <span>{upvotes}</span>
             </span>
             <span className='flex items-center'>
@@ -305,3 +308,12 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
 
 export default CommentBox
+
+
+
+export const OuterLayer = () => {
+
+  return (<>
+
+  </>)
+}

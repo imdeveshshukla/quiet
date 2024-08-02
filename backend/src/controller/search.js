@@ -90,3 +90,44 @@ export const getUserPosts = async (req, res) => {
     console.log(error);
   }
 };
+
+
+
+export const getUserComments = async (req, res) => {
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+  console.log(page, offset);
+  const { userID, username } = req.query;
+
+  try {
+    const comments = await prisma.comment.findMany({
+      where: {
+        userId: userID,
+      },include:{
+        post: {
+          include:{
+            room:true,
+            user:true,
+          },
+        },
+        parent:{
+          include:{
+            user:true,
+          }
+        },
+        user:true,
+        upvotes:true, 
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: offset,
+      take: limit,
+    });
+
+    res.status(200).send(comments);
+  } catch (error) {
+    console.log(error);
+  }
+};

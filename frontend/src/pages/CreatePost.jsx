@@ -22,7 +22,7 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
   const handleChange = (e) => {
     setImage(e.target.files[0]);
-    console.log("Image = " ,e.target.files[0] )
+    console.log("Image = ", e.target.files[0])
   }
 
   const handleSelectChange = (event) => {
@@ -70,8 +70,8 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
         setSelectedOption("")
         setImage(null)
         // getUserData(userInfo.email);
-          onNewPost()
-          setShowCP(false)
+        onNewPost()
+        setShowCP(false)
         console.log(location.state);
         // navigate('/');
       }
@@ -89,7 +89,7 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
   const handleClickOutside = (event) => {
     console.log("clicked");
-    
+
     if (createPostRef.current && !createPostRef.current.contains(event.target)) {
       setShowCP(false)
     }
@@ -105,8 +105,8 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
   return (
     <div className="fixed z-40 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-full  pb-10">
-      <div ref={createPostRef}  className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
-        <div  className="heading flex justify-between">
+      <div ref={createPostRef} className=" absolute w-[85%] xs:w-[75%] sm:w-[60%] md:w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
+        <div className="heading flex justify-between">
           <h2 className="text-xl font-bold mb-4 text-[#656923]">Write your thoughts....</h2>
           <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { setShowCP(false) }}>
             <IoClose className="text-[#656923] m-auto" />
@@ -121,15 +121,15 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
                 <text x="50%" y="50%" fontSize="18" textAnchor="middle" fill="white" fontFamily="Arial, sans-serif" dominantBaseline="middle">q/</text>
               </svg>
             </span>
-            <select className=' cursor-pointer bg-transparent py-2 px-4   outline-none' id="options" value={selectedOption} onChange={(e) => handleSelectChange(e)}>
+            <select className=' cursor-pointer bg-transparent  px-2 sm:px-4   outline-none' id="options" value={selectedOption} onChange={(e) => handleSelectChange(e)}>
 
-              <option className='bg-[#808449] text-white font-extralight text-lg' value="">Select a Topic</option>
-              <option className='bg-[#808449] text-white font-extralight text-lg' value="sports">Sports</option>
-              <option className='bg-[#808449] text-white font-extralight text-lg' value="dsa">DSA</option>
-              <option className='bg-[#808449] text-white font-extralight text-lg' value="iet">IET</option>
-              <option className='bg-[#808449] text-white font-extralight text-lg' value="entertainment">Entertainment</option>
-              <option className='bg-[#808449] text-white font-extralight text-lg' value="lifestyle">Lifestyle</option>
-              <option className='bg-[#808449] text-white font-extralight text-lg' value="lucknow">Lucknow</option>
+              <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="">Select a Topic</option>
+              <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="sports">Sports</option>
+              <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="dsa">DSA</option>
+              <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="iet">IET</option>
+              <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="entertainment">Entertainment</option>
+              <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="lifestyle">Lifestyle</option>
+              <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="lucknow">Lucknow</option>
             </select>
 
           </div>
@@ -182,7 +182,7 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
         {/* Submit Button */}
 
         <button
-          onClick={()=>handleSubmit()}
+          onClick={() => handleSubmit()}
           className="bg-[#656923] flex justify-center hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
           {Btnloading ? <span className=""><SmallLoader /></span> : "Post"}
         </button>
