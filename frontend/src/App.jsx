@@ -226,7 +226,7 @@ function App() {
        
 
 
-{/* <Rightnav/>     */} 
+<Rightnav/>     
 
           
 
