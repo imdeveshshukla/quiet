@@ -6,7 +6,7 @@ import SmallLoader from "../components/SmallLoader";
 import toast from "react-hot-toast";
 import axios from "axios";
 import { useSelector } from "react-redux";
-const CreatePost = ({setShowCP, onNewPost, roomTitle}) => {
+const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
   const createPostRef = useRef(null);
   const navigate = useNavigate();
@@ -31,7 +31,7 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle}) => {
   };
 
   const handleSubmit = async () => {
-    console.log(title + "\n" + description + "\n" + selectedOption);
+    // console.log(title + "\n" + description + "\n" + selectedOption);
     const formData = new FormData();
     try {
       formData.append('title', title);
@@ -41,7 +41,7 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle}) => {
 
       if(roomTitle) formData.append('subCommunity',roomTitle);
 
-      console.log(formData);
+      // console.log(formData);
       setLoading(true);
       toast.loading("Posting....");
       const response = await axios.post('http://localhost:3000/posts/postWithImg', formData, {
@@ -49,7 +49,17 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle}) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data.post);
+      // console.clear();
+      // console.log("Created Posts");
+      // console.log(response.data.post);
+      if(setPost)
+      {
+        console.clear();
+        console.log("Inside CreatepOst");
+        
+        console.log(`setPost = ${setPost} && ${response.data.post}`);
+        setPost(response.data.post);
+      }
       if (response.status == 201) {
         // dispatch(setPost(response.data.post));
         // dispatch(setUserPost(response.data.post));
