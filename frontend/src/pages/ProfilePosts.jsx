@@ -19,11 +19,13 @@ const ProfilePosts = () => {
     const [hasMore, setHasMore] = useState(true);
     const { user } = useOutletContext();
     const { username } = useParams();
+  const [isLoading, setisLoading] = useState(false)
+
 
     const getUserPost = async (reset = false) => {
         console.log("fetching");
         dispatch(setSkeltonLoader());
-        
+        setisLoading(true)
         try {
             if (reset) {
                 dispatch(clearPostsInfo());
@@ -54,7 +56,7 @@ const ProfilePosts = () => {
             console.log(error);
         }
         dispatch(setSkeltonLoader());
-
+        setisLoading(false)
     };
 
     useEffect(() => {
@@ -73,6 +75,7 @@ const ProfilePosts = () => {
     }, [page]);
 
     const fetchMoreData = () => {
+        if (isLoading || !hasMore) return;
         setPage(prevPage => prevPage + 1);
     };
 

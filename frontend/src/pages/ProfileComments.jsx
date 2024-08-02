@@ -28,6 +28,7 @@ const ProfileComments = () => {
   const { username } = useParams();
   const dispatch = useDispatch()
   const isSkelton = useSelector(state => state.skelton.value);
+  const [isLoading, setisLoading] = useState(false)
 
 
 
@@ -35,7 +36,7 @@ const ProfileComments = () => {
   const getUserComment = async (reset = false) => {
     console.log("fetching");
     dispatch(setSkeltonLoader());
-
+    setisLoading(true)
     try {
       if (reset) {
         setUserComment([]);
@@ -67,7 +68,7 @@ const ProfileComments = () => {
       console.log(error);
     }
     dispatch(setSkeltonLoader());
-
+    setisLoading(false)
   };
 
   useEffect(() => {
@@ -87,6 +88,7 @@ const ProfileComments = () => {
 
 
   const fetchMoreData = () => {
+    if (isLoading || !hasMore) return;
     setPage(prevPage => prevPage + 1);
   };
   return (
@@ -98,7 +100,7 @@ const ProfileComments = () => {
       endMessage={<p className='text-center font-semibold p-4'>{`${userComment.length == 0 ? "It looks like the user hasn't made any comments." : "You've reached the end of the page!"}`}</p>}
     >
       <div className='py-8'>
-        {(isSkelton && userComment.length === 0) ? <CommentSkelton /> :
+        {(isSkelton && userComment.length === 0) ? <></> :
           userComment.map(comment => (<>
             <UserComment key={comment.id} comment={comment} />
           </>

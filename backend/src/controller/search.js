@@ -56,7 +56,7 @@ export const getUser = async (req, res) => {
 export const getUserPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const offset = (page - 1) * limit;
+  const offset =parseInt(req.query.offset) || (page - 1) * limit;
   console.log(page, offset);
   const { userID, username } = req.query;
 
@@ -84,6 +84,8 @@ export const getUserPosts = async (req, res) => {
         },
       },
     });
+    
+    
 
     res.status(200).send({ posts: user.posts });
   } catch (error) {
@@ -91,12 +93,10 @@ export const getUserPosts = async (req, res) => {
   }
 };
 
-
-
 export const getUserComments = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const offset = (page - 1) * limit;
+  const offset = parseInt(req.query.offset) || (page - 1) * limit;
   console.log(page, offset);
   const { userID, username } = req.query;
 
@@ -104,20 +104,21 @@ export const getUserComments = async (req, res) => {
     const comments = await prisma.comment.findMany({
       where: {
         userId: userID,
-      },include:{
+      },
+      include: {
         post: {
-          include:{
-            room:true,
-            user:true,
+          include: {
+            room: true,
+            user: true,
           },
         },
-        parent:{
-          include:{
-            user:true,
-          }
+        parent: {
+          include: {
+            user: true,
+          },
         },
-        user:true,
-        upvotes:true, 
+        user: true,
+        upvotes: true,
       },
       orderBy: {
         createdAt: "desc",
@@ -125,9 +126,56 @@ export const getUserComments = async (req, res) => {
       skip: offset,
       take: limit,
     });
+    
+    
 
     res.status(200).send(comments);
   } catch (error) {
     console.log(error);
   }
 };
+
+export const getUserUpvotes = async (req, res) => {
+
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  let { userId } = req.query;
+  try {
+    let data = await prisma.upvote.findMany({
+      where: {
+        upvotes:1,
+        userId,
+        commentId: null,
+      },
+      include: {
+        post: {
+          include: {
+            user: true,
+            comments:true,
+            upvotes: true,
+          },
+        },
+      },
+      orderBy: {
+        createAt: "desc",
+      },
+      skip: offset,
+      take: limit,
+    });
+ 
+    
+     data.forEach(data=>{
+      data.post.upvotes = data.post.upvotes.filter((upvote) => upvote.commentId === null)
+    });
+  
+    
+    res.status(200).send(data);
+  } catch (error) {
+    console.log(error);
+    
+  }
+};
+
+

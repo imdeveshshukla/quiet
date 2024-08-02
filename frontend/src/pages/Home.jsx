@@ -21,7 +21,8 @@ const Home = () => {
   const posts = useSelector((state) => state.post.posts);
   const isLogin = useSelector((state) => state.login.value);
   const isSkelton = useSelector((state) => state.skelton.value);
-  
+  const [isLoading, setisLoading] = useState(false)
+
   const dispatch = useDispatch();
   // const page = useSelector(state => state.page.value)
   
@@ -32,6 +33,7 @@ const Home = () => {
 
   const getPost = async (page) => {
     dispatch(setSkeltonLoader())
+    setisLoading(true)
     console.log(`Fetching posts for page: ${page}`);
     if (page == 1) {
       window.scrollTo(0, 0);
@@ -62,7 +64,7 @@ const Home = () => {
     }
 
     dispatch(setSkeltonLoader())
-
+    setisLoading(false)
   };
 
   const handleNewPost = () => {
@@ -79,6 +81,7 @@ const Home = () => {
   }, [isLogin]);
   
   const fetchMoreData = () => {
+    if (isLoading || !hasMore) return;
     console.clear();
     console.log(`Loading more data, current page: ${page}`);
     // dispatch(increment());

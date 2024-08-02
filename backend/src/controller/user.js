@@ -176,7 +176,7 @@ const getNotifications= async (req,res)=>{
         createdAt: "desc",
       },
     });
-    console.log(data);
+    
     
     
     res.status(202).send({msg:"Success", data});
@@ -201,7 +201,7 @@ const markAsRead=async (req,res)=>{
         visited: true,
       },
     })
-    console.log(newData);
+   
     
     res.status(201).send(newData);
    } catch (error) {
@@ -224,7 +224,7 @@ const markAllAsRead=async(req,res)=>{
         visited:true,
       }
     })
-    console.log(newData);
+  
     
     res.status(202).send(newData)
   } catch (error) {
@@ -244,7 +244,7 @@ const sendNotification= async (req,res)=>{
         fromUser,
       }
     });
-    console.log(notification);
+   
     res.status(201).send(notification);
     
   } catch (error) {
