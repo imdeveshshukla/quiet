@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Postskelton from '../components/Postskelton';
+import Postskelton, { CommentSkelton } from '../components/Postskelton';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -93,11 +93,11 @@ const ProfileComments = () => {
       dataLength={userComment.length}
       next={fetchMoreData}
       hasMore={hasMore}
-      loader={<div className='py-8'><Postskelton /></div>}
+      loader={<div className='py-8'><CommentSkelton /></div>}
       endMessage={<p className='text-center font-semibold p-4'>{`${userComment.length == 0 ? "It looks like the user hasn't made any comments." : "You've reached the end of the page!"}`}</p>}
     >
       <div className='py-8'>
-        {(isSkelton && userComment.length === 0) ? <Postskelton /> :
+        {(isSkelton && userComment.length === 0) ? <CommentSkelton /> :
           userComment.map(comment => (<>
             <UserComment key={comment.id} comment={comment} />
           </>

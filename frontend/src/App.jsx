@@ -21,7 +21,7 @@ import Posts from './components/Posts'
 import Overview from './pages/Overview'
 import Comments from './components/Comments'
 import Postdetail from './components/Postdetail'
-import Postskelton from './components/Postskelton'
+import Postskelton, { CommentSkelton, ProfileSkelton } from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
 import HotTopicPosts from './pages/HotTopicPosts'
 import sportsdp from './assets/sportsdp.jpg'
@@ -213,7 +213,11 @@ function App() {
             <Route path='/room/:username/:title' element={<Room />} />
             <Route path='*' element={<NotFound/>} />
               <Route path='/room/:CreatorId/:title' element={<Room />} />
+              <Route path='/sk' element={<ProfileSkelton/>} />
+              
+
           </Routes>
+
         </div>
 
        
