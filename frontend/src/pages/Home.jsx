@@ -9,6 +9,7 @@ import Posts from '../components/Posts';
 import Postskelton from '../components/Postskelton';
 import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
+import { increment, Reset } from '../redux/Page';
 
 
 
@@ -20,14 +21,16 @@ const Home = () => {
   const posts = useSelector((state) => state.post.posts);
   const isLogin = useSelector((state) => state.login.value);
   const isSkelton = useSelector((state) => state.skelton.value);
+  
   const dispatch = useDispatch();
-
+  // const page = useSelector(state => state.page.value)
+  
 
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
 
 
-  const getPost = async () => {
+  const getPost = async (page) => {
     dispatch(setSkeltonLoader())
     console.log(`Fetching posts for page: ${page}`);
     if (page == 1) {
@@ -65,22 +68,23 @@ const Home = () => {
   const handleNewPost = () => {
     setPage(1);
     setHasMore(true);
-    getPost();
+    getPost(page);
   }
 
   useEffect(() => {
+    // console.clear();
     console.log("underUse effect getting post for page", page);
-    getPost();
-  }, [page]);
 
+    if(posts.length <= 0)getPost(1);
+  }, [isLogin]);
+  
   const fetchMoreData = () => {
+    console.clear();
     console.log(`Loading more data, current page: ${page}`);
-    setPage((prevPage) => prevPage + 1);
+    // dispatch(increment());
+    setPage((prevPages)=>prevPages+1);
+    getPost(page+1);
   };
-
-
-
-
 
 
   return (

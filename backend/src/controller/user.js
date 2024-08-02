@@ -16,72 +16,80 @@ import uploadOnCloudinary from "../utils/cloudinary.js";
 //   };
 
 const getUser = async (req, res) => {
-
-  const user = await prisma.user.findUnique({
-    where: {
-      email: req.params.email,
-    },
-    select: {
-      bio: true,
-      createdAt: true,
-      dp: true,
-      email: true,
-      isVarified: true,
-      userID: true,
-      username: true,
-      posts: {
-        select: {
-          id: true,
-          title: true,
-          topic: true,
-          body:true,
-          createdAt: true,
-          updatedAt: true
-        }
+  const email = req.params?.email;
+  if (typeof(email) !== "string") return res.status(404).json({msg: 'invalid username'});
+  try {
+    const user = await prisma.user.findUnique({
+      where: {
+        email: req.params.email,
       },
-      comments:{
-        select:{
-          id:true,
-          postId:true,
-          parentId:true,
-          createdAt:true,
-          updatedAt:true
+      select: {
+        bio: true,
+        createdAt: true,
+        dp: true,
+        email: true,
+        isVarified: true,
+        userID: true,
+        username: true,
+        posts: {
+          select: {
+            id: true,
+            title: true,
+            topic: true,
+            body:true,
+            createdAt: true,
+            updatedAt: true
+          }
+        },
+        comments:{
+          select:{
+            id:true,
+            postId:true,
+            parentId:true,
+            createdAt:true,
+            updatedAt:true
+          }
+        },
+        upvotes:{
+          select:{
+            id:true,
+            upvotes:true,
+            postId:true,
+            commentId:true,
+            createAt:true
+          }
+        },
+        OwnedRooms:{
+          select:{
+            id:true,
+            title:true,
+            desc:true,
+            privateRoom:true,
+            img:true,
+            createdAt:true,
+            bgImg:true,
+            UsersEnrolled:true
+          }
+        },
+        Room:{
+          select:{
+            id:true,
+            userId:true,
+            RoomId:true
+          }
         }
-      },
-      upvotes:{
-        select:{
-          id:true,
-          upvotes:true,
-          postId:true,
-          commentId:true,
-          createAt:true
-        }
-      },
-      OwnedRooms:{
-        select:{
-          id:true,
-          title:true,
-          desc:true,
-          privateRoom:true,
-          img:true,
-          createdAt:true,
-          bgImg:true,
-          UsersEnrolled:true
-        }
-      },
-      Room:{
-        select:{
-          id:true,
-          userId:true,
-          RoomId:true
-        }
-      }
-  }});
-  // console.log(user);
-
-  res.status(200).send({
-    user,
-  });
+    }});
+    // console.log(user);
+  
+    res.status(200).send({
+      user,
+    });
+  } catch (error) {
+    res.status(500).json({
+      msg:"Server/Database Error",
+      error:error.message
+    })
+  }
 };
 
 

@@ -47,6 +47,9 @@ import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
 import { useRef } from 'react'
 import NotFound from './pages/NotFound'
+import Profilecard from './components/Profilecard'
+import { Reset } from './redux/Page'
+import { clearPostsInfo } from './redux/Post'
 
 
 
@@ -141,7 +144,7 @@ function App() {
 
   useEffect(() => {
     if (!isLogin)
-      sendReq();
+      sendReq();  //Faltu ka request send kar when we are loggin out fix later
     let intervalId;
     if (isLogin)
       intervalId = setInterval(getUserNotification, 30000);
@@ -173,8 +176,10 @@ function App() {
 
 
 
-  // console.log("HEy this is me");
   const room = location.pathname.includes('/room');
+  
+  console.log("HEy this is me");
+  // dispatch(Reset());
   return (
     <>
       {isLoading && <Loader />}
@@ -210,12 +215,11 @@ function App() {
             <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
-            <Route path='/room/:username/:title' element={<Room />} />
-            <Route path='*' element={<NotFound/>} />
-              <Route path='/room/:CreatorId/:title' element={<Room />} />
-              <Route path='/sk' element={<ProfileSkelton/>} />
-              
 
+            <Route path='/room/:username/:title' element={<Room />} />
+
+            <Route path='*' element={<NotFound/>} />
+              <Route path='/room/:CreatorId/:title' element={<Room/>} />
           </Routes>
 
         </div>
@@ -223,7 +227,7 @@ function App() {
        
 
 
-<Rightnav/>    
+<Rightnav/>     
 
           
 
@@ -260,14 +264,3 @@ function App() {
 }
 
 export default App
-
-
-
-
-// userInfo?.posts == null ? <Postskelton /> :
-//   userInfo.posts.map(post => {
-//     return (
-//       isSkelton ? <Postskelton key={uuidv4()} /> : <Posts key={post.id} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} />
-//     )
-//   }
-//   )

@@ -13,7 +13,7 @@ import hamburgerReducer from './hamburger'
 import SearchReducer from './search'
 import roomReducer from './roomSlice'
 import userRoomsReducer from './userRooms'
-
+import PageReducer from './Page'
 
 export const store = configureStore({
   reducer: {
@@ -30,6 +30,7 @@ export const store = configureStore({
     hamburger: hamburgerReducer,
     search: SearchReducer,
     room:roomReducer,
-    rooms:userRoomsReducer
+    rooms:userRoomsReducer,
+    page:PageReducer
   },
 })
