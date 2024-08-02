@@ -210,7 +210,7 @@ function App() {
             <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
-//             <Route path='/room/:username/:title' element={<Room />} />
+            <Route path='/room/:username/:title' element={<Room />} />
             <Route path='*' element={<NotFound/>} />
               <Route path='/room/:CreatorId/:title' element={<Room />} />
           </Routes>
@@ -221,7 +221,7 @@ function App() {
 
 <Rightnav/>    
 
-          {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<Rightnav/>}
+          
 
       </div>
 

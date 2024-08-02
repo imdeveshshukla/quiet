@@ -6,6 +6,7 @@ const ReadMore = ({ children, maxLines = 10 }) => {
   const contentRef = useRef(null);
 
   useEffect(() => {
+    
     const checkOverflow = () => {
       const lineHeight = parseFloat(window.getComputedStyle(contentRef.current).lineHeight);
       const contentHeight = contentRef.current.scrollHeight;
@@ -36,7 +37,7 @@ const ReadMore = ({ children, maxLines = 10 }) => {
         {children}
       </div>
       {isOverflowing && (
-        <button onClick={toggleIsTruncated} className="text-blue-500 mt-2">
+        <button onClick={toggleIsTruncated} className="text-blue-500 mt-2 exclude-click">
           {isTruncated ? 'Read More' : 'Show Less'}
         </button>
       )}

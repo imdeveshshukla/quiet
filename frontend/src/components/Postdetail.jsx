@@ -2,7 +2,7 @@ import React, { useState,useEffect, useMemo } from 'react'
 import Posts, { sendNotification } from './Posts'
 import { useDispatch, useSelector } from 'react-redux'
 import { AiOutlinePlus } from "react-icons/ai";
-import {  useLocation, useNavigate } from 'react-router-dom';
+import {  useLocation, useNavigate, useParams } from 'react-router-dom';
 import axios from 'axios';
 import toast from 'react-hot-toast';
 import { clearPostDetail, setComment, setPostDetail } from '../redux/Postdetail';
@@ -27,15 +27,18 @@ const Postdetail = () => {
     const Navigate= useNavigate()
     const dispatch= useDispatch()
     const location = useLocation();
+    const {id}= useParams();
+    
     // console.log("UserInfo "+userInfo);
-    const getApost=async(id)=>{
+    const getApost=async()=>{
         try {
           const res = await axios.get("http://localhost:3000/posts/getapost", { 
             params:{
-              id
+              id,
             }
           });
-
+          console.log(res);
+          
           if(res.status==200){
             dispatch(setPostDetail(res.data.post))
           }
@@ -46,13 +49,8 @@ const Postdetail = () => {
  
       useEffect(() => {
         dispatch(clearPostDetail())
-        let loc=String(location.pathname)
-        if(loc.includes("/post/")){
-            let id= loc.split("/post/")[1];
-            console.log("postDetailID",id);
-            getApost(id)   
-        }
-      },[location])
+        getApost()   
+      },[])
       
 
 

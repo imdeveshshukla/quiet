@@ -175,7 +175,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
     console.log((image)?"true":"false");
     return(
         <div className="fixed z-50 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-[100vw]  pb-10">
-      <div ref={roomRef} className=" absolute w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
+      <div ref={roomRef} className=" absolute w-[85%] xs:w-[75%] sm:w-[60%] md:w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 ">
         <div  className="heading flex justify-between">
           <h2 className="text-xl font-bold mb-4 text-[#656923]">{firstPage?heading:"What Kind of Room is this?"}</h2>
           <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { showRoom1?setShow(false):setShow2(false) }}>
@@ -245,7 +245,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 
             <button
             onClick={next}
-            className={titleRequired?"bg-[#656923] w-48 text-sm text-black font-bold py-2 px-4 rounded focus:outline-none cursor-not-allowed":"bg-[#656923] hover:bg-[#a9aa88] w-48 text-sm text-black font-bold py-2 px-4 rounded focus:outline-none"}>
+            className={titleRequired?"bg-[#656923] w-32 1_5md:w-48 text-sm text-black font-bold py-2 px-4 rounded focus:outline-none cursor-not-allowed":"bg-[#656923] hover:bg-[#a9aa88] w-48 text-sm text-black font-bold py-2 px-4 rounded focus:outline-none"}>
             {"Save & Next"}
           </button>
 

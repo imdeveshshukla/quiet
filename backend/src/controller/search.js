@@ -109,8 +109,15 @@ export const getUserComments = async (req, res) => {
           include:{
             room:true,
             user:true,
+          },
+        },
+        parent:{
+          include:{
+            user:true,
           }
-        }
+        },
+        user:true,
+        upvotes:true, 
       },
       orderBy: {
         createdAt: "desc",
