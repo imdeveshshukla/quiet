@@ -253,6 +253,8 @@ const sendNotification= async (req,res)=>{
   }
 }
 
+
+
 // const userController={getUser,varifyToken};
 const userController = { getUser, uploadImg, getUserPost, getNotifications, markAsRead, markAllAsRead, sendNotification };
 export default userController;

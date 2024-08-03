@@ -14,6 +14,5 @@ router.post("/sendnotification",verifyToken,userController.sendNotification);
 router.get('/:email',verifyToken, userController.getUser );
 
 
-
 const userRouter= router
 export default userRouter; 

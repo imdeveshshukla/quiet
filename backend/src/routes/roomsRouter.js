@@ -1,5 +1,5 @@
 import express from 'express'
-import { addUser, CreateRoom, deleteRoom, filterName, getAllRoom, getBulk, getRoom, updateRoom } from '../controller/rooms.js';
+import { acceptJoiningRequest, addUser, CreateRoom, deleteRoom, filterName, getAllRoom, getBulk, getRoom, sendJoiningRequest, updateRoom } from '../controller/rooms.js';
 import { verifyToken } from '../middlewares/verifytoken.js';
 import { upload } from '../middlewares/multer.js';
 
@@ -12,6 +12,9 @@ roomsRouter.post('/delete',verifyToken,deleteRoom);
 
 
 roomsRouter.post('/join',verifyToken,addUser)
+
+roomsRouter.post('/addUserinRoom/:username',verifyToken,sendJoiningRequest) // completing this;
+roomsRouter.post('/acceptJoiningRequest',verifyToken,acceptJoiningRequest);
 
 roomsRouter.get('/titleNameIsUnique',verifyToken,filterName)
 roomsRouter.get('/getBulk',verifyToken,getBulk)     //Use for search
