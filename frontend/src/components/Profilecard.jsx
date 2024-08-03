@@ -15,8 +15,9 @@ const Profilecard = ({room}) => {
   else
     profileInfo = useSelector(state => state.profile.profileInfo)
 
-  console.log("Prfile card = ", profileInfo);
   const profileLink = `${window.location.origin}/u/${profileInfo?.username}`;
+
+
   const handleShare = async () => {
     console.log(profileInfo);
 
@@ -42,7 +43,7 @@ const Profilecard = ({room}) => {
         });
     }
   };
-  // mx-12 xxs:mx-20 xs:mx-28 sm:mx-40 2_sm:mx-52
+  
   return (
     <div className=' w-[80vw] xxs:w-[75vw] xs:w-[65vw] sm:w-[50vw]  1_5md:w-full mx-0   rounded-3xl  bg-[#c2c7b3] '>
       <div className=' rounded-t-3xl h-32 w-full overflow-hidden'>

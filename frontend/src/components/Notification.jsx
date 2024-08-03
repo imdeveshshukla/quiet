@@ -27,7 +27,6 @@ const Notification = ({setIsNfnOpen}) => {
     const getUserNotification = async()=>{
         try {
           const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
-          console.log(res.data);
           dispatch(setNotification(res.data.data))
         } catch (error) {
           console.log(error);
@@ -37,9 +36,7 @@ const Notification = ({setIsNfnOpen}) => {
       }
 
 
-    const handleClick=(id, nId)=>{
-        console.log(id, nId);
-        
+    const handleClick=(id, nId)=>{        
         Navigate(`/posts/${id}`);
         setIsNfnOpen(false);
         markAsRead(nId);
@@ -48,7 +45,6 @@ const Notification = ({setIsNfnOpen}) => {
 
     const handleAllRead = async() => {
         setIsNfnOpen(false)
-        console.log("notify",notifications);
         if(notifications.length==0) return;
         try {
             const res = await axios.post("http://localhost:3000/u/markallasread", { withCredentials: true  });
@@ -56,13 +52,12 @@ const Notification = ({setIsNfnOpen}) => {
                 dispatch(clearNotification());
             }
         } catch (error) {
-            
+            console.log(error);      
         }
         
     }
 
     const markAsRead=async(id)=>{
-        console.log(id);
         
         try {
             const res = await axios.post("http://localhost:3000/u/markasread", { id });

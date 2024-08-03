@@ -30,12 +30,9 @@ const Createpost = ({onNewPost}) => {
     
     const handleChange=(e)=>{
       setImage(e.target.files[0]);
-      console.log(e.target.files[0].name);
-      
     }
     
     const handleSelectChange = (event) => {
-      console.log(event.target.value);
       setSelectedOption(event.target.value);
     };
 
@@ -43,14 +40,12 @@ const Createpost = ({onNewPost}) => {
       if (buttonRef.current) {
         buttonRef.current.disabled = true;
       }
-        console.log(title+"\n"+description+"\n"+selectedOption);
         const formData = new FormData();
         formData.append('title', title);
         formData.append('topic', selectedOption);
         formData.append('body', description);
         formData.append('postImg', image);
-        console.log(formData);
-        
+
                 
         setLoading(true);
         toast.loading("Posting....");
@@ -60,7 +55,6 @@ const Createpost = ({onNewPost}) => {
               'Content-Type': 'multipart/form-data',
             },
           });
-          console.log(response.data.post);
           if(response.status==201){
             // dispatch(setPost(response.data.post));
             // dispatch(setUserPost(response.data.post))

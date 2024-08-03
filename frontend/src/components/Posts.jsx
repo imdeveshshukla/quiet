@@ -60,13 +60,20 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
         setUpvote((upvoteNumber) => upvoteNumber - 1);
       }
 
-      const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
-      if (res.status == 201) {
-        const data = res.data.newUpvote;
-        if (val == 1 && data.userId != data.post.userId) {
-          sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "upvoted your post!" });
+
+      try {
+        const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
+        if (res.status == 201) {
+          const data = res.data.newUpvote;
+          if (val == 1 && data.userId != data.post.userId) {
+            sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "upvoted your post!" });
+          }
         }
+
+      } catch (error) {
+      console.log(error);
       }
+
     } else {
       toast.dismiss();
       toast.error("Sign In First");
@@ -93,13 +100,20 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
       val = 0;
       setDownvotenum((upvoteNumber) => upvoteNumber - 1);
     }
-    const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
-    if (res.status == 201) {
-      const data = res.data.newUpvote;
-      if (val == -1 && data.userId != data.post.userId) {
-        sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "downvoted your post!" });
+
+    try {
+      const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
+      if (res.status == 201) {
+        const data = res.data.newUpvote;
+        if (val == -1 && data.userId != data.post.userId) {
+          sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "downvoted your post!" });
+        }
       }
+      
+    } catch (error) {
+      console.log(error);
     }
+
   };
 
 
@@ -112,13 +126,13 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
           <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
         </header>
         <main className='cursor-pointer'>
-          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip '  style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em',  wordBreak: 'break-word' }}>{title}</div>
+          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}>{title}</div>
 
           <div className={` my-2 whitespace-pre-wrap break-words`}>
             <ReadMore children={body} maxLines={media ? 2 : 10} />
           </div>
 
-          
+
           {media && (
             <img className='xxxs:w-screen xs:w-full max-h-[420px] object-contain py-2' src={media} alt="postImg" />
           )}

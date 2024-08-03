@@ -31,10 +31,6 @@ import ReadMore from './ReadMore';
 
 
 
-//test
-
-
-
 
 export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox }) => {
   const [isComment, setIsComment] = useState(false)
@@ -55,17 +51,15 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
   const addComment = async () => {
     toast.loading("Adding your comment...");
     setLoading(true);
-    console.log(comment);
+
     try {
       const res = await axios.post(`http://localhost:3000/posts/createcomment`, {
         withCredentials: true, postId: post?.id,
         commentId, content: comment
       });
-      console.log(res);
-      if (res.status == 201) {
 
+      if (res.status == 201) {
         setIsComment(false)
-        console.log(res.data.newComment);
         dispatch(setComment(res.data.newComment))
         dispatch(setUserPostComment(res.data.newComment))
         dispatch(setPostComment(res.data.newComment))
@@ -82,7 +76,6 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
             sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "commented on your post!", body: res.data.newComment.body });
           }
         }
-        console.log(post);
         toast.dismiss();
         toast.success("Comment Added.");
         setcomment("");
@@ -150,8 +143,6 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
   }
   async function getUpvote() {
     const res = await axios.post("http://localhost:3000/posts/upvoteNum", { postId: postId, commentId: id });
-    // console.log("Inside getUPvote = "+JSON.stringify(res.data));
-    console.log("upvotesdetail", res.data);
 
     setUpvotes(res.data.numbers);
     res.data.upvote.forEach((item) => {
@@ -186,7 +177,6 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
     try {
       const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
-      console.log("commentpelike", res);
 
       if (res.status == 201) {
         const data = res.data.newUpvote;
@@ -232,7 +222,6 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       setDownvote((upvoteNumber) => upvoteNumber - 1)
     }
     const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
-    console.log("commentpedislike", res);
     const data = res.data.newUpvote
 
     if (val == -1) {

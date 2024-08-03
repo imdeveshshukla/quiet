@@ -6,12 +6,11 @@ const ReadMore = ({ children, maxLines = 10 }) => {
   const contentRef = useRef(null);
 
   useEffect(() => {
-    
+
     const checkOverflow = () => {
       const lineHeight = parseFloat(window.getComputedStyle(contentRef.current).lineHeight);
       const contentHeight = contentRef.current.scrollHeight;
       const maxHeight = lineHeight * maxLines;
-
       setIsOverflowing(contentHeight > maxHeight);
     };
 
@@ -32,7 +31,7 @@ const ReadMore = ({ children, maxLines = 10 }) => {
       <div
         ref={contentRef}
         className={`overflow-clip whitespace-pre-wrap break-words  ${isTruncated ? ` line-clamp-${maxLines}` : ''}`}
-        style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: isTruncated ? maxLines : '', lineHeight: '1.3em',  wordBreak: 'break-word' }}
+        style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', WebkitLineClamp: isTruncated ? maxLines : '', lineHeight: '1.3em', wordBreak: 'break-word' }}
       >
         {children}
       </div>

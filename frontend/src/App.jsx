@@ -87,7 +87,6 @@ function App() {
       console.log(error);
 
     }
-    // dispatch(loading())
   }
 
 
@@ -95,7 +94,6 @@ function App() {
   const getUserNotification = async () => {
     try {
       const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
-      console.log(res.data);
       dispatch(setNotification(res.data.data))
     } catch (error) {
       console.log(error);
@@ -111,10 +109,7 @@ function App() {
 
 
   const sendReq = async () => {
-
-    // dispatch(loading());
     dispatch(setSkeltonLoader());
-
     try {
       const res = await axios.post("http://localhost:3000/auth/refreshsignin", { withCredentials: true });
       if (res.status == 200) {
@@ -122,24 +117,16 @@ function App() {
         dispatch(login());
         getUserData(res.data);
         getUserNotification();
-        //  await getPost();
-
       }
     } catch (error) {
       console.log(error);
-      // await getPost();
-
       if (error.response.status == 404) {
         console.log("token not found");
       } else if (error.response.status == 401) {
         console.log("Invalid token");
       }
     }
-    // dispatch(loading())
     dispatch(setSkeltonLoader());
-
-
-
   }
 
 
@@ -158,12 +145,10 @@ function App() {
     };
   }, [isLogin]);
 
-
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       dispatch(setShowSearch(false))
     }
-
   };
 
 

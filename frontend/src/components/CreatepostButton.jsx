@@ -30,11 +30,9 @@ const Createpost = ({ onNewPost }) => {
 
   const handleChange = (e) => {
     setImage(e.target.files[0]);
-    console.log("Image = " + image);
   }
 
   const handleSelectChange = (event) => {
-    console.log(event.target.value);
     setSelectedOption(event.target.value);
   };
 
@@ -56,7 +54,7 @@ const Createpost = ({ onNewPost }) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data.post);
+
       if (response.status == 201) {
         // dispatch(setPost(response.data.post));
         // dispatch(setUserPost(response.data.post))
