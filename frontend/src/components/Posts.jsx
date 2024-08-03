@@ -137,7 +137,7 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
             <img className='xxxs:w-screen xs:w-full max-h-[420px] object-contain py-2' src={media} alt="postImg" />
           )}
         </main>
-        <footer className='flex py-2 gap-6'>
+        <footer className='flex py-2 gap-5 xxs:gap-6'>
           <div className={upvoted ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-green-600 text-white' : downvote ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white' : 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
             <BiUpvote onClick={() => upvote(id)} className={upvoted ? 'text-2xl hover:text-neutral-950 text-green-900 cursor-pointer' : 'text-2xl hover:text-green-700 cursor-pointer'} />
             <span>{upvoteNumber}</span>

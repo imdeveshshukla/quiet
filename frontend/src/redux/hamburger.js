@@ -10,7 +10,6 @@ export const hamburger = createSlice({
   reducers: {
     setShowSideNav: (state,actions) => {
       state.value = actions.payload;
-      console.log(state.value);
     },
     
   },

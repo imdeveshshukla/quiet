@@ -19,7 +19,7 @@ const ProfilePosts = () => {
     const [hasMore, setHasMore] = useState(true);
     const { user } = useOutletContext();
     const { username } = useParams();
-  const [isLoading, setisLoading] = useState(false)
+    const [isLoading, setisLoading] = useState(false)
 
 
     const getUserPost = async (reset = false) => {
@@ -58,26 +58,25 @@ const ProfilePosts = () => {
         dispatch(setSkeltonLoader());
         setisLoading(false)
     };
+    
 
     useEffect(() => {
-        console.log("usrname eff",user, username);
-        
-        
         getUserPost(true);
     }, [username]);
 
+
     useEffect(() => {
-        console.log("page eff", user, username);
-        
         if (page > 1) {
             getUserPost();
         }
     }, [page]);
 
+
     const fetchMoreData = () => {
         if (isLoading || !hasMore) return;
         setPage(prevPage => prevPage + 1);
     };
+
 
     return (
         <InfiniteScroll

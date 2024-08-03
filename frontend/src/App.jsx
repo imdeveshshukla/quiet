@@ -47,6 +47,7 @@ import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
 import { useRef } from 'react'
 import NotFound from './pages/NotFound'
+import Popular from './pages/Popular'
 
 
 
@@ -185,6 +186,9 @@ function App() {
             {!isLogin && <Route path='/signin' element={<Signin />} />}
             <Route path='/resetpassword' element={<Resetpass />} />
             <Route path='/varifyaccount' element={<Varifyacc />} />
+
+
+            <Route path='/popular' element={<Popular/>} />
 
             <Route path='u/:username' element={<DisplayProfile />} >
               <Route path='overview' element={<Overview />} />
