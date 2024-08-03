@@ -17,6 +17,7 @@ import Postskelton from "../components/Postskelton";
 import Posts from "../components/Posts";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { SiTestin } from "react-icons/si";
+import AddMemBox from "../components/AddMemBox";
 const Room = function()
 {
   const location = useLocation();
@@ -37,6 +38,7 @@ const Room = function()
     const [gotPost,setPost] = useState([]);
     const [endMsg,setEndMsg] = useState("You've reached the end of the page!");
     const isOwner = CreatorId == userData?.userID;
+    const [showAddMem,setShowAddMem] = useState(false);
     function openPostBtn(){
       setShowCP(true);
     }
@@ -164,6 +166,7 @@ const Room = function()
     return( 
       <>
       {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP} roomTitle={title} setPost={setPost}/>}
+      {showAddMem && <AddMemBox setShow={setShowAddMem}/>}
     <div className="w-full">
       <div className=''>
           <div className='border-black border-2 relative shadow-lg shadow-slate-300 rounded-2xl h-48 m-4  '>
@@ -182,8 +185,8 @@ const Room = function()
           <div className="bg-black text-white text-sm rounded px-1">{"room"}/</div><span>{title}</span>
           {
             joined?
-            <div className='flex'>
-              <button className="ml-20 flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
+            <div className='flex self-end gap-2 justify-self-end'>
+              <button className="flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
               onClick={openPostBtn}
               >
               
@@ -192,14 +195,14 @@ const Room = function()
               </svg>
                 <span className="text-sm pt-0 mt-0 self-center no-underline">{"Create"}</span>
               </button>
-              <button className="ml-2 flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
-              onClick={()=>{}}
+              <button className="flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
+              onClick={()=>setShowAddMem(true)}
               >
               
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
                 <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
               </svg>
-                <span className="text-sm pt-0 mt-0 self-center no-underline">{"Add Member"}</span>
+                <span className="text-sm pt-0 mt-0 self-center no-underline">{"Member"}</span>
               </button>
               
             </div>

@@ -387,6 +387,116 @@ export const addUser = async(req,res)=>{
     }
 }
 
+
+export const sendJoiningRequest = async(req,res)=>{
+    const userID = req.userId;
+    const { title } = req.body;
+    const { username } = req.params;
+    console.log("Sending Room Joining Request = ");
+    console.log(userID+" "+title+" "+username);
+    if(!title || !username)
+    {
+        return res.status(404).json({
+            msg:"Username/title is not found"
+        })
+    }
+
+    try{
+        console.log("Inside try Catch block above usre");
+        const user = await prisma.user.findFirst({
+            where:{
+                username
+            }
+        });
+
+        if(!user) return res.status(404).json({
+            msg:"Please Enter Correct Username"
+        })
+        console.log("Above Room Fetching Block");
+        const room = await prisma.rooms.findFirst({
+            where:{
+                title,
+            },
+            include:{
+                UsersEnrolled:true
+            }
+        });
+        if(!room)return res.status(404).json({msg:"Room Not Found"});
+        if(room.CreatorId != userID)return res.status(401).json({msg:"You are not authorised"});
+        let found  =false;
+
+        console.log("Above ForEach Bloco");
+        room.UsersEnrolled.forEach((rooms)=>{
+            if(rooms.userId === user.userID){
+                found = true;
+            }
+        })
+        if(found)
+        {
+            const enrollment = await prisma.enrolledRooms.update({
+                where:{
+                    AND:[
+                        {userId:user.userID},
+                        {RoomId:room.id}
+                    ]
+                },
+                data:{
+                    joined:true,
+                }
+            })
+
+            if(enrollment) {
+                return res.status(200).json({
+                    msg:"User Added Successfully"
+                })
+            }
+            else{
+                return res.status(404).json({
+                    msg:"Enrolled User Not found",
+                    enrollment
+                })
+            }
+        }
+        try {
+            const notification= await prisma.notification.create({
+              data:{
+                title:`Join My Room`,
+                body:`Join Room: ${room.title}`,
+                toUser:user.userID,
+                fromUser:userID,
+              }
+            });
+            console.log(notification);
+            return res.status(201).json({
+                msg:"Sended Request",
+                notification
+            });
+            
+          } catch (error) {
+            console.log(error);
+            
+            res.status(403).json({
+                msg:"Error In Sending Notification",
+                error:error.message
+            });
+          }
+
+
+    }
+    catch(err){
+        return res.status(500).json({
+            msg:"Database/Server Issue",
+            error:err.message
+        })
+    }
+}
+
+export const acceptJoiningRequest = async(req,res)=>{
+    const userID = req.userID;
+    const body = req.body;
+}
+
+//Trashes Need to clean
 export const getPost = async(req,res)=>{
     const { title } = res.body;
 
