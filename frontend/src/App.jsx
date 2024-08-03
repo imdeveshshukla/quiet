@@ -11,17 +11,17 @@ import Resetpass from './pages/Resetpass'
 import Varifyacc from './pages/Varifyacc'
 import toast, { Toaster } from 'react-hot-toast';
 import Loader from './components/Loader'
-import { login } from "./redux/login"
-import { loading } from './redux/loading'
+import { login, logout } from "./redux/login"
+
 import { useSelector, useDispatch } from 'react-redux'
-import User, { setUserInfo } from './redux/user'
+import { setUserInfo, clearUserInfo } from './redux/user'
 import Settings from './pages/Settings'
 import Sidenav from './components/Sidenav'
-import Posts from './components/Posts'
+
 import Overview from './pages/Overview'
-import Comments from './components/Comments'
+
 import Postdetail from './components/Postdetail'
-import Postskelton from './components/Postskelton'
+import Postskelton, { CommentSkelton, ProfileSkelton } from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
 import HotTopicPosts from './pages/HotTopicPosts'
 import sportsdp from './assets/sportsdp.jpg'
@@ -47,9 +47,7 @@ import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
 import { useRef } from 'react'
 import NotFound from './pages/NotFound'
-import Profilecard from './components/Profilecard'
-import { Reset } from './redux/Page'
-import { clearPostsInfo } from './redux/Post'
+
 
 
 
@@ -101,6 +99,11 @@ function App() {
       dispatch(setNotification(res.data.data))
     } catch (error) {
       console.log(error);
+      if(error.response.status==401){
+        dispatch(logout());
+        dispatch(clearUserInfo());
+        toast.error("Login session expired!");
+      }
     }
   }
 
@@ -221,6 +224,7 @@ function App() {
             <Route path='*' element={<NotFound/>} />
               <Route path='/room/:CreatorId/:title' element={<Room/>} />
           </Routes>
+
         </div>
 
        
@@ -263,14 +267,3 @@ function App() {
 }
 
 export default App
-
-
-
-
-// userInfo?.posts == null ? <Postskelton /> :
-//   userInfo.posts.map(post => {
-//     return (
-//       isSkelton ? <Postskelton key={uuidv4()} /> : <Posts key={post.id} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} />
-//     )
-//   }
-//   )

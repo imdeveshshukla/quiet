@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Postskelton from '../components/Postskelton';
+import Postskelton, { CommentSkelton } from '../components/Postskelton';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
@@ -19,6 +19,7 @@ import ReadMore from '../components/ReadMore';
 
 
 
+
 const ProfileComments = () => {
   const [userComment, setUserComment] = useState([]);
   const [page, setPage] = useState(1);
@@ -27,6 +28,7 @@ const ProfileComments = () => {
   const { username } = useParams();
   const dispatch = useDispatch()
   const isSkelton = useSelector(state => state.skelton.value);
+  const [isLoading, setisLoading] = useState(false)
 
 
 
@@ -34,7 +36,7 @@ const ProfileComments = () => {
   const getUserComment = async (reset = false) => {
     console.log("fetching");
     dispatch(setSkeltonLoader());
-
+    setisLoading(true)
     try {
       if (reset) {
         setUserComment([]);
@@ -66,7 +68,7 @@ const ProfileComments = () => {
       console.log(error);
     }
     dispatch(setSkeltonLoader());
-
+    setisLoading(false)
   };
 
   useEffect(() => {
@@ -86,6 +88,7 @@ const ProfileComments = () => {
 
 
   const fetchMoreData = () => {
+    if (isLoading || !hasMore) return;
     setPage(prevPage => prevPage + 1);
   };
   return (
@@ -93,11 +96,11 @@ const ProfileComments = () => {
       dataLength={userComment.length}
       next={fetchMoreData}
       hasMore={hasMore}
-      loader={<div className='py-8'><Postskelton /></div>}
+      loader={<div className='py-8'><CommentSkelton /></div>}
       endMessage={<p className='text-center font-semibold p-4'>{`${userComment.length == 0 ? "It looks like the user hasn't made any comments." : "You've reached the end of the page!"}`}</p>}
     >
       <div className='py-8'>
-        {(isSkelton && userComment.length === 0) ? <Postskelton /> :
+        {(isSkelton && userComment.length === 0) ? <></> :
           userComment.map(comment => (<>
             <UserComment key={comment.id} comment={comment} />
           </>

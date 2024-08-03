@@ -15,7 +15,7 @@ export const verifyToken = (req, res, next) => {
       } else res.status(401).send({ msg: "Invalid Token" });
       
     } catch (error) {
-      res.status(401).json({
+      res.status(400).json({
         msg:"Some Error Occured",
         error
       })

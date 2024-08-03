@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../redux/login'
 import axios from 'axios';
-import { setUserInfo, clearUserInfo } from '../redux/user'
+import {  clearUserInfo } from '../redux/user'
 import { loading } from '../redux/loading';
 import { IoIosLogOut } from "react-icons/io";
 import dp from '../assets/dummydp.png'
