@@ -9,8 +9,8 @@ import Posts from '../components/Posts';
 import Postskelton from '../components/Postskelton';
 import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
-import { increment, Reset } from '../redux/Page';
-
+import { GrRefresh } from "react-icons/gr";
+import SmallLoader from '../components/SmallLoader';
 
 
 
@@ -22,7 +22,7 @@ const Home = () => {
   const isLogin = useSelector((state) => state.login.value);
   const isSkelton = useSelector((state) => state.skelton.value);
   const [isLoading, setisLoading] = useState(false)
-
+  
   const dispatch = useDispatch();
   // const page = useSelector(state => state.page.value)
   
@@ -31,10 +31,9 @@ const Home = () => {
   const [hasMore, setHasMore] = useState(true);
 
 
-  const getPost = async (page) => {
+  const getPost = async () => {
     dispatch(setSkeltonLoader())
     setisLoading(true)
-    console.log(`Fetching posts for page: ${page}`);
     if (page == 1) {
       window.scrollTo(0, 0);
       dispatch(clearPostsInfo())
@@ -68,25 +67,24 @@ const Home = () => {
   };
 
   const handleNewPost = () => {
+    console.log("hello");
+    if(page==1){
+      getPost()
+      setHasMore(true);
+      return;
+    }
     setPage(1);
     setHasMore(true);
-    getPost(page);
   }
 
   useEffect(() => {
-    // console.clear();
-    console.log("underUse effect getting post for page", page);
-
-    if(posts.length <= 0)getPost(1);
-  }, [isLogin]);
+    getPost();
+  }, [page]);
   
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
     console.clear();
-    console.log(`Loading more data, current page: ${page}`);
-    // dispatch(increment());
     setPage((prevPages)=>prevPages+1);
-    getPost(page+1);
   };
 
 
@@ -101,6 +99,11 @@ const Home = () => {
       >
         {isLogin && <Createpost onNewPost={handleNewPost} />}
         <div className='bg-gray-700 h-[1px]'></div>
+        <div className=' flex items-center justify-end mx-4 mt-3'>
+          <span onClick={()=>handleNewPost()} className=' bg-[#eff1d3] rounded-full p-1'>
+          {isLoading?<SmallLoader/>:<GrRefresh  className=' cursor-pointer text-blue-500 text-xl font-extrabold'/>}
+          </span>
+        </div>
 
 
         <div className="post">
