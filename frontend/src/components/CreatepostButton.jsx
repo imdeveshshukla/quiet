@@ -37,13 +37,11 @@ const Createpost = ({ onNewPost }) => {
   };
 
   const handleSubmit = async () => {
-    console.log(title + "\n" + description + "\n" + selectedOption);
     const formData = new FormData();
     formData.append('title', title);
     formData.append('topic', selectedOption);
     formData.append('body', description);
     formData.append('postImg', image);
-    console.log(formData);
 
 
     setLoading(true);

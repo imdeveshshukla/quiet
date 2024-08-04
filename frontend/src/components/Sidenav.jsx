@@ -71,8 +71,6 @@ const Sidenav = () => {
 
   }
   
-
-  console.log("myAllRooms = ",myAllRoom);
   return (<>
 
     <nav ref={navRef} className={` ${hamburger ? 'left-0' : '-left-full'} fixed transition-all duration-400 ease-in-out bg-[#bbc2a5] xl:bg-[#fff0]  border-4 xl:border-none  border-[#dae0cb] xl:sticky xl:left-0 z-20 xl:block  overflow-auto  p-3  h-[calc(100vh-74.47px)]  top-[74.46px] `} >
@@ -93,7 +91,7 @@ const Sidenav = () => {
             {isLogin &&<> <CreateRoomBtn />
             
             {isLogin && roomLoader?<div className="mx-auto"><SmoothLoader/></div>:(myAllRoom?.map(function(val){
-              {/* console.log(val?.room); */}
+             
               return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{joined:true}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.room.title}</span></NavLink>
             }))}
               </>

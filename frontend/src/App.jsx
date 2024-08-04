@@ -19,7 +19,7 @@ import Settings from './pages/Settings'
 import Sidenav from './components/Sidenav'
 
 import Overview from './pages/Overview'
-
+import baseAddress from "./utils/localhost";
 import Postdetail from './components/Postdetail'
 import Postskelton, { CommentSkelton, ProfileSkelton } from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
@@ -79,8 +79,7 @@ function App() {
     // dispatch(loading())
 
     try {
-      const res = await axios.get(`http://localhost:3000/u/${email}`, { withCredentials: true });
-      console.log(res.data.user);
+      const res = await axios.get(`${baseAddress}u/${email}`, { withCredentials: true });
       if (res.status == 200) {
         dispatch(setUserInfo(res.data.user));
       }
@@ -94,7 +93,7 @@ function App() {
 
   const getUserNotification = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
+      const res = await axios.get(`${baseAddress}u/notification`, { withCredentials: true });
       dispatch(setNotification(res.data.data))
     } catch (error) {
       console.log(error);
@@ -112,7 +111,7 @@ function App() {
   const sendReq = async () => {
     dispatch(setSkeltonLoader());
     try {
-      const res = await axios.post("http://localhost:3000/auth/refreshsignin", { withCredentials: true });
+      const res = await axios.post(`${baseAddress}auth/refreshsignin`, { withCredentials: true });
       if (res.status == 200) {
         toast.success("Loggin Session Restored")
         dispatch(login());
@@ -167,8 +166,7 @@ function App() {
 
   const room = location.pathname.includes('/room');
   
-  console.log("HEy this is me");
-  // dispatch(Reset());
+
   return (
     <>
       {isLoading && <Loader />}

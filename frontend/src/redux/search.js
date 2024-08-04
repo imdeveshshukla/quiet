@@ -10,7 +10,6 @@ export const search = createSlice({
   reducers: {
     setShowSearch: (state,actions) => {
       state.value = actions.payload;
-      console.log(state.value);
     },
     
   },

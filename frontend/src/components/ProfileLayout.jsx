@@ -73,7 +73,6 @@ const ProfileLayout = ({isLoading, user }) => {
   const handleDpUpdate = async (e) => {
     const file = e.target.files[0];
     setdpLoc(e.target.files[0])
-    console.log("dp", e.target.files[0]);
 
     if (file) {
       const reader = new FileReader();

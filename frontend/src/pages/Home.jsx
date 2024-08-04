@@ -11,6 +11,8 @@ import { setSkeltonLoader } from '../redux/skelton';
 import { GrRefresh } from "react-icons/gr";
 import SmallLoader from '../components/SmallLoader';
 import { increment, Reset } from '../redux/Page';
+import baseAddress from "../utils/localhost";
+
 
 
 
@@ -33,7 +35,7 @@ const Home = () => {
     setisLoading(true)
     dispatch(setSkeltonLoader())
     try {
-      const res = await axios.get('http://localhost:3000/posts/getPost', {
+      const res = await axios.get(`${baseAddress}posts/getPost`, {
         params: {
           page: p,
           limit: 10,
@@ -59,7 +61,7 @@ const Home = () => {
   };
 
   const handleNewPost = () => {
-    console.log("hello");
+
     dispatch(Reset())
     dispatch(clearPostsInfo())
     getPost(1)

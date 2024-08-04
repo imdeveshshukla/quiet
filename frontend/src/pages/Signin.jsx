@@ -13,6 +13,7 @@ import { loading } from '../redux/loading';
 import toast from 'react-hot-toast';
 import { setUserInfo } from '../redux/user';
 import { setSkeltonLoader } from '../redux/skelton';
+import baseAddress from "../utils/localhost";
 
 
 
@@ -34,12 +35,10 @@ const Signin = () => {
 
 
     const getUserData=async(email)=>{ 
-        console.log(location);
         // dispatch(loading())
         dispatch(setSkeltonLoader())
         try {
-          const res= await axios.get(`http://localhost:3000/u/${email}`, {withCredentials:true});
-          console.log(res);
+          const res= await axios.get(`${baseAddress}u/${email}`, {withCredentials:true});
           if(res.status==200){
             dispatch(setUserInfo(res.data.user));
           }
@@ -56,7 +55,7 @@ const Signin = () => {
         toast.loading("Signing In...");
         try {
             if (String(form.user).endsWith("@ietlucknow.ac.in")) {
-                const res = await axios.post("http://localhost:3000/auth/signin", { email: form.user, password: form.password });
+                const res = await axios.post(`${baseAddress}auth/signin`, { email: form.user, password: form.password });
                 toast.dismiss()
                 if (res.status == 202) {
                     toast.dismiss()
@@ -65,10 +64,9 @@ const Signin = () => {
                     await getUserData(res.data);
                     toast.success("Logged In successfully !")
                 }
-                // console.log(res);
             }
             else {
-                const res = await axios.post("http://localhost:3000/auth/signin", { username: form.user, password: form.password });
+                const res = await axios.post(`${baseAddress}auth/signin`, { username: form.user, password: form.password });
                 if (res.status == 202) {
                     toast.dismiss()
                     Navigate("/")
@@ -76,7 +74,6 @@ const Signin = () => {
                     await getUserData(res.data);
                     toast.success("Logged In succesfully!")
                 }
-                console.log(res);
             }
         } catch (error) {
             toast.dismiss()
@@ -106,16 +103,13 @@ const Signin = () => {
         // dispatch(loading());
         await sendRequest();
         // dispatch(loading());
-        console.log(form);
     }
     const handleEye = () => {
-        console.log("hello");
         passref.current.type = "text"
         setEye(true);
 
     }
     const handleCloseEye = () => {
-        console.log("ok");
         passref.current.type = "password"
         setEye(false);
 

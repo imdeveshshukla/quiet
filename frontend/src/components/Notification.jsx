@@ -37,7 +37,6 @@ const Notification = ({setIsNfnOpen}) => {
 
 
     const handleClick=(item, nId)=>{
-        console.log(item, nId);
         setIsNfnOpen(false);
         markAsRead(nId);
         if(item.postId)
@@ -65,7 +64,6 @@ const Notification = ({setIsNfnOpen}) => {
         
         try {
             const res = await axios.post("http://localhost:3000/u/markasread", { id });
-            console.log(res);
             if(res.status==201){
                 dispatch(updateNotification(id));
             }

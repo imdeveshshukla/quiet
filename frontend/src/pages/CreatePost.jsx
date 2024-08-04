@@ -4,8 +4,10 @@ import { IoClose } from "react-icons/io5";
 import { useLocation, useNavigate } from "react-router-dom";
 import SmallLoader from "../components/SmallLoader";
 import toast from "react-hot-toast";
+import baseAddress from "../utils/localhost";
 import axios from "axios";
 import { useSelector } from "react-redux";
+
 const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
   const createPostRef = useRef(null);
@@ -22,11 +24,9 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
   const handleChange = (e) => {
     setImage(e.target.files[0]);
-    console.log("Image = ", e.target.files[0])
   }
 
   const handleSelectChange = (event) => {
-    console.log(event.target.value);
     setSelectedOption(event.target.value);
   };
 
@@ -41,28 +41,20 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
       if(roomTitle) formData.append('subCommunity',roomTitle);
 
-      // console.log(formData);
       setLoading(true);
       toast.loading("Posting....");
-      const response = await axios.post('http://localhost:3000/posts/postWithImg', formData, {
+      const response = await axios.post(`${baseAddress}posts/postWithImg`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
       });
-      // console.clear();
-      // console.log("Created Posts");
-      // console.log(response.data.post);
+
       if(setPost)
       {
         console.clear();
-        console.log("Inside CreatepOst");
-        
-        console.log(`setPost = ${setPost} && ${response.data.post}`);
         setPost(response.data.post);
       }
       if (response.status == 201) {
-        // dispatch(setPost(response.data.post));
-        // dispatch(setUserPost(response.data.post));
         toast.dismiss();
         toast.success("Successfully Posted!")
         setTitle("")
@@ -72,7 +64,6 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
         // getUserData(userInfo.email);
         onNewPost()
         setShowCP(false)
-        console.log(location.state);
         // navigate('/');
       }
     } catch (error) {
@@ -88,7 +79,6 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
   }
 
   const handleClickOutside = (event) => {
-    console.log("clicked");
 
     if (createPostRef.current && !createPostRef.current.contains(event.target)) {
       setShowCP(false)

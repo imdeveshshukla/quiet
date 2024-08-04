@@ -6,6 +6,8 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSkeltonLoader } from '../redux/skelton';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
+import baseAddress from "../utils/localhost";
+
 
 
 const Popular = () => {
@@ -19,8 +21,6 @@ const Popular = () => {
 
 
     const getPosts = async (reset = false) => {
-        console.log("fetching");
-        // dispatch(setSkeltonLoader());
         setisLoading(true)
         try {
             if (reset) {
@@ -31,13 +31,12 @@ const Popular = () => {
 
             const currentPage = reset ? 1 : page;
 
-            const res = await axios.get(`http://localhost:3000/posts/popular`, {
+            const res = await axios.get(`${baseAddress}posts/popular`, {
                 params: {
                     page: currentPage,
                     limit: 10,
                 },
             });
-            console.log(res);
 
 
             if (res.status === 200) {
@@ -50,7 +49,6 @@ const Popular = () => {
         } catch (error) {
             console.log(error);
         }
-        // dispatch(setSkeltonLoader());
         setisLoading(false)
     };
 

@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSkeltonLoader } from '../redux/skelton';
 import axios from 'axios';
+import baseAddress from "../utils/localhost";
 import { clearPostsInfo, setPost } from '../redux/userposts';
 import { useOutletContext } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
@@ -24,7 +25,6 @@ const Profileupvoted = () => {
   
 
   const getUserUpvotes = async (reset = false) => {
-    console.log("fetching");
     dispatch(setSkeltonLoader());
     setisLoading(true)
     try {
@@ -36,7 +36,7 @@ const Profileupvoted = () => {
 
         const currentPage = reset ? 1 : page;
 
-        const res = await axios.get(`http://localhost:3000/search/getuserupvotes`, {
+        const res = await axios.get(`${baseAddress}search/getuserupvotes`, {
             params: {
                 userId: user.userID,
                 page: currentPage,
@@ -54,7 +54,6 @@ const Profileupvoted = () => {
             let posts= []
             Array.from(res.data).forEach(e=>posts.push(e.post));
             // let posts = res.data.map(e => e.post);
-            console.log("profileupvote",posts);
             
             dispatch(setPost(posts));
 

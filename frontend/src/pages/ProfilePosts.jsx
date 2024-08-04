@@ -8,6 +8,11 @@ import { clearPostsInfo, setPost } from '../redux/userposts';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { useOutletContext, useParams } from 'react-router-dom';
+import baseAddress from "../utils/localhost";
+
+
+
+
 
 axios.defaults.withCredentials = true;
 
@@ -23,7 +28,6 @@ const ProfilePosts = () => {
 
 
     const getUserPost = async (reset = false) => {
-        console.log("fetching");
         dispatch(setSkeltonLoader());
         setisLoading(true)
         try {
@@ -35,7 +39,7 @@ const ProfilePosts = () => {
 
             const currentPage = reset ? 1 : page;
 
-            const res = await axios.get(`http://localhost:3000/search/getuserposts`, {
+            const res = await axios.get(`${baseAddress}search/getuserposts`, {
                 params: {
                     userID: user.userID,
                     username,

@@ -229,7 +229,9 @@ export const getPopularPosts = async (req, res) => {
     LIMIT ${limit} OFFSET ${offset};
   `;
 
-    let posts = JSON.parse(stringify(result));
+  
+let posts = JSON.parse(stringify(result));
+
 
   const postIds = posts.map(post => post.id);
   const upvotes = await prisma.upvote.findMany({

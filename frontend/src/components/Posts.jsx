@@ -180,7 +180,6 @@ export const getTime = (createdAt) => {
 export const sendNotification = async ({ postId, toUser, fromUser, title, body }) => {
   try {
     const res = await axios.post("http://localhost:3000/u/sendnotification", { postId, toUser, fromUser, title, body });
-    console.log(res);
     return res;
   } catch (error) {
     console.error(error);

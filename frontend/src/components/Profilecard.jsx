@@ -19,7 +19,6 @@ const Profilecard = ({room}) => {
 
 
   const handleShare = async () => {
-    console.log(profileInfo);
 
     if (navigator.share) {
       try {

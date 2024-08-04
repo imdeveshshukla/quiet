@@ -28,7 +28,6 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
     const roomRef= useRef(null);
     const handleChange = (e) => {
         setImage(e.target.files[0]);
-        console.log("Image = " ,e.target.files[0] )
     }
     const containsWhitespace = str => /\s/.test(str);
     const handleSubmit = async()=>{
@@ -108,7 +107,6 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
     async function sendReq(){
       const title2 = title.trim();
       const res = await axios.get("http://localhost:3000/rooms/titleNameIsUnique?filter="+title2);
-      console.log(res.data);
       if(res.data.msg == true)
       {
         setColor("green");
@@ -158,8 +156,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 
 
     const handleClickOutside = (event) => {
-      console.log("clicked");
-      
+
       if (roomRef.current && !roomRef.current.contains(event.target)) {
         setShow(false);
         setShow2(false)
@@ -172,7 +169,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         document.removeEventListener('mousedown', handleClickOutside);
       };
     }, []);
-    console.log((image)?"true":"false");
+
     return
     (
         <div className="fixed z-50 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-[100vw]  pb-10">

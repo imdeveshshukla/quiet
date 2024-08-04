@@ -10,6 +10,7 @@ import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { loading } from '../redux/loading';
 import { useDispatch } from 'react-redux';
+import baseAddress from "../utils/localhost";
 
 
 
@@ -84,8 +85,7 @@ const Resetpass = () => {
         } else {
             dispatch(loading())
             try {
-                const res = await axios.post("http://localhost:3000/auth/resetpass", form);
-                console.log(res);
+                const res = await axios.post(`${baseAddress}auth/resetpass`, form);
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
                 setVarifyPassData({ ...varifyPassData, userID: res.data.userID })
                 setotpSent(true)
@@ -94,7 +94,6 @@ const Resetpass = () => {
                 toast.success("Your OTP is on its way !")
 
             } catch (error) {
-                console.log(error);
 
                 if (error && error.response.status == 404) {
                     setErrorEmail("User doesn't exists !");
@@ -110,9 +109,7 @@ const Resetpass = () => {
     const resendOtp = async () => {
         dispatch(loading())
         try {
-            const res = await axios.post("http://localhost:3000/auth/resendotp", varifyOtpData);
-            console.log(res);
-            console.log(varifyOtpData);
+            const res = await axios.post(`${baseAddress}auth/resendotp`, varifyOtpData);
 
             if (res.status == 202) {
                 setTimeLeft(60);
@@ -133,17 +130,13 @@ const Resetpass = () => {
     const varifyOtp = async () => {
         dispatch(loading())
         try {
-            console.log(varifyOtpData);
-            const res = await axios.post("http://localhost:3000/auth/varifyotp", varifyOtpData);
+            const res = await axios.post(`${baseAddress}auth/varifyotp`, varifyOtpData);
 
-            console.log(res);
-            console.log(varifyOtpData);
             if (res.status == 202) {
                 setOtpVerify(true)
             }
 
         } catch (error) {
-            console.log(error);
             if (error.response.status == 403) {
                 setErrorOtp("Otp is Expired! Resend it.")
             } else if (error.response.status == 401) {
@@ -163,15 +156,13 @@ const Resetpass = () => {
     }
 
     const handleConfirm = async () => {
-        console.log(form.password);
         if (!validatePassword(form.password)) {
             setOnSave(false)
             setErrorPass("* Password must include a-z,A-Z,0-9,symbols and min-length of 8");
         } else {
-            console.log(varifyOtpData, form.password);
             dispatch(loading())
             try {
-                const res = await axios.post("http://localhost:3000/auth/updatepass", varifyPassData);
+                const res = await axios.post(`${baseAddress}auth/updatepass`, varifyPassData);
                 if (res.status == 201) {
                     toast.success("Password has been updated!");
                     Navigate("/signin")
@@ -193,13 +184,11 @@ const Resetpass = () => {
 
 
     const handleEye = () => {
-        console.log("hello");
         passref.current.type = "text"
         setEye(true);
 
     }
     const handleCloseEye = () => {
-        console.log("ok");
         passref.current.type = "password"
         setEye(false);
 
