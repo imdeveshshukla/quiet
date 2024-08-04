@@ -1,20 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
-import Postskelton, { CommentSkelton } from '../components/Postskelton';
+import  { CommentSkelton } from '../components/Postskelton';
 import InfiniteScroll from 'react-infinite-scroll-component'
 import { useNavigate, useOutletContext, useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { setSkeltonLoader } from '../redux/skelton';
-import dp from '../assets/dummydp.png'
-import { RiReplyLine } from "react-icons/ri";
-import { BiLike } from "react-icons/bi";
-import { BiSolidLike } from "react-icons/bi";
-import { BiDislike } from "react-icons/bi";
-import { BiSolidDislike } from "react-icons/bi";
-import Posts, { sendNotification } from '../components/Posts';
-import { getTime } from '../components/Posts';
-import { v4 as uuidv4 } from 'uuid';
-import ReadMore from '../components/ReadMore';
+import baseAddress from "../utils/localhost";
+import Posts from '../components/Posts';
 import { UserComment } from './ProfileComments';
 
 const Overview = () => {
@@ -30,7 +22,6 @@ const Overview = () => {
   const [isLoading, setisLoading] = useState(false)
 
   const getUserOverview = async (reset = false) => {
-    console.log("fetching");
     dispatch(setSkeltonLoader());
     setisLoading(true)
 
@@ -45,7 +36,7 @@ const Overview = () => {
 
 
 
-      const res1 = await axios.get(`http://localhost:3000/search/getusercomments`, {
+      const res1 = await axios.get(`${baseAddress}search/getusercomments`, {
         params: {
           userID: user.userID,
           username,
@@ -56,11 +47,10 @@ const Overview = () => {
         withCredentials: true,
       });
 
-      console.log("res1", res1);
 
 
 
-      const res2 = await axios.get(`http://localhost:3000/search/getuserposts`, {
+      const res2 = await axios.get(`${baseAddress}search/getuserposts`, {
         params: {
           userID: user.userID,
           username,
@@ -71,13 +61,11 @@ const Overview = () => {
         withCredentials: true,
       });
 
-      console.log("res2", res2);
 
       if (res1.status === 200 && res2.status == 200) {
 
         let res = [...res1.data, ...res2.data.posts].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt)).slice(0,10);
         
-        console.log("res", res);
 
         setUserData([...userData, ...res]);
         let temp = res.filter(e => 'postId' in e);

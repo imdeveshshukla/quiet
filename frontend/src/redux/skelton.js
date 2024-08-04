@@ -10,7 +10,6 @@ export const skeltonState = createSlice({
   reducers: {
     setSkeltonLoader: (state) => {
       state.value = !state.value; 
-      console.log("skelton", state.value);
       
     },
     

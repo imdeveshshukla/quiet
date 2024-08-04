@@ -1,15 +1,14 @@
 import React, { useRef, useState, useEffect } from 'react'
 import { MdOutlineMailLock } from "react-icons/md";
-import { RiLockPasswordFill } from "react-icons/ri";
+
 import { MdPassword } from "react-icons/md";
-import { VscEye } from "react-icons/vsc";
-import { VscEyeClosed } from "react-icons/vsc";
-import { Link } from 'react-router-dom';
+
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
 import { loading } from '../redux/loading';
 import { useDispatch } from 'react-redux';
+import baseAddress from "../utils/localhost";
 
 
 
@@ -63,8 +62,7 @@ const Varifyacc = () => {
     }
 
     const handleChange = (e) => {
-        console.log(e.target.value);
-        console.log();
+  
         setVarifyOtpData({ ...varifyOtpData, [e.target.name]: e.target.value })
         setOnSave(true)
         setErrorOtp(null)
@@ -80,8 +78,7 @@ const Varifyacc = () => {
         } else {
             dispatch(loading())
             try {
-                const res = await axios.post("http://localhost:3000/auth/resetpass", form);
-                console.log(res);
+                const res = await axios.post(`${baseAddress}auth/resetpass`, form);
                 if (res.status == 202) {
                     setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email })
                     setotpSent(true)
@@ -111,9 +108,8 @@ const Varifyacc = () => {
     const resendOtp = async () => {
         dispatch(loading())
         try {
-            const res = await axios.post("http://localhost:3000/auth/resendotp", varifyOtpData);
-            console.log(res);
-            console.log(varifyOtpData);
+            const res = await axios.post(`${baseAddress}auth/resendotp`, varifyOtpData);
+ 
 
             if (res.status == 202) {
                 setTimeLeft(60);
@@ -135,12 +131,7 @@ const Varifyacc = () => {
     const varifyOtp = async () => {
         dispatch(loading())
         try {
-
-            console.log(varifyOtpData);
-            const res = await axios.post("http://localhost:3000/auth/varifyotp", varifyOtpData);
-
-            console.log(res);
-            console.log(varifyOtpData);
+            const res = await axios.post(`${baseAddress}auth/varifyotp`, varifyOtpData);
             if (res.status == 202) {
                 toast.success("Email has been successfully varified!");
                 Navigate("/signin");

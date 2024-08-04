@@ -62,8 +62,6 @@ export default function AddMemBox({setShow,id}){
   }
 
   const handleClickOutside = (event) => {
-    console.log("clicked");
-
     if (createPostRef.current && !createPostRef.current.contains(event.target)) {
       setShow(false)
     }

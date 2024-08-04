@@ -29,7 +29,6 @@ export const userPostState = createSlice({
       let upvotes;
       if (post) {
         upvotes = post.upvotes;
-        console.log(action.payload);
 
         let index = upvotes.findIndex(
           (vote) => vote.userId == action.payload.userId
@@ -38,13 +37,10 @@ export const userPostState = createSlice({
         if (index != -1) {
           upvotes[index] = action.payload;
 
-          console.log(upvotes);
         } else {
-          console.log("length", upvotes.length);
 
           upvotes[upvotes.length] = action.payload;
 
-          console.log("else", upvotes);
         }
       }
     },

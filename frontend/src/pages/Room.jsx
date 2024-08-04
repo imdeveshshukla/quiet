@@ -102,7 +102,6 @@ const Room = function()
     useEffect(() => {
       getRooms();
       
-      // console.log("underUse effect getting post for page", page);
       setPage(1); 
       setHasMore(true); 
       getPost(); 
@@ -112,7 +111,6 @@ const Room = function()
     }, [title])
 
     const fetchMoreData = () => {
-      // console.log(`Loading more data, current page: ${page}`);
       setPage((prevPage) => prevPage + 1);
     };
 
@@ -131,16 +129,12 @@ const Room = function()
 
     useEffect(()=>{
       var temp = [...room];
-      console.log("temp ",temp);
       temp.forEach((val,idx)=>{
         if(val?.room?.id == roomDetail?.id)
         {
           temp[idx] = {room:roomDetail};
-          console.log(room[idx])
-          console.log(roomDetail);
         }
       })
-      console.log("update = ",temp);
       dispatch(setRooms(temp));
     },[roomDetail]);
 
@@ -150,10 +144,8 @@ const Room = function()
       const formData = new FormData();
       formData.append('title',title);
       formData.append('bgImg',bgImg);
-      console.log(formData);
       try{
         const res = await axios.post(baseAddress+"rooms/updatebgImg",formData);
-        console.log(res.data);
         const updated = res.data.updatedRoom.bgImg;
         dispatch(changeBgImg(updated));
         toast.success("Updated");

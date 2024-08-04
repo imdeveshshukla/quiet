@@ -13,6 +13,7 @@ import { loading } from '../redux/loading';
 import toast from 'react-hot-toast';
 import { FiRefreshCcw } from "react-icons/fi";
 import SmallLoader from '../components/SmallLoader';
+import baseAddress from "../utils/localhost";
 
 
 
@@ -54,28 +55,23 @@ const Signup = () => {
         setErrorPass(null)
         setOnSave(true)
         setForm({ ...form, [e.target.name]: e.target.value });
-        console.log(e.target.value);
         
     }
 
     const handleOtp = async (e) => {
         setErrorOtp(null)
-        console.log(e.target.value);
         setOtp(e.target.value);
         setVarifyOtpData({ ...varifyOtpData, otp: e.target.value });
-        console.log(varifyOtpData);
     }
 
     const sendOtp = async () => {
         try {
-            const res = await axios.post("http://localhost:3000/auth/signup", form);
-            console.log(res);
+            const res = await axios.post(`${baseAddress}auth/signup`, form);
             if (res.status == 202) {
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email });
                 toast.success("Your OTP is on its way !");
                 setOtpsent(true);
             }
-            console.log(varifyOtpData);
 
         } catch (error) {
             if (error.response.status == 500) {
@@ -90,7 +86,6 @@ const Signup = () => {
     const handleSubmit = async (e) => {
 
         e.preventDefault();
-        console.log(form);
         
         if ((form.username.length < 3)) {
             setOnSave(false)
@@ -112,7 +107,6 @@ const Signup = () => {
             setTimeLeft(60)
 
             setForm({ username: "", email: "", password: "" })
-            console.log(form);
         }
     }
 
@@ -122,7 +116,7 @@ const Signup = () => {
 
         try {
 
-            const res = await axios.post("http://localhost:3000/auth/resendotp", varifyOtpData);
+            const res = await axios.post(`${baseAddress}auth/resendotp"`, varifyOtpData);
             if (res.status == 202) {
                 setTimeLeft(60);
                 setdisable(true)
@@ -132,7 +126,6 @@ const Signup = () => {
             } else if (res.status == 500) {
                 toast.error("Some error occured! Try Again.")
             }
-            console.log(res);
 
         } catch (error) {
             if (error.response.status == 500) {
@@ -147,10 +140,8 @@ const Signup = () => {
     const varifyOtp = async () => {
         dispatch(loading())
         try {
-            console.log(varifyOtpData);
 
-            const res = await axios.post("http://localhost:3000/auth/varifyotp", varifyOtpData);
-            console.log(res);
+            const res = await axios.post(`${baseAddress}auth/varifyotp`, varifyOtpData);
 
             if (res.status == 202) {
                 toast.success("Sign Up Successful!");
@@ -176,13 +167,11 @@ const Signup = () => {
 
 
     const handleEye = () => {
-        console.log("hello");
         passref.current.type = "text"
         setEye(true);
 
     }
     const handleCloseEye = () => {
-        console.log("ok");
         passref.current.type = "password"
         setEye(false);
 
@@ -243,8 +232,8 @@ export const Layout = ({ form,setForm, passref, eye, handleChange, handleCloseEy
     const generateUsername = async()=>{
         setisLoading(true);
         try {
-            const res = await axios.get("http://localhost:3000/auth/generateusername");
-            console.log(res);
+            const res = await axios.get(`${baseAddress}auth/generateusername`);
+
             setUsrnmList(res.data.usernames);
             
         } catch (error) {

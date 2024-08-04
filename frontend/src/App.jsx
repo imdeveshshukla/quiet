@@ -19,7 +19,7 @@ import Settings from './pages/Settings'
 import Sidenav from './components/Sidenav'
 
 import Overview from './pages/Overview'
-
+import baseAddress from "./utils/localhost";
 import Postdetail from './components/Postdetail'
 import Postskelton, { CommentSkelton, ProfileSkelton } from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
@@ -47,6 +47,7 @@ import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
 import { useRef } from 'react'
 import NotFound from './pages/NotFound'
+import Popular from './pages/Popular'
 
 
 
@@ -78,8 +79,7 @@ function App() {
     // dispatch(loading())
 
     try {
-      const res = await axios.get(`http://localhost:3000/u/${email}`, { withCredentials: true });
-      console.log(res.data.user);
+      const res = await axios.get(`${baseAddress}u/${email}`, { withCredentials: true });
       if (res.status == 200) {
         dispatch(setUserInfo(res.data.user));
       }
@@ -87,15 +87,13 @@ function App() {
       console.log(error);
 
     }
-    // dispatch(loading())
   }
 
 
 
   const getUserNotification = async () => {
     try {
-      const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
-      console.log(res.data);
+      const res = await axios.get(`${baseAddress}u/notification`, { withCredentials: true });
       dispatch(setNotification(res.data.data))
     } catch (error) {
       console.log(error);
@@ -111,35 +109,24 @@ function App() {
 
 
   const sendReq = async () => {
-
-    // dispatch(loading());
     dispatch(setSkeltonLoader());
-
     try {
-      const res = await axios.post("http://localhost:3000/auth/refreshsignin", { withCredentials: true });
+      const res = await axios.post(`${baseAddress}auth/refreshsignin`, { withCredentials: true });
       if (res.status == 200) {
         toast.success("Loggin Session Restored")
         dispatch(login());
         getUserData(res.data);
         getUserNotification();
-        //  await getPost();
-
       }
     } catch (error) {
       console.log(error);
-      // await getPost();
-
       if (error.response.status == 404) {
         console.log("token not found");
       } else if (error.response.status == 401) {
         console.log("Invalid token");
       }
     }
-    // dispatch(loading())
     dispatch(setSkeltonLoader());
-
-
-
   }
 
 
@@ -158,12 +145,10 @@ function App() {
     };
   }, [isLogin]);
 
-
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       dispatch(setShowSearch(false))
     }
-
   };
 
 
@@ -181,8 +166,7 @@ function App() {
 
   const room = location.pathname.includes('/room');
   
-  console.log("HEy this is me");
-  // dispatch(Reset());
+
   return (
     <>
       {isLoading && <Loader />}
@@ -200,6 +184,9 @@ function App() {
             {!isLogin && <Route path='/signin' element={<Signin />} />}
             <Route path='/resetpassword' element={<Resetpass />} />
             <Route path='/varifyaccount' element={<Varifyacc />} />
+
+
+            <Route path='/popular' element={<Popular/>} />
 
             <Route path='u/:username' element={<DisplayProfile />} >
               <Route path='overview' element={<Overview />} />

@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import Hottopic from '../components/Hottopic'
+import baseAddress from "../utils/localhost";
 
 import { useDispatch, useSelector } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
@@ -28,12 +29,11 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
 
     const getPost = async () => {
         dispatch(setSkeltonLoader())
-        console.log(`Fetching posts for page: ${page}`);
         if(page==1){
           dispatch(clearHotPostsInfo())
         }
         try {
-          const res = await axios.get('http://localhost:3000/posts/q/hottopic', {
+          const res = await axios.get(`${baseAddress}posts/q/hottopic`, {
             params: {
               page,
               limit: 10,
@@ -58,7 +58,6 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
       };
 
       useEffect(() => {
-        console.log("underUse effect getting post for page", page);
         setPage(1); // Reset page when topic changes
         setHasMore(true); // Reset hasMore when topic changes
         getPost(); // Fetch posts for the new topic
@@ -68,7 +67,6 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
       
 
       useEffect(() => {
-        console.log("underUse effect getting post for page",page);
         getPost();
       }, [page]);
 
@@ -76,7 +74,6 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
 
 
       const fetchMoreData = () => {
-        console.log(`Loading more data, current page: ${page}`);
         setPage((prevPage) => prevPage + 1);
       };
 

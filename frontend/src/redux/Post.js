@@ -14,7 +14,6 @@ export const postState = createSlice({
         if(!elm)
           state.posts.push(item);
       })
-      // state.posts = [...state.posts, ...action.payload];
     },
     setPostComment: (state, action) => {
       let post = state.posts.find((post) => post.id == action.payload.postId);
@@ -28,7 +27,6 @@ export const postState = createSlice({
       let upvotes;
       if (post) {
         upvotes = post.upvotes;
-        console.log(action.payload);
 
         let index = upvotes.findIndex(
           (vote) => vote.userId == action.payload.userId
@@ -37,13 +35,10 @@ export const postState = createSlice({
         if (index != -1) {
           upvotes[index] = action.payload;
 
-          console.log(upvotes);
         } else {
-          console.log("length", upvotes.length);
 
           upvotes[upvotes.length] = action.payload;
 
-          console.log("else", upvotes);
         }
       }
     },

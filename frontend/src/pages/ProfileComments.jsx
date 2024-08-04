@@ -15,6 +15,7 @@ import { sendNotification } from '../components/Posts';
 import { getTime } from '../components/Posts';
 import { v4 as uuidv4 } from 'uuid';
 import ReadMore from '../components/ReadMore';
+import baseAddress from "../utils/localhost";
 
 
 
@@ -34,7 +35,6 @@ const ProfileComments = () => {
 
 
   const getUserComment = async (reset = false) => {
-    console.log("fetching");
     dispatch(setSkeltonLoader());
     setisLoading(true)
     try {
@@ -46,7 +46,7 @@ const ProfileComments = () => {
 
       const currentPage = reset ? 1 : page;
 
-      const res = await axios.get(`http://localhost:3000/search/getusercomments`, {
+      const res = await axios.get(`${baseAddress}search/getusercomments`, {
         params: {
           userID: user.userID,
           username,
@@ -56,7 +56,6 @@ const ProfileComments = () => {
         withCredentials: true,
       });
 
-      console.log("userComments", res);
 
       if (res.status === 200) {
         if (res.data.length < 10) {
@@ -72,14 +71,12 @@ const ProfileComments = () => {
   };
 
   useEffect(() => {
-    console.log("usrname eff", user, username);
 
 
     getUserComment(true);
   }, [username]);
 
   useEffect(() => {
-    console.log("page eff", user, username);
 
     if (page > 1) {
       getUserComment();
@@ -116,7 +113,7 @@ export default ProfileComments
 
 export const UserComment = ({ comment }) => {
 
-  const Navigate= useNavigate();
+  const Navigate = useNavigate();
   const [upvoted, setUpvoted] = useState(false);
   const [downvoted, setDownVoted] = useState(false);
   const [upvotes, setUpvotes] = useState(0);
@@ -174,7 +171,6 @@ export const UserComment = ({ comment }) => {
 
     try {
       const res = await axios.post("http://localhost:3000/posts/vote", { commentId: comment.id, val, postId: comment.postId });
-      console.log("commentpelike", res);
 
       if (res.status == 201) {
         const data = res.data.newUpvote;
@@ -198,6 +194,7 @@ export const UserComment = ({ comment }) => {
 
       }
     } catch (error) {
+      console.log(error);
 
     }
 
@@ -220,38 +217,42 @@ export const UserComment = ({ comment }) => {
       val = 0;
       setDownvote((upvoteNumber) => upvoteNumber - 1)
     }
-    const res = await axios.post("http://localhost:3000/posts/vote", { commentId: comment.id, val, postId: comment.postId });
-    console.log("commentpedislike", res);
-    const data = res.data.newUpvote
+    try {
+      const res = await axios.post("http://localhost:3000/posts/vote", { commentId: comment.id, val, postId: comment.postId });
+      const data = res.data.newUpvote
 
-    if (val == -1) {
-      if (res.status == 201) {
-        if (data.comment.parentId) {
-          if (data.userId != data.comment.userId)
-            sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your reply on a comment!", body: data.comment.body });
+      if (val == -1) {
+        if (res.status == 201) {
+          if (data.comment.parentId) {
+            if (data.userId != data.comment.userId)
+              sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your reply on a comment!", body: data.comment.body });
+          }
+          else {
+            if (data.userId != data.comment.userId)
+              sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your comment on a post!", body: data.comment.body });
+          }
+          if (data.userId != data.post.userId)
+            sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "disliked a comment on your post!", body: data.comment.body });
         }
-        else {
-          if (data.userId != data.comment.userId)
-            sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.comment.userId, title: "disliked your comment on a post!", body: data.comment.body });
-        }
-        if (data.userId != data.post.userId)
-          sendNotification({ postId: data.postId, fromUser: data.userId, toUser: data.post.userId, title: "disliked a comment on your post!", body: data.comment.body });
       }
+    } catch (error) {
+        console.log(error);
+        
     }
   }
 
   const handleClick = (event) => {
-    
+
     if (event.target.closest('.exclude-click')) {
       return;
     }
     Navigate(`/post/${comment.postId}`)
- 
+
   };
 
 
 
-  return (<div className=' cursor-pointer' onClick={(e)=>handleClick(e)} key={comment.id}>
+  return (<div className=' cursor-pointer' onClick={(e) => handleClick(e)} key={comment.id}>
     <div className=" flex flex-col mx-2 my-6 sm:m-8   gap-2 py-4 pl-4  pr-2 xxs:pl-8 xxs:pr-4 xs:pl-12 xs:pr-8  sm:px-14  border rounded-2xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
       <div className=" flex gap-2 items-center">
 
@@ -272,12 +273,12 @@ export const UserComment = ({ comment }) => {
         <header className=' flex items-center justify-stretch flex-wrap whitespace-pre-wrap leading-3'>
           <span className='exclude-click text-sm font-mono font-semibold'>{comment?.user.username}</span>
           <span className=' text-xs'>{comment.parentId ? `  replied to  ` : '  commented  '}</span>
-          <span  className='exclude-click text-sm font-mono font-semibold'>{comment.parent?.user.username}</span>
+          <span className='exclude-click text-sm font-mono font-semibold'>{comment.parent?.user.username}</span>
           <span>• </span>
           <span className="text-gray-500 text-[9px] xxs:text-xs  line-clamp-1 overflow-clip">{getTime(comment.createdAt)} ago</span>
         </header>
 
-        <section className=' font-serif px-2 py-1'><ReadMore maxLines={3} children={comment.body}/></section>
+        <section className=' font-serif px-2 py-1'><ReadMore maxLines={3} children={comment.body} /></section>
 
         <footer>
           <div className="btns">

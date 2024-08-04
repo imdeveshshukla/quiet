@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import InfiniteScroll from 'react-infinite-scroll-component';
-
 import Createpost from '../components/CreatepostButton';
 import Posts from '../components/Posts';
 import Postskelton from '../components/Postskelton';
@@ -11,6 +10,9 @@ import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
 import { GrRefresh } from "react-icons/gr";
 import SmallLoader from '../components/SmallLoader';
+import { increment, Reset } from '../redux/Page';
+import baseAddress from "../utils/localhost";
+
 
 
 
@@ -22,30 +24,23 @@ const Home = () => {
   const isLogin = useSelector((state) => state.login.value);
   const isSkelton = useSelector((state) => state.skelton.value);
   const [isLoading, setisLoading] = useState(false)
-  
-  const dispatch = useDispatch();
-  // const page = useSelector(state => state.page.value)
-  
 
-  const [page, setPage] = useState(1);
+  const dispatch = useDispatch();
+  const page = useSelector(state => state.page.value)
+
   const [hasMore, setHasMore] = useState(true);
 
 
-  const getPost = async () => {
-    dispatch(setSkeltonLoader())
+  const getPost = async (p) => {
     setisLoading(true)
-    if (page == 1) {
-      window.scrollTo(0, 0);
-      dispatch(clearPostsInfo())
-    }
+    dispatch(setSkeltonLoader())
     try {
-      const res = await axios.get('http://localhost:3000/posts/getPost', {
+      const res = await axios.get(`${baseAddress}posts/getPost`, {
         params: {
-          page,
+          page: p,
           limit: 10,
         },
       });
-      console.log(res.data);
 
 
       if (res.status === 200) {
@@ -59,25 +54,31 @@ const Home = () => {
       }
     } catch (error) {
       console.error(error);
-      setHasMore(false); // Stop fetching if there's an error
+      setHasMore(false);
     }
-
     dispatch(setSkeltonLoader())
     setisLoading(false)
   };
 
   const handleNewPost = () => {
-    console.log("hello");
-    if(page==1){
-      getPost()
-      setHasMore(true);
-      return;
-    }
-    setPage(1);
+
+    dispatch(Reset())
+    dispatch(clearPostsInfo())
+    getPost(1)
     setHasMore(true);
   }
 
   useEffect(() => {
+// <<<<<<< master
+//     if (posts.length > 0) return;
+//     getPost(1);
+//   }, []);
+
+//   const fetchMoreData = () => {
+//     if (isLoading || !hasMore) return;
+//     getPost(page + 1)
+//     dispatch(increment());
+// =======
     if(posts.length > 0)return;
     getPost();
   }, []);
@@ -87,6 +88,7 @@ const Home = () => {
     console.clear();
     setPage((prevPages)=>prevPages+1);
     getPost();
+// >>>>>>> master
   };
 
 
@@ -102,15 +104,15 @@ const Home = () => {
         {isLogin && <Createpost onNewPost={handleNewPost} />}
         <div className='bg-gray-700 h-[1px]'></div>
         <div className=' flex items-center justify-end mx-4 mt-3'>
-          <span onClick={()=>handleNewPost()} className=' bg-[#eff1d3] rounded-full p-1'>
-          {isLoading?<SmallLoader/>:<GrRefresh  className=' cursor-pointer text-blue-500 text-xl font-extrabold'/>}
+          <span onClick={() => handleNewPost()} className=' bg-[#eff1d3] rounded-full p-1'>
+            {isLoading ? <SmallLoader /> : <GrRefresh className=' cursor-pointer text-blue-500 text-xl font-extrabold' />}
           </span>
         </div>
 
 
         <div className="post">
           {(isSkelton && posts.length === 0) ? (
-            <Postskelton />
+            <><Postskelton/></>
           ) : (
             posts?.map((post) => (
               <Posts
@@ -131,7 +133,7 @@ const Home = () => {
         </div>
       </InfiniteScroll>
 
-      
+
 
     </div>
 

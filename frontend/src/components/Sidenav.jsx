@@ -14,7 +14,7 @@ import axios from 'axios';
 import baseAddress from '../utils/localhost';
 import { clearRooms, setRooms } from '../redux/userRooms';
 import SmoothLoader from '../assets/SmoothLoader';
-import { GiConsoleController } from 'react-icons/gi';
+
 
 
 
@@ -53,15 +53,7 @@ const Sidenav = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
     }, []);
-// <<<<<<< master
-//   }, []);
 
-//   const handleHamburger = () => {
-//     console.log("hamburger");
-
-//     dispatch(setShowSideNav(!hamburger))
-// =======
-//     }, []);
 
     useEffect(()=>{
       if(isLogin)
@@ -75,24 +67,20 @@ const Sidenav = () => {
     },[userData])
 
     const handleHamburger =()=>{
-      // console.log("hamburger");
-  
       dispatch(setShowSideNav(!hamburger))
 
   }
   
-
-  console.log("myAllRooms = ",myAllRoom);
   return (<>
 
-    <nav ref={navRef} className={` ${hamburger ? 'left-0' : '-left-full'} fixed transition-all duration-400 ease-in-out bg-[#bbc2a5] xl:bg-[#fff0]  border-4 xl:border-none  border-[#dae0cb] xl:sticky xl:left-0  xl:block  overflow-auto  p-3 z-20 h-[calc(100vh-74.47px)]  top-[74.46px] `} >
+    <nav ref={navRef} className={` ${hamburger ? 'left-0' : '-left-full'} fixed transition-all duration-400 ease-in-out bg-[#bbc2a5] xl:bg-[#fff0]  border-4 xl:border-none  border-[#dae0cb] xl:sticky xl:left-0 z-20 xl:block  overflow-auto  p-3  h-[calc(100vh-74.47px)]  top-[74.46px] `} >
       <GrMenu onClick={() => handleHamburger()} className=' cursor-pointer hover:text-gray-700 fixed left-2 top-5 text-3xl block xl:hidden' />
       <div className="sidenav">
 
         <div className='p-3 m-2 border-b-2 border-gray-600'>
-          <NavLink to={"/"} className={(e) => { return e.isActive ? 'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'w-full flex rounded items-center gap-2 px-4 py-2' }}><IoHome /><span>Home</span></NavLink>
-          <NavLink to={"/popular"} className={(e) => { return e.isActive ? 'flex w-full rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full rounded items-center gap-2 px-4 py-2' }}><LuArrowUpRightSquare /><span>Popular</span></NavLink>
-          <NavLink to={"/all"} className={(e) => { return e.isActive ? 'flex w-full  rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full  rounded items-center gap-2 px-4 py-2' }}><HiOutlineChartSquareBar /><span>All</span></NavLink>
+          <NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/"} className={(e) => { return e.isActive ? 'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'w-full flex rounded items-center gap-2 px-4 py-2' }}><IoHome /><span>Home</span></NavLink>
+          <NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/popular"} className={(e) => { return e.isActive ? 'flex w-full rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full rounded items-center gap-2 px-4 py-2' }}><LuArrowUpRightSquare /><span>Popular</span></NavLink>
+          <NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/all"} className={(e) => { return e.isActive ? 'flex w-full  rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full  rounded items-center gap-2 px-4 py-2' }}><HiOutlineChartSquareBar /><span>All</span></NavLink>
         </div>
 
         <div className='p-3 m-2 border-b-2 border-gray-600'>
@@ -103,7 +91,7 @@ const Sidenav = () => {
             {isLogin &&<> <CreateRoomBtn />
             
             {isLogin && roomLoader?<div className="mx-auto"><SmoothLoader/></div>:(myAllRoom?.map(function(val){
-              {/* console.log(val?.room); */}
+             
               return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{joined:true}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.room.title}</span></NavLink>
             }))}
               </>

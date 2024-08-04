@@ -28,8 +28,7 @@ const Postdetail = () => {
     const dispatch= useDispatch()
     const location = useLocation();
     const {id}= useParams();
-    
-    // console.log("UserInfo "+userInfo);
+
     const getApost=async()=>{
         try {
           const res = await axios.get("http://localhost:3000/posts/getapost", { 
@@ -37,7 +36,6 @@ const Postdetail = () => {
               id,
             }
           });
-          console.log(res);
           
           if(res.status==200){
             dispatch(setPostDetail(res.data.post))

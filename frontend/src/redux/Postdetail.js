@@ -13,7 +13,6 @@ export const postDetailState = createSlice({
     },
     setComment:(state,action)=>{
       state.post.comments=[...state.post.comments, action.payload]
-      console.log(action.payload);
       
     },
     clearPostDetail:(state)=>{

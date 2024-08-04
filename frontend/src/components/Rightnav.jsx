@@ -23,7 +23,6 @@ const Rightnav = () => {
       
       {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<HotTopicNav/>}
 
-
     </div>
   )
 }

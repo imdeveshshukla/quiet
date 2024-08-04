@@ -6,6 +6,8 @@ import ProfileLayout from '../components/ProfileLayout';
 import { useDispatch } from 'react-redux';
 import {setProfileInfo} from '../redux/profile'
 import toast from 'react-hot-toast';
+import baseAddress from "../utils/localhost";
+
 
 
 const DisplayProfile = () => {
@@ -17,10 +19,9 @@ const DisplayProfile = () => {
   const getUser = async () => {
     setIsLoading(true)
     try {
-      const res = await axios.get('http://localhost:3000/search/getauser', {
+      const res = await axios.get(`${baseAddress}search/getauser`, {
         params: { key: username },
       });
-      console.log("userdata", res);
       if(res.status==200){
         setUser(res.data);
         dispatch(setProfileInfo(res.data))

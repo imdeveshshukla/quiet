@@ -8,6 +8,11 @@ import { clearPostsInfo, setPost } from '../redux/userposts';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { useOutletContext, useParams } from 'react-router-dom';
+import baseAddress from "../utils/localhost";
+
+
+
+
 
 axios.defaults.withCredentials = true;
 
@@ -19,11 +24,10 @@ const ProfilePosts = () => {
     const [hasMore, setHasMore] = useState(true);
     const { user } = useOutletContext();
     const { username } = useParams();
-  const [isLoading, setisLoading] = useState(false)
+    const [isLoading, setisLoading] = useState(false)
 
 
     const getUserPost = async (reset = false) => {
-        console.log("fetching");
         dispatch(setSkeltonLoader());
         setisLoading(true)
         try {
@@ -35,7 +39,7 @@ const ProfilePosts = () => {
 
             const currentPage = reset ? 1 : page;
 
-            const res = await axios.get(`http://localhost:3000/search/getuserposts`, {
+            const res = await axios.get(`${baseAddress}search/getuserposts`, {
                 params: {
                     userID: user.userID,
                     username,
@@ -58,26 +62,25 @@ const ProfilePosts = () => {
         dispatch(setSkeltonLoader());
         setisLoading(false)
     };
+    
 
     useEffect(() => {
-        console.log("usrname eff",user, username);
-        
-        
         getUserPost(true);
     }, [username]);
 
+
     useEffect(() => {
-        console.log("page eff", user, username);
-        
         if (page > 1) {
             getUserPost();
         }
     }, [page]);
 
+
     const fetchMoreData = () => {
         if (isLoading || !hasMore) return;
         setPage(prevPage => prevPage + 1);
     };
+
 
     return (
         <InfiniteScroll

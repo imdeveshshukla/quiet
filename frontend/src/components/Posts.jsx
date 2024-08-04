@@ -60,13 +60,20 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
         setUpvote((upvoteNumber) => upvoteNumber - 1);
       }
 
-      const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
-      if (res.status == 201) {
-        const data = res.data.newUpvote;
-        if (val == 1 && data.userId != data.post.userId) {
-          sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "upvoted your post!" });
+
+      try {
+        const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
+        if (res.status == 201) {
+          const data = res.data.newUpvote;
+          if (val == 1 && data.userId != data.post.userId) {
+            sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "upvoted your post!" });
+          }
         }
+
+      } catch (error) {
+      console.log(error);
       }
+
     } else {
       toast.dismiss();
       toast.error("Sign In First");
@@ -93,13 +100,20 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
       val = 0;
       setDownvotenum((upvoteNumber) => upvoteNumber - 1);
     }
-    const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
-    if (res.status == 201) {
-      const data = res.data.newUpvote;
-      if (val == -1 && data.userId != data.post.userId) {
-        sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "downvoted your post!" });
+
+    try {
+      const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
+      if (res.status == 201) {
+        const data = res.data.newUpvote;
+        if (val == -1 && data.userId != data.post.userId) {
+          sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "downvoted your post!" });
+        }
       }
+      
+    } catch (error) {
+      console.log(error);
     }
+
   };
 
 
@@ -112,18 +126,18 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
           <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
         </header>
         <main className='cursor-pointer'>
-          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip '  style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em',  wordBreak: 'break-word' }}>{title}</div>
+          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}>{title}</div>
 
           <div className={` my-2 whitespace-pre-wrap break-words`}>
             <ReadMore children={body} maxLines={media ? 2 : 10} />
           </div>
 
-          
+
           {media && (
             <img className='xxxs:w-screen xs:w-full max-h-[420px] object-contain py-2' src={media} alt="postImg" />
           )}
         </main>
-        <footer className='flex py-2 gap-6'>
+        <footer className='flex py-2 gap-5 xxs:gap-6'>
           <div className={upvoted ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-green-600 text-white' : downvote ? 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-red-600 text-white' : 'rounded-3xl flex gap-1 items-start justify-center p-2 bg-zinc-400 text-black'}>
             <BiUpvote onClick={() => upvote(id)} className={upvoted ? 'text-2xl hover:text-neutral-950 text-green-900 cursor-pointer' : 'text-2xl hover:text-green-700 cursor-pointer'} />
             <span>{upvoteNumber}</span>
@@ -166,7 +180,6 @@ export const getTime = (createdAt) => {
 export const sendNotification = async ({ postId, toUser, fromUser, title, body }) => {
   try {
     const res = await axios.post("http://localhost:3000/u/sendnotification", { postId, toUser, fromUser, title, body });
-    console.log(res);
     return res;
   } catch (error) {
     console.error(error);

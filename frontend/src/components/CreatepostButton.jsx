@@ -30,22 +30,18 @@ const Createpost = ({ onNewPost }) => {
 
   const handleChange = (e) => {
     setImage(e.target.files[0]);
-    console.log("Image = " + image);
   }
 
   const handleSelectChange = (event) => {
-    console.log(event.target.value);
     setSelectedOption(event.target.value);
   };
 
   const handleSubmit = async () => {
-    console.log(title + "\n" + description + "\n" + selectedOption);
     const formData = new FormData();
     formData.append('title', title);
     formData.append('topic', selectedOption);
     formData.append('body', description);
     formData.append('postImg', image);
-    console.log(formData);
 
 
     setLoading(true);
@@ -56,7 +52,7 @@ const Createpost = ({ onNewPost }) => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      console.log(response.data.post);
+
       if (response.status == 201) {
         // dispatch(setPost(response.data.post));
         // dispatch(setUserPost(response.data.post))

@@ -1,6 +1,6 @@
 import express  from "express"
 import { verifyToken } from "../middlewares/verifytoken.js";
-import { createPost, getPost,getAPost,getHotPost } from "../controller/posts.js";
+import { createPost, getPost,getAPost,getHotPost, getPopularPosts } from "../controller/posts.js";
 import { upload } from "../middlewares/multer.js";
 import { createComment, getAllComment, getUserComment } from "../controller/comment.js";
 import {  upvoteNumber, vote } from "../controller/upvotes.js";
@@ -24,12 +24,14 @@ postRoutes.post("/post",verifyToken,createPost);
 
 //hotTopicsPost
 postRoutes.get("/q/hottopic", getHotPost);
+postRoutes.get('/popular',getPopularPosts);
 
 
 //Comments Routes 
 postRoutes.post('/createcomment',verifyToken,createComment);
 postRoutes.post('/getallcomment',getAllComment);
 postRoutes.get('/comment',getUserComment);
+
 //create getComment according to postID
 
 //Upvotes Routes 
