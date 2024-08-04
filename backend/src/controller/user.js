@@ -158,7 +158,7 @@ const getUserPost = async (req, res) => {
 const getNotifications= async (req,res)=>{
 
   const id= req.userId;
-  console.log("id", req.userId);
+  console.log("Notification :For id", req.userId);
   
   try {
     const data= await prisma.notification.findMany({

@@ -1,8 +1,12 @@
 import { useEffect, useRef, useState } from "react";
 import { IoClose } from "react-icons/io5";
 import { useSelector } from "react-redux";
+import SmoothLoader from "../assets/SmoothLoader";
+import axios from "axios";
+import baseAddress from "../utils/localhost";
+import toast from "react-hot-toast";
 
-export default function AddMemBox({setShow}){
+export default function AddMemBox({setShow,id}){
     const createPostRef = useRef(null);
   const [title, setTitle] = useState('');
   const [Btnloading, setLoading] = useState(false);
@@ -31,7 +35,30 @@ export default function AddMemBox({setShow}){
   }, [title])
 
   const handleSubmit = async () => {
-    
+    setLoading(true);
+    try{
+      const res = await axios.post(`${baseAddress}rooms/addUserinRoom/${title}`,{
+        title:id
+      });
+      console.clear();
+      console.log(res);
+      const msg = res?.data.msg;
+      console.log(msg);
+      if(res.status == 201)
+      {
+        toast.success("Successfully Send Request");
+      }
+      else{
+        toast.error(msg);
+      }
+      setShow(false); 
+      setLoading(false);
+    }
+    catch(err){
+      toast.error(`${err.message}`);
+      setShow(false);
+      setLoading(false);
+    }
   }
 
   const handleClickOutside = (event) => {
@@ -85,7 +112,7 @@ export default function AddMemBox({setShow}){
         <button
             onClick={handleSubmit}
             className={titleRequired?"bg-[#656923] w-32 1_5md:w-48 text-sm text-black font-bold py-2 px-4 rounded focus:outline-none cursor-not-allowed":"bg-[#656923] hover:bg-[#a9aa88] w-48 text-sm text-black font-bold py-2 px-4 rounded focus:outline-none"}>
-            {"Send Request"}
+            {Btnloading?<SmoothLoader/>:"Send Request"}
           </button>
       </div>
     </div>

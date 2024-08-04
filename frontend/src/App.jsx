@@ -219,7 +219,7 @@ function App() {
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
 
-            <Route path='/room/:username/:title' element={<Room />} />
+            {/* <Route path='/room/:username/:title' element={<Room />} /> */}
 
             <Route path='*' element={<NotFound/>} />
               <Route path='/room/:CreatorId/:title' element={<Room/>} />

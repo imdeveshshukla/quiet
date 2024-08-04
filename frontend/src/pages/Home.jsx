@@ -78,13 +78,15 @@ const Home = () => {
   }
 
   useEffect(() => {
+    if(posts.length > 0)return;
     getPost();
-  }, [page]);
+  }, []);
   
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
     console.clear();
     setPage((prevPages)=>prevPages+1);
+    getPost();
   };
 
 

@@ -37,7 +37,7 @@ const Room = function()
     const [hasMore, setHasMore] = useState(true);
     const [gotPost,setPost] = useState([]);
     const [endMsg,setEndMsg] = useState("You've reached the end of the page!");
-    const isOwner = CreatorId == userData?.userID;
+    const isOwner = (CreatorId === userData?.userID);
     const [showAddMem,setShowAddMem] = useState(false);
     function openPostBtn(){
       setShowCP(true);
@@ -52,6 +52,10 @@ const Room = function()
     const getPost = async () => {
         dispatch(setSkeltonLoader())
         console.log(`Fetching posts for page: ${page}`);
+        if(!joined){ 
+          dispatch(setHotPost([]))
+          return;
+        }
         if(page==1){
           dispatch(clearHotPostsInfo())
         }
@@ -162,11 +166,13 @@ const Room = function()
         setLoader1(false);
       }
     }
-    // console.log(roomDetail?.CreatorId +"=="+userData?.userID);
+    console.log(roomDetail?.CreatorId +"=="+userData?.userID);
+    console.log('Joined'+joined)
+    console.log(location);
     return( 
       <>
       {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP} roomTitle={title} setPost={setPost}/>}
-      {showAddMem && <AddMemBox setShow={setShowAddMem}/>}
+      {showAddMem && <AddMemBox setShow={setShowAddMem} id={title}/>}
     <div className="w-full">
       <div className=''>
           <div className='border-black border-2 relative shadow-lg shadow-slate-300 rounded-2xl h-48 m-4  '>
@@ -195,7 +201,7 @@ const Room = function()
               </svg>
                 <span className="text-sm pt-0 mt-0 self-center no-underline">{"Create"}</span>
               </button>
-              <button className="flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
+              {isOwner&&<button className="flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
               onClick={()=>setShowAddMem(true)}
               >
               
@@ -204,7 +210,7 @@ const Room = function()
               </svg>
                 <span className="text-sm pt-0 mt-0 self-center no-underline">{"Member"}</span>
               </button>
-              
+              }
             </div>
           :
           <>
