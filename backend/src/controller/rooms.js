@@ -409,7 +409,7 @@ export const sendJoiningRequest = async(req,res)=>{
             }
         });
 
-        if(!user) return res.status(404).json({
+        if(!user) return res.status(200).json({
             msg:"Please Enter Correct Username"
         })
         console.log("Above Room Fetching Block");
@@ -461,7 +461,7 @@ export const sendJoiningRequest = async(req,res)=>{
             const notification= await prisma.notification.create({
               data:{
                 title:`Join My Room`,
-                body:`Join Room: ${room.title}`,
+                body:`Join Room: ${room.title} Click Here to Join Room`,
                 toUser:user.userID,
                 fromUser:userID,
               }
@@ -492,8 +492,42 @@ export const sendJoiningRequest = async(req,res)=>{
 }
 
 export const acceptJoiningRequest = async(req,res)=>{
-    const userID = req.userID;
+    const userID = req.userId;
     const body = req.body;
+    const roomTitle = body?.title.split(" ")[2];
+    const creatorId = body?.fromUser;
+    if(!roomTitle || !creatorId)return res.status(404).json({msg:"Wrong Input"});
+    try {
+        const room = await prisma.rooms.findFirst({
+            where:{
+                title:roomTitle,
+            },
+            include:{
+                posts:true,
+                UsersEnrolled:true
+            }
+        })
+        if(!room)return res.status(404).json({msg:"Room Not Found"});
+        if(room.CreatorId != creatorId)return res.status(404).json({msg:"Wrong Request Send"});
+
+        const enrollment = await prisma.enrolledRooms.create({
+            data:{
+                userId:userID,
+                RoomId:room.id,
+                joined:true
+            }
+        })
+        return res.status(200).json({
+            msg:"Success",
+            room,
+            enrollment
+        })
+    } catch (error) {
+        return res.status(500).json({
+            msg:"Database/Server Issue",
+            error:error?.message
+        })
+    }
 }
 
 //Trashes Need to clean

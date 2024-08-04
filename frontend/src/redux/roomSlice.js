@@ -10,6 +10,8 @@ export const roomSlice = createSlice({
   reducers: {
     setRoomDetail:(state,action)=>{
         state.roomInfo = action.payload
+        console.clear();
+        console.log(state.roomInfo);
     },
     changeBgImg:(state,action)=>{
       state.roomInfo.bgImg = action.payload

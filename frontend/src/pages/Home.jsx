@@ -69,14 +69,26 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (posts.length > 0) return;
-    getPost(1);
-  }, []);
+// <<<<<<< master
+//     if (posts.length > 0) return;
+//     getPost(1);
+//   }, []);
 
+//   const fetchMoreData = () => {
+//     if (isLoading || !hasMore) return;
+//     getPost(page + 1)
+//     dispatch(increment());
+// =======
+    if(posts.length > 0)return;
+    getPost();
+  }, []);
+  
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
-    getPost(page + 1)
-    dispatch(increment());
+    console.clear();
+    setPage((prevPages)=>prevPages+1);
+    getPost();
+// >>>>>>> master
   };
 
 

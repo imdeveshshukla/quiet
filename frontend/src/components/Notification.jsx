@@ -6,6 +6,11 @@ import axios from 'axios';
 import { clearNotification, setNotification, updateNotification } from '../redux/Notification';
 import { FiRefreshCcw } from "react-icons/fi";
 import SmallLoader from './SmallLoader';
+import Loader from './Loader';
+import baseAddress from '../utils/localhost';
+import { addNewRoom } from '../redux/userRooms';
+import { setRoomDetail } from '../redux/roomSlice';
+import toast from 'react-hot-toast';
 
 
 
@@ -18,7 +23,7 @@ const Notification = ({setIsNfnOpen}) => {
     const dispatch = useDispatch();
     const Navigate =useNavigate();
     const [isLoading, setIsLoading] = useState(false);
-
+    const [bigLoader,setBigLoader] = useState(false);
     const handleRefresh= async()=>{
         setIsLoading(true);
         getUserNotification()
@@ -28,6 +33,7 @@ const Notification = ({setIsNfnOpen}) => {
         try {
           const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
           dispatch(setNotification(res.data.data))
+          
         } catch (error) {
           console.log(error);
           
@@ -35,14 +41,46 @@ const Notification = ({setIsNfnOpen}) => {
         setIsLoading(false)
       }
 
+    const addUserToRoom = async(title,fromUser)=>{
+        // console.clear();
+        console.log(title+" "+fromUser);
+        setBigLoader(true)
+        try {
+            const res = await axios.post(`${baseAddress}rooms/acceptJoiningRequest`,{
+                title,
+                fromUser
+            })
+            console.log(res);
+            if(res.status == 200)
+            {
+                const room = res?.data?.room;
+                dispatch(addNewRoom(room));
+                // dispatch(setRoomDetail(room));
+                const creatorId = room?.CreatorId;
+                const title = room?.title;
+                setBigLoader(false);
+                Navigate(`/room/${creatorId}/${title}`,{state:{joined:true}});
 
+            }
+            else{
+                toast.error(res.data.msg);
+            }
+            setBigLoader(false)
+        } catch (error) {
+            setBigLoader(false)
+            toast.error(error.message);
+        }
+    }
     const handleClick=(item, nId)=>{
         setIsNfnOpen(false);
         markAsRead(nId);
         if(item.postId)
             Navigate(`/post/${item.postId}`);
         else
-            Navigate('')
+        {
+            console.log(item);
+            addUserToRoom(item.body,item.fromUser);
+        }
     }
 
 
