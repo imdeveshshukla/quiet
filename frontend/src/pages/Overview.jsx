@@ -120,7 +120,7 @@ const Overview = () => {
               
                  :
 
-              <Posts key={e.id}  id={e.id} title={e.title} body={e.body} media={e.img} countComment={e.comments?.length} createdAt={e.createdAt} user={e.user} upvotes={e.upvotes}/>}
+              <Posts key={e.id} inRoom={e.subCommunity} room={e.room}  id={e.id} title={e.title} body={e.body} media={e.img} countComment={e.comments?.length} createdAt={e.createdAt} user={e.user} upvotes={e.upvotes}/>}
             </>)
           )
         }

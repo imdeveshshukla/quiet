@@ -28,23 +28,14 @@ const Search = () => {
 
     useEffect(() => {
         if (debouncedSearch) {
-            fetchUsers();
+            fetchUsers({debouncedSearch, setUsers});
         } else {
             setUsers([])
         }
     }, [debouncedSearch]);
 
 
-    const fetchUsers = async () => {
-        try {
-            const res = await axios.get('http://localhost:3000/search/getusers', {
-                params: { key: debouncedSearch },
-            });
-            setUsers(res.data)
-        } catch (error) {
-            console.error('Error fetching users:', error);
-        }
-    };
+
 
 
 
@@ -61,7 +52,6 @@ const Search = () => {
         if (searchRef.current && !searchRef.current.contains(event.target)) {
             setMenu(false);
         }
-
     };
 
 
@@ -75,15 +65,37 @@ const Search = () => {
 
     return (
         <div ref={searchRef} className="search flex items-center relative ">
-            <span className="absolute z-10 left-2"><IoSearchOutline className=" text-2xl" /></span>
+            <span className="absolute z-30 left-2"><IoSearchOutline className=" text-2xl" /></span>
             <div className='relative'>
-                <input onClick={() => setMenu(true)} onChange={(e) => handleSearch(e)} autoComplete='off' value={search} className={` w-[90vw] xs:w-[60vw] 2_sm:w-[36vw] outline-none pl-10 pr-4 py-2  lg:w-[30vw] hover:bg-[#acb23fa3]   rounded-3xl ${menu ? ' bg-[#c2c7b3]' : 'bg-[#878c47] 2_sm:bg-[#656923]'} `} type="search" name="search" id="search" placeholder='Search' />
-                {menu && <div className=' absolute top-0 min-h-20 bg-[#c2c7b3] w-full rounded-3xl -z-10 '>
+                <input spellCheck={"false"} onClick={() => setMenu(true)} onChange={(e) => handleSearch(e)} autoComplete='off' value={search} className={` w-[90vw] xs:w-[60vw] 2_sm:w-[36vw] outline-none pl-10 pr-4 py-2 relative z-20  lg:w-[30vw] hover:bg-[#acb23fa3]   rounded-3xl ${menu ? ' bg-[#c2c7b3]' : 'bg-[#878c47] 2_sm:bg-[#656923]'} `} type="search" name="search" id="search" placeholder='Search' />
+                {menu && <Menu users={users} openUserProfile={openUserProfile} debouncedSearch={debouncedSearch} isSearch={true}/>}
+            </div>
+        </div>
+    )
+}
+
+export default Search
+
+export  const fetchUsers = async ({debouncedSearch, setUsers}) => {
+    try {
+        const res = await axios.get('http://localhost:3000/search/getusers', {
+            params: { key: debouncedSearch },
+        });
+        setUsers(res.data)
+    } catch (error) {
+        console.error('Error fetching users:', error);
+    }
+};
+
+
+export const Menu= ({users, debouncedSearch, openUserProfile,isSearch, setTitle, setMenu})=>{
+    return (
+        <div className=' absolute top-0 min-h-20 bg-[#c2c7b3] w-full rounded-3xl  '>
                     <div className='mt-14 h-[1px] w-full bg-[#4c6011]'></div>
                     {users.length > 0 ? <div className=' text-md font-semibold py-1 px-4'>People</div> : <div className='text-md font-light py-1 px-4'>Search for people or community.</div>}
                     <div className='py-2 px-4 flex flex-col'>
                         {users.map(user => {
-                            return <div key={uuidv4()} onClick={() => openUserProfile(user.username)} className=' flex items-center gap-4 cursor-pointer hover:bg-[#b9c19e] rounded-lg py-2 px-4'>
+                            return <div key={uuidv4()} onClick={() => openUserProfile(user.username) } className=' flex items-center gap-4 cursor-pointer hover:bg-[#b9c19e] rounded-lg py-2 px-4'>
                                 <img
                                     src={user.dp ? user.dp : dp}
                                     alt="Profile"
@@ -95,10 +107,6 @@ const Search = () => {
                         })}
                     </div>
                     <div className=' px-4 py-2 flex items-center gap-4 border-t border-[#656923]'><IoSearchOutline className=' text-xl' /><span>search for"{debouncedSearch}"...</span></div>
-                </div>}
-            </div>
-        </div>
+                </div>
     )
 }
-
-export default Search

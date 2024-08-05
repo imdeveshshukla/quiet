@@ -73,8 +73,10 @@ export const getUserPosts = async (req, res) => {
                 user: true,
               },
             },
+            room:true,
             user: true,
             upvotes: true,
+
           },
           orderBy: {
             createdAt: "desc",
@@ -155,6 +157,7 @@ export const getUserUpvotes = async (req, res) => {
             user: true,
             comments:true,
             upvotes: true,
+            room:true,
           },
         },
       },

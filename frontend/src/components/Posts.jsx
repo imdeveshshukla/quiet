@@ -9,7 +9,7 @@ import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
 import ReadMore from './ReadMore';
 
-const Posts = ({ id, post, title, body, media, countComment, createdAt, user, upvotes }) => {
+const Posts = ({ id, post, title, body, media, countComment, inRoom, room, createdAt, user, upvotes }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -71,7 +71,7 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
         }
 
       } catch (error) {
-      console.log(error);
+        console.log(error);
       }
 
     } else {
@@ -109,7 +109,7 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
           sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "downvoted your post!" });
         }
       }
-      
+
     } catch (error) {
       console.log(error);
     }
@@ -123,7 +123,10 @@ const Posts = ({ id, post, title, body, media, countComment, createdAt, user, up
       <div className='px-4 py-2 xxs:px-8 xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
         <header className='flex gap-2 items-center my-2'>
           <img src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
-          <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
+          <div className=' flex flex-wrap gap-1 xs:gap-2 md:gap-4 items-center'>
+              <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•{inRoom && <><span className=' text-sm font-semibold'>q/{room.title}</span> <span>•</span></>}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
+            
+          </div>
         </header>
         <main className='cursor-pointer'>
           <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}>{title}</div>
