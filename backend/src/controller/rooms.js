@@ -428,7 +428,18 @@ export const addUser = async(req,res)=>{
             select:{
                 id:true,
                 UsersEnrolled:true,
-                privateRoom:true
+                privateRoom:true,
+                title:true,
+                img:true,
+                bgImg:true,
+                desc:true,
+                CreatorId:true,
+                createdAt:true,
+                _count:{
+                    select:{
+                        posts:true
+                    }
+                }
             }
         })
         var found = false,waiting = false;

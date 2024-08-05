@@ -54,6 +54,7 @@ const Sidenav = () => {
     setRoomLoader2(true)
     try{
       const res = await axios.get(baseAddress+"rooms/notJoinedRoom");
+
       setNotJoinedRooms(res.data.rooms);
 
     }catch(e)

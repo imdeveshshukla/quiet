@@ -54,7 +54,9 @@ const Room = function()
         })
         if(res.status == 200)
         {
-          dispatch(addNewRoom(res?.data.room));
+          console.clear()
+          console.log(res?.data?.room);
+          dispatch(addNewRoom(res?.data?.room));
           toast.success(res?.data.msg);
         }
         else{
@@ -114,8 +116,6 @@ const Room = function()
       dispatch(updatePost(gotPost));
     }
     async function getRooms(){
-        console.clear();
-        console.log(room);
         const crr = room.forEach(function(val){
           console.log(val?.room);
           if(val?.room?.title == title)
