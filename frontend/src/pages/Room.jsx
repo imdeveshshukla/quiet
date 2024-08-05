@@ -103,43 +103,43 @@ const Room = function()
       }
       navigate('/');
     }
-//     const getPost = async () => {
-//         dispatch(setSkeltonLoader())
-//         console.log(`Fetching posts for page: ${page}`);
-//         if(!joined && privateRoom){ 
-//           setHasMore(false);
-//           dispatch(setHotPost([]))
-//           return;
-//         }
-//         if(page==1){
-//           dispatch(clearHotPostsInfo())
-//         }
-//         try {
-//           const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
-//             params: {
-//               page,
-//               limit: 10,
-//             },
-//           });
+    const getPost = async () => {
+        dispatch(setSkeltonLoader())
+        console.log(`Fetching posts for page: ${page}`);
+        if(!joined && privateRoom){ 
+          setHasMore(false);
+          dispatch(setHotPost([]))
+          return;
+        }
+        if(page==1){
+          dispatch(clearHotPostsInfo())
+        }
+        try {
+          const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
+            params: {
+              page,
+              limit: 10,
+            },
+          });
     
-//           if (res.status === 200) {
-//             const fetchedPosts = res.data.posts;
+          if (res.status === 200) {
+            const fetchedPosts = res.data.posts;
     
-//             if (fetchedPosts.length < 10) {
-//               setHasMore(false);
-//             }
-//             dispatch(setSkeltonLoader())
-//             dispatch(setHotPost(fetchedPosts));
-//             console.log(fetchedPosts);
-//           }
-//         } catch (error) {
-//           console.log(error);
-//           setHasMore(false); // Stop fetching if there's an error
-//           dispatch(setSkeltonLoader())
-//         }
+            if (fetchedPosts.length < 10) {
+              setHasMore(false);
+            }
+            dispatch(setSkeltonLoader())
+            dispatch(setHotPost(fetchedPosts));
+            console.log(fetchedPosts);
+          }
+        } catch (error) {
+          console.log(error);
+          setHasMore(false); // Stop fetching if there's an error
+          dispatch(setSkeltonLoader())
+        }
 
           
-//     };
+    };
 // >>>>>>> master
 
 //   const getPost = async () => {
@@ -217,9 +217,9 @@ const Room = function()
       }
     }, [title])
 
-    const fetchMoreData = () => {
-      setPage((prevPage) => prevPage + 1);
-    };
+    // const fetchMoreData = () => {
+    //   setPage((prevPage) => prevPage + 1);
+    // };
 
     //For Refresh
     // useEffect(()=>{
@@ -233,24 +233,24 @@ const Room = function()
     //   dispatch(setRooms(temp));
     // },[roomDetail]);
 
-    const updateBgImg = async(e)=>{
-      setLoader1(true);
-      const bgImg = e.target.files[0];
-      const formData = new FormData();
-      formData.append('title',title);
-      formData.append('bgImg',bgImg);
-      try{
-        const res = await axios.post(baseAddress+"rooms/updatebgImg",formData);
-        const updated = res.data.updatedRoom.bgImg;
-        dispatch(changeBgImg(updated));
-        toast.success("Updated");
-      }
-    } catch (error) {
-      console.log(error);
-      setHasMore(false); // Stop fetching if there's an error
-    }
-    dispatch(setSkeltonLoader())
-  };
+  //   const updateBgImg = async(e)=>{
+  //     setLoader1(true);
+  //     const bgImg = e.target.files[0];
+  //     const formData = new FormData();
+  //     formData.append('title',title);
+  //     formData.append('bgImg',bgImg);
+  //     try{
+  //       const res = await axios.post(baseAddress+"rooms/updatebgImg",formData);
+  //       const updated = res.data.updatedRoom.bgImg;
+  //       dispatch(changeBgImg(updated));
+  //       toast.success("Updated");
+  //     }
+  //    catch (error) {
+  //     console.log(error);
+  //     setHasMore(false); // Stop fetching if there's an error
+  //   }
+  //   dispatch(setSkeltonLoader())
+  // };
 
 
   function onNewPost() {
@@ -259,24 +259,24 @@ const Room = function()
     getPost();
     dispatch(updatePost(gotPost));
   }
-  function getRooms() {
-    const crr = room.forEach(function (val) {
-      if (val?.room?.title == title) {
-        dispatch(setRoomDetail(val.room));
-        return;
-      }
-    });
-  }
-  useEffect(() => {
-    getRooms();
+  // function getRooms() {
+  //   const crr = room.forEach(function (val) {
+  //     if (val?.room?.title == title) {
+  //       dispatch(setRoomDetail(val.room));
+  //       return;
+  //     }
+  //   });
+  // }
+  // useEffect(() => {
+  //   getRooms();
 
-    setPage(1);
-    setHasMore(true);
-    getPost();
-    return () => {
-      dispatch(clearHotPostsInfo());
-    }
-  }, [title])
+  //   setPage(1);
+  //   setHasMore(true);
+  //   getPost();
+  //   return () => {
+  //     dispatch(clearHotPostsInfo());
+  //   }
+  // }, [title])
 
   const fetchMoreData = () => {
     setPage((prevPage) => prevPage + 1);
@@ -323,6 +323,7 @@ const Room = function()
     finally {
       setLoader1(false);
     }
+  }
     console.log(roomDetail?.CreatorId +"=="+userData?.userID);
     console.log('Private Room'+privateRoom);
     return( 
@@ -357,7 +358,7 @@ const Room = function()
               </svg>
                 <span className="text-sm pt-0 mt-0 self-center no-underline">{"Create"}</span>
               </button>
-              {isOwner&&<button className="flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
+              {isOwner && <button className="flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
               onClick={()=>setShowAddMem(true)}
               >
               

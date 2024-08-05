@@ -391,9 +391,16 @@ export const getNotJoinedRoom = async(req,res)=>{
         console.log(roomIds)
         const notJoinedRooms = await prisma.rooms.findMany({
             where:{
-                id:{
-                    notIn:roomIds
-                }
+                AND:[
+                    {
+                        id:{
+                            notIn:roomIds
+                        },
+                    },
+                    {
+                        privateRoom:false
+                    }
+                ]
             },
             include:{
                 UsersEnrolled:true,
