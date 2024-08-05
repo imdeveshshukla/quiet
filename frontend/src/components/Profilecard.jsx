@@ -61,7 +61,7 @@ const Profilecard = ({room}) => {
         });
     }
   };
-  
+  console.log(profileInfo);
   return (
     <div className=' w-[80vw] xxs:w-[75vw] xs:w-[65vw] sm:w-[50vw]  1_5md:w-full mx-0   rounded-3xl  bg-[#c2c7b3] '>
       <div className=' rounded-t-3xl h-32 w-full overflow-hidden'>
@@ -77,7 +77,7 @@ const Profilecard = ({room}) => {
 
           <div className=' grid grid-cols-[1fr_1fr] gap-8 my-4'>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{room?(profileInfo?.posts?.length):profileInfo?._count?.posts}</span>
+              <span className=' font-medium text-sm'>{profileInfo?._count?.posts || 0}</span>
               <span className=' text-sm text-gray-700'>{"Posts"}</span>
             </div>
             <div className=' flex flex-col items-start'>
