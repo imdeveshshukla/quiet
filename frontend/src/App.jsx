@@ -214,10 +214,8 @@ function App() {
 
         </div>
 
+          <Rightnav/>    
        
-
-
-<Rightnav/>     
 
           
 
