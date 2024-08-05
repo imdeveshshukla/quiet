@@ -41,6 +41,8 @@ const Home = () => {
           limit: 10,
         },
       });
+      console.log(res);
+      
 
 
       if (res.status === 200) {

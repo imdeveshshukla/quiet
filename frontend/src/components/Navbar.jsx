@@ -113,7 +113,7 @@ const Navbar = () => {
 
       <div className={`${isLogin?' gap-6':'xxs:gap-1 sm:gap-2'} flex  1_5md:gap-8 items-center`}>
 
-        <span><IoSearchOutline onClick={() => dispatch(setShowSearch(!showSearch))} className=' cursor-pointer text-3xl 2_sm:hidden' /></span>
+        <span><IoSearchOutline onClick={() => dispatch(setShowSearch(!showSearch))} className=' relative cursor-pointer text-3xl 2_sm:hidden' /></span>
 
         
 
