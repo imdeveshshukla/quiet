@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import banner from '../assets/banner.png'
 import { useSelector } from 'react-redux';
 import { PiShareFat } from "react-icons/pi";
@@ -7,24 +7,43 @@ import { PiShareFat } from "react-icons/pi";
 
 
 const Profilecard = ({room}) => {
-  var profileInfo;
+  
+  
+  
+  console.log("room",room);
+  
+  let profileInfo;
   if(room)
-  {
+    {
     profileInfo = useSelector(state => state.room.roomInfo)
   }
   else
     profileInfo = useSelector(state => state.profile.profileInfo)
 
-  const profileLink = `${window.location.origin}/u/${profileInfo?.username}`;
+
+    
+
+  
+  let profileLink='';
+
+
+  useEffect(() => {
+    profileLink = room?`${window.location.origin}/room/${profileInfo?.CreatorId}/${profileInfo?.title}`:`${window.location.origin}/u/${profileInfo?.username}`;
+    console.log("proinfo", profileInfo);
+    
+  }, [profileInfo])
+  
+  
 
 
   const handleShare = async () => {
 
     if (navigator.share) {
+
       try {
         await navigator.share({
-          title: `${profileInfo?.username}'s Profile`,
-          text: `Check out ${profileInfo?.username}'s profile on our site!`,
+          title: room?`${profileInfo?.title}` :`${profileInfo?.username}'s Profile`,
+          text: room?`Check out ${profileInfo?.title}'s profile on our site!` :`Check out ${profileInfo?.username}'s profile on our site!`,
           url: profileLink,
         });
         console.log('Profile shared successfully');

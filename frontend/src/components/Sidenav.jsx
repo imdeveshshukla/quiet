@@ -39,6 +39,7 @@ const Sidenav = () => {
   const getRooms = async()=>{
     try{
       const res = await axios.get(baseAddress+`rooms/getAllRoom/${userData?.userID}`);
+      
       dispatch(setRooms(res.data.rooms));
       setRoomLoader(false);
     }catch(e)
