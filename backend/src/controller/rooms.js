@@ -290,6 +290,37 @@ export const getRoom = async(req,res)=>{
     }
 }
 
+export const showRoom = async(req,res)=>{
+    const title = req.params.title;
+    if(!title)return res.status(404).json({msg:"Title Not Found",room:null});
+
+    try {
+        const room = await prisma.rooms.findFirst({
+            where:{
+                title
+            },
+            include:{
+                UsersEnrolled:true,
+                _count:{
+                    select:{
+                        posts:true,
+                    }
+                }
+            }
+        })
+        
+        if(!room)return res.status(404).json({msg:"Not Found",room:null});
+        room
+        return res.status(200).json({msg:"Found",room}); 
+    } catch (error) {
+        return res.status(500).json({
+            msg:"Database/Server Issue",
+            room:null,
+            error
+        })
+    }
+}
+
 export const getAllRoom = async(req,res)=>{
     const id  = req.params.userID;
     if(!id) return res.status(404).json({msg:"Username not found",rooms:[]});
@@ -304,8 +335,12 @@ export const getAllRoom = async(req,res)=>{
             select:{
                 room:{
                     include:{
-                        posts:true,
-                        UsersEnrolled:true
+                        UsersEnrolled:true,
+                        _count:{
+                            select:{
+                                posts:true,
+                            }
+                        }
                     }
                 }
             }
@@ -313,6 +348,65 @@ export const getAllRoom = async(req,res)=>{
         res.status(200).json({
             msg:"Success",
             rooms
+        });
+    } catch (error) {
+        res.status(500).json({
+            msg:"Database/Server Issue",
+            error
+        })
+    }
+}
+
+export const getNotJoinedRoom = async(req,res)=>{
+    const id  = req.userId;
+    if(!id) return res.status(404).json({msg:"Username not found",rooms:[]});
+    try {
+
+        const rooms = await prisma.enrolledRooms.findMany({
+            where:{
+                AND:[
+                    {userId:id},
+                    {joined:true}
+                ]
+            },
+            select:{
+                room:{
+                    include:{
+                        UsersEnrolled:true,
+                        _count:{
+                            select:{
+                                posts:true,
+                            }
+                        }
+                    }
+                }
+            }
+        })
+        console.log(rooms);
+        const roomIds = [];
+        for (const roomObject of rooms) {
+            // Extract the room ID and add it to the roomIds array
+            roomIds.push(roomObject.room.id);
+        }
+        console.log(roomIds)
+        const notJoinedRooms = await prisma.rooms.findMany({
+            where:{
+                id:{
+                    notIn:roomIds
+                }
+            },
+            include:{
+                UsersEnrolled:true,
+                _count:{
+                    select:{
+                        posts:true
+                    }
+                }
+            }
+        })
+        res.status(200).json({
+            msg:"Success",
+            rooms:notJoinedRooms
         });
     } catch (error) {
         res.status(500).json({
@@ -334,7 +428,18 @@ export const addUser = async(req,res)=>{
             select:{
                 id:true,
                 UsersEnrolled:true,
-                privateRoom:true
+                privateRoom:true,
+                title:true,
+                img:true,
+                bgImg:true,
+                desc:true,
+                CreatorId:true,
+                createdAt:true,
+                _count:{
+                    select:{
+                        posts:true
+                    }
+                }
             }
         })
         var found = false,waiting = false;
@@ -358,8 +463,7 @@ export const addUser = async(req,res)=>{
                 }
             })
             return res.status(200).json({
-                msg:"Sent Request",
-                room,
+                msg:"Request Send!Wait for Admin Reply",
                 users
             })
         }

@@ -1,5 +1,5 @@
 import express from 'express'
-import { acceptJoiningRequest, addUser, CreateRoom, deleteRoom, filterName, getAllRoom, getBulk, getRoom, sendJoiningRequest, updateRoom } from '../controller/rooms.js';
+import { acceptJoiningRequest, addUser, CreateRoom, deleteRoom, filterName, getAllRoom, getBulk, getNotJoinedRoom, getRoom, sendJoiningRequest, showRoom, updateRoom } from '../controller/rooms.js';
 import { verifyToken } from '../middlewares/verifytoken.js';
 import { upload } from '../middlewares/multer.js';
 
@@ -19,7 +19,9 @@ roomsRouter.post('/acceptJoiningRequest',verifyToken,acceptJoiningRequest);
 roomsRouter.get('/titleNameIsUnique',verifyToken,filterName)
 roomsRouter.get('/getBulk',verifyToken,getBulk)     //Use for search
 roomsRouter.get('/getRoom/:title',verifyToken,getRoom)
+roomsRouter.get('/showRoom/:title',verifyToken,showRoom);
 roomsRouter.get('/getAllRoom/:userID',verifyToken,getAllRoom);
+roomsRouter.get('/notJoinedRoom',verifyToken,getNotJoinedRoom);
 // roomsRouter.get('/getPosts',verifyToken,getPost);
 // roomsRouter.get("/getAPost/:title/:id",verifyToken,getAPost);
 

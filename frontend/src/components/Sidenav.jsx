@@ -14,7 +14,7 @@ import axios from 'axios';
 import baseAddress from '../utils/localhost';
 import { clearRooms, setRooms } from '../redux/userRooms';
 import SmoothLoader from '../assets/SmoothLoader';
-
+import { RiHomeWifiFill } from "react-icons/ri";
 
 
 
@@ -26,6 +26,8 @@ const Sidenav = () => {
   const dispatch = useDispatch()
   const [roomLoader,setRoomLoader] = useState(false);
   const navRef= useRef(null);
+  const [notJoinedRooms,setNotJoinedRooms] = useState([]);
+  const [roomLoader2,setRoomLoader2] = useState(false);
 
 
 
@@ -43,7 +45,24 @@ const Sidenav = () => {
       setRoomLoader(false);
     }catch(e)
     {
-      console.log("Error in Fetching Rooms ="+e);
+      console.log("Error in Fetching Rooms ="+e.message);
+      setRoomLoader(false);
+    }
+  }
+
+  const getNotJoinedRoom = async()=>{
+    setRoomLoader2(true)
+    try{
+      const res = await axios.get(baseAddress+"rooms/notJoinedRoom");
+
+      setNotJoinedRooms(res.data.rooms);
+
+    }catch(e)
+    {
+      console.log(e.message);
+    }
+    finally{
+      setRoomLoader2(false);
     }
   }
 
@@ -60,6 +79,7 @@ const Sidenav = () => {
       {
         setRoomLoader(true);
         getRooms();
+        getNotJoinedRoom();
       }
       else {
         dispatch(clearRooms());
@@ -84,12 +104,13 @@ const Sidenav = () => {
         </div>
 
         <div className='p-3 m-2 border-b-2 border-gray-600'>
-          <div className=' flex items-center gap-4'><FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>Rooms</span></div>
+          <div className=' flex items-center gap-4'><FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>My Rooms</span></div>
           <div className='pl-6 m-4 flex flex-col'>
           
           
-            {isLogin &&<> <CreateRoomBtn />
-            
+            {isLogin &&
+            <> <CreateRoomBtn />
+             
             {isLogin && roomLoader?<div className="mx-auto"><SmoothLoader/></div>:(myAllRoom?.map(function(val){
              
               return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{joined:true}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.room.title}</span></NavLink>
@@ -105,6 +126,14 @@ const Sidenav = () => {
         </div>
 
 
+      </div>
+      <div className='p-3 m-2 border-b-2 border-gray-600'>
+          <div className=' flex items-center gap-4'><RiHomeWifiFill className=' text-2xl' /><span className=' text-lg font-semibold'>Public Rooms</span></div>
+          <div className='pl-6 m-4 flex flex-col'>
+          {isLogin && roomLoader2?<div className="mx-auto"><SmoothLoader/></div>:(notJoinedRooms?.map(function(val){
+             return <NavLink key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} state={{joined:false}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.title}</span></NavLink>
+           }))}
+          </div>
       </div>
     </nav>
 
