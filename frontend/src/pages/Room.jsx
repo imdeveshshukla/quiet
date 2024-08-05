@@ -259,16 +259,29 @@ const Room = function()
     getPost();
     dispatch(updatePost(gotPost));
   }
-  // function getRooms() {
-  //   const crr = room.forEach(function (val) {
-  //     if (val?.room?.title == title) {
-  //       dispatch(setRoomDetail(val.room));
-  //       return;
-  //     }
-  //   });
-  // }
+  async function getRooms() {
+
+    try {
+      const res= await axios.get(`${baseAddress}rooms/getRoom/${title}`)
+      console.log("roooms",res);
+
+      dispatch(setRoomDetail(res.data.room))
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+
+    // const crr = room.forEach(function (val) {
+    //   if (val?.room?.title == title) {
+    //     dispatch(setRoomDetail(val.room));
+    //     return;
+    //   }
+    // });
+  }
   // useEffect(() => {
   //   getRooms();
+
 
   //   setPage(1);
   //   setHasMore(true);
@@ -276,11 +289,12 @@ const Room = function()
   //   return () => {
   //     dispatch(clearHotPostsInfo());
   //   }
-  // }, [title])
+  //  }, [title])
 
   const fetchMoreData = () => {
     setPage((prevPage) => prevPage + 1);
   };
+
 
   //For Refresh
   // useEffect(()=>{
