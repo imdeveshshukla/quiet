@@ -24,6 +24,7 @@ import SmallLoader from "../components/SmallLoader";
 import { GrRefresh } from "react-icons/gr";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { RiAddBoxLine } from "react-icons/ri";
+import { BsHouseAddFill } from "react-icons/bs";
 
 
 
@@ -304,14 +305,14 @@ const Room = function () {
              {
               joined ?
                 <div className='flex self-end gap-2 justify-self-end'>
-                  <button className="flex items-center gap-2 bg-black text-white py-2 px-6 rounded-md  hover:bg-slate-500"
+                  <button className="flex items-center gap-2 bg-black text-white py-2 px-6 rounded-lg  hover:bg-slate-500"
                     onClick={openPostBtn}
                   >
 
                     <RiAddBoxLine className=" text-xl"/>
                     <span className="text-sm pt-0 mt-0 self-center no-underline">{"Post"}</span>
                   </button>
-                  {isOwner && <button className="flex bg-black items-center gap-2 text-white py-2 px-3 rounded-md self-center hover:bg-slate-500"
+                  {isOwner && <button className="flex bg-black items-center gap-2 text-white py-2 px-3 rounded-lg self-center hover:bg-slate-500"
                     onClick={() => setShowAddMem(true)}
                   >
 
@@ -322,13 +323,11 @@ const Room = function () {
                 </div>
                 :
                 <>
-                  <button className="ml-20 flex bg-black text-white p-1 px-3 rounded-md self-center hover:bg-slate-500"
+                  <button className=" flex items-center gap-2 bg-black text-white py-2 px-6 rounded-lg self-center hover:bg-slate-500"
                     onClick={joinRoom}
                   >
 
-                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="size-6">
-                      <path strokeLinecap="round" strokeLinejoin="round" d="M12 9v6m3-3H9m12 0a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z" />
-                    </svg>
+                    <BsHouseAddFill className=" text-xl"/>
                     <span className="text-sm pt-0 mt-0 self-center no-underline">{privateRoom ? "Send Request" : "Join"}</span>
                   </button>
                 </>
