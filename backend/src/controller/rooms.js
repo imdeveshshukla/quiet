@@ -275,8 +275,13 @@ export const getRoom = async(req,res)=>{
             },
             include:{
                 UsersEnrolled:true,
-                posts:true
-            }
+                posts:true,
+                _count:{
+                    select:{
+                        posts:true,
+                    }
+                }
+            },
         })
         if(!room)return res.status(404).json({msg:"Not Found",room:null});
 

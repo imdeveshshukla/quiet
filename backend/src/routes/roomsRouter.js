@@ -6,7 +6,7 @@ import { upload } from '../middlewares/multer.js';
 const roomsRouter = express.Router()
 
 roomsRouter.post('/create',verifyToken,upload.single('roomImg'),CreateRoom);
-roomsRouter.post('/update',verifyToken,upload.single('roomImg'),updateRoom);
+roomsRouter.post('/updatedp',verifyToken,upload.single('roomImg'),updateRoom);
 roomsRouter.post('/updatebgImg',verifyToken,upload.single('bgImg'),updateRoom);
 roomsRouter.post('/delete',verifyToken,deleteRoom);
 

@@ -41,8 +41,8 @@ const Home = () => {
           limit: 10,
         },
       });
-      console.log(res);
-      
+
+
 
 
       if (res.status === 200) {
@@ -71,27 +71,26 @@ const Home = () => {
   }
 
   useEffect(() => {
-// <<<<<<< master
-//     if (posts.length > 0) return;
-//     getPost(1);
-//   }, []);
-
-//   const fetchMoreData = () => {
-//     if (isLoading || !hasMore) return;
-//     getPost(page + 1)
-//     dispatch(increment());
-// =======
-    if(posts.length > 0)return;
-    getPost();
+    if (posts.length > 0) return;
+    getPost(1);
   }, []);
-  
+
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
-    console.clear();
-    setPage((prevPages)=>prevPages+1);
-    getPost();
-// >>>>>>> master
+    getPost(page + 1)
+    dispatch(increment());
+
   };
+  //     if(posts.length > 0)return;
+  //     getPost();
+  //   }, []);
+
+  //   const fetchMoreData = () => {
+  //     if (isLoading || !hasMore) return;
+  //     console.clear();
+  //     setPage((prevPages)=>prevPages+1);
+  //     getPost();
+  // // >>>>>>> master
 
 
   return (
@@ -114,7 +113,7 @@ const Home = () => {
 
         <div className="post">
           {(isSkelton && posts.length === 0) ? (
-            <><Postskelton/></>
+            <><Postskelton /></>
           ) : (
             posts?.map((post) => (
               <Posts
