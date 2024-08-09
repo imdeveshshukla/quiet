@@ -1,7 +1,7 @@
 import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import baseAddress from "../utils/localhost";
-import { Navigate, useAsyncError, useLocation, useNavigate, useParams } from 'react-router-dom'
+import { Link, Navigate, useAsyncError, useLocation, useNavigate, useParams } from 'react-router-dom'
 import bg from '../assets/unnamed.png'
 import { MdFileUpload } from "react-icons/md";
 import q from '../assets/q.svg'
@@ -18,6 +18,7 @@ import Postskelton from "../components/Postskelton";
 import Posts from "../components/Posts";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { SiTestin } from "react-icons/si";
+import { BsThreeDots } from "react-icons/bs";
 import AddMemBox from "../components/AddMemBox";
 import { PiCameraPlusLight } from "react-icons/pi";
 import SmallLoader from "../components/SmallLoader";
@@ -25,24 +26,29 @@ import { GrRefresh } from "react-icons/gr";
 import { BsPersonFillAdd } from "react-icons/bs";
 import { RiAddBoxLine } from "react-icons/ri";
 import { BsHouseAddFill } from "react-icons/bs";
-
-
-
-
-
+import { IoIosLogOut } from "react-icons/io";
+import ForbiddenPage from "./ForbiddenPage";
+import { roomsApi, useGetRoomDetailsQuery } from "./RoomApis";
 
 const Room = function () {
   const location = useLocation();
-  const [joined, setJoined] = useState(location?.state?.joined || false)
-
+  // const [joined, setJoined] = useState(location?.state?.joined||false)
   const { title, CreatorId } = useParams();
+  
+  const {data,isLoading,isError,error} = useGetRoomDetailsQuery(title)
+  // console.log(data)
+  const [joined,setJoined] = useState(data?.joined);
+  const dispatch = useDispatch();
+  
   const userData = useSelector(state => state.user.userInfo);
+  // const userID = localStorage.getItem("userID");
+  // const userID = userData?.userID;
   const room = useSelector(state => state.rooms.rooms);
   const roomDetail = useSelector(state => state.room.roomInfo);
-  const dispatch = useDispatch();
+  
   const [loader1, setLoader1] = useState(false);
   const [loader2, setLoader2] = useState(false);
-  const [isLoading, setisLoading] = useState(false)
+  // const [isLoading, setisLoading] = useState(false)
   const ref = useRef(null);
   const dpref= useRef(null)
   const [showCP, setShowCP] = useState(false);
@@ -55,21 +61,52 @@ const Room = function () {
   const isOwner = (CreatorId === userData?.userID && joined);
   const [showAddMem, setShowAddMem] = useState(false);
   const [privateRoom, setPrivateRoom] = useState(true);
+  const dropdownRef = useRef(null);
+  const [isOpen,setisOpen] = useState(false);
+  function handleToggle(){
+    setisOpen((isOpen) => !isOpen)
+  }
+  async function deleteRoom(){
+    setisOpen((isOpen)=>!isOpen);
+
+    toast.loading("Processing...");
+    try{
+      const roomId = roomDetail.id;
+      const res = await axios.post(baseAddress+"rooms/leave/"+roomId);
+      toast.dismiss();
+      toast.success(res?.data?.msg);
+      const updatedRooms = [...room].filter(roomObject => roomObject.room.id !== roomId);
+      dispatch(setRooms(updatedRooms));
+      refresh();
+      if(isOwner)navigate('/');
+      else setJoined(false);
+    }
+    catch(e)
+    {
+      toast.dismiss();
+      toast.error(e?.response?.data?.msg);
+    }
+  }
   function openPostBtn() {
     setShowCP(true);
   }
 
   async function joinRoom() {
-    console.log("Code For Joining the room");
+    // console.log("Code For Joining the room");
     try {
       const res = await axios.post(`${baseAddress}rooms/join`, {
         title
       })
       if (res.status == 200) {
         console.clear()
-        console.log(res?.data?.room);
+        // console.log(res?.data?.room);
         dispatch(addNewRoom(res?.data?.room));
+        refresh();
+        console.log(res?.data);
+        console.log(room);
         toast.success(res?.data.msg);
+        
+        setJoined(true);
       }
       else {
         toast.error(res?.data.msg);
@@ -77,24 +114,25 @@ const Room = function () {
     } catch (error) {
       toast.error(error.message);
     }
-    navigate('/');
   }
 
 
 
   const getPost = async () => {
-    dispatch(setSkeltonLoader())
-    setisLoading(true)
+    
+    // setisLoading(true)
     console.log(`Fetching posts for page: ${page}`);
     if (!joined && privateRoom) {
       setHasMore(false);
       dispatch(setHotPost([]))
+      // setisLoading(false);
       return;
     }
     if (page == 1) {
       dispatch(clearHotPostsInfo())
     }
     try {
+      dispatch(setSkeltonLoader())
       const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
         params: {
           page,
@@ -110,7 +148,7 @@ const Room = function () {
         }
         dispatch(setSkeltonLoader())
         dispatch(setHotPost(fetchedPosts));
-        console.log(fetchedPosts);
+        // console.log(fetchedPosts);
       }
     } catch (error) {
       console.log(error);
@@ -118,118 +156,48 @@ const Room = function () {
       dispatch(setSkeltonLoader())
     }
 
-    setisLoading(false)
+    // setisLoading(false)
 
 
   };
  
-  async function getRooms() {
-    const crr = room.forEach(function (val) {
-      console.log(val?.room);
-      if (val?.room?.title == title) {
-        setPrivateRoom(val.room.privateRoom);
-        setJoined(true);
-        console.log(joined + " joining and Private ROom " + privateRoom);
-        dispatch(setRoomDetail(val.room));
-        getPost();
-        setHasMore(true);
-        return;
-      }
-    });
-    if (!joined) {
-      const res = await axios.get(`${baseAddress}rooms/showRoom/${title}`);
-      if (res.status === 200) {
-        console.log("Inside GetRooms IF");
-        const room = res.data.room;
-        setPrivateRoom(room?.privateRoom);
-        dispatch(setRoomDetail(room));
-      }
-      else {
-        console.clear();
-        console.log(res?.data?.msg);
-        toast.error("Room Not Exist");
-        navigate('/');
-      }
-    }
+  // console.clear();
+  
+  async function refresh() {
+    dispatch(roomsApi.util.invalidateTags([{ type: 'Room', id: title }]));
+    getPost();
   }
+
   useEffect(() => {
-    getRooms();
-    getRoom()
-    setPage(1);
-    getPost(); //*** 
+    dispatch(setRoomDetail(data?.room));
+    setJoined(data?.joined);
+    setPrivateRoom(data?.room?.privateRoom);
+    console.log("Inside useeffect ")
+    console.log(data);
+    getPost();
+    setPage(1); 
     if (joined) setHasMore(true);
-    if (!privateRoom) getPost();
     return () => {
       dispatch(clearHotPostsInfo());
     }
-  }, [title])
+  }, [data])
 
-
+  useEffect(()=>{
+    getPost();
+  },[page])
 
 
   function onNewPost() {
     setPage(1);
     setHasMore(true);
-    getRoom()
-    getPost();
+    refresh();
     dispatch(updatePost(gotPost));
   }
-
-
-  async function getRoom() {
-
-    try {
-      const res = await axios.get(`${baseAddress}rooms/getRoom/${title}`)
-      console.log("roooms", res);
-
-      dispatch(setRoomDetail(res.data.room))
-
-    } catch (error) {
-      console.log(error);
-
-    }
-  }
-
-    // const crr = room.forEach(function (val) {
-    //   if (val?.room?.title == title) {
-    //     dispatch(setRoomDetail(val.room));
-    //     return;
-    //   }
-    // });
-
-
-  useEffect(() => {
-    getPost();
-  }, [page]);
-
 
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 1);
   };
-
-
-  // For Refresh
-  useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(baseAddress + `rooms/getAllRoom/${userData?.userID}`);
-        dispatch(setRooms(res.data.rooms));
-      } catch (e) {
-        console.log("Error in Fetching Rooms =" + e);
-      }
-    })();
-  }, [userData])
-
-  useEffect(() => {
-    var temp = [...room];
-    temp.forEach((val, idx) => {
-      if (val?.room?.id == roomDetail?.id) {
-        temp[idx] = { room: roomDetail };
-      }
-    })
-    dispatch(setRooms(temp));
-  }, [roomDetail]);
 
   const updateBgImg = async (e) => {
     setLoader1(true);
@@ -245,6 +213,7 @@ const Room = function () {
     }
     catch (e) {
       console.log(e);
+      toast.error(e?.response?.data?.msg);
     }
     finally {
       setLoader1(false);
@@ -273,8 +242,20 @@ const Room = function () {
   }
 
 
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setisOpen(false);
+    }
 
-  console.log(roomDetail?.CreatorId + "==" + userData?.userID);
+  };
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+
+  // console.log(roomDetail?.CreatorId + "==" + userData?.userID+" === ");
   console.log('Private Room' + privateRoom);
   return (
     <>
@@ -315,9 +296,7 @@ const Room = function () {
                   {isOwner && <button className="flex bg-black items-center gap-2 text-white py-2 px-3 rounded-lg self-center hover:bg-slate-500"
                     onClick={() => setShowAddMem(true)}
                   >
-
                     <BsPersonFillAdd className=" text-xl"/> 
-                    <span className="text-sm pt-0 mt-0 self-center no-underline">{"Member"}</span>
                   </button>
                   }
                 </div>
@@ -332,15 +311,31 @@ const Room = function () {
                   </button>
                 </>
             }
+            <div className="relative flex items-center gap-8" ref={dropdownRef} >
+
+              <button onClick={handleToggle} className="flex items-center rounded-full border-2 border-black hover:border-white focus:outline-none">
+                <BsThreeDots/>
+              </button>
+              {isOpen && (
+                <div className="absolute right-0 top-10 w-40 bg-white rounded-md shadow-lg z-10">
+                  <ul className="py-1 bg-black rounded-md ">
+                    <li className="px-4 py-1 text-white hover:bg-grey">
+                      <button onClick={() => deleteRoom()} to={"/"} className="block">{isOwner?'Delete':'Leave'}</button>
+                    </li>
+                  </ul>
+
+                </div>
+              )}
+            </div>
           </div>
-        </div>
+          </div>
           <div className='h-[1.5px] bg-gray-800 mt-10'></div>
 
       </div>
 
       
-
-      <div className=' min-h-screen  pl-16'>
+      <div className=' min-h-screen px-10'>
+{privateRoom&&!joined?<ForbiddenPage/>:
         <InfiniteScroll
           dataLength={hotposts.length}
           next={fetchMoreData}
@@ -351,7 +346,7 @@ const Room = function () {
           {/* <Hottopic topic={title} dp={dp} bg={bg} /> */}
 
           <div className=' flex items-center justify-end mx-4 mt-3'>
-            <span onClick={() =>( getPost(), getRoom())} className=' bg-[#eff1d3] rounded-full p-1'>
+            <span onClick={() =>( refresh() )} className=' bg-[#eff1d3] rounded-full p-1'>
               {isSkelton ? <SmallLoader /> : <GrRefresh className=' cursor-pointer text-blue-500 text-xl font-extrabold' />}
             </span>
           </div>
@@ -378,6 +373,7 @@ const Room = function () {
             )}
           </div>
         </InfiniteScroll>
+}
       </div>
     </>
   )

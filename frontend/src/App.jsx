@@ -48,6 +48,7 @@ import Room from './pages/Room'
 import { useRef } from 'react'
 import NotFound from './pages/NotFound'
 import Popular from './pages/Popular'
+import ForbiddenPage from './pages/ForbiddenPage'
 
 
 
@@ -165,7 +166,7 @@ function App() {
 
 
   const room = location.pathname.includes('/room');
-  
+
 
   return (
     <>
@@ -209,7 +210,7 @@ function App() {
             {/* <Route path='/room/:username/:title' element={<Room />} /> */}
 
             <Route path='*' element={<NotFound/>} />
-              <Route path='/room/:CreatorId/:title' element={<Room/>} />
+              <Route path='/room/:CreatorId/:title' element={isLogin?<Room/>:<ForbiddenPage/>} />
           </Routes>
 
         </div>

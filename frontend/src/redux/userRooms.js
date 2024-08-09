@@ -13,10 +13,7 @@ export const userRooms = createSlice({
         state.rooms = action.payload
     },
     addNewRoom:(state,action)=>{
-      const lent =state.rooms.push({room:action.payload});
-    },
-    addNewPost:(state,action)=>{
-
+      state.rooms.push({room:action.payload});
     },
     clearRooms:(state)=>{
       state.rooms=[];

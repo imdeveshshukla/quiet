@@ -297,6 +297,7 @@ export const getRoom = async(req,res)=>{
 
 export const showRoom = async(req,res)=>{
     const title = req.params.title;
+    const userID = req.userId;
     if(!title)return res.status(404).json({msg:"Title Not Found",room:null});
 
     try {
@@ -313,10 +314,14 @@ export const showRoom = async(req,res)=>{
                 }
             }
         })
-        
+        console.log(userID);
         if(!room)return res.status(404).json({msg:"Not Found",room:null});
-        room
-        return res.status(200).json({msg:"Found",room}); 
+        let joins = false;
+        room.UsersEnrolled.forEach((val)=>{
+            console.log(val)
+            if(val.userId === userID){joins = val.joined;}
+        })
+        return res.status(200).json({msg:"Found",room,joined:joins}); 
     } catch (error) {
         return res.status(500).json({
             msg:"Database/Server Issue",
@@ -503,6 +508,52 @@ export const addUser = async(req,res)=>{
     }
 }
 
+
+export const leaveRoom = async(req,res)=>{
+    const roomId = req.params.roomId;
+    const userID = req.userId;
+
+    try{
+        const room = await prisma.rooms.findFirst({
+            where:{
+                id:roomId
+            }
+        });
+        if(!room)return res.status(404).json({msg:'roomNotFound'})
+        if(room.CreatorId === userID)
+        {   
+            const deletedRoom = await prisma.rooms.delete({
+                where:{
+                    id:room.id,
+                },
+            });
+            return res.status(200).json({
+                msg:"Success",
+                deletedRoom
+            })
+        }
+        console.log(roomId);
+        const userEnrolled = await prisma.enrolledRooms.delete({
+            where: {
+              userId_RoomId: {
+                userId: userID,
+                RoomId: roomId   
+              }
+            },
+          });          
+        return res.status(200).json({
+            msg:"Success",
+            userEnrolled
+        })
+    }
+    catch(e)
+    {
+        return res.status(505).json({
+            msg:"Server/Database Issue",
+            error:e.message
+        })
+    }
+}
 
 export const sendJoiningRequest = async(req,res)=>{
     const userID = req.userId;

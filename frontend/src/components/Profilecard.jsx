@@ -15,7 +15,10 @@ const Profilecard = ({room}) => {
   let profileInfo;
   if(room)
     {
+      console.log("Is it Rooms = ",room);
     profileInfo = useSelector(state => state.room.roomInfo)
+    console.log("Fetched Details Inside Profile Info");
+    console.log(profileInfo);
   }
   else
     profileInfo = useSelector(state => state.profile.profileInfo)
@@ -81,7 +84,7 @@ const Profilecard = ({room}) => {
               <span className=' text-sm text-gray-700'>{"Posts"}</span>
             </div>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{room?profileInfo?.UsersEnrolled?.length:profileInfo?._count?.comments}</span>
+              <span className=' font-medium text-sm'>{room?profileInfo?.UsersEnrolled?.length||0:profileInfo?._count?.comments||0}</span>
               <span className=' text-sm text-gray-700'>{room?"Members":"Comments"}</span>
             </div>
             <div className=' flex flex-col items-start'>
@@ -89,7 +92,7 @@ const Profilecard = ({room}) => {
               <span className=' text-sm text-gray-700'>Cake day</span>
             </div>
             {room?<></>:<div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{profileInfo?._count?.upvotes}</span>
+              <span className=' font-medium text-sm'>{profileInfo?._count?.upvotes|| 0}</span>
               <span className=' text-sm text-gray-700'>Upvotes</span>
             </div>}
           </div>
