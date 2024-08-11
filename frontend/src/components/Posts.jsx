@@ -8,8 +8,9 @@ import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
 import ReadMore from './ReadMore';
+import { clearPostsInfo } from '../redux/Post';
 
-const Posts = ({ id, post, title, body, media, countComment, inRoom, room, createdAt, user, upvotes }) => {
+const Posts = ({ id, post, title, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -40,12 +41,26 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
   }, [upvotes, userInfo?.userID]);
 
   const handleComment = async (id) => {
+    if(inRoom)
+    {
+      if(!joined){
+        toast.error("First Join The Room");
+        return;
+      }
+    }
     if (!location.pathname.includes('/post/') && id) {
       Navigate(`/post/${id}`);
     }
   };
 
   const upvote = async (key) => {
+    if(inRoom)
+    {
+      if(!joined){
+        toast.error("First Join The Room");
+        return;
+      }
+    }
     if (isLogin) {
       let val = 1;
       if (!upvoted) {
@@ -68,6 +83,7 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
           if (val == 1 && data.userId != data.post.userId) {
             sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "upvoted your post!" });
           }
+          if(postDetails)dispatch(clearPostsInfo());
         }
 
       } catch (error) {
@@ -81,6 +97,13 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
   };
 
   const downVoteFunc = async (key) => {
+    if(inRoom)
+    {
+      if(!joined){
+        toast.error("First Join The Room");
+        return;
+      }
+    }
     if (!isLogin) {
       toast.dismiss();
       toast.error("Sign In First");

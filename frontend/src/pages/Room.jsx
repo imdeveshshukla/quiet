@@ -3,9 +3,10 @@ import { useEffect, useRef, useState } from "react";
 import baseAddress from "../utils/localhost";
 import { Link, Navigate, useAsyncError, useLocation, useNavigate, useParams } from 'react-router-dom'
 import bg from '../assets/unnamed.png'
+import NotUploaded from '../assets/NotUploaded.jpg' 
 import { MdFileUpload } from "react-icons/md";
 import q from '../assets/q.svg'
-import { setRoomDetail, changeBgImg, updatePost, changeDpImg } from "../redux/roomSlice";
+import { setRoomDetail, changeBgImg, changeDpImg } from "../redux/roomSlice";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import SmoothLoader from "../assets/SmoothLoader";
@@ -32,23 +33,20 @@ import { roomsApi, useGetRoomDetailsQuery } from "./RoomApis";
 
 const Room = function () {
   const location = useLocation();
-  // const [joined, setJoined] = useState(location?.state?.joined||false)
   const { title, CreatorId } = useParams();
   
   const {data,isLoading,isError,error} = useGetRoomDetailsQuery(title)
-  // console.log(data)
-  const [joined,setJoined] = useState(data?.joined);
+
+  const [joined,setJoined] = useState(false);
   const dispatch = useDispatch();
   
   const userData = useSelector(state => state.user.userInfo);
-  // const userID = localStorage.getItem("userID");
-  // const userID = userData?.userID;
   const room = useSelector(state => state.rooms.rooms);
   const roomDetail = useSelector(state => state.room.roomInfo);
   
   const [loader1, setLoader1] = useState(false);
   const [loader2, setLoader2] = useState(false);
-  // const [isLoading, setisLoading] = useState(false)
+  const [isLoading2, setisLoading2] = useState(false)
   const ref = useRef(null);
   const dpref= useRef(null)
   const [showCP, setShowCP] = useState(false);
@@ -94,8 +92,10 @@ const Room = function () {
   async function joinRoom() {
     // console.log("Code For Joining the room");
     try {
+      setisLoading2(true)
       const res = await axios.post(`${baseAddress}rooms/join`, {
-        title
+        title,
+        Username:userData?.username
       })
       if (res.status == 200) {
         console.clear()
@@ -109,10 +109,14 @@ const Room = function () {
         setJoined(true);
       }
       else {
-        toast.error(res?.data.msg);
+        navigate('/');
+        toast.success(res?.data?.msg);
       }
+      setisLoading2(false);
     } catch (error) {
-      toast.error(error.message);
+      console.log(error);
+      toast.error(error?.response?.data.msg);
+      setisLoading2(false);
     }
   }
 
@@ -125,38 +129,38 @@ const Room = function () {
     if (!joined && privateRoom) {
       setHasMore(false);
       dispatch(setHotPost([]))
-      // setisLoading(false);
       return;
     }
-    if (page == 1) {
-      dispatch(clearHotPostsInfo())
-    }
-    try {
-      dispatch(setSkeltonLoader())
-      const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
-        params: {
-          page,
-          limit: 10,
-        },
-      });
-
-      if (res.status === 200) {
-        const fetchedPosts = res.data.posts;
-
-        if (fetchedPosts.length < 10) {
-          setHasMore(false);
-        }
-        dispatch(setSkeltonLoader())
-        dispatch(setHotPost(fetchedPosts));
-        // console.log(fetchedPosts);
+    else{
+      if (page == 1) {
+        dispatch(clearHotPostsInfo())
       }
-    } catch (error) {
-      console.log(error);
-      setHasMore(false); // Stop fetching if there's an error
-      dispatch(setSkeltonLoader())
-    }
+      try {
+        dispatch(setSkeltonLoader())
+        const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
+          params: {
+            page,
+            limit: 10,
+          },
+        });
+  
+        if (res.status === 200) {
+          const fetchedPosts = res.data.posts;
+  
+          if (fetchedPosts.length < 10) {
+            setHasMore(false);
+          }
+          dispatch(setSkeltonLoader())
+          dispatch(setHotPost(fetchedPosts));
+          // console.log(fetchedPosts);
+        }
+      } catch (error) {
+        console.log(error);
+        setHasMore(false); // Stop fetching if there's an error
+        dispatch(setSkeltonLoader())
+      }
 
-    // setisLoading(false)
+    }
 
 
   };
@@ -165,25 +169,42 @@ const Room = function () {
   
   async function refresh() {
     dispatch(roomsApi.util.invalidateTags([{ type: 'Room', id: title }]));
-    getPost();
+    if(joined || !privateRoom)getPost();
   }
 
-  useEffect(() => {
+  async function onStart(){
+    if(isLoading)return;
+    setisLoading2(true);
     dispatch(setRoomDetail(data?.room));
-    setJoined(data?.joined);
     setPrivateRoom(data?.room?.privateRoom);
     console.log("Inside useeffect ")
     console.log(data);
-    getPost();
-    setPage(1); 
-    if (joined) setHasMore(true);
+    console.log(isLoading2||isLoading)
+    setJoined(data?.joined);
+    if (joined || !privateRoom){
+      getPost();
+      setPage(1); 
+      setHasMore(true);
+    }
+    setisLoading2(false);
+  }
+  useEffect(() => {
+    onStart();
     return () => {
       dispatch(clearHotPostsInfo());
     }
-  }, [data])
+  }, [data,title])
 
   useEffect(()=>{
-    getPost();
+    if (joined || !privateRoom){
+      getPost();
+      setPage(1); 
+      setHasMore(true);
+    }
+  },[joined,privateRoom])
+
+  useEffect(()=>{
+    if(joined || !privateRoom)getPost();
   },[page])
 
 
@@ -191,7 +212,6 @@ const Room = function () {
     setPage(1);
     setHasMore(true);
     refresh();
-    dispatch(updatePost(gotPost));
   }
 
   const fetchMoreData = () => {
@@ -273,7 +293,7 @@ const Room = function () {
               </button>)}
             <div className=' absolute left-14 bottom-0 border-4  bg-blue-600 translate-y-1/2  h-40 w-40 rounded-full  '>
               
-              {loader2?<div className="h-full w-full rounded-full flex items-center justify-center bg-[#fff5] backdrop-blur-lg"><SmallLoader/></div>:<img  className=' h-full w-full object-cover rounded-full' src={roomDetail?.img} alt="Image Not Uploaded" />}
+              {loader2?<div className="h-full w-full rounded-full flex items-center justify-center bg-[#fff5] backdrop-blur-lg"><SmallLoader/></div>:<img  className=' h-full w-full object-cover rounded-full' src={roomDetail?.img || NotUploaded} alt="Image Not Uploaded" />}
               <input onChange={(e) => handleDpUpdate(e)} accept='image/*' ref={dpref} type="file" name="media" id="media" hidden />
               {isOwner && (<button onClick={() => dpref.current?.click()} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight /></button>)}
 
@@ -307,10 +327,10 @@ const Room = function () {
                   >
 
                     <BsHouseAddFill className=" text-xl"/>
-                    <span className="text-sm pt-0 mt-0 self-center no-underline">{privateRoom ? "Send Request" : "Join"}</span>
+                    <span className="text-sm pt-0 mt-0 self-center no-underline">{(isLoading||isLoading2)? <SmoothLoader/> : (privateRoom ? "Send Request" : "Join")}</span>
                   </button>
                 </>
-            }
+            }{!joined?<></>:
             <div className="relative flex items-center gap-8" ref={dropdownRef} >
 
               <button onClick={handleToggle} className="flex items-center rounded-full border-2 border-black hover:border-white focus:outline-none">
@@ -326,7 +346,7 @@ const Room = function () {
 
                 </div>
               )}
-            </div>
+            </div>}
           </div>
           </div>
           <div className='h-[1.5px] bg-gray-800 mt-10'></div>
@@ -367,6 +387,9 @@ const Room = function () {
                   createdAt={post.createdAt}
                   user={post?.user}
                   upvotes={post?.upvotes}
+                  inRoom={true}
+                  room={data.room}
+                  joined={data.room.joined}
                 />
               )
               )

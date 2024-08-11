@@ -84,7 +84,7 @@ const Profilecard = ({room}) => {
               <span className=' text-sm text-gray-700'>{"Posts"}</span>
             </div>
             <div className=' flex flex-col items-start'>
-              <span className=' font-medium text-sm'>{room?profileInfo?.UsersEnrolled?.length||0:profileInfo?._count?.comments||0}</span>
+              <span className=' font-medium text-sm'>{room?profileInfo?.UsersEnrolled?.filter((val)=>(val.joined==true)).length||0:profileInfo?._count?.comments||0}</span>
               <span className=' text-sm text-gray-700'>{room?"Members":"Comments"}</span>
             </div>
             <div className=' flex flex-col items-start'>

@@ -436,7 +436,7 @@ export const getNotJoinedRoom = async(req,res)=>{
 
 export const addUser = async(req,res)=>{
     const userId = req.userId;
-    const { title } = req.body;
+    const { title,Username } = req.body;
     try{
         const room = await prisma.rooms.findFirst({
             where:{
@@ -472,17 +472,36 @@ export const addUser = async(req,res)=>{
 
         if(room.privateRoom)
         {
-            const users = await prisma.enrolledRooms.create({
-                data:{
-                    RoomId:room.id,
-                    userId:userId,
-                    joined:false
-                }
-            })
-            return res.status(200).json({
-                msg:"Request Send!Wait for Admin Reply",
-                users
-            })
+            try {
+                return await prisma.$transaction(async(tsx)=>{
+                    console.log("Inside Prisma transactrion");
+                    const users = await tsx.enrolledRooms.create({
+                        data:{
+                            RoomId:room.id,
+                            userId:userId,
+                            joined:false
+                        }
+                    })
+                    const notification= await tsx.notification.create({
+                        data:{
+                        title:`${room.title}`,
+                        body:`Please Add ${Username} in your Room: ${room.title} Click Here to Accept`,
+                        toUser:room.CreatorId,
+                        fromUser:userId,
+                        }
+                    });
+                    return res.status(201).json({
+                        msg:"Request Send!Wait for Admin Reply",
+                        users,
+                        notification
+                    });
+                })
+            } catch (error) {
+                return res.status(500).json({
+                    msg:"Server Error",
+                    error:e
+                })
+            }
         }
         const users = await prisma.enrolledRooms.create({
             data:{
@@ -501,7 +520,7 @@ export const addUser = async(req,res)=>{
     }
     catch(e)
     {
-        res.status(500).json({
+        return res.status(500).json({
             msg:"Server Error",
             error:e
         })
@@ -559,7 +578,7 @@ export const sendJoiningRequest = async(req,res)=>{
     const userID = req.userId;
     const { title } = req.body;
     const { username } = req.params;
-    console.log("Sending Room Joining Request = ");
+    // console.log("Sending Room Joining Request = ");
     console.log(userID+" "+title+" "+username);
     if(!title || !username)
     {
@@ -569,17 +588,24 @@ export const sendJoiningRequest = async(req,res)=>{
     }
 
     try{
-        console.log("Inside try Catch block above usre");
+        // console.log("Inside try Catch block above usre");
         const user = await prisma.user.findFirst({
             where:{
-                username
+                OR:[
+                    {
+                        username:username,
+                    },
+                    {
+                        userID:username
+                    }
+                ]
             }
         });
 
         if(!user) return res.status(200).json({
             msg:"Please Enter Correct Username"
         })
-        console.log("Above Room Fetching Block");
+        // console.log("Above Room Fetching Block");
         const room = await prisma.rooms.findFirst({
             where:{
                 title,
@@ -598,6 +624,7 @@ export const sendJoiningRequest = async(req,res)=>{
                 found = true;
             }
         })
+        console.log("We Have found ",found)
         if(found)
         {
             const enrollment = await prisma.enrolledRooms.update({
@@ -633,7 +660,7 @@ export const sendJoiningRequest = async(req,res)=>{
                 fromUser:userID,
               }
             });
-            console.log(notification);
+            // console.log(notification);
             return res.status(201).json({
                 msg:"Sended Request",
                 notification

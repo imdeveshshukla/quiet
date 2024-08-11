@@ -71,9 +71,9 @@ const Home = () => {
   }
 
   useEffect(() => {
-    if (posts.length > 0) return;
+    // if (posts.length > 0) return;
     getPost(1);
-  }, []);
+  }, [posts.length]);
 
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
@@ -94,7 +94,7 @@ const Home = () => {
 
 
   return (
-    <div className=' min-h-screen xxs:pl-0 xs:pl-8 sm:pl-16'>
+    <div className=' min-h-screen xxs:pl-0'>
       <InfiniteScroll
         dataLength={posts.length}
         next={fetchMoreData}
