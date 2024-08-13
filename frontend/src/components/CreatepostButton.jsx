@@ -54,15 +54,12 @@ const Createpost = ({ onNewPost }) => {
       });
 
       if (response.status == 201) {
-        // dispatch(setPost(response.data.post));
-        // dispatch(setUserPost(response.data.post))
         toast.dismiss();
         toast.success("Successfully Posted!")
         setTitle("")
         setDescription("")
         setSelectedOption("")
         setImage(null)
-        // getUserData(userInfo.email);
         onNewPost()
       }
     } catch (error) {
@@ -86,6 +83,8 @@ const Createpost = ({ onNewPost }) => {
           </div>
         </div>
       </div>
+      <div className='bg-gray-700 h-[1px]'></div>
+
     </>)
 
 }

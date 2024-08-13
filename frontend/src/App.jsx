@@ -208,8 +208,8 @@ function App() {
 
             {/* <Route path='/room/:username/:title' element={<Room />} /> */}
 
+            <Route path='/room/:CreatorId/:title' element={<Room/>} />
             <Route path='*' element={<NotFound/>} />
-              <Route path='/room/:CreatorId/:title' element={<Room/>} />
           </Routes>
 
         </div>

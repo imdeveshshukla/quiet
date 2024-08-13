@@ -256,7 +256,7 @@ export const Layout = ({ form,setForm, passref, eye, handleChange, handleCloseEy
 
 return (
     <>
-        <div className='w-full flex justify-center items-center h-[89.5vh] m-auto border-x-2 border-black  '>
+        <div className='w-full flex justify-center items-center h-[89.5vh] m-auto '>
             <div className=' w-[95%] xxs:w-[90%]  sm:w-[75%]  md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[50%] sm:h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
 
                 <form autoComplete='off' className='flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
