@@ -1,5 +1,5 @@
 import express from 'express'
-import { acceptJoiningRequest, addUser, CreateRoom, deleteRoom, filterName, getAllRoom, getBulk, getNotJoinedRoom, getRoom, sendJoiningRequest, showRoom, updateRoom } from '../controller/rooms.js';
+import { acceptJoiningRequest, addUser, CreateRoom, deleteRoom, filterName, getAllRoom, getBulk, getNotJoinedRoom, getRoom, leaveRoom, sendJoiningRequest, showRoom, updateRoom } from '../controller/rooms.js';
 import { verifyToken } from '../middlewares/verifytoken.js';
 import { upload } from '../middlewares/multer.js';
 
@@ -12,6 +12,7 @@ roomsRouter.post('/delete',verifyToken,deleteRoom);
 
 
 roomsRouter.post('/join',verifyToken,addUser)
+roomsRouter.post('/leave/:roomId',verifyToken,leaveRoom);
 
 roomsRouter.post('/addUserinRoom/:username',verifyToken,sendJoiningRequest) // completing this;
 roomsRouter.post('/acceptJoiningRequest',verifyToken,acceptJoiningRequest);

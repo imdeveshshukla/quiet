@@ -83,7 +83,7 @@ const HotTopicPosts = ({title,topic,dp,bg}) => {
 
     return (
 
-        <div className=' min-h-screen border-x-2 border-black pl-16'>
+        <div className=' min-h-screen border-x-2 border-black'>
     <InfiniteScroll  
         dataLength={hotposts.length}
         next={fetchMoreData}

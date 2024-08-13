@@ -14,6 +14,7 @@ import SearchReducer from './search'
 import roomReducer from './roomSlice'
 import userRoomsReducer from './userRooms'
 import PageReducer from './Page'
+import { roomsApi } from '../pages/RoomApis'
 
 export const store = configureStore({
   reducer: {
@@ -31,6 +32,10 @@ export const store = configureStore({
     search: SearchReducer,
     room:roomReducer,
     rooms:userRoomsReducer,
-    page:PageReducer
+    page:PageReducer,
+    roomsApi:roomsApi.reducer
   },
+
+  middleware: (getDefaultMiddleware) =>
+    getDefaultMiddleware().concat(roomsApi.middleware),
 })

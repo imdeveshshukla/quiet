@@ -48,6 +48,8 @@ import Room from './pages/Room'
 import { useRef } from 'react'
 import NotFound from './pages/NotFound'
 import Popular from './pages/Popular'
+import ForbiddenPage from './pages/ForbiddenPage'
+import loading from './redux/loading'
 
 
 
@@ -58,7 +60,8 @@ axios.defaults.withCredentials = true
 function App() {
 
   const dispatch = useDispatch();
-  const isLoading = useSelector((state) => state.loading.value);
+  // const isLoading = useSelector((state) => state.loading.value);
+  const [isLoading,setLoading] =useState(false);
   const isLogin = useSelector((state) => state.login.value);
   const userInfo = useSelector(state => state.user.userInfo);
   const searchRef = useRef(null)
@@ -75,18 +78,18 @@ function App() {
   }, [location.pathname]);
 
   const getUserData = async (email) => {
-
-    // dispatch(loading())
-
+    setLoading(true);
     try {
       const res = await axios.get(`${baseAddress}u/${email}`, { withCredentials: true });
       if (res.status == 200) {
         dispatch(setUserInfo(res.data.user));
+
       }
     } catch (error) {
       console.log(error);
 
     }
+    setLoading(false);
   }
 
 
@@ -165,7 +168,7 @@ function App() {
 
 
   const room = location.pathname.includes('/room');
-  
+
 
   return (
     <>
@@ -177,7 +180,7 @@ function App() {
         <Sidenav />
 
 
-        <div className='  md:border-r-2  xl:border-x-2 border-black'>
+        <div className='md:border-r-2  xl:border-x-2 border-black'>
           <Routes>
             <Route path='/' element={<Home />} />
             {!isLogin && <Route path='/signup' element={<Signup />} />}
@@ -210,6 +213,7 @@ function App() {
 
             <Route path='/room/:CreatorId/:title' element={<Room/>} />
             <Route path='*' element={<NotFound/>} />
+              <Route path='/room/:CreatorId/:title' element={isLogin?<Room/>:<ForbiddenPage/>} />
           </Routes>
 
         </div>

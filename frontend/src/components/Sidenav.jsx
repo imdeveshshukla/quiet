@@ -15,12 +15,14 @@ import baseAddress from '../utils/localhost';
 import { clearRooms, setRooms } from '../redux/userRooms';
 import SmoothLoader from '../assets/SmoothLoader';
 import { RiHomeWifiFill } from "react-icons/ri";
-
+import { CiCircleChevUp } from "react-icons/ci";
+import { CiCircleChevDown } from "react-icons/ci";
 
 
 const Sidenav = () => {
   const isLogin = useSelector(state => state.login.value);
   const userData = useSelector(state => state.user.userInfo);
+
    const hamburger= useSelector(state=>  state.hamburger.value)
   const myAllRoom = useSelector(state=> state.rooms.rooms);
   const dispatch = useDispatch()
@@ -29,7 +31,8 @@ const Sidenav = () => {
   const [notJoinedRooms,setNotJoinedRooms] = useState([]);
   const [roomLoader2,setRoomLoader2] = useState(false);
 
-
+  const [openBar,setOpenBar] = useState(false);
+  const [openBar2,setOpenBar2] = useState(true);
 
   const handleClickOutside = (event) => {
     if (navRef.current && !navRef.current.contains(event.target)) {
@@ -80,12 +83,19 @@ const Sidenav = () => {
       {
         setRoomLoader(true);
         getRooms();
-        getNotJoinedRoom();
+        // getNotJoinedRoom();
       }
       else {
         dispatch(clearRooms());
       }
     },[userData])
+
+    useEffect(()=>{
+      if(isLogin)
+      {
+        getNotJoinedRoom();
+      }
+    },[myAllRoom])
 
     const handleHamburger =()=>{
       dispatch(setShowSideNav(!hamburger))
@@ -104,38 +114,48 @@ const Sidenav = () => {
           <NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/all"} className={(e) => { return e.isActive ? 'flex w-full  rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full  rounded items-center gap-2 px-4 py-2' }}><HiOutlineChartSquareBar /><span>All</span></NavLink>
         </div>
 
-        <div className='p-3 m-2 border-b-2 border-gray-600'>
-          <div className=' flex items-center gap-4'><FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>My Rooms</span></div>
-          <div className='pl-6 m-4 flex flex-col'>
-          
-          
-            {isLogin &&
-            <> <CreateRoomBtn />
-             
-            {isLogin && roomLoader?<div className="mx-auto"><SmoothLoader/></div>:(myAllRoom?.map(function(val){
-             
-              return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{joined:true}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.room.title}</span></NavLink>
-            }))}
-              </>
-            }
-
+        {isLogin&&<div className='p-3 m-2 border-b-2 border-gray-600'>
+          <button onClick={()=>setOpenBar2((v)=>!v)}>
+          <div className=' flex items-center gap-14'>
+          <div className='flex justify-center gap-2'>
+            <FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>My Rooms</span>
           </div>
-        </div>
+            <span className='justify-self-end'>{openBar2?<CiCircleChevDown size={25}/>:<CiCircleChevUp size={25}/>}</span>
+          </div>
+          </button>
+
+          <div className={`pl-6 m-4 flex flex-col ${!openBar2? `hidden`:`` }`}>
+            <CreateRoomBtn />
+             
+            {roomLoader?<div className="mx-auto"><SmoothLoader/></div>:(myAllRoom?.map(function(val){
+              return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{joined:true}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.room.title}</span></NavLink>
+             
+            }))}
+          </div>
+        </div>}
 
         <div className={`  1_5md:hidden p-3 m-2 border-b-2 border-gray-600`}>
             <HotTopicNav/>
         </div>
-
-
       </div>
-      <div className='p-3 m-2 border-b-2 border-gray-600'>
-          <div className=' flex items-center gap-4'><RiHomeWifiFill className=' text-2xl' /><span className=' text-lg font-semibold'>Public Rooms</span></div>
-          <div className='pl-6 m-4 flex flex-col'>
-          {isLogin && roomLoader2?<div className="mx-auto"><SmoothLoader/></div>:(notJoinedRooms?.map(function(val){
-             return <NavLink key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} state={{joined:false}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.title}</span></NavLink>
+      {isLogin&&<div className='p-3 m-2 border-b-2 border-gray-600'>
+      <button onClick={()=>setOpenBar((v)=>!v)}>
+
+          <div className=' flex items-center gap-8'>
+          <div className='flex items-center gap-2'>
+          <RiHomeWifiFill className=' text-2xl' /><span className=' text-lg font-semibold'>Public Rooms</span>
+          </div>
+          <span>{openBar?<CiCircleChevDown size={25}/>:<CiCircleChevUp size={25}/>}</span>
+          </div>
+      </button>
+          <div className={`pl-6 m-4 flex flex-col ${!openBar? `hidden`:`` }`}>
+          {roomLoader2?<div className="mx-auto"><SmoothLoader/></div>:(notJoinedRooms?.map(function(val){
+             return <NavLink key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.title}</span></NavLink>
            }))}
           </div>
-      </div>
+      </div>}
+
+
     </nav>
 
     {hamburger && <div className="fixed inset-0 top-[74.46px] bg-black bg-opacity-40 backdrop-blur-sm z-10"></div>}

@@ -18,15 +18,12 @@ export const roomSlice = createSlice({
     changeDpImg:(state,action)=>{
       state.roomInfo.img = action.payload
     },
-    updatePost:(state,action)=>{
-      state.roomInfo.posts = [action,...state.roomInfo.posts]
-    },
     clearRoomDetail:(state)=>{
       state.roomInfo=null;
     },
   },
 })
 
-export const { setRoomDetail,updatePost,changeBgImg,clearRoomDetail, changeDpImg } = roomSlice.actions;
+export const { setRoomDetail,changeBgImg,clearRoomDetail, changeDpImg } = roomSlice.actions;
 
 export default roomSlice.reducer
