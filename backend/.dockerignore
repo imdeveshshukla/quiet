@@ -1,0 +1,27 @@
+# Ignore node_modules to avoid copying unnecessary files into the container
+node_modules
+
+
+# Ignore the bugs directory if it contains debugging or log files
+bugs
+
+# Ignore Prisma directory if it contains files that are only needed locally
+# prisma
+
+# Ignore environment variable files (they should be passed at runtime)
+.env
+.env.example
+
+# Ignore local git configuration
+.git
+.gitignore
+
+# Ignore any backup or temporary files
+*.json~
+*.un~
+
+# Ignore Dockerfile itself
+Dockerfile
+
+# Ignore public directory if it contains static assets that you don't want in the container
+
