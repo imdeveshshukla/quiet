@@ -14,15 +14,27 @@ dotenv.config({
   path: './.env'
 })
 const app = express() 
-const port = 3000
-app.use(cors({credentials:true, origin:"http://localhost:5173"}));
+const port = 3010
+const whitelist = ['http://localhost:5173', 'http://localhost:3000']
+const corsOptions = {
+  credentials:true,
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
+app.use(cors(corsOptions));
 app.use(bodyParser.json())
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));
 app.use(cookieParser());  
 
 app.get('/', (req, res) => { 
-  res.send('Hello World!')
+  res.send('Hello From Quiet Backend!')
 })
 
 

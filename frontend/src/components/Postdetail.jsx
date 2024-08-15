@@ -12,6 +12,7 @@ import SmallLoader from './SmallLoader';
 import Postskelton from './Postskelton';
 import { setUserPostComment } from '../redux/userposts';
 import { CommentBody, CommentBody2, CommentBox } from './Comments';
+import baseAddress from '../utils/localhost';
 
 
 
@@ -31,7 +32,7 @@ const Postdetail = () => {
 
     const getApost=async()=>{
         try {
-          const res = await axios.get("http://localhost:3000/posts/getapost", { 
+          const res = await axios.get(baseAddress+"posts/getapost", { 
             params:{
               id,
             }

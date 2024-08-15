@@ -10,6 +10,7 @@ import {useDispatch} from 'react-redux'
 import { addOwnedRoom } from "../redux/user";
 import SmoothLoader from "../assets/SmoothLoader";
 import { addNewRoom } from "../redux/userRooms";
+import baseAddress from "../utils/localhost";
 export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 {
     
@@ -39,7 +40,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
         formData.append('roomImg',image||"");
         formData.append('privacy',privacy);
         setBtnloading(true);
-        const res = await axios.post('http://localhost:3000/rooms/create',formData, {
+        const res = await axios.post(baseAddress+'rooms/create',formData, {
           headers: {
             'Content-Type': 'multipart/form-data',
           },
@@ -94,7 +95,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
 
     async function sendReq(){
       const title2 = title.trim();
-      const res = await axios.get("http://localhost:3000/rooms/titleNameIsUnique?filter="+title2);
+      const res = await axios.get(baseAddress+"rooms/titleNameIsUnique?filter="+title2);
       if(res.data.msg == true)
       {
         setColor("green");

@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 import { setShowSearch } from '../redux/search';
 import { useDispatch, useSelector } from 'react-redux';
+import baseAddress from '../utils/localhost';
 
 
 const Search = () => {
@@ -78,7 +79,7 @@ export default Search
 
 export  const fetchUsers = async ({debouncedSearch, setUsers}) => {
     try {
-        const res = await axios.get('http://localhost:3000/search/getusers', {
+        const res = await axios.get(baseAddress+'search/getusers', {
             params: { key: debouncedSearch },
         });
         setUsers(res.data)

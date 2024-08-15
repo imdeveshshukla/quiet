@@ -170,7 +170,7 @@ export const UserComment = ({ comment }) => {
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/posts/vote", { commentId: comment.id, val, postId: comment.postId });
+      const res = await axios.post(baseAddress+"posts/vote", { commentId: comment.id, val, postId: comment.postId });
 
       if (res.status == 201) {
         const data = res.data.newUpvote;
@@ -218,7 +218,7 @@ export const UserComment = ({ comment }) => {
       setDownvote((upvoteNumber) => upvoteNumber - 1)
     }
     try {
-      const res = await axios.post("http://localhost:3000/posts/vote", { commentId: comment.id, val, postId: comment.postId });
+      const res = await axios.post(baseAddress+"posts/vote", { commentId: comment.id, val, postId: comment.postId });
       const data = res.data.newUpvote
 
       if (val == -1) {

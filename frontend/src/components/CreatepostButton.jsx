@@ -12,6 +12,7 @@ import { setSkeltonLoader } from '../redux/skelton';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAddCircleOutline } from "react-icons/io";
 import CreatePost from '../pages/CreatePost';
+import baseAddress from '../utils/localhost';
 
 
 const Createpost = ({ onNewPost }) => {
@@ -47,7 +48,7 @@ const Createpost = ({ onNewPost }) => {
     setLoading(true);
     toast.loading("Posting....");
     try {
-      const response = await axios.post('http://localhost:3000/posts/postWithImg', formData, {
+      const response = await axios.post(baseAddress+'posts/postWithImg', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
