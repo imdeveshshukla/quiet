@@ -27,6 +27,7 @@ import { BiSolidDislike } from "react-icons/bi";
 import { sendNotification } from './Posts';
 import { getTime } from './Posts';
 import ReadMore from './ReadMore';
+import baseAddress from '../utils/localhost';
 
 
 
@@ -53,7 +54,7 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
     setLoading(true);
 
     try {
-      const res = await axios.post(`http://localhost:3000/posts/createcomment`, {
+      const res = await axios.post(`${baseAddress}posts/createcomment`, {
         withCredentials: true, postId: post?.id,
         commentId, content: comment
       });
@@ -142,7 +143,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
   }
   async function getUpvote() {
-    const res = await axios.post("http://localhost:3000/posts/upvoteNum", { postId: postId, commentId: id });
+    const res = await axios.post(baseAddress+"posts/upvoteNum", { postId: postId, commentId: id });
 
     setUpvotes(res.data.numbers);
     res.data.upvote.forEach((item) => {
@@ -176,7 +177,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
+      const res = await axios.post(baseAddress+"posts/vote", { commentId: id, val, postId: postId });
 
       if (res.status == 201) {
         const data = res.data.newUpvote;
@@ -221,7 +222,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       val = 0;
       setDownvote((upvoteNumber) => upvoteNumber - 1)
     }
-    const res = await axios.post("http://localhost:3000/posts/vote", { commentId: id, val, postId: postId });
+    const res = await axios.post(baseAddress+"posts/vote", { commentId: id, val, postId: postId });
     const data = res.data.newUpvote
 
     if (val == -1) {

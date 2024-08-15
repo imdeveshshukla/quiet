@@ -31,7 +31,7 @@ const Notification = ({setIsNfnOpen}) => {
 
     const getUserNotification = async()=>{
         try {
-          const res = await axios.get("http://localhost:3000/u/notification", { withCredentials: true });
+          const res = await axios.get(baseAddress+"u/notification", { withCredentials: true });
           dispatch(setNotification(res.data.data))
           
         } catch (error) {
@@ -100,7 +100,7 @@ const Notification = ({setIsNfnOpen}) => {
         setIsNfnOpen(false)
         if(notifications.length==0) return;
         try {
-            const res = await axios.post("http://localhost:3000/u/markallasread", { withCredentials: true  });
+            const res = await axios.post(baseAddress+"u/markallasread", { withCredentials: true  });
             if(res.status==202){
                 dispatch(clearNotification());
             }
@@ -113,7 +113,7 @@ const Notification = ({setIsNfnOpen}) => {
     const markAsRead=async(id)=>{
         
         try {
-            const res = await axios.post("http://localhost:3000/u/markasread", { id });
+            const res = await axios.post(baseAddress+"u/markasread", { id });
             if(res.status==201){
                 dispatch(updateNotification(id));
             }

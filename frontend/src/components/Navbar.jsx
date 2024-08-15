@@ -15,6 +15,7 @@ import { IoSearchOutline } from "react-icons/io5";
 import Notification from './Notification';
 import Search from './Search'
 import {setShowSearch} from '../redux/search'
+import baseAddress from '../utils/localhost'
 
 
 
@@ -82,7 +83,7 @@ const Navbar = () => {
 
       toast.loading("Logging out...")
       setIsOpen(!isOpen);
-      const res = await axios.post("http://localhost:3000/auth/logout", { withCredentials: true })
+      const res = await axios.post(baseAddress+"auth/logout", { withCredentials: true })
       if (res.status == 200) {
         dispatch(logout());
         dispatch(clearUserInfo());

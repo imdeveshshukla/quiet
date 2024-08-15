@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import SmallLoader from './SmallLoader'
 import OnclickCard from './OnclickCard';
 import { ProfileSkelton } from './Postskelton';
+import baseAddress from '../utils/localhost';
 
 axios.defaults.withCredentials = true
 
@@ -34,7 +35,7 @@ const ProfileLayout = ({isLoading, user }) => {
     setBtnLoading(true);
     try {
 
-      const res = await axios.post('http://localhost:3000/u/uploadImg', formData, {
+      const res = await axios.post(baseAddress+'u/uploadImg', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }, withCredentials: true,

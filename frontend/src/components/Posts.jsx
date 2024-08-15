@@ -9,6 +9,7 @@ import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
 import ReadMore from './ReadMore';
 import { clearPostsInfo } from '../redux/Post';
+import baseAddress from '../utils/localhost';
 
 const Posts = ({ id, post, title, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
   const userInfo = useSelector(state => state.user.userInfo);
@@ -77,7 +78,7 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
 
 
       try {
-        const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
+        const res = await axios.post(baseAddress+"posts/vote", { postId: key, val, commentId: null });
         if (res.status == 201) {
           const data = res.data.newUpvote;
           if (val == 1 && data.userId != data.post.userId) {
@@ -125,7 +126,7 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
     }
 
     try {
-      const res = await axios.post("http://localhost:3000/posts/vote", { postId: key, val, commentId: null });
+      const res = await axios.post(baseAddress+"posts/vote", { postId: key, val, commentId: null });
       if (res.status == 201) {
         const data = res.data.newUpvote;
         if (val == -1 && data.userId != data.post.userId) {
@@ -205,7 +206,7 @@ export const getTime = (createdAt) => {
 
 export const sendNotification = async ({ postId, toUser, fromUser, title, body }) => {
   try {
-    const res = await axios.post("http://localhost:3000/u/sendnotification", { postId, toUser, fromUser, title, body });
+    const res = await axios.post(baseAddress+"u/sendnotification", { postId, toUser, fromUser, title, body });
     return res;
   } catch (error) {
     console.error(error);
