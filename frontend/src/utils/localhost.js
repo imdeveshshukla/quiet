@@ -1,2 +1,2 @@
-const baseAddress = "http://api.bequiet.live/"
+const baseAddress = "https://api.bequiet.live/"
 export default baseAddress;
