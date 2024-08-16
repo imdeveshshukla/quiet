@@ -14,7 +14,7 @@ dotenv.config({
   path: './.env'
 })
 const app = express() 
-const port = 3010
+const port = 3000
 const whitelist = ['http://localhost:5173', 'http://localhost:3000']
 const corsOptions = {
   credentials:true,
