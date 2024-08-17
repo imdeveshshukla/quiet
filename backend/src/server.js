@@ -17,7 +17,7 @@ const app = express()
 const port = 3000
 const corsOptions = {
   credentials: true,
-  origin: 'https://quiet-9tua.onrender.com',
+  origin: 'https://www.bequiet.live',
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: [
     "Origin",
