@@ -14,20 +14,20 @@ dotenv.config({
   path: './.env'
 })
 const app = express() 
-const port = 3010
-const whitelist = ['http://localhost:5173', 'http://localhost:3000']
+const port = 3000
 const corsOptions = {
-  credentials:true,
-  origin: function (origin, callback) {
-    if (whitelist.indexOf(origin) !== -1 || !origin) {
-      callback(null, true)
-    } else {
-      callback(new Error('Not allowed by CORS'))
-    }
-  }
-}
-
-app.use(cors(corsOptions));
+  credentials: true,
+  origin: 'https://www.bequiet.live',
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: [
+    "Origin",
+    "Content-Type",
+    "Accept",
+    "Authorization",
+    "X-Requested-With",
+  ],
+};
+app.use('*',cors(corsOptions));
 app.use(bodyParser.json())
 app.use(express.json());
 app.use(express.urlencoded({extended:true}));

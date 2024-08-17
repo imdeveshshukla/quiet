@@ -1,2 +1,2 @@
-const baseAddress = 'http://localhost:3010/'
+const baseAddress = "https://api.bequiet.live/"
 export default baseAddress;
