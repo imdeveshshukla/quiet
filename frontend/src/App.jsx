@@ -138,9 +138,9 @@ function App() {
       }
     } catch (error) {
       console.log(error);
-      if (error.response.status == 404) {
+      if (error.response?.status == 404) {
         console.log("token not found");
-      } else if (error.response.status == 401) {
+      } else if (error.response?.status == 401) {
         console.log("Invalid token");
       }
     }

@@ -20,6 +20,7 @@ const getUser = async (req, res) => {
   if (typeof email !== "string")
     return res.status(404).json({ msg: "invalid username" });
   try {
+    console.log(email)
     const user = await prisma.user.findUnique({
       where: {
         email: req.params.email,
@@ -83,13 +84,13 @@ const getUser = async (req, res) => {
         },
       },
     });
-    // console.log(user);
+    console.log(user);
 
-    res.status(200).send({
+    return res.status(200).send({
       user,
     });
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       msg: "Server/Database Error",
       error: error.message,
     });

@@ -1,9 +1,9 @@
-name: Build on PR
+name: Build Quietly
 
 on:
   pull_request:
     branches:
-      - build #stopped
+      - deploy #branch
 
 jobs:
   build:
@@ -14,9 +14,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '20'
+          
       
       - name: Install Dependencies
         run: npm install
+        working-directory: ./backend
         
       - name: Run Build
-        run: npm run build
+        run: npm run deploy
+        working-directory: ./backend

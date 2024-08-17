@@ -17,7 +17,7 @@ const app = express()
 const port = 3000
 const corsOptions = {
   credentials: true,
-  origin: 'https://www.bequiet.live',
+  origin: (process.env.NODE_ENV === 'development')?'http://localhost:5173':'https://www.bequiet.live',
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: [
     "Origin",
