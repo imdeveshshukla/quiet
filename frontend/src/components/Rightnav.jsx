@@ -19,7 +19,7 @@ const Rightnav = () => {
   const room = location.pathname.includes('/room');
 
   return (
-    <div className='  p-4 2_md:p-8 h-[calc(100vh-74.46px)] overflow-auto sticky top-[74.46px] hidden  1_5md:block  lg:mr-4 1_5lg:mr-6 1_5xl:mr-16'>
+    <div className='  p-4 2_md:p-8 h-[calc(100vh-74.46px)] overflow-auto sticky top-[74.46px]  hidden  1_5md:block  lg:mr-4 1_5lg:mr-6 1_5xl:mr-16'>
       
       {(location.pathname.includes("/u/")) || room ?<Profilecard room={room}/>:<HotTopicNav/>}
 

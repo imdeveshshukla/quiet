@@ -94,6 +94,8 @@ function App() {
       const res = await axios.get(`${baseAddress}u/${email}`, { withCredentials: true });
       if (res.status == 200) {
         dispatch(setUserInfo(res.data.user));
+        console.log(res);
+        
 
       }
     } catch (error) {
@@ -127,7 +129,9 @@ function App() {
     try {
       const res = await axios.post(`${baseAddress}auth/refreshsignin`, { withCredentials: true });
       if (res.status == 200) {
-        toast.success("Loggin Session Restored")
+        toast("Loggin Session Restored", {
+          icon: 'ℹ️',
+        })
         dispatch(login());
         getUserData(res.data);
         getUserNotification();

@@ -37,6 +37,7 @@ const Signin = () => {
     const getUserData=async(email)=>{ 
         // dispatch(loading())
         dispatch(setSkeltonLoader())
+        
         try {
           const res= await axios.get(`${baseAddress}u/${email}`, {withCredentials:true});
           if(res.status==200){
@@ -56,23 +57,23 @@ const Signin = () => {
         try {
             if (String(form.user).endsWith("@ietlucknow.ac.in")) {
                 const res = await axios.post(`${baseAddress}auth/signin`, { email: form.user, password: form.password });
-                toast.dismiss()
                 if (res.status == 202) {
                     toast.dismiss()
                     Navigate("/")
-                    dispatch(login())
                     await getUserData(res.data);
+                    toast.dismiss()
                     toast.success("Logged In successfully !")
+                    dispatch(login())
                 }
             }
             else {
                 const res = await axios.post(`${baseAddress}auth/signin`, { username: form.user, password: form.password });
                 if (res.status == 202) {
-                    toast.dismiss()
                     Navigate("/")
-                    dispatch(login())
                     await getUserData(res.data);
+                    toast.dismiss()
                     toast.success("Logged In succesfully!")
+                    dispatch(login())
                 }
             }
         } catch (error) {

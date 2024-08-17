@@ -11,12 +11,15 @@ import SmallLoader from './SmallLoader'
 import OnclickCard from './OnclickCard';
 import { ProfileSkelton } from './Postskelton';
 import baseAddress from '../utils/localhost';
+import LeetCode from './LeetCode';
+import LeetCodeLogo from '../assets/LeetCodeLogo'
+
 
 axios.defaults.withCredentials = true
 
 
 
-const ProfileLayout = ({isLoading, user }) => {
+const ProfileLayout = ({ isLoading, user }) => {
   const location = useLocation();
   const userInfo = useSelector((state) => state.user.userInfo);
   const dpUploadRef = useRef(null);
@@ -26,6 +29,9 @@ const ProfileLayout = ({isLoading, user }) => {
   const [dpLoc, setdpLoc] = useState("");
   const dispatch = useDispatch();
   const [btnLoading, setBtnLoading] = useState(false);
+  const [showLCard, setshowLCard] = useState(false)
+  const cardRef = useRef(null);
+
 
   const currentPath = location.pathname.split('/').pop();
 
@@ -35,7 +41,7 @@ const ProfileLayout = ({isLoading, user }) => {
     setBtnLoading(true);
     try {
 
-      const res = await axios.post(baseAddress+'u/uploadImg', formData, {
+      const res = await axios.post(baseAddress + 'u/uploadImg', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         }, withCredentials: true,
@@ -61,6 +67,9 @@ const ProfileLayout = ({isLoading, user }) => {
     if (dpUploadRef.current && !dpUploadRef.current.contains(event.target)) {
       setIsOpen(false);
     }
+    if (cardRef.current && !cardRef.current.contains(event.target)) {
+      setshowLCard(false);
+    }
   };
 
   useEffect(() => {
@@ -69,6 +78,9 @@ const ProfileLayout = ({isLoading, user }) => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
+
+
+
 
 
   const handleDpUpdate = async (e) => {
@@ -119,7 +131,7 @@ const ProfileLayout = ({isLoading, user }) => {
 
 
       <div className='min-h-[calc(100vh-74.46px)] xs:pl-8 sm:pl-16'>
-        {isLoading?<ProfileSkelton/>:<div className='relative flex items-center gap-3 xxs:gap-6 px-2 xxs:px-4 py-6'>
+        {isLoading ? <ProfileSkelton /> : <><div className='relative flex items-center gap-3 xxs:gap-6 px-2 xxs:px-4 py-6'>
           <div className='relative  rounded-full'>
             <img
               src={(userInfo?.username === user?.username && userInfo?.dp) ? userInfo.dp : user?.dp ? user.dp : dp}
@@ -135,10 +147,26 @@ const ProfileLayout = ({isLoading, user }) => {
 
 
 
-          <div className=' 1_5md:hidden absolute bottom-2 right-4 xxs:right-8 xs:right-12 sm:bottom-4 sm:right-20'><OnclickCard /></div>
+          <div className=' 1_5md:hidden absolute top-4 right-4 xxs:right-8 xs:right-12 sm:right-20 '><OnclickCard /></div>
 
 
-        </div>}
+          {user.showLC && <div className='  absolute bottom-4 right-4  xxs:right-8 xs:right-12 sm:right-20 '>
+            <button onClick={() => setshowLCard(true)} className=' bg-black rounded-full flex p-2 items-center justify-center'>
+              <LeetCodeLogo />
+            </button>
+          </div>}
+
+          {showLCard && <div className='fixed top-[74.46px] z-50 left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-md ' >
+
+            <span ref={cardRef} className='fixed left-[50%] top-[50%]  translate-x-[-50%] translate-y-[-50%]'>
+              <LeetCode />
+            </span>
+
+          </div>}
+
+        </div>
+
+        </>}
 
 
 

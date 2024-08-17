@@ -66,7 +66,7 @@ const Profilecard = ({room}) => {
   };
   console.log(profileInfo);
   return (
-    <div className=' w-[80vw] xxs:w-[75vw] xs:w-[65vw] sm:w-[50vw]  1_5md:w-full mx-0   rounded-3xl  bg-[#c2c7b3] '>
+    <div className=' w-[80vw] xxs:w-[75vw] xs:w-[65vw] sm:w-[50vw]  1_5md:w-full mx-0    rounded-3xl  bg-[#c2c7b3] '>
       <div className=' rounded-t-3xl h-32 w-full overflow-hidden'>
         <img className=' w-full h-full object-cover' src={banner} alt="" />
       </div>

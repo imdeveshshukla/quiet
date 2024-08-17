@@ -30,6 +30,10 @@ import { BsHouseAddFill } from "react-icons/bs";
 import { IoIosLogOut } from "react-icons/io";
 import ForbiddenPage from "./ForbiddenPage";
 import { roomsApi, useGetRoomDetailsQuery } from "./RoomApis";
+import { MdExitToApp } from "react-icons/md";
+import { MdDelete } from "react-icons/md";
+
+
 
 const Room = function () {
   const location = useLocation();
@@ -71,6 +75,7 @@ const Room = function () {
     try{
       const roomId = roomDetail.id;
       const res = await axios.post(baseAddress+"rooms/leave/"+roomId);
+      
       toast.dismiss();
       toast.success(res?.data?.msg);
       const updatedRooms = [...room].filter(roomObject => roomObject.room.id !== roomId);
@@ -302,7 +307,7 @@ const Room = function () {
           <div className='flex items-center  justify-end pr-8   w-full text-center text-3xl font-bold'>
             <img className=" w-9 rounded-l-lg " src={q} alt="" /><span className=" bg-white  rounded-r-lg px-1">{title}</span>
           </div>
-          <div className="flex items-center  justify-end pr-8   w-full">
+          <div className="flex items-center  justify-end pr-8 gap-2   w-full">
              {
               joined ?
                 <div className='flex self-end gap-2 justify-self-end'>
@@ -337,10 +342,15 @@ const Room = function () {
                 <BsThreeDots/>
               </button>
               {isOpen && (
-                <div className="absolute right-0 top-10 w-40 bg-white rounded-md shadow-lg z-10">
-                  <ul className="py-1 bg-black rounded-md ">
-                    <li className="px-4 py-1 text-white hover:bg-grey">
-                      <button onClick={() => deleteRoom()} to={"/"} className="block">{isOwner?'Delete':'Leave'}</button>
+                <div className="absolute right-0 top-10  bg-white rounded-md shadow-lg z-10">
+                  <ul className=" bg-black rounded-md ">
+                    <li className=" text-white hover:bg-grey">
+                      <button onClick={() => deleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
+                        {isOwner?<>
+                          <span>Delete</span> <MdDelete/>
+                      </>:<>
+                      <span>Leave</span> <MdExitToApp/>
+                      </>}</button>
                     </li>
                   </ul>
 

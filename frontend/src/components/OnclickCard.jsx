@@ -37,7 +37,7 @@ export const Card = ({setShowCard}) => {
         };
       }, []);
     return (
-        <div className=' 1_5md:hidden fixed top-[74.46px] left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-sm '>
+        <div className=' 1_5md:hidden fixed top-[74.46px] z-50 left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-sm '>
             <span  ref={cardRef}  className='fixed left-[50%] top-[50%]  translate-x-[-50%] translate-y-[-50%]'>
             <Profilecard/>
             </span>

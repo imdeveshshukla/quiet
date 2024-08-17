@@ -17,12 +17,19 @@ export const userState = createSlice({
     addEnrolledRoom:(state,action)=>{
       state.userInfo.Room = [action.payload,...state.userInfo.Room]
     },
+    addLeetCodeID:(state,action)=>{
+      state.userInfo = {...state.userInfo, leetcode: action.payload}
+    },
+    setShowLC: (state,action)=>{
+      state.userInfo = {...state.userInfo, showLC: action.payload}
+
+    },
     clearUserInfo:(state)=>{
         state.userInfo=null;
     }
   },
 })
 
-export const { setUserInfo,addOwnedRoom,addEnrolledRoom,clearUserInfo,setUserPost,setUserComment} = userState.actions
+export const { setUserInfo,addOwnedRoom,addEnrolledRoom,clearUserInfo,setUserPost,setUserComment, addLeetCodeID, setShowLC} = userState.actions
 
 export default userState.reducer
