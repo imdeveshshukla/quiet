@@ -11,7 +11,11 @@ router.get('/notification',verifyToken, userController.getNotifications);
 router.post('/markasread', userController.markAsRead );
 router.post('/markallasread',verifyToken, userController.markAllAsRead );
 router.post("/sendnotification",verifyToken,userController.sendNotification);
+router.post("/addLeetCode",verifyToken,userController.addLC);
+router.post("/setLcVisibility",verifyToken,userController.setLcVisibility);
+
 router.get('/:email',verifyToken, userController.getUser );
+
 
 
 const userRouter= router

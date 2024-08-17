@@ -8,9 +8,10 @@
     scroll-behavior: smooth;
 }
 body{
-    background-color: #6d712e87;
+    background-color: #c9cbad;
     overflow-x: hidden;
 }
+/* #6d712e87 */
 
 ::-webkit-scrollbar {
     display: none;

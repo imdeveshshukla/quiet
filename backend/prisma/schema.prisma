@@ -30,9 +30,15 @@ model User{
   OwnedRooms Rooms[] @relation("creatorUserId")
   Room EnrolledRooms[] @relation("UserId")
 
+  leetcode String?
+  showLC Boolean @default(false)
+
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
 }
+
+
+
 model UserVarify{
   userID String @id @unique
   otp String

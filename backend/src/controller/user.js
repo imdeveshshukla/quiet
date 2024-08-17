@@ -17,7 +17,8 @@ import uploadOnCloudinary from "../utils/cloudinary.js";
 
 const getUser = async (req, res) => {
   const email = req.params?.email;
-  if (typeof(email) !== "string") return res.status(404).json({msg: 'invalid username'});
+  if (typeof email !== "string")
+    return res.status(404).json({ msg: "invalid username" });
   try {
     const user = await prisma.user.findUnique({
       where: {
@@ -31,71 +32,73 @@ const getUser = async (req, res) => {
         isVarified: true,
         userID: true,
         username: true,
+        leetcode:true,
+        showLC:true,
         posts: {
           select: {
             id: true,
             title: true,
             topic: true,
-            body:true,
+            body: true,
             createdAt: true,
-            updatedAt: true
-          }
+            updatedAt: true,
+          },
         },
-        comments:{
-          select:{
-            id:true,
-            postId:true,
-            parentId:true,
-            createdAt:true,
-            updatedAt:true
-          }
+        comments: {
+          select: {
+            id: true,
+            postId: true,
+            parentId: true,
+            createdAt: true,
+            updatedAt: true,
+          },
         },
-        upvotes:{
-          select:{
-            id:true,
-            upvotes:true,
-            postId:true,
-            commentId:true,
-            createAt:true
-          }
+        upvotes: {
+          select: {
+            id: true,
+            upvotes: true,
+            postId: true,
+            commentId: true,
+            createAt: true,
+          },
         },
-        OwnedRooms:{
-          select:{
-            id:true,
-            title:true,
-            desc:true,
-            privateRoom:true,
-            img:true,
-            createdAt:true,
-            bgImg:true,
-            UsersEnrolled:true
-          }
+        OwnedRooms: {
+          select: {
+            id: true,
+            title: true,
+            desc: true,
+            privateRoom: true,
+            img: true,
+            createdAt: true,
+            bgImg: true,
+            UsersEnrolled: true,
+          },
         },
-        Room:{
-          select:{
-            id:true,
-            userId:true,
-            RoomId:true
-          }
-        }
-    }});
+        Room: {
+          select: {
+            id: true,
+            userId: true,
+            RoomId: true,
+          },
+        },
+      },
+    });
     // console.log(user);
-  
+
     res.status(200).send({
       user,
     });
   } catch (error) {
     res.status(500).json({
-      msg:"Server/Database Error",
-      error:error.message
-    })
+      msg: "Server/Database Error",
+      error: error.message,
+    });
   }
 };
 
-
 const uploadImg = async (req, res) => {
   console.log("in controller");
-  
+
   let imgurl = null;
   const userId = req.userId;
 
@@ -155,44 +158,36 @@ const getUserPost = async (req, res) => {
   }
 };
 
-const getNotifications= async (req,res)=>{
-
-  const id= req.userId;
+const getNotifications = async (req, res) => {
+  const id = req.userId;
   console.log("Notification :For id", req.userId);
-  
+
   try {
-    const data= await prisma.notification.findMany({
-      where:{
-        AND:[
-          {toUser:id},
-          {visited:false}
-        ]
+    const data = await prisma.notification.findMany({
+      where: {
+        AND: [{ toUser: id }, { visited: false }],
       },
-      include:{
+      include: {
         user: true,
-        user2:true,
+        user2: true,
       },
       orderBy: {
         createdAt: "desc",
       },
     });
-    
-    
-    
-    res.status(202).send({msg:"Success", data});
 
+    res.status(202).send({ msg: "Success", data });
   } catch (error) {
     console.log(error);
-    res.status(403).send({msg:"Some error occured"});
+    res.status(403).send({ msg: "Some error occured" });
   }
+};
 
-}
+const markAsRead = async (req, res) => {
+  const id = req.body.id;
+  console.log(req.body);
 
-const markAsRead=async (req,res)=>{
-   const id = req.body.id;
-   console.log(req.body);
-   
-   try {
+  try {
     const newData = await prisma.notification.update({
       where: {
         id,
@@ -200,61 +195,107 @@ const markAsRead=async (req,res)=>{
       data: {
         visited: true,
       },
-    })
-   
-    
+    });
+
     res.status(201).send(newData);
-   } catch (error) {
-    console.log(error);
-    
-   }
-}
-
-const markAllAsRead=async(req,res)=>{
-  const id= req.userId;
-  try {
-    const newData= await prisma.notification.updateMany({
-      where:{
-        AND:[
-          {toUser:id},
-          {visited:false}
-        ]
-      },
-      data:{
-        visited:true,
-      }
-    })
-  
-    
-    res.status(202).send(newData)
   } catch (error) {
-    
+    console.log(error);
   }
-}
+};
 
-const sendNotification= async (req,res)=>{
-  const {toUser, fromUser, postId, title, body} = req.body;
+const markAllAsRead = async (req, res) => {
+  const id = req.userId;
   try {
-    const notification= await prisma.notification.create({
-      data:{
+    const newData = await prisma.notification.updateMany({
+      where: {
+        AND: [{ toUser: id }, { visited: false }],
+      },
+      data: {
+        visited: true,
+      },
+    });
+
+    res.status(202).send(newData);
+  } catch (error) {}
+};
+
+const sendNotification = async (req, res) => {
+  const { toUser, fromUser, postId, title, body } = req.body;
+  try {
+    const notification = await prisma.notification.create({
+      data: {
         title,
         body,
         postId,
         toUser,
         fromUser,
-      }
+      },
     });
-   
+
     res.status(201).send(notification);
-    
   } catch (error) {
     console.log(error);
     res.status(403).send(error);
   }
+};
+
+const addLC = async (req, res) => {
+  const userID = req.userId
+  const  {lcusername}= req.body;
+  
+  try {
+    const data= await prisma.user.update({
+      where:{
+        userID,
+      },
+      data:{
+        leetcode: lcusername,
+      }
+    });
+    console.log(data);
+    
+     
+    res.status(200).send(data);
+  } catch (error) {
+    console.log(error);
+    
+  }
+};
+
+const setLcVisibility = async(req,res)=>{
+  const userID = req.userId;
+  const {showLC}= req.body
+  
+  
+  try {
+    const data=await prisma.user.update({
+      where:{
+        userID,
+      },
+      data:{
+        showLC:showLC,
+      }
+    })
+    console.log(data);
+    
+     res.status(202).send(data)
+  } catch (error) {
+    console.log(error);
+    
+  }
 }
 
-
-
 // const userController={getUser,varifyToken};
-const userController = { getUser, uploadImg, getUserPost, getNotifications, markAsRead, markAllAsRead, sendNotification };
+const userController = {
+  getUser,
+  uploadImg,
+  getUserPost,
+  getNotifications,
+  markAsRead,
+  markAllAsRead,
+  sendNotification,
+  addLC,
+  setLcVisibility,
+  
+};
 export default userController;

@@ -103,7 +103,6 @@ const Home = () => {
         endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}
       >
         {isLogin && <Createpost onNewPost={handleNewPost} />}
-        <div className='bg-gray-700 h-[1px]'></div>
         <div className=' flex items-center justify-end mx-4 mt-3'>
           <span onClick={() => handleNewPost()} className=' bg-[#eff1d3] rounded-full p-1'>
             {isLoading ? <SmallLoader /> : <GrRefresh className=' cursor-pointer text-blue-500 text-xl font-extrabold' />}

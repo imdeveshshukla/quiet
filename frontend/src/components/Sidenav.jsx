@@ -88,7 +88,7 @@ const Sidenav = () => {
       else {
         dispatch(clearRooms());
       }
-    },[userData])
+    },[userData,isLogin])
 
     useEffect(()=>{
       if(isLogin)
@@ -124,11 +124,11 @@ const Sidenav = () => {
           </div>
           </button>
 
-          <div className={`pl-6 m-4 flex flex-col ${!openBar2? `hidden`:`` }`}>
+          <div className={`pl-6 m-4 flex flex-col gap-2 ${!openBar2? `hidden`:`` }`}>
             <CreateRoomBtn />
              
             {roomLoader?<div className="mx-auto"><SmoothLoader/></div>:(myAllRoom?.map(function(val){
-              return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{joined:true}} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.room.title}</span></NavLink>
+              return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{joined:true}} className={'w-full flex rounded items-center gap-2 px-4 py-1 hover:bg-[#65692375]'}><IoHome /><span>{val?.room.title}</span></NavLink>
              
             }))}
           </div>
@@ -148,9 +148,9 @@ const Sidenav = () => {
           <span>{openBar?<CiCircleChevDown size={25}/>:<CiCircleChevUp size={25}/>}</span>
           </div>
       </button>
-          <div className={`pl-6 m-4 flex flex-col ${!openBar? `hidden`:`` }`}>
+          <div className={`pl-6 m-4 gap-1 flex flex-col ${!openBar? `hidden`:`` }`}>
           {roomLoader2?<div className="mx-auto"><SmoothLoader/></div>:(notJoinedRooms?.map(function(val){
-             return <NavLink key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} className={'w-full flex rounded items-center gap-2 px-4 py-2 hover:bg-[#65692375]'}><IoHome /><span>{val?.title}</span></NavLink>
+             return <NavLink key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} className={'w-full flex rounded items-center gap-2 px-4 py-1 hover:bg-[#65692375]'}><IoHome /><span>{val?.title}</span></NavLink>
            }))}
           </div>
       </div>}

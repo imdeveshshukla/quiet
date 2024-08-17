@@ -1,6 +1,6 @@
 
 import Navbar from './components/Navbar'
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom'
+import { BrowserRouter, Routes, Route, useLocation, useNavigate } from 'react-router-dom'
 import './styles/App.css'
 import Home from './pages/Home'
 import Signup from './pages/Signup'
@@ -69,13 +69,24 @@ function App() {
   const location = useLocation();
   const isSkelton = useSelector(state => state.skelton.value);
   const showSearch = useSelector(state => state.search.value)
+  const navigate= useNavigate()
 
 
 
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [location.pathname]);
+    if((location.pathname.endsWith("/signin") || location.pathname.endsWith("/signup")) && isLogin){
+      navigate("/");
+      toast('You are already logged in!', {
+        icon: 'ℹ️',
+      });
+    }
+  }, [isLogin, location.pathname]);
+
+
+
+
 
   const getUserData = async (email) => {
     setLoading(true);
@@ -83,6 +94,8 @@ function App() {
       const res = await axios.get(`${baseAddress}u/${email}`, { withCredentials: true });
       if (res.status == 200) {
         dispatch(setUserInfo(res.data.user));
+        console.log(res);
+        
 
       }
     } catch (error) {
@@ -116,7 +129,9 @@ function App() {
     try {
       const res = await axios.post(`${baseAddress}auth/refreshsignin`, { withCredentials: true });
       if (res.status == 200) {
-        toast.success("Loggin Session Restored")
+        toast("Loggin Session Restored", {
+          icon: 'ℹ️',
+        })
         dispatch(login());
         getUserData(res.data);
         getUserNotification();
@@ -183,7 +198,7 @@ function App() {
         <div className='md:border-r-2  xl:border-x-2 border-black'>
           <Routes>
             <Route path='/' element={<Home />} />
-            {!isLogin && <Route path='/signup' element={<Signup />} />}
+            {!isLogin &&  <Route path='/signup' element={<Signup />} />}
             {!isLogin && <Route path='/signin' element={<Signin />} />}
             <Route path='/resetpassword' element={<Resetpass />} />
             <Route path='/varifyaccount' element={<Varifyacc />} />
@@ -211,6 +226,7 @@ function App() {
 
             {/* <Route path='/room/:username/:title' element={<Room />} /> */}
 
+            <Route path='/room/:CreatorId/:title' element={<Room/>} />
             <Route path='*' element={<NotFound/>} />
               <Route path='/room/:CreatorId/:title' element={isLogin?<Room/>:<ForbiddenPage/>} />
           </Routes>

@@ -37,6 +37,7 @@ const Signin = () => {
     const getUserData=async(email)=>{ 
         // dispatch(loading())
         dispatch(setSkeltonLoader())
+        
         try {
           const res= await axios.get(`${baseAddress}u/${email}`, {withCredentials:true});
           if(res.status==200){
@@ -56,23 +57,23 @@ const Signin = () => {
         try {
             if (String(form.user).endsWith("@ietlucknow.ac.in")) {
                 const res = await axios.post(`${baseAddress}auth/signin`, { email: form.user, password: form.password });
-                toast.dismiss()
                 if (res.status == 202) {
                     toast.dismiss()
                     Navigate("/")
-                    dispatch(login())
                     await getUserData(res.data);
+                    toast.dismiss()
                     toast.success("Logged In successfully !")
+                    dispatch(login())
                 }
             }
             else {
                 const res = await axios.post(`${baseAddress}auth/signin`, { username: form.user, password: form.password });
                 if (res.status == 202) {
-                    toast.dismiss()
                     Navigate("/")
-                    dispatch(login())
                     await getUserData(res.data);
+                    toast.dismiss()
                     toast.success("Logged In succesfully!")
+                    dispatch(login())
                 }
             }
         } catch (error) {
@@ -120,7 +121,7 @@ const Signin = () => {
     return (
 
         <>
-            <div className='w-full flex justify-center items-center h-[89.5vh] m-auto border-x-2 border-black '>
+            <div className='w-full flex justify-center items-center h-[89.5vh] m-auto  '>
                 <div className=' w-[95%] xxs:w-[90%]  sm:w-[75%]  md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[50%] sm:h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
 
                     <form noValidate autoComplete='off' className='flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>

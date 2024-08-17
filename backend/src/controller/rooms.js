@@ -547,7 +547,7 @@ export const leaveRoom = async(req,res)=>{
                 },
             });
             return res.status(200).json({
-                msg:"Success",
+                msg:"Room deleted",
                 deletedRoom
             })
         }
@@ -561,7 +561,7 @@ export const leaveRoom = async(req,res)=>{
             },
           });          
         return res.status(200).json({
-            msg:"Success",
+            msg:"Left the room",
             userEnrolled
         })
     }

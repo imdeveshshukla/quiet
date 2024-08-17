@@ -1,5 +1,6 @@
 import prisma from "../../db/db.config.js";
 
+
 export const getUsers = async (req, res) => {
   try {
     const { key } = req.query;
@@ -38,6 +39,8 @@ export const getUser = async (req, res) => {
         username: true,
         dp: true,
         createdAt: true,
+        leetcode:true,
+        showLC:true,
         _count: {
           select: {
             posts: true,
@@ -56,7 +59,7 @@ export const getUser = async (req, res) => {
 export const getUserPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
-  const offset =parseInt(req.query.offset) || (page - 1) * limit;
+  const offset = parseInt(req.query.offset) || (page - 1) * limit;
   console.log(page, offset);
   const { userID, username } = req.query;
 
@@ -73,10 +76,9 @@ export const getUserPosts = async (req, res) => {
                 user: true,
               },
             },
-            room:true,
+            room: true,
             user: true,
             upvotes: true,
-
           },
           orderBy: {
             createdAt: "desc",
@@ -86,8 +88,6 @@ export const getUserPosts = async (req, res) => {
         },
       },
     });
-    
-    
 
     res.status(200).send({ posts: user.posts });
   } catch (error) {
@@ -128,8 +128,6 @@ export const getUserComments = async (req, res) => {
       skip: offset,
       take: limit,
     });
-    
-    
 
     res.status(200).send(comments);
   } catch (error) {
@@ -138,7 +136,6 @@ export const getUserComments = async (req, res) => {
 };
 
 export const getUserUpvotes = async (req, res) => {
-
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = (page - 1) * limit;
@@ -147,7 +144,7 @@ export const getUserUpvotes = async (req, res) => {
   try {
     let data = await prisma.upvote.findMany({
       where: {
-        upvotes:1,
+        upvotes: 1,
         userId,
         commentId: null,
       },
@@ -155,9 +152,9 @@ export const getUserUpvotes = async (req, res) => {
         post: {
           include: {
             user: true,
-            comments:true,
+            comments: true,
             upvotes: true,
-            room:true,
+            room: true,
           },
         },
       },
@@ -167,17 +164,16 @@ export const getUserUpvotes = async (req, res) => {
       skip: offset,
       take: limit,
     });
- 
-    
-     data.forEach(data=>{
-      data.post.upvotes = data.post.upvotes.filter((upvote) => upvote.commentId === null)
+
+    data.forEach((data) => {
+      data.post.upvotes = data.post.upvotes.filter(
+        (upvote) => upvote.commentId === null
+      );
     });
-  
-    
+
     res.status(200).send(data);
   } catch (error) {
     console.log(error);
-    
   }
 };
 
