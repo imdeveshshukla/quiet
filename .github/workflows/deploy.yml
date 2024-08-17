@@ -32,14 +32,14 @@ jobs:
     - name: Verify Pushed Image
       run: docker pull imdeveshshukla/quiet-backend
 
-    # - name: Deploy to EC2
-    #   uses: appleboy/ssh-action@master
-    #   with:
-    #     host: ${{ secrets.SSH_HOST }}
-    #     username: ${{ secrets.SSH_USERNAME }}
-    #     key: ${{ secrets.SSH_KEY }}
-    #     script: |
-    #       sudo docker pull imdeveshshukla/quiet-backend:latest
-    #       sudo docker stop web-app || true
-    #       sudo docker rm web-app || true
-    #       sudo docker run -e DATABASE_URL ${{ secrets.DB_URL }} --restart-always -d --name web-app -p 3005:3000 imdeveshshukla/quiet-backend:latest
+    - name: Deploy
+      uses: appleboy/ssh-action@master  #working
+      with:
+        host: ${{ secrets.SSH_HOST }}
+        username: ${{ secrets.SSH_USERNAME }}
+        key: ${{ secrets.SSH_KEY }}
+        script: |
+          sudo docker pull imdeveshshukla/quiet-backend:latest
+          sudo docker stop web-app || true
+          sudo docker rm web-app || true
+          sudo docker run --env-file .env --restart always -d --name web-app -p 3000:3000 imdeveshshukla/quiet-backend:latest
