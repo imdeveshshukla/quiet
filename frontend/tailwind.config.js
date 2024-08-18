@@ -30,12 +30,21 @@ export const theme = {
         '0%, 100%': { boxShadow: '0 0 5px #f9ff86, 0 0 10px #f9ff86, 0 0 20px #f9ff86' },
         '50%': { boxShadow: '0 0 15px #f9ff86, 0 0 20px #f9ff86, 0 0 30px #f9ff86' },
       },
+      slideInFromBehind: {
+        '0%': { transform: 'scale(0.5) translateZ(-200px)', opacity: '0' },
+        '100%': { transform: 'scale(1) translateZ(0)', opacity: '1' },
+      },
     },
     transitionDuration: {
       '400': '400ms', // 2 seconds
     },
     animation: {
       glow: 'glow 2s infinite',
+      slideInFromBehind: 'slideInFromBehind 0.8s ease-out forwards',
+    },
+    fontFamily: {
+      roboto: ["Roboto", 'sans-serif'],
+      ubuntu:["Ubuntu", "sans-serif"]
     },
   },
   // colors:{

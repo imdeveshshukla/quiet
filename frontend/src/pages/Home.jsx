@@ -94,7 +94,7 @@ const Home = () => {
 
 
   return (
-    <div className=' min-h-screen xxs:pl-0'>
+    <div className=' min-h-screen xs:pl-8 sm:pl-16'>
       <InfiniteScroll
         dataLength={posts.length}
         next={fetchMoreData}

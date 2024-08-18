@@ -14,6 +14,7 @@ import toast from 'react-hot-toast';
 import { setUserInfo } from '../redux/user';
 import { setSkeltonLoader } from '../redux/skelton';
 import baseAddress from "../utils/localhost";
+import { getUserData } from '../App';
 
 
 
@@ -34,21 +35,7 @@ const Signin = () => {
     const passref = useRef();
 
 
-    const getUserData=async(email)=>{ 
-        // dispatch(loading())
-        dispatch(setSkeltonLoader())
-        
-        try {
-          const res= await axios.get(`${baseAddress}u/${email}`, {withCredentials:true});
-          if(res.status==200){
-            dispatch(setUserInfo(res.data.user));
-          }
-        } catch (error) {
-          console.log(error);
-        } 
-        // dispatch(loading())
-        dispatch(setSkeltonLoader())
-     }
+    
 
 
     const sendRequest = async () => {
@@ -60,17 +47,20 @@ const Signin = () => {
                 if (res.status == 202) {
                     toast.dismiss()
                     Navigate("/")
-                    await getUserData(res.data);
+                    await getUserData({email:res.data, dispatch});
                     toast.dismiss()
-                    toast.success("Logged In successfully !")
+                    toast.success("Logged In succesfully!")
                     dispatch(login())
                 }
             }
             else {
                 const res = await axios.post(`${baseAddress}auth/signin`, { username: form.user, password: form.password });
+                console.log(res);
+                
                 if (res.status == 202) {
+                    toast.dismiss()
+                    await getUserData({email:res.data, dispatch});
                     Navigate("/")
-                    await getUserData(res.data);
                     toast.dismiss()
                     toast.success("Logged In succesfully!")
                     dispatch(login())
@@ -162,3 +152,6 @@ const Signin = () => {
 }
 
 export default Signin
+
+
+

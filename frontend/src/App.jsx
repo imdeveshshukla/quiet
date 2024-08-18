@@ -50,6 +50,8 @@ import NotFound from './pages/NotFound'
 import Popular from './pages/Popular'
 import ForbiddenPage from './pages/ForbiddenPage'
 import loading from './redux/loading'
+import About from './components/About'
+import { hide } from './redux/welcome'
 
 
 
@@ -65,10 +67,12 @@ function App() {
   const isLogin = useSelector((state) => state.login.value);
   const userInfo = useSelector(state => state.user.userInfo);
   const searchRef = useRef(null)
+  const welcomeRef = useRef(null)
   const posts = useSelector(state => state.post.posts)
   const location = useLocation();
   const isSkelton = useSelector(state => state.skelton.value);
   const showSearch = useSelector(state => state.search.value)
+  const showWelcome= useSelector(state=> state.welcome.value)
   const navigate= useNavigate()
 
 
@@ -88,22 +92,7 @@ function App() {
 
 
 
-  const getUserData = async (email) => {
-    setLoading(true);
-    try {
-      const res = await axios.get(`${baseAddress}u/${email}`, { withCredentials: true });
-      if (res.status == 200) {
-        dispatch(setUserInfo(res.data.user));
-        console.log(res);
-        
 
-      }
-    } catch (error) {
-      console.log(error);
-
-    }
-    setLoading(false);
-  }
 
 
 
@@ -129,11 +118,12 @@ function App() {
     try {
       const res = await axios.post(`${baseAddress}auth/refreshsignin`, { withCredentials: true });
       if (res.status == 200) {
+        
+        await getUserData({email:res.data, dispatch});
         toast("Loggin Session Restored", {
           icon: 'ℹ️',
         })
         dispatch(login());
-        getUserData(res.data);
         getUserNotification();
       }
     } catch (error) {
@@ -166,6 +156,9 @@ function App() {
   const handleClickOutside = (event) => {
     if (searchRef.current && !searchRef.current.contains(event.target)) {
       dispatch(setShowSearch(false))
+    }
+    if (welcomeRef.current && !welcomeRef.current.contains(event.target)) {
+      dispatch(hide())
     }
   };
 
@@ -266,8 +259,41 @@ function App() {
         </>
       )}
 
+      {showWelcome && <>
+        <div className='fixed top-[74.46px] z-50 left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-sm '>
+  
+            <span ref={welcomeRef} className='fixed left-[50%] top-[50%]  translate-x-[-50%] translate-y-[-50%]'>
+              <About />
+            </span>
+        </div>
+      </>}
+
+
+
     </>
   )
 }
 
 export default App
+
+
+export const getUserData=async({email, dispatch})=>{ 
+  toast.dismiss()
+  toast.loading("Signing In")
+
+  dispatch(setSkeltonLoader())
+  
+  try {
+    const res= await axios.get(`${baseAddress}u/${email}`, {withCredentials:true});
+    
+    if(res.status==200){
+      console.log(res);
+      dispatch(setUserInfo(res.data.user));
+    }
+  } catch (error) {
+    console.log(error);
+  } 
+
+  dispatch(setSkeltonLoader())
+  toast.dismiss()
+}

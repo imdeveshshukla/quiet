@@ -5,6 +5,7 @@ import SmoothLoader from "../assets/SmoothLoader";
 import axios from "axios";
 import baseAddress from "../utils/localhost";
 import toast from "react-hot-toast";
+import dp from '../assets/dummydp.png'
 import { useDebounce } from '../hooks/useDebounce';
 import { fetchUsers } from "./Search";
 import { v4 as uuidv4 } from "uuid";
