@@ -128,6 +128,9 @@ const signup = async (req, res) => {
     });
   }
 };
+
+
+
 const  varifyOtp = async (req, res) => {
   try {
     // console.log("Remaining = "+(req.rateLimit.remaining));
@@ -135,7 +138,7 @@ const  varifyOtp = async (req, res) => {
     {
       return res.status(425).send({message:"Too Many requests, please try again after some minutes"});
     }
-    const { userID, otp } = req.body;
+    const { userID, otp, email } = req.body;
     if (userID == "" || otp == "") {
       throw Error(" credetials cannot be empty");
     } else {
@@ -161,6 +164,10 @@ const  varifyOtp = async (req, res) => {
       if (!validOtp) {
         return res.status(401).json({ msg: "Invalid Otp" });
       }
+
+      var token = jwt.sign({ userId:userID,email: email }, process.env.SECRET_KEY, {
+        expiresIn: 24 * 60 * 60,
+      });
       const updateUser = await prisma.user.update({
         where: {
           userID: userID,
@@ -176,12 +183,18 @@ const  varifyOtp = async (req, res) => {
         },
       });
 
-      return res.status(202).json({ msg: "User successfully Varified" });
+      return res.cookie(updateUser.userID, token, {
+        path: "/",
+        expires: new Date(Date.now() + 1000 * 1 * 24 * 60 * 60),
+        httpOnly: true,
+        sameSite: "lax",
+      }).status(202).send(email);
     }
   } catch (error) {
     console.log(error);
   }
 };
+
 const resendOtp = async (req, res) => {
   console.log(req.body);
   try {

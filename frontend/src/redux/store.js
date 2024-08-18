@@ -15,6 +15,7 @@ import roomReducer from './roomSlice'
 import userRoomsReducer from './userRooms'
 import PageReducer from './Page'
 import { roomsApi } from '../pages/RoomApis'
+import welcomeStateReducer  from './welcome'
 
 export const store = configureStore({
   reducer: {
@@ -33,6 +34,7 @@ export const store = configureStore({
     room:roomReducer,
     rooms:userRoomsReducer,
     page:PageReducer,
+    welcome: welcomeStateReducer,
     roomsApi:roomsApi.reducer
   },
 
