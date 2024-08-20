@@ -1,19 +1,7 @@
 import prisma from "../../db/db.config.js";
 import jwt from "jsonwebtoken";
+import bcrypt from "bcrypt";
 import uploadOnCloudinary from "../utils/cloudinary.js";
-
-// const varifyToken = (req, res, next) => {
-//     const token = req.headers.cookie.split("=")[1];
-
-//     if (!token) {
-//       res.status(401).send({ msg: "No token found" });
-//     }
-//     let payload = jwt.verify(token, process.env.SECRET_KEY);
-//     if (payload.email) {
-//         req.email=payload.email
-//       next();
-//     } else res.status(401).send({ msg: "Invalid Token" });
-//   };
 
 const getUser = async (req, res) => {
   const email = req.params?.email;
@@ -35,6 +23,8 @@ const getUser = async (req, res) => {
         username: true,
         leetcode:true,
         showLC:true,
+        codeforces:true,
+        showCf:true,
         posts: {
           select: {
             id: true,
@@ -98,14 +88,14 @@ const getUser = async (req, res) => {
 };
 
 const uploadImg = async (req, res) => {
-  console.log("in controller");
+  // console.log("in controller");
 
   let imgurl = null;
   const userId = req.userId;
 
   if (req.file) {
     imgurl = await uploadOnCloudinary(req.file.path);
-    console.log("file Object = " + imgurl);
+    // console.log("file Object = " + imgurl);
   }
   try {
     const user = await prisma.user.update({
@@ -161,7 +151,7 @@ const getUserPost = async (req, res) => {
 
 const getNotifications = async (req, res) => {
   const id = req.userId;
-  console.log("Notification :For id", req.userId);
+  // console.log("Notification :For id", req.userId);
 
   try {
     const data = await prisma.notification.findMany({
@@ -286,9 +276,70 @@ const setLcVisibility = async(req,res)=>{
   }
 }
 
+const update = async(req,res)=>{
+  const body = req.body;
+  const userId = req.userId;
+  var hashPass = undefined;
+  if(body.password)hashPass = bcrypt.hashSync(body.password, 10);
+
+  try {
+    const user = await prisma.user.update({
+      where:{
+        userID:userId,
+      },
+      data:{
+        bio:body.bio?body.bio:undefined,
+        username:body.username?body.username:undefined,
+        password:hashPass,
+        codeforces:body.rank?body.rank:undefined,
+        showCf:body.showCF?body.showCF:undefined
+      }
+    });
+    res.status(201).json({
+      msg:"Succesfully Updated",
+      user
+    })
+  } catch (error) {
+    res.status(500).json({
+      msg:"Server/Database Error",
+      error
+    });
+  }
+}
+
+const deleteAcct = async(req,res)=>{
+  const userID = req.userId;
+  try {
+    console.log(userID);
+    const user = await prisma.user.delete({
+      where:{
+        userID
+      }
+    })
+    console.log(user);
+    return res
+    .clearCookie(user?.userID, "", {
+      path: "/",
+      httpOnly: true,
+      sameSite: "lax",
+    })
+    .status(200)
+    .json({
+      msg:"Success",
+      user
+    });
+  } catch (error) {
+    return res.status(500).json({
+      msg:"Server/Database Issue",
+      error
+    })
+  }
+}
 // const userController={getUser,varifyToken};
 const userController = {
   getUser,
+  update,
+  deleteAcct,
   uploadImg,
   getUserPost,
   getNotifications,

@@ -4,7 +4,7 @@ node_modules
 
 # Ignore the bugs directory if it contains debugging or log files
 bugs
-
+Details
 # Ignore Prisma directory if it contains files that are only needed locally
 # prisma
 

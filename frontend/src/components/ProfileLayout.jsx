@@ -142,7 +142,8 @@ const ProfileLayout = ({ isLoading, user }) => {
           </div>
           <div className='flex flex-col gap-1'>
             <div className=' text-lg  xxs:text-2xl break-words xs:text-3xl font-bold'>{user.username}</div>
-            <div className=' text-sm xxs:text-base font-semibold text-gray-700'>u/{user.username}</div>
+            <div className=' text-xs font-thin xxs:text-base font-semibold text-gray-700'>u/{user.username}</div>
+            <div className=' text-sm xxs:text-base break-words font-semibold text-gray-800'>{userInfo?.bio}</div>
           </div>
 
 

@@ -24,12 +24,19 @@ export const userState = createSlice({
       state.userInfo = {...state.userInfo, showLC: action.payload}
 
     },
+    addCodeforceRank:(state,action)=>{
+      state.userInfo = {...state.userInfo, codeforces: action.payload}
+    },
+    setshowCf: (state,action)=>{
+      state.userInfo = {...state.userInfo, showCf: action.payload}
+
+    },
     clearUserInfo:(state)=>{
         state.userInfo=null;
     }
   },
 })
 
-export const { setUserInfo,addOwnedRoom,addEnrolledRoom,clearUserInfo,setUserPost,setUserComment, addLeetCodeID, setShowLC} = userState.actions
+export const { setUserInfo,addOwnedRoom,addEnrolledRoom,clearUserInfo,setUserPost,setUserComment, addLeetCodeID, setShowLC,addCodeforceRank,setshowCf} = userState.actions
 
 export default userState.reducer

@@ -331,7 +331,7 @@ const refreshSignIn = async (req, res) => {
 const logout = async (req, res) => {
   try {
     const token = req.headers.cookie.split("=")[1];
-    console.log(token);
+    // console.log(token);
     if (!token) {
       res.status(404).send({ msg: "No token found" });
     }
@@ -340,12 +340,11 @@ const logout = async (req, res) => {
       const user = await prisma.user.findUnique({
         where: { email: payload.email },
       });
-      console.log(user?.email);
+      // console.log(user?.email);
       if(!user) return res.status(400).send("User not Found");
       res
         .clearCookie(user?.userID, "", {
           path: "/",
-          // expires: new Date(Date.now() + 1000 * 1),
           httpOnly: true,
           sameSite: "lax",
         })
@@ -354,7 +353,10 @@ const logout = async (req, res) => {
     } else res.status(401).send({ msg: "Invalid Token" });
     // console.log(req.body.email);
   } catch (error) {
-    throw error;
+    res.status(500).json({
+      msg:"Server Issue",
+      error
+    })
   }
 };
 

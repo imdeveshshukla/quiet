@@ -13,7 +13,8 @@ router.post('/markallasread',verifyToken, userController.markAllAsRead );
 router.post("/sendnotification",verifyToken,userController.sendNotification);
 router.post("/addLeetCode",verifyToken,userController.addLC);
 router.post("/setLcVisibility",verifyToken,userController.setLcVisibility);
-
+router.post("/update",verifyToken,userController.update);
+router.delete("/deleteAccount",verifyToken,userController.deleteAcct);
 router.get('/:email',verifyToken, userController.getUser );
 
 
