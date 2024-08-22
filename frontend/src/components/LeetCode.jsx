@@ -7,6 +7,10 @@ import { SlBadge } from "react-icons/sl";
 import { FaRankingStar } from "react-icons/fa6";
 import { FaTrophy } from "react-icons/fa"
 import { SiLeetcode } from 'react-icons/si';
+import { LeetCodeSkelton } from './Postskelton';
+import baseAddress from '../utils/localhost';
+import axios from 'axios';
+import CryptoJS from 'crypto-js';
 
 
 
@@ -16,6 +20,7 @@ const LeetCode = () => {
     const [showAccRate, setShowAccRate] = useState(false)
     const user = useSelector(state => state.profile.profileInfo)
     const [lcdata, setlcdata] = useState({})
+    const [isLoading, setisLoading] = useState(false)
 
 
     const keysToKeep = [
@@ -55,16 +60,25 @@ const LeetCode = () => {
     const mediumSolvedPercentage = (mediumSolved / totalQuestions) * 100;
     const hardSolvedPercentage = (hardSolved / totalQuestions) * 100;
 
-
+    
     const getLC = async () => {
+
+        setisLoading(true)
         try {
-            let data = await fetch(`https://leetcode-stats-api.herokuapp.com/${user.leetcode}`);
-            let res = await data.json();
-            if (res.status == "success") {
-                const lcdata = Object.keys(res)
+            const encUsername = CryptoJS.AES.encrypt(user.leetcode, import.meta.env.VITE_LC_SECRETKEY).toString();
+            console.log(user.leetcode);
+            
+            console.log(encUsername);
+            
+            
+            let res = await axios.post(`${baseAddress}search/getLCdata/`, {username: encUsername});
+            console.log(res);
+            
+            if (res.data.status == "success") {
+                const lcdata = Object.keys(res.data)
                     .filter(key => keysToKeep.includes(key))
                     .reduce((obj, key) => {
-                        obj[key] = res[key];
+                        obj[key] = res.data[key];
                         return obj;
                     }, {});
                 console.log(lcdata);
@@ -78,8 +92,10 @@ const LeetCode = () => {
 
 
         } catch (error) {
+            console.log(error);
 
         }
+        setisLoading(false)
     }
 
 
@@ -96,11 +112,11 @@ const LeetCode = () => {
     }
 
     useEffect(() => {
-      if(user?.leetcode){
-        getLC()
-      }
+        if (user?.leetcode) {
+            getLC()
+        }
     }, [user])
-    
+
 
     return (
 
@@ -120,134 +136,137 @@ const LeetCode = () => {
                 </div>
             </div>
 
+            {isLoading?<LeetCodeSkelton/>:
             <div className=' grid grid-cols-[1fr_1fr] gap-8 xxs:gap-16 bg-[#e2e4c6]  p-4 xxs:p-8 rounded-xl w-fit   ' >
 
 
 
-                <div onMouseEnter={() => handleMouseEnter()} onMouseLeave={() => handleMouseLeave()} className="multi-arc-progres " style={{ position: 'relative', width: 160, height: 160 }}>
+            <div onMouseEnter={() => handleMouseEnter()} onMouseLeave={() => handleMouseLeave()} className="multi-arc-progres " style={{ position: 'relative', width: 160, height: 160 }}>
 
 
 
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-                        <CircularProgressbar
-                            value={easyPercentage - easyPercentage / 8}
-                            styles={buildStyles({
-                                pathColor: '#264545',
-                                trailColor: 'transparent',
-                                pathTransitionDuration: 0.5,
-                            })}
-                            strokeWidth={6}
-                        />
-
-                    </div>
-
-                    <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
-                        <CircularProgressbar
-                            value={easySolvedPercentage - easySolvedPercentage / 8}
-                            styles={buildStyles({
-                                pathColor: '#1cbaba',
-                                trailColor: 'transparent',
-                                pathTransitionDuration: 0.5,
-                            })}
-                            strokeWidth={6}
-                        />
-                    </div>
-
-
-                    <div style={{
-                        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                        transform: `rotate(${(easyPercentage / 100) * 360}deg)`
-
-                    }}>
-                        <CircularProgressbar
-                            value={mediumPercentage - easyPercentage / 8}
-                            styles={buildStyles({
-                                pathColor: '#534520', // Yellow for Medium
-                                trailColor: 'transparent',
-                                pathTransitionDuration: 0.5,
-                            })}
-                            strokeWidth={6}
-                        />
-                    </div>
-                    <div style={{
-                        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                        transform: `rotate(${(easyPercentage / 100) * 360}deg)`
-
-                    }}>
-                        <CircularProgressbar
-                            value={mediumSolvedPercentage - easySolvedPercentage / 8}
-                            styles={buildStyles({
-                                pathColor: '#ffb700',
-                                trailColor: 'transparent',
-                                pathTransitionDuration: 0.5,
-                            })}
-                            strokeWidth={6}
-                        />
-                    </div>
-
-                    <div style={{
-                        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                        transform: `rotate(${((easyPercentage + mediumPercentage) / 100) * 360}deg)`
-
-                    }}>
-                        <CircularProgressbar
-                            value={hardPercentage - easyPercentage / 8}
-                            styles={buildStyles({
-                                pathColor: '#512b2b', // Red for Hard
-                                trailColor: 'transparent',
-                                pathTransitionDuration: 0.5,
-                            })}
-                            strokeWidth={6}
-                        />
-                    </div>
-                    <div style={{
-                        position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
-                        transform: `rotate(${((easyPercentage + mediumPercentage) / 100) * 360}deg)`
-
-                    }}>
-                        <CircularProgressbar
-                            value={hardSolvedPercentage - easySolvedPercentage / 8}
-                            styles={buildStyles({
-                                pathColor: '#f63737', // Red for Hard
-                                trailColor: 'transparent',
-                                pathTransitionDuration: 0.5,
-                            })}
-                            strokeWidth={6}
-                        />
-                    </div>
-
-
-
-
-
-
-                    {/* Display the text in the center */}
-                    <div className="progress-text " style={{ position: 'absolute', top: '50%', left: '50%', translate: '-50% -50%', color: '#fff', textAlign: 'center' }}>
-                        <div className=' flex items-baseline text-gray-600'> <span className=' text-2xl font-semibold'>{showAccRate ? leftPart : totalSolved || 0}</span> <span className=' font-semibold text-sm'>{showAccRate ? `.${rightPart}%` : `/${totalQuestions || 0}`}</span></div>
-                        <div className=' flex items-center gap-1 justify-center'> {!showAccRate && <span><Greencheck /></span>} <span className='text-black'>
-                            {showAccRate ? 'Acceptance' : 'Solved'}</span></div>
-                    </div>
-                </div>
-
-
-                <div className=' flex flex-col justify-between'>
-                    <div className=' flex flex-col rounded-md  items-center px-4 bg-[#d2d5a1]'>
-                        <span className=' text-[#1cbaba]'>Easy</span>
-                        <span className=' text-xs font-semibold'>{easySolved || 0}/{totalEasy || 0}</span>
-                    </div>
-                    <div className=' flex flex-col rounded-md items-center px-4 bg-[#d2d5a1]'>
-                        <span className=' text-[#ffb700]'>Medium</span>
-                        <span className=' text-xs font-semibold'>{mediumSolved || 0}/{totalMedium || 0}</span>
-                    </div>
-                    <div className=' flex flex-col rounded-md items-center px-4 bg-[#d2d5a1]'>
-                        <span className=' text-[#f63737]'>Hard</span>
-                        <span className=' text-xs font-semibold'>{hardSolved || 0}/{totalHard || 0}</span>
-                    </div>
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                    <CircularProgressbar
+                        value={easyPercentage - easyPercentage / 8}
+                        styles={buildStyles({
+                            pathColor: '#264545',
+                            trailColor: 'transparent',
+                            pathTransitionDuration: 0.5,
+                        })}
+                        strokeWidth={6}
+                    />
 
                 </div>
 
+                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                    <CircularProgressbar
+                        value={easySolvedPercentage - easySolvedPercentage / 8}
+                        styles={buildStyles({
+                            pathColor: '#1cbaba',
+                            trailColor: 'transparent',
+                            pathTransitionDuration: 0.5,
+                        })}
+                        strokeWidth={6}
+                    />
+                </div>
+
+
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    transform: `rotate(${(easyPercentage / 100) * 360}deg)`
+
+                }}>
+                    <CircularProgressbar
+                        value={mediumPercentage - easyPercentage / 8}
+                        styles={buildStyles({
+                            pathColor: '#534520', // Yellow for Medium
+                            trailColor: 'transparent',
+                            pathTransitionDuration: 0.5,
+                        })}
+                        strokeWidth={6}
+                    />
+                </div>
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    transform: `rotate(${(easyPercentage / 100) * 360}deg)`
+
+                }}>
+                    <CircularProgressbar
+                        value={mediumSolvedPercentage - easySolvedPercentage / 8}
+                        styles={buildStyles({
+                            pathColor: '#ffb700',
+                            trailColor: 'transparent',
+                            pathTransitionDuration: 0.5,
+                        })}
+                        strokeWidth={6}
+                    />
+                </div>
+
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    transform: `rotate(${((easyPercentage + mediumPercentage) / 100) * 360}deg)`
+
+                }}>
+                    <CircularProgressbar
+                        value={hardPercentage - easyPercentage / 8}
+                        styles={buildStyles({
+                            pathColor: '#512b2b', // Red for Hard
+                            trailColor: 'transparent',
+                            pathTransitionDuration: 0.5,
+                        })}
+                        strokeWidth={6}
+                    />
+                </div>
+                <div style={{
+                    position: 'absolute', top: 0, left: 0, width: '100%', height: '100%',
+                    transform: `rotate(${((easyPercentage + mediumPercentage) / 100) * 360}deg)`
+
+                }}>
+                    <CircularProgressbar
+                        value={hardSolvedPercentage - easySolvedPercentage / 8}
+                        styles={buildStyles({
+                            pathColor: '#f63737', // Red for Hard
+                            trailColor: 'transparent',
+                            pathTransitionDuration: 0.5,
+                        })}
+                        strokeWidth={6}
+                    />
+                </div>
+
+
+
+
+
+
+                {/* Display the text in the center */}
+                <div className="progress-text " style={{ position: 'absolute', top: '50%', left: '50%', translate: '-50% -50%', color: '#fff', textAlign: 'center' }}>
+                    <div className=' flex items-baseline text-gray-600'> <span className=' text-2xl font-semibold'>{showAccRate ? leftPart : totalSolved || 0}</span> <span className=' font-semibold text-sm'>{showAccRate ? `.${rightPart}%` : `/${totalQuestions || 0}`}</span></div>
+                    <div className=' flex items-center gap-1 justify-center'> {!showAccRate && <span><Greencheck /></span>} <span className='text-black'>
+                        {showAccRate ? 'Acceptance' : 'Solved'}</span></div>
+                </div>
+            </div>
+
+
+            <div className=' flex flex-col justify-between'>
+                <div className=' flex flex-col rounded-md  items-center px-4 bg-[#d2d5a1]'>
+                    <span className=' text-[#1cbaba]'>Easy</span>
+                    <span className=' text-xs font-semibold'>{easySolved || 0}/{totalEasy || 0}</span>
+                </div>
+                <div className=' flex flex-col rounded-md items-center px-4 bg-[#d2d5a1]'>
+                    <span className=' text-[#ffb700]'>Medium</span>
+                    <span className=' text-xs font-semibold'>{mediumSolved || 0}/{totalMedium || 0}</span>
+                </div>
+                <div className=' flex flex-col rounded-md items-center px-4 bg-[#d2d5a1]'>
+                    <span className=' text-[#f63737]'>Hard</span>
+                    <span className=' text-xs font-semibold'>{hardSolved || 0}/{totalHard || 0}</span>
+                </div>
 
             </div>
+
+
+        </div>}
+
+            
         </div>
     );
 };

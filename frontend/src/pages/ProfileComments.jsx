@@ -94,7 +94,7 @@ const ProfileComments = () => {
       next={fetchMoreData}
       hasMore={hasMore}
       loader={<div className='py-8'><CommentSkelton /></div>}
-      endMessage={<p className='text-center font-semibold p-4'>{`${userComment.length == 0 ? "It looks like the user hasn't made any comments." : "You've reached the end of the page!"}`}</p>}
+      endMessage={<p className='text-center font-semibold p-4'>{`${userComment.length == 0 ? "It looks like the user hasn't made any comments yet." : "You've reached the end of the page!"}`}</p>}
     >
       <div className='py-8'>
         {(isSkelton && userComment.length === 0) ? <></> :

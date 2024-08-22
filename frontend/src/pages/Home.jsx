@@ -100,7 +100,7 @@ const Home = () => {
         next={fetchMoreData}
         hasMore={hasMore}
         loader={<Postskelton />}
-        endMessage={<p className=' text-center font-semibold p-4'>You've reached the end of the page!</p>}
+        endMessage={<p className='text-center break-words font-semibold p-4'>{`${posts.length === 0 ? "It looks like there's no posts to display." : "You've reached the end of the page!"}`}</p>}
       >
         {isLogin && <Createpost onNewPost={handleNewPost} />}
         <div className=' flex items-center justify-end mx-4 mt-3'>

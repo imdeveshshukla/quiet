@@ -50,7 +50,7 @@ import NotFound from './pages/NotFound'
 import Popular from './pages/Popular'
 import ForbiddenPage from './pages/ForbiddenPage'
 import loading from './redux/loading'
-import About from './components/About'
+import About, { WelcomePage } from './components/About'
 import { hide } from './redux/welcome'
 
 
@@ -73,8 +73,21 @@ function App() {
   const isSkelton = useSelector(state => state.skelton.value);
   const showSearch = useSelector(state => state.search.value)
   const showWelcome= useSelector(state=> state.welcome.value)
-  const navigate= useNavigate()
+
+  const [isFirstVisit, setIsFirstVisit] = useState(false);
+  const navigate= useNavigate();
+
+
+  useEffect(() => {
+    const visited = localStorage.getItem('visited');
+    if (!visited) {
+      setIsFirstVisit(true);
+      localStorage.setItem('visited', 'true');
+    }
+  }, []);
+
   const myAllRoom = useSelector(state=> state.rooms.rooms);
+
 
 
 
@@ -217,6 +230,7 @@ function App() {
             <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />
             <Route path='/setting/' element={<Settings />} />
             <Route path="/test/" element={<Postskelton />} />
+            <Route path="/about/" element={<About />} />
 
             {/* <Route path='/room/:username/:title' element={<Room />} /> */}
 
@@ -260,11 +274,11 @@ function App() {
         </>
       )}
 
-      {showWelcome && <>
+      {isFirstVisit && <>
         <div className='fixed top-[74.46px] z-50 left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-sm '>
   
             <span ref={welcomeRef} className='fixed left-[50%] top-[50%]  translate-x-[-50%] translate-y-[-50%]'>
-              <About />
+              <WelcomePage />
             </span>
         </div>
       </>}
@@ -286,6 +300,7 @@ export const getUserData=async({email, dispatch})=>{
   
   try {
     const res= await axios.get(`${baseAddress}u/${email}`, {withCredentials:true});
+    console.log(res);
     
     if(res.status==200){
       console.log(res);

@@ -16,6 +16,7 @@ import Notification from './Notification';
 import Search from './Search'
 import {setShowSearch} from '../redux/search'
 import baseAddress from '../utils/localhost'
+import { BsInfoCircle } from "react-icons/bs";
 
 
 
@@ -151,6 +152,11 @@ const Navbar = () => {
                   <li className="px-4 py-2 text-white hover:bg-[#6d712eb8]">
                     <Link onClick={() => setIsOpen(!isOpen)} to={"/setting/"} className="block">Settings</Link>
                   </li>
+
+                  <li className="px-4 py-2 text-white  hover:bg-[#6d712eb8]">
+                    <Link onClick={() => setIsOpen(!isOpen)} to={"/about/"} className="flex gap-2 items-center"><span>About</span> <span><BsInfoCircle /></span></Link>
+                  </li>
+
                   <li className="px-4 py-2 text-white cursor-pointer flex items-center gap-3 hover:bg-[#6d712eb8]" onClick={() => logOut()}>
                     <span>Logout</span> <span><IoIosLogOut /></span>
                   </li>

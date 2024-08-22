@@ -59,8 +59,8 @@ const Signin = () => {
                 
                 if (res.status == 202) {
                     toast.dismiss()
-                    await getUserData({email:res.data, dispatch});
                     Navigate("/")
+                    await getUserData({email:res.data, dispatch});
                     toast.dismiss()
                     toast.success("Logged In succesfully!")
                     dispatch(login())

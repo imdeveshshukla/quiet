@@ -1,4 +1,5 @@
 import prisma from "../../db/db.config.js";
+import CryptoJS from "crypto-js";
 
 
 export const getUsers = async (req, res) => {
@@ -39,8 +40,8 @@ export const getUser = async (req, res) => {
         username: true,
         dp: true,
         createdAt: true,
-        leetcode:true,
-        showLC:true,
+        leetcode: true,
+        showLC: true,
         _count: {
           select: {
             posts: true,
@@ -177,4 +178,31 @@ export const getUserUpvotes = async (req, res) => {
   }
 };
 
+export const getLCdata = async (req, res) => {
 
+
+  const encryptUsername  = req.body.username;
+  console.log(encryptUsername);
+
+  
+  try {
+    
+      
+      const bytes = CryptoJS.AES.decrypt(encryptUsername, process.env.LC_SECRETKEY);
+      const username = bytes.toString(CryptoJS.enc.Utf8);
+    console.log("username", username);
+    console.log("sk", process.env.LC_SECRETKEY);
+    
+   
+    
+    let data = await fetch(
+      `https://leetcode-stats-api.herokuapp.com/${username}`
+    );
+    let result = await data.json();
+    console.log(result);
+    
+    res.status(202).send(result);
+  } catch (error) {
+    console.log(error);
+  }
+};

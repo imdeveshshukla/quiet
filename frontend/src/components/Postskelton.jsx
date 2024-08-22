@@ -87,16 +87,15 @@ export const CommentSkelton = () => {
 export const ProfileSkelton = () => {
     return (<>
         <div className=" h-full rounded-3xl m-2 p-2 xxs:m-6 xxs:p-4 bg-[#a3a674f0] animate-pulse">
-            <header className='flex justify-start gap-4 items-center my-2'>
+            <header className='flex justify-start gap-4 items-center my-2 animate-pulse'>
                 <div className=" w-32 h-32 xs:w-36 xs:h-36 rounded-full bg-white"></div>
 
 
                 <div className=" w-1/2 xxs:w-2/3 flex flex-col">
-                    <div className='h-10 bg-gray-300 w-full my-2 rounded'>
-                    </div><div className='h-6 bg-gray-300 w-3/4 my-2 rounded'>
-                    </div>
+                    <div className='h-10 bg-gray-300 w-full my-2 rounded animate-pulse'></div>
+                    <div className='h-6 bg-gray-300 w-3/4 my-2 rounded animate-pulse'></div>
                     <div className="flex justify-end">
-                    <div className='text-2xl h-6 w-8 bg-white'></div>
+                        <div className='text-2xl h-6 w-8 bg-white animate-pulse'></div>
                     </div>
                 </div>
 
@@ -106,6 +105,26 @@ export const ProfileSkelton = () => {
 
 
 
+        </div>
+    </>)
+}
+
+
+
+export const LeetCodeSkelton = () => {
+    return (<>
+        <div className="grid grid-cols-[1fr_1fr] gap-8 xxs:gap-16 bg-[#e2e4c6]  p-4 xxs:p-8 rounded-xl w-fit   ">
+
+            <div className=" w-32 h-32 xs:w-36 xs:h-36 p-2 rounded-full bg-gray-400 animate-pulse">
+                <div className=" w-full h-full  rounded-full bg-white animate-pulse"></div>
+            </div>
+
+
+            <div className="  flex flex-col justify-between">
+                <div className='px-10 py-4 bg-gray-300 rounded animate-pulse'></div>
+                <div className='px-10 py-4 bg-gray-300 rounded animate-pulse'></div>
+                <div className='px-10 py-4 bg-gray-300 rounded animate-pulse'></div>
+            </div>
         </div>
     </>)
 }

@@ -171,6 +171,7 @@ function Settings() {
       if (data.status === "FAILED") {
         setisLoading2(false);
         seterror2("Invalid username");
+        setisLoading2(false)
         return;
       }
 
@@ -279,7 +280,7 @@ function Settings() {
 
   return (
     <>
-      <div className='p-24'>
+      <div className=' py-10 px-6 xxs:p-12 sm:p-24'>
         <h1 className='text-2xl font-bold'>Settings</h1>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12 mt-2">
@@ -397,7 +398,7 @@ function Settings() {
                       />
                     </div>
                     <button onClick={() => addCF()} className=' flex  items-center justify-center px-4 bg-[#e3a300] font-medium rounded-md shadow-sm ring-1 ring-inset ring-gray-300 text-sm '>
-                      {isLoading2 ? <SmoothLoader /> : <span>Add</span>}
+                      {isLoading2 ? <SmallLoader /> : <span>Add</span>}
                     </button>
                   </div>
                   <div className='mt-1 ml-2' role="alert" style={{ color: "red", fontSize: "12px" }}>{error2}</div>
@@ -413,10 +414,13 @@ function Settings() {
                   Username
                 </label>
                 <div className="mt-2">
-                  <div className="flex rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-black sm:max-w-md">
-                    <span className="flex justify-center first-letter:select-none items-center pl-3 pr-3 text-black sm:text-sm hover:cursor-pointer hover:text-gray-600"
+
+                  <div className="flex  rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-black sm:max-w-md">
+                    <span className="flex justify-center select-none items-center pl-3 pr-3 bg-green-500 rounded-l-md text-black sm:text-sm hover:cursor-pointer hover:text-gray-600"
+
+                  
                     onClick={()=>{generateUsername()}}
-                    >{generating?<SmoothLoader/>: "Generate"}</span>
+                    >{generating?<SmallLoader/>: "Generate"}</span>
                     <input
                       id="username"
                       name="username"
