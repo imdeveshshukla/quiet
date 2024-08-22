@@ -172,6 +172,7 @@ function App() {
     }
     if (welcomeRef.current && !welcomeRef.current.contains(event.target)) {
       dispatch(hide())
+      setIsFirstVisit(false)
     }
   };
 
@@ -278,7 +279,7 @@ function App() {
         <div className='fixed top-[74.46px] z-50 left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-sm '>
   
             <span ref={welcomeRef} className='fixed left-[50%] top-[50%]  translate-x-[-50%] translate-y-[-50%]'>
-              <WelcomePage />
+              <WelcomePage setIsFirstVisit={setIsFirstVisit} />
             </span>
         </div>
       </>}
