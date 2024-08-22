@@ -275,7 +275,7 @@ function Settings() {
 
   return (
     <>
-      <div className='p-24'>
+      <div className=' py-10 px-6 xxs:p-12 sm:p-24'>
         <h1 className='text-2xl font-bold'>Settings</h1>
         <div className="space-y-12">
           <div className="border-b border-gray-900/10 pb-12 mt-2">
