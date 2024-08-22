@@ -77,12 +77,12 @@ const About = () => {
 export default About
 
 
-export const WelcomePage = () => {
+export const WelcomePage = ({setIsFirstVisit}) => {
     const dispatch = useDispatch();
     return (
         <>
             <div className='tracking-wide animate-slideInFromBehind relative flex flex-col gap-4 p-4 rounded-lg shadow-2xl bg-[#c8cc83]  w-[80vw] 1_5md:w-[60vw] overflow-auto scrollable-box max-h-[80vh]'>
-                <div onClick={() => dispatch(hide())} className=' absolute right-4 top-4 text-2xl'><MdCancelPresentation /></div>
+                <div onClick={() => setIsFirstVisit(false)} className=' cursor-pointer absolute right-4 top-4 text-2xl'><MdCancelPresentation /></div>
                 <header className=' w-full text-center text-[#5d610bf8] text-xl xs:text-2xl font-bold font-roboto'>
                     <span className=''>Welcome to quIET</span>
                 </header>
