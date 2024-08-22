@@ -86,7 +86,7 @@ const fetchMoreData = () => {
             next={fetchMoreData}
             hasMore={hasMore}
             loader={<div className='py-8'><Postskelton /></div>}
-            endMessage={<p className='text-center font-semibold p-4'>You've reached the end of the page!</p>}
+            endMessage={<p className='text-center break-words font-semibold p-4'>{`${userPost.length === 0 ? "It looks like the user hasn't made any upvotes yet." : "You've reached the end of the page!"}`}</p>}
         >
             <div className='py-8'>
                 {(isSkelton && userPost.length === 0) ? <></> :
