@@ -291,8 +291,8 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
                 </button>
                 <button
                 onClick={handleSubmit}
-                className="bg-[#656923] hover:bg-[#a9aa88] w-20 text-sm text-black px-4 py-2 font-bold text-justify rounded focus:outline-none">
-                {Btnloading ? <SmallLoader /> : "Create"}
+                className="bg-[#656923] hover:bg-[#a9aa88] w-20 text-sm flex justify-center text-black px-4 py-2 font-bold text-justify rounded focus:outline-none">
+                {Btnloading ? <SmoothLoader /> : "Create"}
               </button>
 
               </div>

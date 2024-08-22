@@ -49,6 +49,7 @@ export default function AddMemBox({ setShow, id }) {
     console.log(canSend);
     
     if(!canSend) return;
+    console.log(id+" "+title);
     setLoading(true);
     try {
       const res = await axios.post(`${baseAddress}rooms/addUserinRoom/${title}`, {

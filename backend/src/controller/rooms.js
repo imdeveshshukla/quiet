@@ -485,7 +485,7 @@ export const addUser = async(req,res)=>{
                     const notification= await tsx.notification.create({
                         data:{
                         title:`${room.title}`,
-                        body:`Please Add ${Username} in your Room: ${room.title} Click Here to Accept`,
+                        body:`Please Add Username: "${Username}" in your Private Room: "${room.title}"`,
                         toUser:room.CreatorId,
                         fromUser:userId,
                         }
@@ -579,7 +579,7 @@ export const sendJoiningRequest = async(req,res)=>{
     const { title } = req.body;
     const { username } = req.params;
     // console.log("Sending Room Joining Request = ");
-    console.log(userID+" "+title+" "+username);
+    // console.log(userID+" "+title+" "+username);
     if(!title || !username)
     {
         return res.status(404).json({
@@ -605,7 +605,8 @@ export const sendJoiningRequest = async(req,res)=>{
         if(!user) return res.status(200).json({
             msg:"Please Enter Correct Username"
         })
-        // console.log("Above Room Fetching Block");
+        // console.log(user);
+        // console.log("Above Room Fetching Block "+title);
         const room = await prisma.rooms.findFirst({
             where:{
                 title,
@@ -614,31 +615,32 @@ export const sendJoiningRequest = async(req,res)=>{
                 UsersEnrolled:true
             }
         });
+
         if(!room)return res.status(404).json({msg:"Room Not Found"});
         if(room.CreatorId != userID)return res.status(401).json({msg:"You are not authorised"});
         let found  =false;
 
-        console.log("Above ForEach Bloco");
+        // console.log("Above ForEach Bloco");
         room.UsersEnrolled.forEach((rooms)=>{
             if(rooms.userId === user.userID){
                 found = true;
             }
         })
-        console.log("We Have found ",found)
+        // console.log("We Have found ",found)
         if(found)
         {
             const enrollment = await prisma.enrolledRooms.update({
                 where:{
-                    AND:[
-                        {userId:user.userID},
-                        {RoomId:room.id}
-                    ]
+                    userId_RoomId: {
+                        userId: user.userID,
+                        RoomId: room.id,
+                        },
                 },
                 data:{
                     joined:true,
                 }
             })
-
+            // console.log(enrollment);
             if(enrollment) {
                 return res.status(200).json({
                     msg:"User Added Successfully"

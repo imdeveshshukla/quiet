@@ -80,10 +80,8 @@ export const vote = async (req, res) => {
         post: true,
       },
     });
-    console.log("existing", existingUpvote);
 
     if (existingUpvote) {
-      console.log("upvote exists");
 
       const upvte = await prisma.upvote.update({
         where: {
@@ -98,7 +96,7 @@ export const vote = async (req, res) => {
       });
       console.log(upvte);
 
-      res.status(201).json({
+      return res.status(201).json({
         msg: "Success",
         newUpvote: upvte,
       });
@@ -123,13 +121,13 @@ export const vote = async (req, res) => {
           post: true,
         },
       });
-      res.status(201).json({
+      return res.status(201).json({
         msg: "created",
         newUpvote,
       });
     }
   } catch (error) {
-    res.status(500).json({
+    return res.status(500).json({
       msg: "Failed",
       error,
     });

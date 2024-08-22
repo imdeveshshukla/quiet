@@ -283,7 +283,7 @@ const update = async(req,res)=>{
   const userId = req.userId;
   var hashPass = undefined;
   if(body.password)hashPass = bcrypt.hashSync(body.password, 10);
-
+  console.log(body);
   try {
     const user = await prisma.user.update({
       where:{
@@ -294,9 +294,10 @@ const update = async(req,res)=>{
         username:body.username?body.username:undefined,
         password:hashPass,
         codeforces:body.rank?body.rank:undefined,
-        showCf:body.showCF?body.showCF:undefined
+        showCf:body?.showCF
       }
     });
+    console.log(user);
     res.status(201).json({
       msg:"Succesfully Updated",
       user

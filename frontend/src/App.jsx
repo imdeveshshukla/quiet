@@ -73,6 +73,7 @@ function App() {
   const isSkelton = useSelector(state => state.skelton.value);
   const showSearch = useSelector(state => state.search.value)
   const showWelcome= useSelector(state=> state.welcome.value)
+
   const [isFirstVisit, setIsFirstVisit] = useState(false);
   const navigate= useNavigate();
 
@@ -84,6 +85,8 @@ function App() {
       localStorage.setItem('visited', 'true');
     }
   }, []);
+
+  const myAllRoom = useSelector(state=> state.rooms.rooms);
 
 
 
@@ -112,7 +115,7 @@ function App() {
       dispatch(setNotification(res.data.data))
     } catch (error) {
       console.log(error);
-      if(error.response.status==401){
+      if(error?.response?.status==401){
         dispatch(logout());
         dispatch(clearUserInfo());
         toast.error("Login session expired!");
@@ -216,6 +219,7 @@ function App() {
               <Route path='commented' element={<ProfileComments />} />
             </Route>
 
+            <Route path='/post/:roomid/:id' element={isSkelton ? <Postskelton /> : <Postdetail myRooms={myAllRoom}/>}/>
 
             <Route path='/post/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
             <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg} />} />

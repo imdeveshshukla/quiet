@@ -76,7 +76,6 @@ function Settings() {
   
           setUsrnmList(res.data.usernames);
           setUsernameInput(res.data.usernames[0]);
-          console.log(usernm);
       } catch (error) {
         toast.error("Not Able to Generate Username!Try Again Later");
       }
@@ -135,9 +134,10 @@ function Settings() {
       let lcdata = await fetch(`https://leetcode-stats-api.herokuapp.com/${lcusername}`);
       let data = await lcdata.json();
 
-      console.log(data);
+      // console.log(data);
 
       if (data.status == "error") {
+        setisLoading(false);
         seterror("Invalid username");
         return
       }
@@ -145,7 +145,7 @@ function Settings() {
       const res = await axios.post(`${baseAddress}u/addLeetCode`, {
         lcusername: lcusername,
       });
-      console.log(res);
+      // console.log(res);
       if (res.status == 200) {
         dispatch(addLeetCodeID(res.data.leetcode));
         setlcdata(data)
@@ -169,6 +169,7 @@ function Settings() {
       console.log("AddCF ",data);
 
       if (data.status === "FAILED") {
+        setisLoading2(false);
         seterror2("Invalid username");
         setisLoading2(false)
         return;
@@ -177,9 +178,8 @@ function Settings() {
       const res = await axios.post(`${baseAddress}u/update`, {
         rank: data.result[0]?.maxRank,
       });
-      console.log("IN ADD CF ",res);
-      if (res.status == 200) {
-        dispatch(addCodeforceRank(res.data.codeforces));
+      if (res.status == 201) {
+        dispatch(addCodeforceRank(res.data.user.codeforces));
         setupdate2(false)
       }
 
@@ -192,13 +192,12 @@ function Settings() {
 
   const setShowLc = async (value)=>{
     setIsDisable(true)
-    console.log(value);
     
     try {
       const res=await  axios.post(`${baseAddress}u/setLcVisibility`, {
         showLC:value,
       })
-       console.log(res);
+      //  console.log(res);
        
     } catch (error) {
       console.log(error);
@@ -209,13 +208,13 @@ function Settings() {
 
   const setShowCf = async(value)=>{
     setIsDisable2(true)
-    console.log(value+" "+typeOf(value));
+    // console.log(value+" "+typeof (value));
     
     try {
       const res=await axios.post(`${baseAddress}u/update`, {
         showCF:value,
       })
-       console.log("setShowCf ",res.data);
+      //  console.log("setShowCf ",res.data);
     } catch (error) {
       console.log(error);
     }
@@ -224,14 +223,14 @@ function Settings() {
 
   const handleChange2= (e)=>{
     setShow2(e.target.checked); 
-    console.log(e.target.checked);
+    // console.log(e.target.checked);
     setShowCf(e.target.checked);
     dispatch(setshowCf(e.target.checked));
   }
 
   const handleChange= (e)=>{
     setShow(e.target.checked); 
-    console.log(e.target.checked);
+    // console.log(e.target.checked);
     setShowLc(e.target.checked);
     dispatch(setShowLC(e.target.checked))
   }
@@ -263,6 +262,12 @@ function Settings() {
       setShow(userInfo.showLC)
     }
   }, [userInfo?.showLC])
+
+  useEffect(() => {
+    if(userInfo){
+      setShow2(userInfo.showCf)
+    }
+  }, [userInfo?.showCf])
   
   const cancelChanges = ()=>{
     setUsernameInput('');
@@ -372,7 +377,7 @@ function Settings() {
                   </div>
                 </> : <>
                   <label htmlFor="about" className="block text-sm font-medium leading-6 text-gray-900">
-                    Add Codeforces profile
+                    Add Your Codeforces Rank
                   </label>
                   <div className='flex mt-2 gap-2'>
                     <div className=" relative rounded-md shadow-sm ring-1 ring-inset ring-gray-300">
@@ -409,8 +414,11 @@ function Settings() {
                   Username
                 </label>
                 <div className="mt-2">
+
                   <div className="flex  rounded-md shadow-sm ring-1 ring-inset ring-gray-300 focus-within:ring-2 focus-within:ring-inset focus-within:ring-black sm:max-w-md">
                     <span className="flex justify-center select-none items-center pl-3 pr-3 bg-green-500 rounded-l-md text-black sm:text-sm hover:cursor-pointer hover:text-gray-600"
+
+                  
                     onClick={()=>{generateUsername()}}
                     >{generating?<SmallLoader/>: "Generate"}</span>
                     <input
@@ -479,7 +487,7 @@ function Settings() {
             <button
               type="submit"
               onClick={updateDetails}
-              className={isDataValid?"rounded-md bg-[#656923] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#a9aa88] hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black":"rounded-md bg-[#656923] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:cursor-not-allowed"}
+              className={isDataValid?"rounded-md bg-[#656923] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-[#a9aa88] hover:cursor-pointer focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-black flex justify-center":"flex justify-center rounded-md bg-[#656923] px-3 py-2 text-sm font-semibold text-white shadow-sm hover:cursor-not-allowed"}
             >
               {updating?<SmoothLoader/>:'Save'}
             </button>
