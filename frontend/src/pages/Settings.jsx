@@ -171,7 +171,6 @@ function Settings() {
       if (data.status === "FAILED") {
         setisLoading2(false);
         seterror2("Invalid username");
-        setisLoading2(false)
         return;
       }
 
