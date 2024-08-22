@@ -398,7 +398,7 @@ const Room = function () {
                     upvotes={post?.upvotes}
                     inRoom={true}
                     room={data.room}
-                    joined={data.room.joined}
+                    joined={joined}
                   />
                 )
                 )

@@ -14,7 +14,7 @@ roomsRouter.post('/delete',verifyToken,deleteRoom);
 roomsRouter.post('/join',verifyToken,addUser)
 roomsRouter.post('/leave/:roomId',verifyToken,leaveRoom);
 
-roomsRouter.post('/addUserinRoom/:username',verifyToken,sendJoiningRequest) // completing this;
+roomsRouter.post('/addUserinRoom/:username',verifyToken,sendJoiningRequest);
 roomsRouter.post('/acceptJoiningRequest',verifyToken,acceptJoiningRequest);
 
 roomsRouter.get('/titleNameIsUnique',verifyToken,filterName)

@@ -40,24 +40,10 @@ const Notification = ({setIsNfnOpen}) => {
         }
         setIsLoading(false)
       }
-
     const addUserToRoom = async(title,fromUser)=>{
-        // console.clear();
-        // console.log(typeof title+""++" "+fromUser);
-        setBigLoader(true)
-        const title2 = title.split(":")[1].trim().split(" ")[0].trim()  //Here is Some Bug
-        console.log(title2+" "+fromUser)
-        try {
-            if(title2 != "Join")
-            {
 
-                const res = await axios.post(`${baseAddress}rooms//addUserinRoom/${fromUser}`,{
-                    title: title2
-                })
-                setBigLoader(false);
-                toast.success(res?.data.msg);
-                return;
-            }
+        setBigLoader(true)
+        try {
             const res = await axios.post(`${baseAddress}rooms/acceptJoiningRequest`,{
                 title,
                 fromUser
@@ -90,7 +76,6 @@ const Notification = ({setIsNfnOpen}) => {
             Navigate(`/post/${item.postId}`);
         else
         {
-            // console.log(item);
             addUserToRoom(item.body,item.fromUser);
         }
     }

@@ -21,7 +21,7 @@ import baseAddress from '../utils/localhost';
 axios.defaults.withCredentials = true
 
 
-const Postdetail = () => {
+const Postdetail = ({ myRooms }) => {
     const post= useSelector(state=>state.postDetail.post);
     const userInfo= useSelector(state=>state.user.userInfo);
     const isLogin= useSelector(state=>state.login.value);
@@ -29,8 +29,21 @@ const Postdetail = () => {
     const dispatch= useDispatch()
     const location = useLocation();
     const {id}= useParams();
+    const {roomid} = useParams();
 
     const getApost=async()=>{
+        if(myRooms){
+          let found = false;
+          console.log(myRooms);
+          console.log(roomid);
+          myRooms.map((room)=>{
+            if(room.room.id === roomid)found = true;
+          });
+          if(!found){
+            toast.error("Unauthorised");
+            return;
+          }
+        }
         try {
           const res = await axios.get(baseAddress+"posts/getapost", { 
             params:{

@@ -4,7 +4,7 @@ export const verifyToken = (req, res, next) => {
     const token = req?.headers?.cookie?.split("=")[1];
     try {
       if (!token) {
-        res.status(401).send({ msg: "No token found" });
+        return res.status(401).send({ msg: "No token found" });
       }
       let payload = jwt.verify(token, process.env.SECRET_KEY);
       if (payload.email) {
@@ -15,7 +15,7 @@ export const verifyToken = (req, res, next) => {
       } else res.status(401).send({ msg: "Invalid Token" });
       
     } catch (error) {
-      res.status(400).json({
+      return res.status(400).json({
         msg:"Some Error Occured",
         error
       })

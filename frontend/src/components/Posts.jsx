@@ -48,9 +48,11 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
         toast.error("First Join The Room");
         return;
       }
+
     }
     if (!location.pathname.includes('/post/') && id) {
-      Navigate(`/post/${id}`);
+      if(inRoom)Navigate(`/post/${room.id}/${id}`);
+      else Navigate(`/post/${id}`);
     }
   };
 

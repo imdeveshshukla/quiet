@@ -27,7 +27,6 @@ export const createComment =async (req,res)=>{
                     parent:true,
                 },
             })
-            // console.log("Child Comment = "+newComment.body+" ParentID "+newComment.parentId);
             return res.status(201).json({
                 msg:"Successfully Created",
                 newComment:newComment,
