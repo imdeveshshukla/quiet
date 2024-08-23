@@ -22,8 +22,26 @@ export const getUsers = async (req, res) => {
       },
       take: limit,
     });
-    res.status(200).send(users);
-  } catch (error) {}
+
+    let rooms= await prisma.rooms.findMany({
+      where: {
+        title: {
+          contains: key,
+          mode: "insensitive",
+        },
+      },
+      select: {
+        title: true,
+        img: true,
+        CreatorId: true,
+      },
+      take: limit,
+    });
+    res.status(200).send({users, rooms });
+  } catch (error) {
+    console.log(error);
+    
+  }
 };
 
 export const getUser = async (req, res) => {
@@ -188,7 +206,7 @@ export const getLCdata = async (req, res) => {
   try {
     
       
-      const bytes = CryptoJS.AES.decrypt(encryptUsername, process.env.LC_SECRETKEY);
+      const bytes =  CryptoJS.AES.decrypt(encryptUsername, process.env.LC_SECRETKEY);
       const username = bytes.toString(CryptoJS.enc.Utf8);
     console.log("username", username);
     console.log("sk", process.env.LC_SECRETKEY);

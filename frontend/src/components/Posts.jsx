@@ -7,9 +7,12 @@ import dp from '../assets/dummydp.png';
 import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
-import ReadMore from './ReadMore';
+import ReadMore, { linkDecorator } from './ReadMore';
 import { clearPostsInfo } from '../redux/Post';
 import baseAddress from '../utils/localhost';
+import Linkify from 'react-linkify';
+
+
 
 const Posts = ({ id, post, title, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
   const userInfo = useSelector(state => state.user.userInfo);
@@ -155,7 +158,7 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
           </div>
         </header>
         <main className='cursor-pointer'>
-          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}>{title}</div>
+          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}><Linkify componentDecorator={linkDecorator}>{title}</Linkify></div>
 
           <div className={` my-2 whitespace-pre-wrap break-words`}>
             <ReadMore children={body} maxLines={media ? 2 : 10} />

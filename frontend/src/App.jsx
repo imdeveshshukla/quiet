@@ -268,7 +268,7 @@ function App() {
         }} />
         {showSearch && (
         <>
-          <div className="fixed inset-0  bg-black bg-opacity-50 backdrop-blur-sm z-10 w-full h-full"></div>
+          <div className="fixed inset-0  bg-black bg-opacity-50 backdrop-blur-sm z-30 w-full h-full"></div>
           <div ref={searchRef} className="fixed top-[60px] z-50 left-[50%] translate-x-[-50%]">
             <Search />
           </div>

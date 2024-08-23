@@ -66,6 +66,7 @@ const LeetCode = () => {
         setisLoading(true)
         try {
             const encUsername = CryptoJS.AES.encrypt(user.leetcode, import.meta.env.VITE_LC_SECRETKEY).toString();
+            
             console.log(user.leetcode);
             
             console.log(encUsername);
