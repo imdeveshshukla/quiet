@@ -128,3 +128,21 @@ export const LeetCodeSkelton = () => {
         </div>
     </>)
 }
+export const SearchSkelton = () => {
+    return (<>
+        
+
+            <div className=" w-full flex flex-col gap-2 p-4 justify-between">
+                <div className=' flex items-center justify-start pl-3 w-full h-12 bg-[#acb886] rounded animate-pulse'>
+                    <div className=" h-10 w-10 rounded-full bg-gray-100 animate-pulse"></div>
+                </div>
+                <div className=' flex items-center justify-start pl-3 w-full h-12 bg-[#acb886] rounded animate-pulse'>
+                    <div className=" h-10 w-10 rounded-full bg-gray-100 animate-pulse"></div>
+                </div>
+                <div className=' flex items-center justify-start pl-3 w-full h-12 bg-[#acb886] rounded animate-pulse'>
+                    <div className=" h-10 w-10 rounded-full bg-gray-100 animate-pulse"></div>
+                </div>
+            </div>
+       
+    </>)
+}
