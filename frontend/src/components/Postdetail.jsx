@@ -34,8 +34,8 @@ const Postdetail = ({ myRooms }) => {
     const getApost=async()=>{
         if(myRooms){
           let found = false;
-          console.log(myRooms);
-          console.log(roomid);
+          // console.log(myRooms);
+          // console.log(roomid);
           myRooms.map((room)=>{
             if(room.room.id === roomid)found = true;
           });

@@ -48,7 +48,7 @@ const Notification = ({setIsNfnOpen}) => {
                 title,
                 fromUser
             })
-            console.log(res);
+            
             if(res.status == 200)
             {
                 const room = res?.data?.room;

@@ -10,15 +10,14 @@ const Profilecard = ({room}) => {
   
   
   
-  console.log("room",room);
   
   let profileInfo;
   if(room)
     {
-      console.log("Is it Rooms = ",room);
+     
     profileInfo = useSelector(state => state.room.roomInfo)
     console.log("Fetched Details Inside Profile Info");
-    console.log(profileInfo);
+  
   }
   else
     profileInfo = useSelector(state => state.profile.profileInfo)
@@ -32,7 +31,6 @@ const Profilecard = ({room}) => {
 
   useEffect(() => {
     profileLink = room?`${window.location.origin}/room/${profileInfo?.CreatorId}/${profileInfo?.title}`:`${window.location.origin}/u/${profileInfo?.username}`;
-    console.log("proinfo", profileInfo);
     
   }, [profileInfo])
   
@@ -64,7 +62,7 @@ const Profilecard = ({room}) => {
         });
     }
   };
-  console.log(profileInfo);
+  
   return (
     <div className=' w-[80vw] xxs:w-[75vw] xs:w-[65vw] sm:w-[50vw]  1_5md:w-full mx-0    rounded-3xl  bg-[#c2c7b3] '>
       <div className=' rounded-t-3xl h-32 w-full overflow-hidden'>

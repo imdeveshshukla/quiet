@@ -105,7 +105,7 @@ export const fetchUsers = async ({ debouncedSearch, setUsers, setRooms, setLoadi
         const res = await axios.get(baseAddress + 'search/getusers', {
             params: { key: debouncedSearch },
         });
-        console.log(res);
+      
 
         setUsers(res.data.users)
         setRooms(res.data.rooms)

@@ -106,8 +106,7 @@ const Room = function () {
         // console.log(res?.data?.room);
         dispatch(addNewRoom(res?.data?.room));
         refresh();
-        console.log(res?.data);
-        console.log(room);
+
         toast.success(res?.data.msg);
 
         setJoined(true);
@@ -129,7 +128,7 @@ const Room = function () {
   const getPost = async () => {
 
     // setisLoading(true)
-    console.log(`Fetching posts for page: ${page}`);
+    
     if (!joined && privateRoom) {
       setHasMore(false);
       dispatch(setHotPost([]))
@@ -181,9 +180,7 @@ const Room = function () {
     setisLoading2(true);
     dispatch(setRoomDetail(data?.room));
     setPrivateRoom(data?.room?.privateRoom);
-    console.log("Inside useeffect ")
-    console.log(data);
-    console.log(isLoading2 || isLoading)
+   
     setJoined(data?.joined);
     if (joined || !privateRoom) {
       getPost();
@@ -280,7 +277,7 @@ const Room = function () {
   }, []);
 
   // console.log(roomDetail?.CreatorId + "==" + userData?.userID+" === ");
-  console.log('Private Room' + privateRoom);
+
   return (
     <>
       {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP} roomTitle={title} setPost={setPost} />}

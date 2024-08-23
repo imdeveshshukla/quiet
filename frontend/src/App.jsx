@@ -301,10 +301,10 @@ export const getUserData=async({email, dispatch})=>{
   
   try {
     const res= await axios.get(`${baseAddress}u/${email}`, {withCredentials:true});
-    console.log(res);
+    
     
     if(res.status==200){
-      console.log(res);
+      
       dispatch(setUserInfo(res.data.user));
     }
   } catch (error) {

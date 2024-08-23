@@ -187,7 +187,7 @@ const Signup = () => {
         try {
 
             const res = await axios.post(`${baseAddress}auth/varifyotp`, varifyOtpData);
-            console.log(res);
+            
 
 
             if (res.status == 202) {
