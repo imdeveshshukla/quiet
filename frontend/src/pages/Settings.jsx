@@ -38,7 +38,6 @@ function Settings() {
   const [isDisable2, setIsDisable2] = useState(false)
   const [show2, setShow2] = useState(true);
 
-  const [lcdata, setlcdata] = useState({});
   const [isDisable, setIsDisable] = useState(false)
 
   const [generating,setGenerating] = useState(false);
@@ -131,29 +130,24 @@ function Settings() {
     setisLoading(true)
 
     try {
-      let lcdata = await fetch(`https://leetcode-stats-api.herokuapp.com/${lcusername}`);
-      let data = await lcdata.json();
-
-      // console.log(data);
-
-      if (data.status == "error") {
-        setisLoading(false);
-        seterror("Invalid username");
-        return
-      }
-
+    
       const res = await axios.post(`${baseAddress}u/addLeetCode`, {
         lcusername: lcusername,
       });
-      // console.log(res);
+      
       if (res.status == 200) {
         dispatch(addLeetCodeID(res.data.leetcode));
-        setlcdata(data)
         setupdate(false)
       }
 
     } catch (error) {
-      console.log(error);
+      if(error.response.status==404){
+        setisLoading(false);
+        seterror("Invalid username");
+      }else{
+        console.log(error);
+        
+      }
 
     }
     setisLoading(false)
