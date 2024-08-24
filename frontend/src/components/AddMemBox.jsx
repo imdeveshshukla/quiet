@@ -46,19 +46,19 @@ export default function AddMemBox({ setShow, id }) {
   }, [title])
 
   const handleSubmit = async () => {
-    console.log(canSend);
+    // console.log(canSend);
     
     if(!canSend) return;
-    console.log(id+" "+title);
+    // console.log(id+" "+title);
     setLoading(true);
     try {
       const res = await axios.post(`${baseAddress}rooms/addUserinRoom/${title}`, {
         title: id
       });
       console.clear();
-      console.log(res);
+      // console.log(res);
       const msg = res?.data.msg;
-      console.log(msg);
+      // console.log(msg);
       if (res.status == 201) {
         toast.success("Successfully Send Request");
       }

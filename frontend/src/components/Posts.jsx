@@ -14,7 +14,7 @@ import Linkify from 'react-linkify';
 
 
 
-const Posts = ({ id, post, title, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
+const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -151,13 +151,14 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
     <>
       <div className='px-4 py-2 xxs:px-8 xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
         <header className='flex gap-2 items-center my-2'>
-          <img src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
+          <img onClick={()=> Navigate(`/u/${user?.username}`)} src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
           <div className=' flex flex-wrap gap-1 xs:gap-2 md:gap-4 items-center'>
-              <span className='font-semibold cursor-pointer'>u/{user?.username}</span>•{inRoom && <><span className=' text-sm font-semibold'>q/{room.title}</span> <span>•</span></>}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
+              <span onClick={()=> Navigate(`/u/${user?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{user?.username}</span>•{(inRoom && <><span onClick={()=> Navigate(`/room/${user.userID}/${room.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room.title}</span> <span>•</span></>)
+              || (topic && <><span onClick={()=> Navigate(`/q/${topic}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
             
           </div>
         </header>
-        <main className='cursor-pointer'>
+        <main className=''>
           <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}><Linkify componentDecorator={linkDecorator}>{title}</Linkify></div>
 
           <div className={` my-2 whitespace-pre-wrap break-words`}>
@@ -217,3 +218,7 @@ export const sendNotification = async ({ postId, toUser, fromUser, title, body }
     console.error(error);
   }
 };
+
+export const openUserProfile= ()=>{
+
+}

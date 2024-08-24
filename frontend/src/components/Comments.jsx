@@ -28,6 +28,7 @@ import { sendNotification } from './Posts';
 import { getTime } from './Posts';
 import ReadMore from './ReadMore';
 import baseAddress from '../utils/localhost';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -136,6 +137,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
   const [showChild, setShowChild] = useState(false);
   const childs = getChildren(id) == undefined ? [] : getChildren(id);
   const userInfo = useSelector(state => state.user.userInfo);
+  const Navigate= useNavigate();
 
 
   function handleComment(id) {
@@ -252,7 +254,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
         <div className="flex items-center w-full gap-2">
           <div className="flex flex-row justify-between">
-            <p className="relative  whitespace-nowrap truncate text-sm xxs:text-base  font-medium overflow-clip">u/{user.username}</p>
+            <p onClick={()=> Navigate(`/u/${user.username}`)} className="relative cursor-pointer  whitespace-nowrap hover:text-green-900 truncate text-sm xxs:text-base  font-medium overflow-clip">u/{user.username}</p>
             {/* <a className="text-gray-500 text-xl" href="#"><i className="fa-solid fa-trash"></i></a> */}
           </div><span>•</span>
           <p className="text-gray-500 text-[9px] xxs:text-xs  line-clamp-1 overflow-clip">{getTime(createdAt)} ago</p>

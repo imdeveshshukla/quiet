@@ -166,7 +166,6 @@ function Settings() {
       let cfdata = await fetch(`https://codeforces.com/api/user.info?handles=${cfusername}&checkHistoricHandles=false`);
       let data = await cfdata.json();
 
-      console.log("AddCF ",data);
 
       if (data.status === "FAILED") {
         setisLoading2(false);
@@ -247,7 +246,7 @@ function Settings() {
       dispatch(clearHotPostsInfo());
       dispatch(logout());
       nav("/signin")
-      console.log(res.data);
+      
       toast.success("Account Deleted")
     } catch (error) {
       console.log(error);

@@ -9,8 +9,10 @@ import SmallLoader from './SmallLoader';
 import Loader from './Loader';
 import baseAddress from '../utils/localhost';
 import { addNewRoom } from '../redux/userRooms';
+
 import { setRoomDetail } from '../redux/roomSlice';
 import toast from 'react-hot-toast';
+import { v4 as uuidv4 } from 'uuid';
 
 
 
@@ -49,7 +51,7 @@ const Notification = ({setIsNfnOpen}) => {
                 title,
                 fromUser
             })
-            console.log(res);
+            
             if(res.status == 200)
             {
                 const room = res?.data?.room;
@@ -118,7 +120,7 @@ const Notification = ({setIsNfnOpen}) => {
             {notifications.length==0 && <div className=' p-4  text-red-950 text-center font-semibold'>You're all caught up! No new notifications.</div>}
             <div className=' max-h-[70vh] sm:max-h-[60vh] overflow-auto scrollable-box'>
             {notifications?.map(item =><>
-                <div key={item.id} onClick={()=>handleClick(item, item.id)} className=' cursor-pointer hover:bg-[#acb499] shadow-sm  shadow-lime-800 px-2 py-1 xxs:px-4  xxs:py-2'>
+                <div key={`${uuidv4()}${item.id}`} onClick={()=>handleClick(item, item.id)} className=' cursor-pointer hover:bg-[#acb499] shadow-sm  shadow-lime-800 px-2 py-1 xxs:px-4  xxs:py-2'>
                     <div className=' flex items-center justify-between'><span className='text-md '><span className='font-semibold'>{item.user2.username} </span>{item.title}</span><span className=' text-xs text-slate-600'>{getTime(item.createdAt)} ago</span></div>
                     {item.body?<div className='whitespace-pre-wrap break-words text-sm line-clamp-3 bg-[#9eb840] overflow-clip px-3 text-white m-1 py-1 rounded-lg'>{item.body}</div>:<></>}
                 </div>

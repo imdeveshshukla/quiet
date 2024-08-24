@@ -55,7 +55,6 @@ const Signin = () => {
             }
             else {
                 const res = await axios.post(`${baseAddress}auth/signin`, { username: form.user, password: form.password });
-                console.log(res);
                 
                 if (res.status == 202) {
                     toast.dismiss()

@@ -67,13 +67,11 @@ const LeetCode = () => {
         try {
             const encUsername = CryptoJS.AES.encrypt(user.leetcode, import.meta.env.VITE_LC_SECRETKEY).toString();
             
-            console.log(user.leetcode);
-            
-            console.log(encUsername);
+
             
             
             let res = await axios.post(`${baseAddress}search/getLCdata/`, {username: encUsername});
-            console.log(res);
+
             
             if (res.data.status == "success") {
                 const lcdata = Object.keys(res.data)
@@ -82,7 +80,7 @@ const LeetCode = () => {
                         obj[key] = res.data[key];
                         return obj;
                     }, {});
-                console.log(lcdata);
+          
                 setlcdata(lcdata);
 
             } else {
@@ -101,12 +99,12 @@ const LeetCode = () => {
 
 
     const handleMouseEnter = () => {
-        console.log("moise enter");
+       
         setShowAccRate(true)
 
     }
     const handleMouseLeave = () => {
-        console.log("mouseleave");
+        
         setShowAccRate(false)
 
 

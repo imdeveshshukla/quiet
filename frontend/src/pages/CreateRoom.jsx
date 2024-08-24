@@ -54,7 +54,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
           // toast.dismiss();
           // toast.error("Error :"+res.data.msg);
           toast.error("Server Issue");
-          console.log(`${res?.data?.msg} + ${res?.data?.error}`);
+          
         }
         
       }
