@@ -41,6 +41,7 @@ const Notification = ({setIsNfnOpen}) => {
         setIsLoading(false)
       }
     const addUserToRoom = async(title,fromUser)=>{
+        console.log(title+" "+fromUser);
 
         setBigLoader(true)
         try {
