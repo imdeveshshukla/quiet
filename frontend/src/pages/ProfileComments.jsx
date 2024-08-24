@@ -260,7 +260,7 @@ export const UserComment = ({ comment }) => {
 
         <div className="flex  items-center w-full gap-2">
           <div className="flex flex-wrap items-center">
-            <p className=" exclude-click   text-sm  font-medium overflow-clip">{data.dp ? 'u' : 'q'}/{data.username ? data.username : data?.title}<span>&nbsp;•&nbsp;</span> </p>
+            <p onClick={()=> Navigate(`/u/${data.username}`) } className=" exclude-click  hover:text-green-900 text-sm  font-medium overflow-clip">{data.dp ? 'u' : 'q'}/{data.username ? data.username : data?.title}<span>&nbsp;•&nbsp;</span> </p>
 
             <span style={{ wordBreak: 'break-word' }} className=' hover:underline hover:text-blue-950 whitespace-pre-wrap  text-xs overflow-clip'>{comment.post.title}</span>
 
@@ -273,7 +273,7 @@ export const UserComment = ({ comment }) => {
         <header className=' flex items-center justify-stretch flex-wrap whitespace-pre-wrap leading-3'>
           <span className='exclude-click text-sm font-mono font-semibold'>{comment?.user.username}</span>
           <span className=' text-xs'>{comment.parentId ? `  replied to  ` : '  commented  '}</span>
-          <span className='exclude-click text-sm font-mono font-semibold'>{comment.parent?.user.username}</span>
+          <span onClick={()=> Navigate(`/u/${comment.parent?.user.username}`)}  className='  exclude-click  hover:text-green-900 text-sm font-mono font-semibold'>{comment.parent?.user.username}</span>
           <span>• </span>
           <span className="text-gray-500 text-[9px] xxs:text-xs  line-clamp-1 overflow-clip">{getTime(comment.createdAt)} ago</span>
         </header>

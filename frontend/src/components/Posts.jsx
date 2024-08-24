@@ -14,7 +14,7 @@ import Linkify from 'react-linkify';
 
 
 
-const Posts = ({ id, post, title, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
+const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -153,7 +153,8 @@ const Posts = ({ id, post, title, body, media, countComment, inRoom, room, creat
         <header className='flex gap-2 items-center my-2'>
           <img onClick={()=> Navigate(`/u/${user?.username}`)} src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
           <div className=' flex flex-wrap gap-1 xs:gap-2 md:gap-4 items-center'>
-              <span onClick={()=> Navigate(`/u/${user?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{user?.username}</span>•{inRoom && <><span className=' text-sm font-semibold'>q/{room.title}</span> <span>•</span></>}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
+              <span onClick={()=> Navigate(`/u/${user?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{user?.username}</span>•{(inRoom && <><span onClick={()=> Navigate(`/room/${user.userID}/${room.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room.title}</span> <span>•</span></>)
+              || (topic && <><span onClick={()=> Navigate(`/q/${topic}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
             
           </div>
         </header>
