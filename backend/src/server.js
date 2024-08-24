@@ -15,9 +15,21 @@ dotenv.config({
 })
 const app = express() 
 const port = 3000
+const dep = (origin, callback) => {
+  const allowedOrigins = [
+    'https://www.bequiet.live', 
+    'https://www.bequiet.vercel.app'
+  ];
+
+  if (allowedOrigins.includes(origin) || !origin) {
+    callback(null, true);
+  } else {
+    callback(new Error('Not allowed by CORS'));
+  }
+};
 const corsOptions = {
   credentials: true,
-  origin: (process.env.NODE_ENV === 'development')?'http://localhost:5173':'https://www.bequiet.live',
+  origin: (process.env.NODE_ENV === 'development')?'http://localhost:5173':dep,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: [
     "Origin",
