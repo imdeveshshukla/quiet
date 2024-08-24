@@ -5,8 +5,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { logout } from '../redux/login'
 import axios from 'axios';
 import {  clearUserInfo } from '../redux/user'
-import { loading } from '../redux/loading';
-import { IoIosLogOut } from "react-icons/io";
+
 import dp from '../assets/dummydp.png'
 import toast from 'react-hot-toast';
 import { clearPostsInfo } from '../redux/Post';
@@ -17,6 +16,9 @@ import Search from './Search'
 import {setShowSearch} from '../redux/search'
 import baseAddress from '../utils/localhost'
 import { BsInfoCircle } from "react-icons/bs";
+import { IoSettingsOutline } from "react-icons/io5";
+import { CgProfile } from "react-icons/cg";
+import { LuLogOut } from 'react-icons/lu'
 
 
 
@@ -142,23 +144,23 @@ const Navbar = () => {
               <div className="absolute right-0 top-12 mt-3 w-48 bg-white rounded-md shadow-lg z-10">
                 <ul className="py-1 bg-[#656923] rounded-md ">
 
-                  <li className="px-4 py-2 text-red-900 ">
-                    <span className='text-sm text-black '>Welcome</span> {userInfo && userInfo.username ? userInfo.username : `Anonymous`}...
+                  <li className="px-4 py-2 cursor-default text-gray-300 font-semibold font-ubuntu ">
+                    <span className='text-sm font-semibold font-mono text-red-800 '>Welcome</span> {userInfo && userInfo.username ? userInfo.username : `Anonymous`}
                   </li>
-                  <li className="px-4 py-2 text-white hover:bg-[#6d712eb8]">
+                  <li className=" hover:text-gray-200 px-4 py-2 text-white hover:bg-[#6d712eb8]">
 
-                    <Link onClick={() => setIsOpen(!isOpen)} to={`u/${userInfo?.username}`} className="block">Profile</Link>
+                    <Link onClick={() => setIsOpen(!isOpen)} to={`u/${userInfo?.username}`} className="flex gap-2 justify-between items-center"><span>Profile</span> <span><CgProfile className='text-lg' /></span></Link>
                   </li>
-                  <li className="px-4 py-2 text-white hover:bg-[#6d712eb8]">
-                    <Link onClick={() => setIsOpen(!isOpen)} to={"/setting/"} className="block">Settings</Link>
-                  </li>
-
-                  <li className="px-4 py-2 text-white  hover:bg-[#6d712eb8]">
-                    <Link onClick={() => setIsOpen(!isOpen)} to={"/about/"} className="flex gap-2 items-center"><span>About</span> <span><BsInfoCircle /></span></Link>
+                  <li className=" hover:text-gray-200 px-4 py-2 text-white hover:bg-[#6d712eb8]">
+                    <Link onClick={() => setIsOpen(!isOpen)} to={"/setting/"} className="flex gap-2 justify-between items-center"><span>Settings</span> <span><IoSettingsOutline className='text-lg' /></span></Link>
                   </li>
 
-                  <li className="px-4 py-2 text-white cursor-pointer flex items-center gap-3 hover:bg-[#6d712eb8]" onClick={() => logOut()}>
-                    <span>Logout</span> <span><IoIosLogOut /></span>
+                  <li className=" hover:text-gray-200 px-4 py-2 text-white  hover:bg-[#6d712eb8]">
+                    <Link onClick={() => setIsOpen(!isOpen)} to={"/about/"} className="flex gap-2 justify-between items-center"><span>About</span> <span><BsInfoCircle className='text-lg' /></span></Link>
+                  </li>
+
+                  <li className=" hover:text-gray-200 px-4 py-2 text-white cursor-pointer justify-between flex items-center gap-3 hover:bg-[#6d712eb8]" onClick={() => logOut()}>
+                    <span>Logout</span> <span><LuLogOut className='text-lg' /></span>
                   </li>
                 </ul>
 
