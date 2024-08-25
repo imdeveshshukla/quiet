@@ -13,6 +13,7 @@ import Postskelton from './Postskelton';
 import { setUserPostComment } from '../redux/userposts';
 import { CommentBody, CommentBody2, CommentBox } from './Comments';
 import baseAddress from '../utils/localhost';
+import ForbiddenPage from '../pages/ForbiddenPage';
 
 
 
@@ -30,17 +31,21 @@ const Postdetail = ({ myRooms }) => {
     const location = useLocation();
     const {id}= useParams();
     const {roomid} = useParams();
-
+    const [room,setRoom] = useState({});
+    const [displayPost,setDisp] = useState(true);
+    const [loading,setLoading] = useState(false);
     const getApost=async()=>{
-        if(myRooms){
+        if(roomid){
           let found = false;
-          // console.log(myRooms);
-          // console.log(roomid);
           myRooms.map((room)=>{
-            if(room.room.id === roomid)found = true;
+            if(room.room.id === roomid)
+            {
+              found = true;
+              setRoom(room.room);
+            }
           });
           if(!found){
-            toast.error("Unauthorised");
+            setDisp(false);
             return;
           }
         }
@@ -60,9 +65,11 @@ const Postdetail = ({ myRooms }) => {
       }
  
       useEffect(() => {
+        setLoading(true)
         dispatch(clearPostDetail())
-        getApost()   
-      },[])
+        getApost()
+        setLoading(false);
+      },[isLogin])
       
 
 
@@ -96,11 +103,11 @@ const Postdetail = ({ myRooms }) => {
     function getChildren(id){
         return groupComments[id]
     }
-  // console.log("Groupd Comments = "+JSON.stringify(groupComments));
-  return (<>
+  if(!displayPost && !loading)return <ForbiddenPage/>
+  else return (<>
     <div className=' min-h-screen overflow-auto xs:pl-4 sm:pl-16 1_5md:pl-2  2_md:pl-16'>
-      {post?<Posts key={post?.id}  id={post?.id} title={post?.title} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes} postDetails={true}/>:<Postskelton/>}
-
+      {post?<Posts key={post?.id} id={post?.id} title={post?.title} inRoom={roomid?true:false} room={room} joined={roomid?true:false} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes} postDetails={true}/>:<Postskelton/>}
+     
       <div className=' m-4'>
         {isLogin?  <CommentBox/>
 
@@ -111,9 +118,9 @@ const Postdetail = ({ myRooms }) => {
     
     <div className=' m-2 xs:m-4'>
       <div className=' text-xl font-bold mb-4 underline'>Comments:</div>
-    {/* {console.log(post?.comments)}; */}
-    <CommentBody comments={groupComments[null]} postId={post?.id} getChildren={getChildren} userId={userInfo?.userID}  dp={dp} getTime={getTime}/>
-    {/* <CommentBody comments={post?.comments} dp={dp} getTime={getTime}/> */}
+    
+    <CommentBody comments={groupComments[null]} postId={post?.id} getChildren={getChildren} userId={post?.userId}  dp={dp} getTime={getTime}/>
+    
     </div>
 
     </div>

@@ -1,12 +1,12 @@
 import axios from 'axios';
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux';
 import toast from 'react-hot-toast';
 import SmallLoader from './SmallLoader';
-import { setComment } from '../redux/Postdetail';
+import { clearPostDetail, delComment, setComment } from '../redux/Postdetail';
 import { setUserPostComment } from '../redux/userposts';
-import { setPostComment } from '../redux/Post';
+import { clearPostsInfo, setPostComment } from '../redux/Post';
 import { BiDownvote, BiUpvote } from 'react-icons/bi';
 import { GoComment } from 'react-icons/go';
 import { RiShareForwardLine } from 'react-icons/ri';
@@ -29,6 +29,9 @@ import { getTime } from './Posts';
 import ReadMore from './ReadMore';
 import baseAddress from '../utils/localhost';
 import { useNavigate } from 'react-router-dom';
+import { BsThreeDotsVertical } from 'react-icons/bs';
+import SmoothLoader from '../assets/SmoothLoader';
+import { MdDelete } from 'react-icons/md';
 
 
 
@@ -137,9 +140,44 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
   const [showChild, setShowChild] = useState(false);
   const childs = getChildren(id) == undefined ? [] : getChildren(id);
   const userInfo = useSelector(state => state.user.userInfo);
+  const isLogin = useSelector(state => state.login.value);
   const Navigate= useNavigate();
+  const [isOpen,setOpen] = useState(false);
+  const [delLoading,setLoading] = useState(false);
+  const dropdownRef = useRef(null);
+  const dispatch = useDispatch();
+  const handleToggle = ()=>{
+    setOpen((v)=>!v)
+  }
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpen(false);
+    }
 
-
+  };
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
+  async function deleteComment(id){
+    setLoading(true);
+    // console.log(userInfo?.userID);
+    try {
+      const res = await axios.delete(`${baseAddress}posts/deleteComment`,{
+        data:{
+          id
+        }
+      })
+      dispatch(delComment(id));
+      toast.success(res?.data.msg);
+    } catch (error) {
+        toast.error(error.response?.data.msg);
+        console.log(error);
+    }
+    setLoading(false);
+  }
   function handleComment(id) {
     setOpenBox((openBox) => !openBox);
 
@@ -258,6 +296,26 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
             {/* <a className="text-gray-500 text-xl" href="#"><i className="fa-solid fa-trash"></i></a> */}
           </div><span>•</span>
           <p className="text-gray-500 text-[9px] xxs:text-xs  line-clamp-1 overflow-clip">{getTime(createdAt)} ago</p>
+          {isLogin&&
+            <div className="relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
+
+                <button onClick={handleToggle} className="flex items-center hover:focus:outline-none">
+                  <BsThreeDotsVertical/>
+                </button>
+                {isOpen && (
+                  <div className="absolute right-0 top-4  bg-white rounded-md shadow-lg z-10">
+                    <ul className=" bg-[#6d712eb8] rounded-md ">
+                      <li className=" text-white hover:text-black">
+                        <button onClick={() => deleteComment(id)} className="px-4 py-1 flex items-center gap-1 ">
+                            {delLoading?<SmoothLoader/>:<><span>Delete</span> <MdDelete /></>}</button>
+                      </li>
+                    </ul>
+
+                  </div>
+                )}
+              </div>
+
+            }
         </div>
       </div>
       <div className=' mx-10 text-sm xs:text-base whitespace-pre-wrap break-words'><ReadMore maxLines={3} children={body} /></div>

@@ -182,7 +182,7 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
                 >Room name</label>
                 <input type="text" 
                 className={`bg-${color}-50 border border-${color}-500 text-${color}-900 placeholder-${color}-700 text-sm rounded-lg focus:ring-${color}-500 focus:border-${color}-500 block w-full p-2.5 `}
-                placeholder="ietSexClub_"
+                placeholder="ietClub_"
                 value={title}
                 onChange={(e)=>setTitle(e.target.value)}/>
                 <p className={`mt-2 text-sm text-${color}-600`}>

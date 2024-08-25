@@ -11,7 +11,10 @@ import ReadMore, { linkDecorator } from './ReadMore';
 import { clearPostsInfo } from '../redux/Post';
 import baseAddress from '../utils/localhost';
 import Linkify from 'react-linkify';
-
+import { BsThreeDotsVertical } from "react-icons/bs";
+import { MdDelete } from 'react-icons/md';
+import SmoothLoader from '../assets/SmoothLoader';
+import { clearHotPostsInfo } from '../redux/Hotposts';
 
 
 const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
@@ -25,7 +28,44 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
   const [upvoted, setUpvoted] = useState(false);
   const [downvoteNum, setDownvotenum] = useState(0);
   const [downvote, setDownVote] = useState(false);
+  const [isOpen,setOpen] = useState(false);
+  const [delLoading,setLoading] = useState(false);
+  const dropdownRef = useRef(null);
+  const handleToggle = ()=>{
+    setOpen((v)=>!v)
+  }
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setOpen(false);
+    }
 
+  };
+  async function deletePost(id){
+    // console.log(id);
+    setLoading(true);
+    try{
+      const res = await axios.delete(`${baseAddress}posts/delete`,{
+        data:{
+          id
+        }
+      });
+      toast.success(res.data.msg);
+      dispatch(clearPostsInfo());
+      dispatch(clearHotPostsInfo());
+      // console.log(res);
+    }
+    catch(err){
+      console.log(err);
+      toast.error(err.response.data.msg);
+    }
+    setLoading(false);
+  }
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
   useEffect(() => {
     const getUpvote = async () => {
       const upvoteArr = await upvotes?.filter(vote => (vote.upvotes == 1 && vote.commentId == null));
@@ -144,8 +184,39 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
     }
 
   };
+  const shareFunction = async(id,room)=>{
+    console.log("Clicked Share Button")
+    if(inRoom)
+    {
+      if(!joined){
+        toast.error("First Join The Room");
+        return;
+      }
+      console.log(room);
+      console.log("Clicked Share Button inside room");
+    }
+    if (navigator.share) {
+      
+      try {
+        await navigator.share({
+          title: title,
+          text: `Check out ${user?.username}'s latest post on our site!`,
+          url: inRoom?`${window.location.origin}/post/${room?.id}/${id}`:`${window.location.origin}/post/${id}`,
+        });
+      } catch (error) {
+        console.error('Error in post sharing', error);
+      }
+    } else {
+      navigator.clipboard.writeText(inRoom?`${window.location.origin}/post/${room?.id}/${id}`:`${window.location.origin}/post/${id}`)
+        .then(() => {
+          alert('Post link copied to clipboard');
+        })
+        .catch((error) => {
+          console.error('Error in Post copying link to clipboard', error);
+        });
+    }
 
-
+  }
 
   return (
     <>
@@ -157,6 +228,24 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
               || (topic && <><span onClick={()=> Navigate(`/q/${topic}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
             
           </div>
+      {   user?.username===userInfo?.username?
+            <div className="relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
+
+                <button onClick={handleToggle} className="flex items-center hover:focus:outline-none">
+                  <BsThreeDotsVertical/>
+                </button>
+                {isOpen && (
+                  <div className="absolute right-0 top-4  bg-white rounded-md shadow-lg z-10">
+                    <ul className=" bg-[#6d712eb8] rounded-md ">
+                      <li className=" text-white hover:text-black">
+                        <button onClick={() => deletePost(id)} className="px-4 py-1 flex items-center gap-1 ">
+                            {delLoading?<SmoothLoader/>:<><span>Delete</span> <MdDelete /></>}</button>
+                      </li>
+                    </ul>
+
+                  </div>
+                )}
+              </div>:<></>}
         </header>
         <main className=''>
           <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}><Linkify componentDecorator={linkDecorator}>{title}</Linkify></div>
@@ -181,10 +270,12 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
             <GoComment className='text-2xl' />
             <span>{countComment ? countComment : 0}</span>
           </div>
+          {!room?.privateRoom?
           <div className='rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>
-            <RiShareForwardLine className='text-2xl' />
+            <RiShareForwardLine onClick={()=> shareFunction(id,room)} className='text-2xl' />
             <span>Share</span>
           </div>
+            :<></>}
         </footer>
       </div>
 

@@ -96,6 +96,42 @@ export const getAllComment = async (req,res)=>{
      });
     }
 }
+export const deleteComment = async(req,res)=>{
+    const userId = req.userId;
+    const id = req.body.id;
+
+    try{
+        const cmnt = await prisma.comment.findFirst({
+            where:{
+                id
+            }
+        });
+        console.log(cmnt.userId);
+        console.log(userId);
+        if(cmnt.userId !== userId)
+        {
+            return res.status(403).json({
+                msg:"You Are Not Authorised"
+            })
+        }
+        await prisma.comment.delete({
+            where:{
+                id
+            }
+        });
+        return res.status(201).json({
+            msg:"Success"
+        });
+    }
+    catch(err)
+    {
+        return res.status(500).json({
+            msg:"Server Issue",
+            err
+        })
+    }
+
+}
 
 export const getUserComment = async (req,res)=>{
     const { uId } = req.userId;

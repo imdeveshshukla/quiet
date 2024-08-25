@@ -2,22 +2,22 @@ import React, { useEffect } from 'react'
 import banner from '../assets/banner.png'
 import { useSelector } from 'react-redux';
 import { PiShareFat } from "react-icons/pi";
+import { CiEdit } from "react-icons/ci";
+import { useNavigate } from 'react-router-dom';
 
 
 
 
 const Profilecard = ({room}) => {
   
-  
+  const nav = useNavigate();
+  const currUser = useSelector((state) => state.user.userInfo);
   
   
   let profileInfo;
   if(room)
     {
-     
     profileInfo = useSelector(state => state.room.roomInfo)
-    console.log("Fetched Details Inside Profile Info");
-  
   }
   else
     profileInfo = useSelector(state => state.profile.profileInfo)
@@ -96,6 +96,10 @@ const Profilecard = ({room}) => {
           </div>
 
           <div className=' border-b '></div>
+          {!room&& profileInfo?.username===currUser?.username?<div>
+            <button className='flex items-center bg-[#99a086] py-2 px-3  text-white my-2 gap-1 rounded-full' onClick={() => nav('/setting/')}><CiEdit className=' text-xl'/><span className=' text-xs font-medium'>Edit</span></button>
+          </div>:<></>
+          }
       </div>
 
     </div>

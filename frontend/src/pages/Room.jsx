@@ -267,7 +267,6 @@ const Room = function () {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
       setisOpen(false);
     }
-
   };
   useEffect(() => {
     document.addEventListener('mousedown', handleClickOutside);

@@ -13,6 +13,7 @@ import { ProfileSkelton } from './Postskelton';
 import baseAddress from '../utils/localhost';
 import LeetCode from './LeetCode';
 import LeetCodeLogo from '../assets/LeetCodeLogo'
+import Codeforces from './Codeforces';
 
 
 axios.defaults.withCredentials = true
@@ -144,6 +145,7 @@ const ProfileLayout = ({ isLoading, user }) => {
             <div className=' text-lg  xxs:text-2xl break-words xs:text-3xl font-bold'>{user.username}</div>
             <div className=' text-xs xxs:text-base font-semibold text-gray-700'>u/{user.username}</div>
             <div className=' text-sm xxs:text-base break-words font-semibold text-gray-800'>{userInfo?.bio}</div>
+            {user?.showCf&&<div className=' text-sm xxs:text-base break-words font-semibold text-gray-800'><Codeforces rating={user?.codeforces}/></div>}
           </div>
 
 
