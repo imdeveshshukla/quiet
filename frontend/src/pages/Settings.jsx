@@ -16,6 +16,7 @@ import { logout } from '../redux/login.js';
 import { clearPostsInfo } from '../redux/Post.js';
 import { clearHotPostsInfo } from '../redux/Hotposts.js';
 import { SiCodeforces } from "react-icons/si";
+import CryptoJS from 'crypto-js';
 
 axios.defaults.withCredentials = true
 
@@ -136,7 +137,8 @@ function Settings() {
       });
       
       if (res.status == 200) {
-        dispatch(addLeetCodeID(lcusername));
+        dispatch(addLeetCodeID(res.data.leetcode));
+        setlcusername("")
         setupdate(false)
       }
 
@@ -152,6 +154,9 @@ function Settings() {
     }
     setisLoading(false)
   }
+
+
+  
 
   const addCF = async()=>{
     setisLoading2(true)
@@ -270,6 +275,8 @@ function Settings() {
 
 
 
+
+
   return (
     <>
       <div className=' py-10 px-6 xxs:p-12 sm:p-24'>
@@ -290,7 +297,7 @@ function Settings() {
                   <div className=' flex justify-between'>
                     <div className=' flex gap-2 items-center'>
                       <SiLeetcode />
-                      <a href={`https://leetcode.com/u/${userInfo.leetcode}/`} target='blank' className=' text-[#01a864]'>{userInfo.leetcode}</a>
+                      <a href={`https://leetcode.com/u/${getLCusername(userInfo.leetcode)}/`} target='blank' className=' text-[#01a864]'>{getLCusername(userInfo.leetcode)}</a>
                       <button onClick={() => setupdate(true)} className=' flex  items-center justify-center px-4 py-1 bg-white font-medium rounded-md shadow-sm ring-1 ring-inset ring-gray-300 text-sm '>Update</button>
                     </div>
                     <div className=' relative'>
@@ -502,3 +509,12 @@ function Settings() {
 }
 
 export default Settings;
+
+const getLCusername= (encryptUsername)=>{
+  const bytes = CryptoJS.AES.decrypt(
+    encryptUsername,
+    import.meta.env.VITE_LC_SECRETKEY
+  );
+  const username = bytes.toString(CryptoJS.enc.Utf8);
+  return username
+}
