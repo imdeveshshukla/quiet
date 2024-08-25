@@ -1,7 +1,6 @@
 import prisma from "../../db/db.config.js";
 import CryptoJS from "crypto-js";
 import axios from "axios";
-import { LeetCode } from "leetcode-query";
 
 export const getUsers = async (req, res) => {
   try {
@@ -215,7 +214,8 @@ export const getLCdata = async (req, res) => {
     const user = data.matchedUser;
 
     if (!user) {
-      res.status(404).send({ status: "error" });
+      res.status(404).send("user not found");
+      return
     }
 
     const solved = user.submitStats.acSubmissionNum;
