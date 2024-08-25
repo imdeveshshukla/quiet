@@ -71,8 +71,8 @@ const Signin = () => {
             if(error.response.status==401){
                 toast.error("Invalid Credentials")
             }else if(error.response.status==403){
-                toast.error("User is not Varified! Varify your email.")
-                Navigate("/varifyaccount")
+                toast.error("User doesn't exists. Please Sign Up")
+                Navigate("/signup")
             } 
             else if(error.response.status == 425)
             {

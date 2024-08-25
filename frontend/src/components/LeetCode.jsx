@@ -54,23 +54,23 @@ const LeetCode = () => {
             const encUsername = CryptoJS.AES.encrypt(user.leetcode, import.meta.env.VITE_LC_SECRETKEY).toString();
             
 
-            
-            
             let res = await axios.post(`${baseAddress}search/getLCdata/`, {username: encUsername});
             
             if (res.status==200) {
                 
                 setlcdata(res.data);
 
-            } else {
-                console.log("Some error occured!");
-                toast.error("Some error occured!")
-
             }
 
 
         } catch (error) {
-            console.log(error);
+            if(error.response.status==404){
+                console.log("user not found");
+                toast.error("User not found!");
+                
+            }else{
+                console.log(error);
+            }
 
         }
         setisLoading(false)
@@ -93,7 +93,7 @@ const LeetCode = () => {
         if (user?.leetcode) {
             getLC()
         }
-    }, [user])
+    }, [])
 
 
     return (

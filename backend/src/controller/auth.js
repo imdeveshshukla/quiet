@@ -1,36 +1,49 @@
 import prisma from "../../db/db.config.js";
 import bcrypt from "bcrypt";
-import jwt from "jsonwebtoken" ;
+import jwt from "jsonwebtoken";
 import transporter from "../utils/transporter.js";
 import z from "zod";
+import nodemailer from "nodemailer";
 
-import { generateUniqueUsernames } from '../utils/generateUsernames.js';
+import { generateUniqueUsernames } from "../utils/generateUsernames.js";
 
 const usersignUpSchema = z.object({
-  username:z.string(),
-  email:z.string(),
-  password:z.string()
-})
+  username: z.string(),
+  email: z.string(),
+  password: z.string(),
+});
 const usersSignInSchema = z.object({
-  email:z.string(),
-  password:z.string()
-})
+  email: z.string(),
+  password: z.string(),
+});
 
-
-
-
-const sendEmailVarification = async ({ userID, email }, res) => {
+const sendEmailVarification = async ({ userID, username, email }, res) => {
   try {
     console.log(userID, email);
 
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const hashOtp = await bcrypt.hash(otp, 10);
 
-    const mailOptions = {
-      from: process.env.AUTH_EMAIL,
+    // const mailOptions = {
+    //   from: process.env.AUTH_EMAIL,
+    //   to: email,
+    //   subject: "Varify Your Email",
+    //   text: `Your OTP code for quIET is: ${otp}. It will expire in 3 minutes`,
+    // };
+
+    let transporter = nodemailer.createTransport({
+      service: "gmail",
+      auth: {
+        user: process.env.AUTH_EMAIL,
+        pass: process.env.AUTH_PASS,
+      },
+    });
+
+    let mailOptions = {
       to: email,
       subject: "Varify Your Email",
       text: `Your OTP code for quIET is: ${otp}. It will expire in 3 minutes`,
+      html: `<p>Your OTP code for quIET with the username <b>${username}</b> is <b>${otp}</b>. It will expire in 3 minutes.`,
     };
 
     transporter.sendMail(mailOptions, async (error, info) => {
@@ -79,12 +92,12 @@ const sendEmailVarification = async ({ userID, email }, res) => {
 const signup = async (req, res) => {
   try {
     const validity = usersignUpSchema.safeParse(req.body);
-    if(!validity.success)
+    if (!validity.success)
       res.status(500).json({
-        message:"Wrong Inputs",
-        error:validity.error
-      })
-      
+        message: "Wrong Inputs",
+        error: validity.error,
+      });
+
     const { username, email, password } = req.body;
     if (username == "" || email == "" || password == "") {
       res.json({ message: "Credentials cannot be empty" });
@@ -94,49 +107,62 @@ const signup = async (req, res) => {
     var token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
       expiresIn: "1d",
     });
-  
+
     const isuser = await prisma.user.findFirst({
       where: {
-        OR:[
+        OR: [
           {
-            username
+            username,
           },
           {
-            email: email
-          }
-        ]
-      }
+            email: email,
+          },
+        ],
+      },
     });
-    if (isuser) {
+    let newUser;
+    if ((isuser &&  isuser.isVarified)|| (isuser && !isuser.isVarified && isuser.email!=email)) {
       res.status(400).json({ res: "User Already Exists" });
+      return;
+    } else if (isuser && !isuser.isVarified && isuser.email==email) {
+      newUser = await prisma.user.update({
+        where:{
+          username: isuser.username
+        },
+        data:{
+          username,
+          password: hashPass,
+        }
+      })
+
+      
     } else {
-      const newUser = await prisma.user.create({
+      newUser = await prisma.user.create({
         data: {
           username: username,
           email: email,
           password: hashPass,
         },
       });
-      console.log(newUser);
-      await sendEmailVarification(newUser, res);
     }
+    console.log(newUser);
+    await sendEmailVarification(newUser, res);
   } catch (error) {
     console.log(error);
     res.json({
-      msg:"Some Error Occured",
-      error
+      msg: "Some Error Occured",
+      error,
     });
   }
 };
 
-
-
-const  varifyOtp = async (req, res) => {
+const varifyOtp = async (req, res) => {
   try {
     // console.log("Remaining = "+(req.rateLimit.remaining));
-    if(req.rateLimit.remaining <= 1)
-    {
-      return res.status(425).send({message:"Too Many requests, please try again after some minutes"});
+    if (req.rateLimit.remaining <= 1) {
+      return res.status(425).send({
+        message: "Too Many requests, please try again after some minutes",
+      });
     }
     const { userID, otp, email } = req.body;
     if (userID == "" || otp == "") {
@@ -165,9 +191,13 @@ const  varifyOtp = async (req, res) => {
         return res.status(401).json({ msg: "Invalid Otp" });
       }
 
-      var token = jwt.sign({ userId:userID,email: email }, process.env.SECRET_KEY, {
-        expiresIn: 24 * 60 * 60,
-      });
+      var token = jwt.sign(
+        { userId: userID, email: email },
+        process.env.SECRET_KEY,
+        {
+          expiresIn: 24 * 60 * 60,
+        }
+      );
       const updateUser = await prisma.user.update({
         where: {
           userID: userID,
@@ -183,12 +213,15 @@ const  varifyOtp = async (req, res) => {
         },
       });
 
-      return res.cookie(updateUser.userID, token, {
-        path: "/",
-        expires: new Date(Date.now() + 1000 * 1 * 24 * 60 * 60),
-        httpOnly: true,
-        sameSite: "lax",
-      }).status(202).send(email);
+      return res
+        .cookie(updateUser.userID, token, {
+          path: "/",
+          expires: new Date(Date.now() + 1000 * 1 * 24 * 60 * 60),
+          httpOnly: true,
+          sameSite: "lax",
+        })
+        .status(202)
+        .send(email);
     }
   } catch (error) {
     console.log(error);
@@ -251,10 +284,11 @@ const updatePassword = async (req, res) => {
 
 const signin = async (req, res) => {
   try {
-    if(req.rateLimit.remaining <= 1)
-      {
-        return res.status(425).send({message:"Too Many requests, please try again after some minutes"});
-      }
+    if (req.rateLimit.remaining <= 1) {
+      return res.status(425).send({
+        message: "Too Many requests, please try again after some minutes",
+      });
+    }
     const { username, email, password } = req.body;
 
     const user = await prisma.user.findFirst({
@@ -270,26 +304,32 @@ const signin = async (req, res) => {
     console.log(user);
 
     if (!user) {
-      return res.status(401).json({ msg: "Incorrect Credentials or User not found" });
+      return res
+        .status(401)
+        .json({ msg: "Incorrect Credentials or User not found" });
     }
 
-    var token = jwt.sign({ userId:user.userID,email: user.email }, process.env.SECRET_KEY, {
-      expiresIn: 24 * 60 * 60,
-    });
+    var token = jwt.sign(
+      { userId: user.userID, email: user.email },
+      process.env.SECRET_KEY,
+      {
+        expiresIn: 24 * 60 * 60,
+      }
+    );
     console.log(token);
 
     const hashPass = user.password;
     const isVarified = user.isVarified;
     const validPass = bcrypt.compareSync(password, hashPass);
     console.log(validPass);
+    if (!isVarified) {
+      res.status(403).send({ msg: "User is not varified!" });
+    }
 
     if (!validPass) {
       return res.status(401).json({ msg: "Incorrect Credentials" });
     }
 
-    if (!isVarified) {
-      res.status(403).send({ msg: "User is not varified!" });
-    }
 
     res
       .cookie(user.userID, token, {
@@ -304,8 +344,6 @@ const signin = async (req, res) => {
     console.log(error);
   }
 };
-
-
 
 const refreshSignIn = async (req, res) => {
   try {
@@ -341,7 +379,7 @@ const logout = async (req, res) => {
         where: { email: payload.email },
       });
       // console.log(user?.email);
-      if(!user) return res.status(400).send("User not Found");
+      if (!user) return res.status(400).send("User not Found");
       res
         .clearCookie(user?.userID, "", {
           path: "/",
@@ -354,13 +392,11 @@ const logout = async (req, res) => {
     // console.log(req.body.email);
   } catch (error) {
     res.status(500).json({
-      msg:"Server Issue",
-      error
-    })
+      msg: "Server Issue",
+      error,
+    });
   }
 };
-
-
 
 const testing = async (req, res) => {
   const deleteUsers = await prisma.user.deleteMany({
@@ -380,18 +416,26 @@ const testing = async (req, res) => {
   res.json({ msg: "deleted" });
 };
 
-
-const generateUsername=async(req,res)=>{
-  
+const generateUsername = async (req, res) => {
   try {
     const usernames = await generateUniqueUsernames();
     res.status(201).json({ usernames });
   } catch (error) {
-    res.status(500).json({ error: 'Failed to generate username options' });
+    res.status(500).json({ error: "Failed to generate username options" });
   }
-
 };
 
-const authController={signup, signin, logout, varifyOtp , resendOtp, resetPassword, updatePassword, refreshSignIn,generateUsername,testing}
+const authController = {
+  signup,
+  signin,
+  logout,
+  varifyOtp,
+  resendOtp,
+  resetPassword,
+  updatePassword,
+  refreshSignIn,
+  generateUsername,
+  testing,
+};
 
-export default authController
+export default authController;

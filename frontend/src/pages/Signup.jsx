@@ -17,6 +17,8 @@ import baseAddress from "../utils/localhost";
 import { login } from '../redux/login';
 import { getUserData } from '../App';
 import { show } from '../redux/welcome';
+import { v4 as uuidv4 } from 'uuid';
+
 
 
 
@@ -290,9 +292,9 @@ const Signup = () => {
                             </div>
 
                             <div className=' flex gap-2 flex-wrap items-center justify-stretch'>
-                                {Array.from(usrnmList).map(username => <>
-                                    <div key={`${username}`} onClick={() => handleSelect(username)} className=' rounded-xl px-2 cursor-pointer bg-[#b1b390] text-gray-900'>{username}</div>
-                                </>
+                                {Array.from(usrnmList).map(username =>(
+                                     <div key={`${uuidv4}@@${username}`} onClick={() => handleSelect(username)} className=' rounded-xl px-2 cursor-pointer bg-[#b1b390] text-gray-900'>{username}</div>
+                                )
                                 )}
                                 <div className=''>{isLoading ? <SmallLoader /> : <FiRefreshCcw cursor={"pointer"} onClick={() => handleClick()} className=' font-semibold text-xl' />}</div>
                             </div>
