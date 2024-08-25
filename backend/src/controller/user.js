@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import { getLeetCodeData } from "./search.js";
+import CryptoJS from 'crypto-js';
+
 
 const getUser = async (req, res) => {
   const email = req.params?.email;
@@ -154,7 +156,7 @@ const getUserPost = async (req, res) => {
 
 const getNotifications = async (req, res) => {
   const id = req.userId;
-  // console.log("Notification :For id", req.userId);
+ 
 
   try {
     const data = await prisma.notification.findMany({
@@ -240,19 +242,19 @@ const addLC = async (req, res) => {
   try {
     const lcdata= await getLeetCodeData(lcusername);
     console.log(lcdata);
-    
     const user= lcdata.matchedUser
     if(!user){
       res.status(404).send("user not found!");
       return
     }
-
+    const encUsername =  CryptoJS.AES.encrypt(lcusername, process.env.LC_SECRETKEY).toString();
+    
     const data= await prisma.user.update({
       where:{
         userID,
       },
       data:{
-        leetcode: lcusername,
+        leetcode: encUsername,
       }
     });
     console.log(data);

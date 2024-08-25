@@ -136,7 +136,7 @@ function Settings() {
       });
       
       if (res.status == 200) {
-        dispatch(addLeetCodeID(res.data.leetcode));
+        dispatch(addLeetCodeID(lcusername));
         setupdate(false)
       }
 

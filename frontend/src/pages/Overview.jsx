@@ -61,10 +61,11 @@ const Overview = () => {
         let res = [...res1.data, ...res2.data.posts]
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 10);
-
+        console.log(res);
+        
         setUserData(prevUserData => [...prevUserData, ...res]);
 
-        let temp = res.filter(e => 'postId' in e);
+        let temp =  res.filter(e => 'postId' in e);
         let co = temp.length;
         let po = res.length - co;
         setPostOffset(prevOffset => prevOffset + po);
@@ -81,12 +82,13 @@ const Overview = () => {
     setIsLoading(false);
   };
 
+
   useEffect(() => {
-    if (page === 1) {
-      window.scroll(0, 0);
-      getUserOverview(true);
-    } else {
+
+    if (page >1) {
       getUserOverview();
+    } else{
+      getUserOverview(true)
     }
   }, [page]);
 

@@ -70,7 +70,7 @@ const Signin = () => {
             console.log(error);
             if(error.response.status==401){
                 toast.error("Invalid Credentials")
-            }else if(error.response.status==403){
+            }else if(error.response.status==404){
                 toast.error("User doesn't exists. Please Sign Up")
                 Navigate("/signup")
             } 
