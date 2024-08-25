@@ -2,7 +2,6 @@ import prisma from "../../db/db.config.js";
 import zod from "zod";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import { stringify } from "bigint-json";
-import fs from "fs";
 const post = zod.object({
   topic: zod.string().optional(),
   title: zod.string(),
@@ -186,6 +185,43 @@ export const getHotPost = async (req, res) => {
   }
 };
 
+export const deletePost = async(req,res) =>{
+  const userId = req.userId;
+  const id = req.body.id;
+  console.log(id);
+  try{
+    
+    const post = await prisma.post.findFirst({
+      where:{
+        id
+      }
+    })
+    if(post.userId != userId)
+    {
+      return res.status(403).json({
+        msg:'Unautorised'
+      })
+    }
+    console.log(post);
+    const data = await prisma.post.delete({
+      where:{
+        id
+      }
+    });
+    return res.status(201).json({
+      msg:"Success",
+      data
+    })
+  }
+  catch(err){
+    return res.status(500).json({
+      msg:"Server Issue",
+      err
+    });
+  }
+}
+
+
 export const getPopularPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -227,7 +263,7 @@ export const getPopularPosts = async (req, res) => {
     LEFT JOIN "User" u ON u."userID" = p."userId"
     ORDER BY "popularityScore" DESC, p."createdAt" DESC
     LIMIT ${limit} OFFSET ${offset};
-  `;
+`;
 
   
 let posts = JSON.parse(stringify(result));

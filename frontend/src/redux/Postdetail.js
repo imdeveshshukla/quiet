@@ -15,12 +15,21 @@ export const postDetailState = createSlice({
       state.post.comments=[...state.post.comments, action.payload]
       
     },
+    delComment:(state,action)=>{
+      let cmts = state.post.comments;
+      cmts = cmts.filter((cmt)=>{
+        return (cmt?.id !== action.payload)
+      });
+      console.log("Inside Redux");
+      console.log(cmts);
+      state.post.comments = [...cmts];
+    },
     clearPostDetail:(state)=>{
       state.post=null;
     }
   },
 })
 
-export const { setPostDetail,setComment,clearPostDetail} = postDetailState.actions
+export const { setPostDetail,setComment,clearPostDetail,delComment} = postDetailState.actions
 
 export default postDetailState.reducer

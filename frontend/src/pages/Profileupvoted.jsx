@@ -91,7 +91,7 @@ const fetchMoreData = () => {
             <div className='py-8'>
                 {(isSkelton && userPost.length === 0) ? <></> :
                     userPost.map(post => (
-                        <Posts key={uuidv4()} post={post} inRoom={post.subCommunity} room={post.room} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
+                        <Posts key={uuidv4()} post={post} joined={true} inRoom={post.subCommunity} room={post.room} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
                     ))
                 }
             </div>

@@ -17,6 +17,7 @@ import SmoothLoader from '../assets/SmoothLoader';
 import { RiHomeWifiFill } from "react-icons/ri";
 import { CiCircleChevUp } from "react-icons/ci";
 import { CiCircleChevDown } from "react-icons/ci";
+import { BsInfoCircle } from 'react-icons/bs';
 
 
 const Sidenav = () => {
@@ -111,7 +112,7 @@ const Sidenav = () => {
         <div className='p-3 m-2 border-b-2 border-gray-600'>
           <NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/"} className={(e) => { return e.isActive ? 'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'w-full flex rounded items-center gap-2 px-4 py-2' }}><IoHome /><span>Home</span></NavLink>
           <NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/popular"} className={(e) => { return e.isActive ? 'flex w-full rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full rounded items-center gap-2 px-4 py-2' }}><LuArrowUpRightSquare /><span>Popular</span></NavLink>
-          {/* <NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/all"} className={(e) => { return e.isActive ? 'flex w-full  rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full  rounded items-center gap-2 px-4 py-2' }}><HiOutlineChartSquareBar /><span>All</span></NavLink> */}
+          {!isLogin&&<NavLink onClick={()=>dispatch(setShowSideNav(false))} to={"/about/"} className={(e) => { return e.isActive ? 'flex w-full  rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full  rounded items-center gap-2 px-4 py-2' }}><BsInfoCircle /><span>About</span></NavLink>}
         </div>
 
         {isLogin&&<div className='p-3 m-2 border-b-2 border-gray-600'>

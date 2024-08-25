@@ -32,6 +32,7 @@ const Notification = ({setIsNfnOpen}) => {
     }
 
     const getUserNotification = async()=>{
+        
         try {
           const res = await axios.get(baseAddress+"u/notification", { withCredentials: true });
           dispatch(setNotification(res.data.data))

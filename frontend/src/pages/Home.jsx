@@ -71,7 +71,6 @@ const Home = () => {
   }
 
   useEffect(() => {
-    // if (posts.length > 0) return;
     getPost(1);
   }, [posts.length]);
 
@@ -81,18 +80,6 @@ const Home = () => {
     dispatch(increment());
 
   };
-  //     if(posts.length > 0)return;
-  //     getPost();
-  //   }, []);
-
-  //   const fetchMoreData = () => {
-  //     if (isLoading || !hasMore) return;
-  //     console.clear();
-  //     setPage((prevPages)=>prevPages+1);
-  //     getPost();
-  // // >>>>>>> master
-
-
   return (
     <div className=' min-h-screen xs:pl-8 sm:pl-16'>
       <InfiniteScroll

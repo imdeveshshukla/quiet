@@ -59,6 +59,8 @@ export const getUser = async (req, res) => {
         createdAt: true,
         leetcode: true,
         showLC: true,
+        showCf:true,
+        codeforces:true,
         _count: {
           select: {
             posts: true,

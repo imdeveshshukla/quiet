@@ -114,6 +114,7 @@ const Overview = () => {
                       key={`post-${e.id}-${uuidv4()}`}
                       inRoom={e.subCommunity}
                       room={e.room}
+                      joined={true}
                       topic={e.topic}
                       id={e.id}
                       title={e.title}
