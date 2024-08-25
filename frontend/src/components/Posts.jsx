@@ -271,8 +271,8 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
             <span>{countComment ? countComment : 0}</span>
           </div>
           {!room?.privateRoom?
-          <div className='rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>
-            <RiShareForwardLine onClick={()=> shareFunction(id,room)} className='text-2xl' />
+          <div onClick={()=> shareFunction(id,room)} className='rounded-3xl flex gap-2 items-start justify-center p-2 bg-amber-100 hover:text-amber-500 cursor-pointer'>
+            <RiShareForwardLine  className='text-2xl' />
             <span>Share</span>
           </div>
             :<></>}
