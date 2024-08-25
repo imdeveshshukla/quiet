@@ -3,8 +3,8 @@ import { CircularProgressbar, buildStyles } from 'react-circular-progressbar';
 import 'react-circular-progressbar/dist/styles.css';
 import Greencheck from '../assets/Greencheck';
 import { useSelector } from 'react-redux';
-import { SlBadge } from "react-icons/sl";
-import { FaRankingStar } from "react-icons/fa6";
+import toast from 'react-hot-toast';
+
 import { FaTrophy } from "react-icons/fa"
 import { SiLeetcode } from 'react-icons/si';
 import { LeetCodeSkelton } from './Postskelton';
@@ -22,20 +22,6 @@ const LeetCode = () => {
     const [lcdata, setlcdata] = useState({})
     const [isLoading, setisLoading] = useState(false)
 
-
-    const keysToKeep = [
-        "acceptanceRate",
-        "contributionPoints",
-        "easySolved",
-        "hardSolved",
-        "mediumSolved",
-        "ranking",
-        "totalEasy",
-        "totalHard",
-        "totalMedium",
-        "totalQuestions",
-        "totalSolved"
-    ];
 
     const {
         acceptanceRate,
@@ -71,21 +57,14 @@ const LeetCode = () => {
             
             
             let res = await axios.post(`${baseAddress}search/getLCdata/`, {username: encUsername});
-
             
-            if (res.data.status == "success") {
-                const lcdata = Object.keys(res.data)
-                    .filter(key => keysToKeep.includes(key))
-                    .reduce((obj, key) => {
-                        obj[key] = res.data[key];
-                        return obj;
-                    }, {});
-          
-                setlcdata(lcdata);
+            if (res.status==200) {
+                
+                setlcdata(res.data);
 
             } else {
-                console.log("User Not Found");
-                seterror("Invalid Username!")
+                console.log("Some error occured!");
+                toast.error("Some error occured!")
 
             }
 
@@ -157,7 +136,7 @@ const LeetCode = () => {
 
                 </div>
 
-                <div style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
+                <div  style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' }}>
                     <CircularProgressbar
                         value={easySolvedPercentage - easySolvedPercentage / 8}
                         styles={buildStyles({
@@ -209,7 +188,7 @@ const LeetCode = () => {
                     <CircularProgressbar
                         value={hardPercentage - easyPercentage / 8}
                         styles={buildStyles({
-                            pathColor: '#512b2b', // Red for Hard
+                            pathColor: '#512b2b', 
                             trailColor: 'transparent',
                             pathTransitionDuration: 0.5,
                         })}
@@ -224,7 +203,7 @@ const LeetCode = () => {
                     <CircularProgressbar
                         value={hardSolvedPercentage - easySolvedPercentage / 8}
                         styles={buildStyles({
-                            pathColor: '#f63737', // Red for Hard
+                            pathColor: '#f63737', 
                             trailColor: 'transparent',
                             pathTransitionDuration: 0.5,
                         })}
@@ -235,10 +214,7 @@ const LeetCode = () => {
 
 
 
-
-
-                {/* Display the text in the center */}
-                <div className="progress-text " style={{ position: 'absolute', top: '50%', left: '50%', translate: '-50% -50%', color: '#fff', textAlign: 'center' }}>
+                <div  className="progress-text  cursor-default" style={{ position: 'absolute', top: '50%', left: '50%', translate: '-50% -50%', color: '#fff', textAlign: 'center' }}>
                     <div className=' flex items-baseline text-gray-600'> <span className=' text-2xl font-semibold'>{showAccRate ? leftPart : totalSolved || 0}</span> <span className=' font-semibold text-sm'>{showAccRate ? `.${rightPart}%` : `/${totalQuestions || 0}`}</span></div>
                     <div className=' flex items-center gap-1 justify-center'> {!showAccRate && <span><Greencheck /></span>} <span className='text-black'>
                         {showAccRate ? 'Acceptance' : 'Solved'}</span></div>

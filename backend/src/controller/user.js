@@ -2,6 +2,7 @@ import prisma from "../../db/db.config.js";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import uploadOnCloudinary from "../utils/cloudinary.js";
+import { getLeetCodeData } from "./search.js";
 
 const getUser = async (req, res) => {
   const email = req.params?.email;
@@ -237,6 +238,15 @@ const addLC = async (req, res) => {
   const  {lcusername}= req.body;
   
   try {
+    const lcdata= await getLeetCodeData(lcusername);
+    console.log(lcdata);
+    
+    const user= lcdata.matchedUser
+    if(!user){
+      res.status(404).send("user not found!");
+      return
+    }
+
     const data= await prisma.user.update({
       where:{
         userID,

@@ -1,6 +1,7 @@
 import prisma from "../../db/db.config.js";
 import CryptoJS from "crypto-js";
-
+import axios from "axios";
+import { LeetCode } from "leetcode-query";
 
 export const getUsers = async (req, res) => {
   try {
@@ -23,7 +24,7 @@ export const getUsers = async (req, res) => {
       take: limit,
     });
 
-    let rooms= await prisma.rooms.findMany({
+    let rooms = await prisma.rooms.findMany({
       where: {
         title: {
           contains: key,
@@ -37,10 +38,9 @@ export const getUsers = async (req, res) => {
       },
       take: limit,
     });
-    res.status(200).send({users, rooms });
+    res.status(200).send({ users, rooms });
   } catch (error) {
     console.log(error);
-    
   }
 };
 
@@ -199,29 +199,113 @@ export const getUserUpvotes = async (req, res) => {
 };
 
 export const getLCdata = async (req, res) => {
+  const encryptUsername = req.body.username;
 
-
-  const encryptUsername  = req.body.username;
-  console.log(encryptUsername);
-
-  
   try {
-    
-      
-      const bytes =  CryptoJS.AES.decrypt(encryptUsername, process.env.LC_SECRETKEY);
-      const username = bytes.toString(CryptoJS.enc.Utf8);
-    console.log("username", username);
-    console.log("sk", process.env.LC_SECRETKEY);
-    
-   
-    
-    let data = await fetch(
-      `https://leetcode-stats-api.herokuapp.com/${username}`
+    const bytes = CryptoJS.AES.decrypt(
+      encryptUsername,
+      process.env.LC_SECRETKEY
     );
-    let result = await data.json();
-    console.log(result);
+    const username = bytes.toString(CryptoJS.enc.Utf8);
+    console.log("LC_username", username);
+
+    const data =await getLeetCodeData(username);
     
-    res.status(202).send(result);
+
+    const user = data.matchedUser;
+
+    if (!user) {
+      res.status(404).send({ status: "error" });
+    }
+
+    const solved = user.submitStats.acSubmissionNum;
+
+    const totalSolved = solved[0].count;
+    const easySolved = solved[1].count;
+    const mediumSolved = solved[2].count;
+    const hardSolved = solved[3].count;
+
+    const succSubmission = solved[0].submissions;
+    const totalSubmission = user.submitStats.totalSubmissionNum[0].submissions;
+    const acceptanceRate = ((succSubmission / totalSubmission) * 100).toFixed(
+      2
+    );
+
+    const contributionPoints = user.contributions.points;
+    const ranking = user.profile.ranking;
+
+    const allQuestions = data.allQuestionsCount;
+
+    const totalQuestions = allQuestions[0].count;
+    const totalEasy = allQuestions[1].count;
+    const totalMedium = allQuestions[2].count;
+    const totalHard = allQuestions[3].count;
+
+    res.status(200).send({
+      ranking,
+      totalQuestions,
+      totalEasy,
+      totalMedium,
+      totalHard,
+      easySolved,
+      mediumSolved,
+      hardSolved,
+      totalSolved,
+      acceptanceRate,
+      contributionPoints,
+    });
+  } catch (error) {
+    console.log(error);
+  }
+};
+
+export const getLeetCodeData = async (username) => {
+  try {
+    const query = `
+    {
+      allQuestionsCount {
+            difficulty
+            count
+          }
+      matchedUser(username: "${username}") {
+
+        submitStats {
+          acSubmissionNum {
+            difficulty
+            count
+            submissions
+          }
+          totalSubmissionNum {
+            difficulty
+            count
+            submissions
+          }
+        }
+        contributions{
+          points
+          questionCount
+          testcaseCount
+        } 
+        profile {
+          ranking
+          reputation          
+        }
+        
+      }
+      
+    }`;
+
+    const response = await axios.post(
+      "https://leetcode.com/graphql",
+      { query },
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+    let data = response.data.data;
+    return data;
   } catch (error) {
     console.log(error);
   }
