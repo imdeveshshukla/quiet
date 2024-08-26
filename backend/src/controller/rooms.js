@@ -25,7 +25,14 @@ export const CreateRoom = async (req,res)=>{
     console.log(`${req.file}`);
     try{
         if(req.file){ 
-            imgUrl = await uploadOnCloudinary(req.file.path);
+            try{
+                imgUrl = await uploadOnCloudinary(req.file.path);
+            }
+            catch(err){
+                return res.status(403).json({
+                    msg:err.message
+                })
+            }
         }
         console.log("Room Image URL "+imgUrl);
         await prisma.$transaction(async(tx)=>{
@@ -77,17 +84,19 @@ export const updateRoom = async(req,res)=>{
     const userId = req.userId;
     
     const title = data.title;
+
+    console.log(data.newTitle);
+    console.log(title);
     try{
-        console.log("Inside UpdateRoom");
-        console.log(title);
+        // console.log("Inside UpdateRoom");
         const room = await prisma.rooms.findFirst({
             where:{
                 title
             }
         })
         const temp = await prisma.rooms.findMany();
-        console.log(temp);
-        console.log(room);
+        // console.log(temp);
+        // console.log(room);
         if(!room?.id)return res.status(404).json({msg:"Room Not Found!"});
 
 
@@ -100,9 +109,9 @@ export const updateRoom = async(req,res)=>{
             })
         }
         let imgUrl = null,bgImgUrl = null;
-        console.log("data\n");
-        console.log(data);
-        if(req.file?.fieldname == 'roomImg')
+        // console.log("data\n");
+        console.log(req.file);
+        if(req.file && req.file?.fieldname === 'roomImg')
         {
             
             try {
@@ -116,28 +125,29 @@ export const updateRoom = async(req,res)=>{
             }
             
         }
-        if(req.file?.fieldname == 'bgImg') 
+        if(req.file && req.file?.fieldname === 'bgImg') 
         {
             try{
-                console.log("Uploading bgImg.......");
+                // console.log("Uploading bgImg.......");
                 bgImgUrl = await uploadOnCloudinary(req.file.path);
             } catch (error) {
-                console.log("Inside bgImg chatch");
+                // console.log("Inside bgImg chatch");
                 // fs.unlinkSync(req.file.path);    //Issue need to resolve
+                console.log(error);
                 return res.status(400).json({
                     msg: error.message,
                     error
                 })
-        }
+            }
         }    
         console.log(bgImgUrl);
-        console.log(`${JSON.stringify(req.file.path)} = ${bgImgUrl}`);
+        // console.log(`${JSON.stringify(req.file.path)} = ${bgImgUrl}`);
         const updatedRoom = await prisma.rooms.update({
             where:{
                 id:room.id
             },
             data:{
-                title: data.title || room.title,
+                title: data.newTitle || room.title,
                 desc: data.desc || room.desc,
                 img: imgUrl || room.img,
                 bgImg: bgImgUrl || room.bgImg
@@ -151,12 +161,12 @@ export const updateRoom = async(req,res)=>{
     }
     catch(err)
     {
-        console.log("Paht ",req.file?.path);
-        
+
         if(req.file?.path)fs.unlink(req.file.path,(err)=>
             console.log("Error While Deleting img = ",err)
         );
-
+        console.log("error");
+        console.log(err);
         return res.status(500).json({
             msg:"Database/Server Error",    
             error:err.message
@@ -619,15 +629,21 @@ export const sendJoiningRequest = async(req,res)=>{
         if(!room)return res.status(404).json({msg:"Room Not Found"});
         if(room.CreatorId != userID)return res.status(401).json({msg:"You are not authorised"});
         let found  =false;
-
+        let waiting = false;
         // console.log("Above ForEach Bloco");
         room.UsersEnrolled.forEach((rooms)=>{
             if(rooms.userId === user.userID){
-                found = true;
+                if(rooms.joined)found = true;
+                else waiting = true; 
             }
         })
-        // console.log("We Have found ",found)
-        if(found)
+        // console.log(found+" "+waiting)
+        if(found){
+            return res.status(200).json({
+                msg:"User Already Present"
+            })
+        }
+        if(waiting)
         {
             const enrollment = await prisma.enrolledRooms.update({
                 where:{

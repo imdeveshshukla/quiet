@@ -108,7 +108,7 @@ export const fetchUsers = async ({ debouncedSearch, setUsers, setRooms, setLoadi
       
 
         setUsers(res.data.users)
-        setRooms(res.data.rooms)
+        if(setRooms)setRooms(res.data.rooms)
     } catch (error) {
         console.error('Error fetching users:', error);
     }

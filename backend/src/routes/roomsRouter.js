@@ -8,6 +8,7 @@ const roomsRouter = express.Router()
 roomsRouter.post('/create',verifyToken,upload.single('roomImg'),CreateRoom);
 roomsRouter.post('/updatedp',verifyToken,upload.single('roomImg'),updateRoom);
 roomsRouter.post('/updatebgImg',verifyToken,upload.single('bgImg'),updateRoom);
+roomsRouter.post('/update',verifyToken,updateRoom);
 roomsRouter.post('/delete',verifyToken,deleteRoom);
 
 

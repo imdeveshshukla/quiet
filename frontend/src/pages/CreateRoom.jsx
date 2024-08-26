@@ -45,24 +45,12 @@ export default function CreateRoom({showRoom1,setShow,setShow2,heading})
             'Content-Type': 'multipart/form-data',
           },
         });
-        if(res.status == 201)
-        {
-          dispatch(addOwnedRoom(res.data.newRoom));
-          toast.success("Room Created Successufully");
-        }
-        else{
-          // toast.dismiss();
-          // toast.error("Error :"+res.data.msg);
-          toast.error("Server Issue");
-          
-        }
-        
+        dispatch(addOwnedRoom(res.data.newRoom));
+        toast.success("Room Created Successufully");
       }
       catch(e)
       {
-        // toast.dismiss();
-        // toast.error(e)
-        toast.error("Got Some Error");
+        toast.error(e.response.data.msg);
         console.log("IN Catch = "+e);
       }
       finally{
