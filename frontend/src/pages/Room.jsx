@@ -35,6 +35,7 @@ import { MdDelete } from "react-icons/md";
 import banner from '../assets/banner.png'
 import { BiEdit } from "react-icons/bi";
 import { CiEdit } from "react-icons/ci";
+import roomDp from '../assets/roomdp.jpg'
 
 
 
@@ -227,6 +228,9 @@ const Room = function () {
     setLoader1(true);
     const bgImg = e.target.files[0];
     const formData = new FormData();
+    if(!bgImg){
+      return;
+    }
     formData.append('title', title);
     formData.append('bgImg', bgImg);
     try {
@@ -289,7 +293,7 @@ const Room = function () {
       {showChangeTitleBox && <AddMemBox setShow={setBox} id={roomDetail?.title} update={roomDetail?.title}/>}
       <div className="w-full">
         <div className=' flex flex-col  gap-4 xxs:gap-2 sm:gap-4 2_sm:gap-6'>
-          <div className='border-black border-2 relative shadow-lg shadow-slate-300 rounded-2xl  h-36 xs:h-44 sm:h-48 m-4  '>
+          <div className='border-black border-2 relative shadow-lg bg-gray-200 shadow-slate-300 rounded-2xl  h-36 xs:h-44 sm:h-48 m-4  '>
             <img className=' w-full h-full object-cover rounded-2xl' src={roomDetail?.bgImg || banner} alt="backgroudImage" />
             {(isOwner) && 
               <button onClick={() => ref.current?.click()}
@@ -297,9 +301,9 @@ const Room = function () {
                 {loader1?<SmallLoader/>:<PiCameraPlusLight className=" text-2xl " />}
                 <input type="file" onChange={(e) => updateBgImg(e)} name="bgImg" accept="image/*" ref={ref} id="" hidden />
               </button>}
-            <div className=' absolute  left-6 sm:left-14 bottom-0 border-4  bg-blue-600 translate-y-1/2  h-32 w-32 xs:h-40 xs:w-40 rounded-full  '>
+            <div className=' absolute  left-6 sm:left-14 bottom-0 border-4  bg-gray-200 translate-y-1/2  h-32 w-32 xs:h-40 xs:w-40 rounded-full  '>
 
-              {loader2 ? <div className="h-full w-full rounded-full flex items-center justify-center bg-[#fff5] backdrop-blur-lg"><SmallLoader /></div> : <img className=' h-full w-full object-cover rounded-full' src={roomDetail?.img || NotUploaded} alt="Image Not Uploaded" />}
+              {loader2 ? <div className="h-full w-full rounded-full flex items-center justify-center bg-gray-200 "><SmallLoader /></div> : <img className=' h-full w-full object-cover rounded-full' src={roomDetail?.img || roomDp} alt="Image Not Uploaded" />}
               <input onChange={(e) => handleDpUpdate(e)} accept='image/*' ref={dpref} type="file" name="media" id="media" hidden />
               {isOwner && (<button onClick={() => dpref.current?.click()} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight /></button>)}
 

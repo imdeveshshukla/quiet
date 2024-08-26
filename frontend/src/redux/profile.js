@@ -15,6 +15,11 @@ export const profile = createSlice({
       if(state.profileInfo)
       state.profileInfo.bgImg= action.payload
     },
+    setDp:(state,action)=>{
+      if(state.profileInfo){
+        state.profileInfo.dp= action.payload
+      }
+    },
     
     clearProfileInfo:(state)=>{
         state.profileInfo=null;
@@ -22,6 +27,6 @@ export const profile = createSlice({
   },
 })
 
-export const { setProfileInfo,setBgImg,clearProfileInfo} = profile.actions
+export const { setProfileInfo,setBgImg,setDp,clearProfileInfo} = profile.actions
 
 export default profile.reducer

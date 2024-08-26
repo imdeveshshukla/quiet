@@ -5,6 +5,9 @@ import { useDispatch } from 'react-redux';
 import { hide } from '../redux/welcome'
 import rituraj from '../assets/rituraj.png'
 import devesh from '../assets/devesh.png'
+import { GrLinkedin } from "react-icons/gr";
+
+
 
 const About = () => {
     return <>
@@ -53,14 +56,14 @@ const About = () => {
                     <div className='flex items-center gap-4'>
                         <img className='h-16 w-16 rounded-full bg-white' src={devesh} alt="" />
                         <div className=' flex flex-col'>
-                            <span className='text-base font-roboto font-medium'>Devesh Shukla</span>
+                            <span  className='text-base justify-end flex font-roboto font-medium'><a href='https://www.linkedin.com/in/imdeveshshukla/' target='blank' className='flex items-center cursor-pointer gap-2 hover:text-blue-600'>Devesh Shukla <GrLinkedin className=' text-blue-800 text-lg'/></a></span >
                             <span className=' text-xs text-gray-600 '>M.C.A, Intitute of engineering and technology, Lucknow</span>
                         </div>
                     </div>
                     <div className='flex items-center gap-4'>
                         <img className='h-16 w-16 rounded-full bg-white' src={rituraj} alt="" />
                         <div className=' flex flex-col'>
-                            <span className='text-base font-roboto font-medium'>Rituraj Singh</span>
+                            <span className='text-base justify-end  flex  font-roboto font-medium'><a href='https://www.linkedin.com/in/rituraj67/' target='blank' className='flex items-center cursor-pointer gap-2 hover:text-blue-600'>Rituraj Singh <GrLinkedin className=' text-blue-800 text-lg'/></a></span >
                             <span className=' text-xs text-gray-600 '>M.C.A,Intitute of engineering and technology, Lucknow</span>
                         </div>
                     </div>

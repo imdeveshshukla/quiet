@@ -83,7 +83,7 @@ export const getAllComment = async (req,res)=>{
                 post:true,
             },
             orderBy:{
-                id:"desc"
+                createdAt:"desc"
             }
         });
         res.status(201).json({

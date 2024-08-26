@@ -133,11 +133,11 @@ const Navbar = () => {
         {isLogin ? <>
           <div className="relative flex items-center gap-8" ref={dropdownRef} >
 
-            <button onClick={handleToggle} className="flex items-center rounded-full border-2 border-black hover:border-white focus:outline-none">
+            <button onClick={handleToggle} className="flex w-12 h-12 overflow-hidden items-center rounded-full border-2  border-t-orange-600 border-b-green-900 hover:border-blue-500 focus:outline-none">
               <img
                 src={userInfo && userInfo.dp ? userInfo.dp : dp}
                 alt="Profile"
-                className="w-10 h-10 rounded-full   bg-white"
+                className="  object-cover bg-gray-200"
               />
             </button>
             {isOpen && (

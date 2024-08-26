@@ -14,6 +14,7 @@ import baseAddress from '../utils/localhost';
 import LeetCode from './LeetCode';
 import LeetCodeLogo from '../assets/LeetCodeLogo'
 import Codeforces from './Codeforces';
+import { setBgImg, setDp } from '../redux/profile';
 
 
 axios.defaults.withCredentials = true
@@ -109,11 +110,15 @@ const ProfileLayout = ({ isLoading, user }) => {
       <div className='min-h-[calc(100vh-74.46px)] xs:pl-8 sm:pl-16'>
         {isLoading ? <ProfileSkelton /> : <><div className='relative flex items-center gap-3 xxs:gap-6 px-2 xxs:px-4 py-6'>
           <div className='relative  rounded-full'>
+
+            <div className=' rounded-full border-2 border-[#707416ee] overflow-hidden w-32 h-32 xs:w-36 xs:h-36'>
             <img
               src={(userInfo?.username === user?.username && userInfo?.dp) ? userInfo.dp : user?.dp ? user.dp : dp}
               alt="Profile"
-              className="  w-32 h-32 xs:w-36 xs:h-36 rounded-full bg-white"
+              className=" object-cover bg-white"
             />
+
+            </div>
             {userInfo?.username === user.username && <button onClick={() => setIsOpen(true)} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight /></button>}
           </div>
           <div className='flex flex-col gap-1'>
@@ -168,6 +173,10 @@ const ProfileLayout = ({ isLoading, user }) => {
 export default ProfileLayout;
 
 export const handleDpChange = async ({dpLoc, setBtnLoading, dispatch,setIsOpen}) => {
+
+  if(!dpLoc){
+    return;
+  }
   const formData = new FormData();
   formData.append('profileImg', dpLoc);
   setBtnLoading(true);
@@ -180,7 +189,10 @@ export const handleDpChange = async ({dpLoc, setBtnLoading, dispatch,setIsOpen})
     });
 
     if (res.status == 202) {
+      console.log(res);
+      
       dispatch(setUserInfo(res.data));
+      dispatch(setDp(res.data.dp))
       toast.success("Profile Picture Updated !")
       setIsOpen(false);
     }
