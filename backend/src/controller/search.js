@@ -5,7 +5,7 @@ import axios from "axios";
 export const getUsers = async (req, res) => {
   try {
     const { key } = req.query;
-    console.log(req.query);
+    // console.log(req.query);
 
     let limit = 3;
     let users = await prisma.user.findMany({
@@ -46,7 +46,7 @@ export const getUsers = async (req, res) => {
 export const getUser = async (req, res) => {
   try {
     const { key } = req.query;
-    console.log(req.query);
+    // console.log(req.query);
 
     let user = await prisma.user.findUnique({
       where: {
@@ -71,7 +71,7 @@ export const getUser = async (req, res) => {
         },
       },
     });
-    console.log(user);
+    // console.log(user);
 
     res.status(200).send(user);
   } catch (error) {}
@@ -81,7 +81,7 @@ export const getUserPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = parseInt(req.query.offset) || (page - 1) * limit;
-  console.log(page, offset);
+  // console.log(page, offset);
   const { userID, username } = req.query;
 
   try {
@@ -120,7 +120,7 @@ export const getUserComments = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = parseInt(req.query.offset) || (page - 1) * limit;
-  console.log(page, offset);
+  // console.log(page, offset);
   const { userID, username } = req.query;
 
   try {
@@ -207,7 +207,7 @@ export const getLCdata = async (req, res) => {
       process.env.LC_SECRETKEY
     );
     const username = bytes.toString(CryptoJS.enc.Utf8);
-    console.log("LC_username", username);
+    // console.log("LC_username", username);
 
     const data =await getLeetCodeData(username);
     
