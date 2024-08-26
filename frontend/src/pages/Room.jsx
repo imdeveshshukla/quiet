@@ -33,6 +33,8 @@ import { roomsApi, useGetRoomDetailsQuery } from "./RoomApis";
 import { MdExitToApp } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
 import banner from '../assets/banner.png'
+import { BiEdit } from "react-icons/bi";
+import { CiEdit } from "react-icons/ci";
 
 
 
@@ -67,6 +69,8 @@ const Room = function () {
   const [privateRoom, setPrivateRoom] = useState(true);
   const dropdownRef = useRef(null);
   const [isOpen, setisOpen] = useState(false);
+
+  const [showChangeTitleBox,setBox] = useState(false);
   function handleToggle() {
     setisOpen((isOpen) => !isOpen)
   }
@@ -277,12 +281,12 @@ const Room = function () {
     };
   }, []);
 
-  // console.log(roomDetail?.CreatorId + "==" + userData?.userID+" === ");
 
   return (
     <>
       {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP} roomTitle={title} setPost={setPost} />}
       {showAddMem && <AddMemBox setShow={setShowAddMem} id={title} />}
+      {showChangeTitleBox && <AddMemBox setShow={setBox} id={roomDetail?.title} update={roomDetail?.title}/>}
       <div className="w-full">
         <div className=' flex flex-col  gap-4 xxs:gap-2 sm:gap-4 2_sm:gap-6'>
           <div className='border-black border-2 relative shadow-lg shadow-slate-300 rounded-2xl  h-36 xs:h-44 sm:h-48 m-4  '>
@@ -302,7 +306,7 @@ const Room = function () {
             </div>
           </div>
           <div className='flex items-center  justify-end pr-8   w-full text-center text-lg xxs:text-2xl xs:text-3xl font-bold'>
-            <img className=" w-7 xxs:w-8 xs:w-9 rounded-l-lg " src={q} alt="" /><span className=" bg-white font-ubuntu rounded-r-lg px-1">{title}</span>
+            <img className=" w-7 xxs:w-8 xs:w-9 rounded-l-lg " src={q} alt="" /><span className=" bg-white font-ubuntu rounded-r-lg px-1">{roomDetail?.title}</span>
           </div>
           <div className="flex items-center  justify-end pr-8 gap-2   w-full">
             {
@@ -341,14 +345,25 @@ const Room = function () {
                 {isOpen && (
                   <div className="absolute right-0 top-10  bg-white rounded-md shadow-lg z-10">
                     <ul className=" bg-black rounded-md ">
+                      {isOwner ? <>
+                      <li className=" text-white rounded-md hover:bg-gray-700">
+                        <button onClick={() => deleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
+                            <span>Delete</span> <MdDelete />
+                          </button>
+                      </li>
+                      <hr/>
+                      <li className=" text-white rounded-md hover:bg-gray-700">
+                        <button onClick={() => setBox(true)} to={"/"} className="px-4 py-1 flex items-center m-auto gap-3 ">
+                            <span className="m-auto text-center">Title</span> <CiEdit />
+                          </button>
+                      </li>
+                      </>:<>
                       <li className=" text-white hover:bg-grey">
                         <button onClick={() => deleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
-                          {isOwner ? <>
-                            <span>Delete</span> <MdDelete />
-                          </> : <>
                             <span>Leave</span> <MdExitToApp />
-                          </>}</button>
+                          </button>
                       </li>
+                      </>}
                     </ul>
 
                   </div>
