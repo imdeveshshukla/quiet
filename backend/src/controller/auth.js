@@ -305,7 +305,7 @@ const signin = async (req, res) => {
 
     if (!user) {
       return res
-        .status(401)
+        .status(404)
         .json({ msg: "Incorrect Credentials or User not found" });
     }
 
@@ -323,7 +323,7 @@ const signin = async (req, res) => {
     const validPass = bcrypt.compareSync(password, hashPass);
     console.log(validPass);
     if (!isVarified) {
-      res.status(403).send({ msg: "User is not varified!" });
+      res.status(404).send({ msg: "User is not varified!" });
     }
 
     if (!validPass) {

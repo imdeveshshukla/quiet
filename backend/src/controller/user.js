@@ -3,6 +3,8 @@ import jwt from "jsonwebtoken";
 import bcrypt from "bcrypt";
 import uploadOnCloudinary from "../utils/cloudinary.js";
 import { getLeetCodeData } from "./search.js";
+import CryptoJS from 'crypto-js';
+
 
 const getUser = async (req, res) => {
   const email = req.params?.email;
@@ -18,6 +20,7 @@ const getUser = async (req, res) => {
         bio: true,
         createdAt: true,
         dp: true,
+        bgImg:true,
         email: true,
         isVarified: true,
         userID: true,
@@ -115,6 +118,29 @@ const uploadImg = async (req, res) => {
   }
 };
 
+const updateBg = async(req,res)=>{
+  let imgurl = null;
+  const userID = req.userId;
+
+  if (req.file) {
+    imgurl = await uploadOnCloudinary(req.file.path);
+    
+  }
+  try {
+    const user = await prisma.user.update({
+      where: {
+        userID,
+      },
+      data: {
+        bgImg: imgurl,
+      },
+    });
+    res.status(202).json(user);
+  } catch (error) {
+    res.status(403).send(error);
+  }
+}
+
 const getUserPost = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -154,7 +180,7 @@ const getUserPost = async (req, res) => {
 
 const getNotifications = async (req, res) => {
   const id = req.userId;
-  // console.log("Notification :For id", req.userId);
+ 
 
   try {
     const data = await prisma.notification.findMany({
@@ -240,19 +266,19 @@ const addLC = async (req, res) => {
   try {
     const lcdata= await getLeetCodeData(lcusername);
     console.log(lcdata);
-    
     const user= lcdata.matchedUser
     if(!user){
       res.status(404).send("user not found!");
       return
     }
-
+    const encUsername =  CryptoJS.AES.encrypt(lcusername, process.env.LC_SECRETKEY).toString();
+    
     const data= await prisma.user.update({
       where:{
         userID,
       },
       data:{
-        leetcode: lcusername,
+        leetcode: encUsername,
       }
     });
     console.log(data);
@@ -361,6 +387,6 @@ const userController = {
   sendNotification,
   addLC,
   setLcVisibility,
-  
+  updateBg
 };
 export default userController;

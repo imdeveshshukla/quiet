@@ -32,6 +32,8 @@ import ForbiddenPage from "./ForbiddenPage";
 import { roomsApi, useGetRoomDetailsQuery } from "./RoomApis";
 import { MdExitToApp } from "react-icons/md";
 import { MdDelete } from "react-icons/md";
+import banner from '../assets/banner.png'
+
 
 
 
@@ -245,6 +247,9 @@ const Room = function () {
   const handleDpUpdate = async (e) => {
     setLoader2(true);
     const roomImg = e.target.files[0];
+    if(!roomImg){
+      return;
+    }
     const formData = new FormData();
     formData.append('title', title);
     formData.append('roomImg', roomImg);
@@ -284,13 +289,13 @@ const Room = function () {
       <div className="w-full">
         <div className=' flex flex-col  gap-4 xxs:gap-2 sm:gap-4 2_sm:gap-6'>
           <div className='border-black border-2 relative shadow-lg shadow-slate-300 rounded-2xl  h-36 xs:h-44 sm:h-48 m-4  '>
-            <img className=' w-full h-full object-cover rounded-2xl' src={roomDetail?.bgImg || bg} alt="backgroudImage" />
-            {(isOwner) && (loader1 ? <div className="absolute bottom-0.5 right-2"><SmoothLoader /></div> :
+            <img className=' w-full h-full object-cover rounded-2xl' src={roomDetail?.bgImg || banner} alt="backgroudImage" />
+            {(isOwner) && 
               <button onClick={() => ref.current?.click()}
                 className="absolute flex text-sm font-bold bottom-2 bg-slate-400 right-2 rounded-full p-1 border-2  hover:bg-gray-600">
-                <PiCameraPlusLight className=" text-2xl " />
+                {loader1?<SmallLoader/>:<PiCameraPlusLight className=" text-2xl " />}
                 <input type="file" onChange={(e) => updateBgImg(e)} name="bgImg" accept="image/*" ref={ref} id="" hidden />
-              </button>)}
+              </button>}
             <div className=' absolute  left-6 sm:left-14 bottom-0 border-4  bg-blue-600 translate-y-1/2  h-32 w-32 xs:h-40 xs:w-40 rounded-full  '>
 
               {loader2 ? <div className="h-full w-full rounded-full flex items-center justify-center bg-[#fff5] backdrop-blur-lg"><SmallLoader /></div> : <img className=' h-full w-full object-cover rounded-full' src={roomDetail?.img || NotUploaded} alt="Image Not Uploaded" />}

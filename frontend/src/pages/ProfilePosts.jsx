@@ -48,7 +48,7 @@ const ProfilePosts = () => {
                 },
                 withCredentials: true,
             });
-            console.log(res);
+           
             
 
             if (res.status === 200) {

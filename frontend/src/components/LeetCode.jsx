@@ -51,10 +51,9 @@ const LeetCode = () => {
 
         setisLoading(true)
         try {
-            const encUsername = CryptoJS.AES.encrypt(user.leetcode, import.meta.env.VITE_LC_SECRETKEY).toString();
+            // const encUsername = CryptoJS.AES.encrypt(user.leetcode, import.meta.env.VITE_LC_SECRETKEY).toString();
             
-
-            let res = await axios.post(`${baseAddress}search/getLCdata/`, {username: encUsername});
+            let res = await axios.post(`${baseAddress}search/getLCdata/`, {username: user.leetcode});
             
             if (res.status==200) {
                 

@@ -56,6 +56,7 @@ export const getUser = async (req, res) => {
         userID: true,
         username: true,
         dp: true,
+        bgImg:true,
         createdAt: true,
         leetcode: true,
         showLC: true,
