@@ -117,6 +117,29 @@ const uploadImg = async (req, res) => {
   }
 };
 
+const updateBg = async(req,res)=>{
+  let imgurl = null;
+  const userID = req.userId;
+
+  if (req.file) {
+    imgurl = await uploadOnCloudinary(req.file.path);
+    
+  }
+  try {
+    const user = await prisma.user.update({
+      where: {
+        userID,
+      },
+      data: {
+        bgImg: imgurl,
+      },
+    });
+    res.status(202).json(user);
+  } catch (error) {
+    res.status(403).send(error);
+  }
+}
+
 const getUserPost = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
@@ -363,6 +386,6 @@ const userController = {
   sendNotification,
   addLC,
   setLcVisibility,
-  
+  updateBg
 };
 export default userController;
