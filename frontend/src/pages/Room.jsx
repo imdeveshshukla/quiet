@@ -96,7 +96,6 @@ const Room = function () {
   }
 
   async function joinRoom() {
-    // console.log("Code For Joining the room");
     try {
       setisLoading2(true)
       const res = await axios.post(`${baseAddress}rooms/join`, {
@@ -104,8 +103,6 @@ const Room = function () {
         Username: userData?.username
       })
       if (res.status == 200) {
-        console.clear()
-        // console.log(res?.data?.room);
         dispatch(addNewRoom(res?.data?.room));
         refresh();
 

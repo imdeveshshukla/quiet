@@ -274,7 +274,7 @@ const Signup = () => {
 
                         {otpsent ? <><div className=' flex flex-col gap-5'><div className='relative flex flex-col justify-center items-center'>
                             <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdPassword className=' text-xl' /></span>
-                            <input autoFocus value={otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
+                            <input autoFocus value={otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
                             <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                         </div>
                             <div className='flex justify-center cursor-pointer'><button disabled={loading} onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >{loading ? <SmallLoader /> : <span>Varify OTP</span>}</button></div>
@@ -286,7 +286,7 @@ const Signup = () => {
 
                             <div className='relative flex flex-col'>
                                 <span className='absolute  left-2 top-[50%] translate-y-[-50%]'><FaRegUserCircle className=' text-xl' /></span>
-                                <input ref={usernameRef} value={form.username} className='text-white focus:border-white transition-all ease-in delay-200 outline-none  px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="text" name="username" id="username" placeholder='Enter Username' readOnly />
+                                <input ref={usernameRef} value={form.username} className='text-white focus:border-white transition-all ease-in delay-200 outline-none  px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="text" name="username" id="username" placeholder='Select Username' readOnly />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorUsername}</div>
 
                             </div>
@@ -305,12 +305,12 @@ const Signup = () => {
 
                             <div className='relative flex flex-col'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdOutlineMailLock className=' text-xl' /></span>
-                                <input value={form.email} className='text-white focus:border-white transition-all ease-in delay-200 outline-none cursor-text px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
+                                <input value={form.email} className='text-white focus:border-white transition-all ease-in delay-200 outline-none cursor-text px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorEmail}</div>
                             </div>
                             <div className='relative flex flex-col'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><RiLockPasswordFill className=' text-xl' /></span>
-                                <input ref={passref} value={form.password} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2' onChange={(e) => { handleChange(e) }} placeholder='Enter Password' type="password" name="password" id="password" />
+                                <input ref={passref} value={form.password} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} placeholder='Enter Password' type="password" name="password" id="password" />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorPass}</div>
                                 <span id='eye' onMouseDown={() => handleEye()} onMouseUp={() => handleCloseEye()} className=' cursor-pointer absolute right-2 top-[50%] translate-y-[-50%] '>{!eye ? <VscEye className='text-xl' /> : <VscEyeClosed />}</span>
                             </div>

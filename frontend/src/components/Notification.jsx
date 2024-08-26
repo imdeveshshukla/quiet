@@ -39,12 +39,23 @@ const Notification = ({setIsNfnOpen}) => {
           
         } catch (error) {
           console.log(error);
-          
         }
         setIsLoading(false)
       }
-    const addUserToRoom = async(title,fromUser)=>{
-        console.log(title+" "+fromUser);
+    const requestByUser = async(title,body,fromUser)=>{
+        setBigLoader(true);
+        try{
+            const res = await axios.post(`${baseAddress}rooms//addUserinRoom/${fromUser}`,{
+                    title
+            })
+            toast.success(res.data.msg);
+        }catch(err){
+            toast.error(err.response.data.msg);
+            console.log(err);
+        }
+        setBigLoader(false)
+    }
+    const requestByOwner = async(title,fromUser)=>{
 
         setBigLoader(true)
         try {
@@ -57,12 +68,11 @@ const Notification = ({setIsNfnOpen}) => {
             {
                 const room = res?.data?.room;
                 dispatch(addNewRoom(room));
-                // dispatch(setRoomDetail(room));
                 const creatorId = room?.CreatorId;
                 const title = room?.title;
                 setBigLoader(false);
                 Navigate(`/room/${creatorId}/${title}`,{state:{joined:true}});
-
+                toast.success(res.data.msg);
             }
             else{
                 toast.error(res.data.msg);
@@ -80,7 +90,11 @@ const Notification = ({setIsNfnOpen}) => {
             Navigate(`/post/${item.postId}`);
         else
         {
-            addUserToRoom(item.body,item.fromUser);
+            if(item.title === "Join My Room")
+                requestByOwner(item.body,item.fromUser);
+            else{
+                requestByUser(item.title,item.body,item.fromUser);
+            }
         }
     }
 

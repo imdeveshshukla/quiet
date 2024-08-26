@@ -25,7 +25,14 @@ export const CreateRoom = async (req,res)=>{
     console.log(`${req.file}`);
     try{
         if(req.file){ 
-            imgUrl = await uploadOnCloudinary(req.file.path);
+            try{
+                imgUrl = await uploadOnCloudinary(req.file.path);
+            }
+            catch(err){
+                return res.status(403).json({
+                    msg:err.message
+                })
+            }
         }
         console.log("Room Image URL "+imgUrl);
         await prisma.$transaction(async(tx)=>{

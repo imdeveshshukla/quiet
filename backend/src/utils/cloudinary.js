@@ -24,29 +24,9 @@ const uploadOnCloudinary = async (localfilepath)=>{
             resource_type:"auto",
             allowed_formats:['jpg','png','jpeg']
         }).catch((error)=>{
-            console.log("Insise catch = ",error);
             throw new Error(error.message);
         });
         
-        // console.log("uploadResult = "+uploadResult.url);//uploadResult.url to get url of file path
-        
-        // Optimize delivery by resizing and applying auto-format and auto-quality
-        // const optimizeUrl = cloudinary.url("images", {
-        //     fetch_format: 'auto',
-        //     quality: 'auto'
-        // });
-        
-        // console.log("optimizeUrl "+optimizeUrl);
-        
-        // Transform the image: auto-crop to square aspect_ratio
-        // const autoCropUrl = cloudinary.url("images", {
-        //     crop: 'auto',
-        //     gravity: 'auto',
-        //     width: 500,
-        //     height: 500,
-        // });
-        
-        // console.log("autoCropUrl = "+autoCropUrl);
         fs.unlinkSync(localfilepath, (err) => {
             if (err) {
                 console.error("Failed to delete local file:", err);
