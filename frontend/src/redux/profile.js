@@ -12,6 +12,7 @@ export const profile = createSlice({
         state.profileInfo=action.payload;
     },
     setBgImg:(state,action)=>{
+      if(state.profileInfo)
       state.profileInfo.bgImg= action.payload
     },
     

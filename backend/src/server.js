@@ -17,7 +17,7 @@ const app = express()
 const port = 3000
 const allowedOrigins = [
   'https://www.bequiet.live', 
-  'https://www.bequiet.vercel.app'
+  'https://bequiet.vercel.app'
 ];
 
 const corsOptions = {

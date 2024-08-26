@@ -36,32 +36,7 @@ const ProfileLayout = ({ isLoading, user }) => {
 
   const currentPath = location.pathname.split('/').pop();
 
-  const handleDpChange = async () => {
-    const formData = new FormData();
-    formData.append('profileImg', dpLoc);
-    setBtnLoading(true);
-    try {
-
-      const res = await axios.post(baseAddress + 'u/uploadImg', formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data',
-        }, withCredentials: true,
-      });
-
-      if (res.status == 202) {
-        dispatch(setUserInfo(res.data));
-        toast.success("Profile Picture Updated !")
-        setIsOpen(false);
-      }
-    } catch (error) {
-      if (error.response.status == 403) {
-        toast.error("Profile picture could't be updated ! ")
-      }
-      console.log(error.response);
-
-    }
-    setBtnLoading(false)
-  }
+  
 
 
   const handleClickOutside = (event) => {
@@ -120,7 +95,7 @@ const ProfileLayout = ({ isLoading, user }) => {
             </div>
             <div className=' flex gap-4'>
               <button onClick={() => setIsOpen(false)} className='px-4 py-2 rounded-3xl bg-white' type="button">Cancle</button>
-              <button onClick={() => handleDpChange()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{btnLoading ? <SmallLoader /> : "Save"}</button>
+              <button onClick={() => handleDpChange({dpLoc,setBtnLoading,setIsOpen,dispatch})} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{btnLoading ? <SmallLoader /> : "Save"}</button>
             </div>
           </div>
 
@@ -191,3 +166,30 @@ const ProfileLayout = ({ isLoading, user }) => {
 };
 
 export default ProfileLayout;
+
+export const handleDpChange = async ({dpLoc, setBtnLoading, dispatch,setIsOpen}) => {
+  const formData = new FormData();
+  formData.append('profileImg', dpLoc);
+  setBtnLoading(true);
+  try {
+
+    const res = await axios.post(baseAddress + 'u/uploadImg', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      }, withCredentials: true,
+    });
+
+    if (res.status == 202) {
+      dispatch(setUserInfo(res.data));
+      toast.success("Profile Picture Updated !")
+      setIsOpen(false);
+    }
+  } catch (error) {
+    if (error.response.status == 403) {
+      toast.error("Profile picture could't be updated ! ")
+    }
+    console.log(error.response);
+
+  }
+  setBtnLoading(false)
+}

@@ -20,6 +20,7 @@ const getUser = async (req, res) => {
         bio: true,
         createdAt: true,
         dp: true,
+        bgImg:true,
         email: true,
         isVarified: true,
         userID: true,

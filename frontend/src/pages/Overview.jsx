@@ -29,7 +29,6 @@ const Overview = () => {
     try {
       if (reset) {
         setUserData([]);
-        setPage(1);
         setHasMore(true);
       }
 
@@ -61,7 +60,7 @@ const Overview = () => {
         let res = [...res1.data, ...res2.data.posts]
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 10);
-        console.log(res);
+       
         
         setUserData(prevUserData => [...prevUserData, ...res]);
 

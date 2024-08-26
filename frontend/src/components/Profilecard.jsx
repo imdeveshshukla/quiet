@@ -10,6 +10,7 @@ import toast from 'react-hot-toast';
 import axios from 'axios';
 import SmallLoader from './SmallLoader';
 import { setBgImg } from '../redux/profile';
+import { setUserInfo } from '../redux/user';
 
 
 
@@ -44,7 +45,7 @@ const Profilecard = ({ room }) => {
 
   }, [profileInfo])
 
-  console.log(profileInfo);
+
   
 
 
@@ -79,7 +80,7 @@ const Profilecard = ({ room }) => {
 
 useEffect(() => {
   if(profileInfo && currUser && profileInfo?.username == currUser?.username){
-    console.log(currUser);
+
     
     setupdateBtn(true)
   }else{
@@ -98,7 +99,7 @@ useEffect(() => {
             className=" absolute border-black  flex text-sm font-bold bottom-2 bg-opacity-70 bg-slate-400 right-2 rounded-full p-1 border  hover:bg-gray-600">
             {loader1 ? <SmallLoader /> : <PiCameraPlusLight className=" text-xl " />}
           </button></>}
-        <input type="file" onChange={(e) => updateBgImg({e,setLoader,dispatch})} name="bgImg" accept="image/*" ref={ref} id="" hidden />
+        <input type="file" onChange={(e) => updateBgImg({bgImg:e.target.files[0],setLoader,dispatch})} name="bgImg" accept="image/*" ref={ref} id="" hidden />
       </div>
 
       <div className=' p-4'>
@@ -150,14 +151,18 @@ useEffect(() => {
 
 export default Profilecard
 
-export const updateBgImg = async ({e,setLoader,dispatch}) => {
+export const updateBgImg = async ({bgImg,setLoader,dispatch}) => {
   setLoader(true);
-  const bgImg = e.target.files[0];
+  
   const formData = new FormData();
   formData.append('bgImg', bgImg);
   try {
     const res = await axios.post(`${baseAddress}u/updatebg`, formData);
+    
+    dispatch(setUserInfo(res.data))
+    
     dispatch(setBgImg(res.data.bgImg));
+    toast.success("Banner updated!")
   }
   catch (e) {
     console.log(e);
