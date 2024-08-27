@@ -36,6 +36,7 @@ import banner from '../assets/banner.png'
 import { BiEdit } from "react-icons/bi";
 import { CiEdit } from "react-icons/ci";
 import roomDp from '../assets/roomdp.jpg'
+import OnclickCard from "../components/OnclickCard";
 
 
 
@@ -70,6 +71,7 @@ const Room = function () {
   const [privateRoom, setPrivateRoom] = useState(true);
   const dropdownRef = useRef(null);
   const [isOpen, setisOpen] = useState(false);
+  const [showCard, setShowCard] = useState(false)
 
   const [showChangeTitleBox, setBox] = useState(false);
   function handleToggle() {
@@ -314,6 +316,8 @@ const Room = function () {
 
             </div>
           </div>
+          <div className=' 1_5md:hidden  flex justify-end mr-6 '><OnclickCard room={true} /></div>
+
 
           <div className="flex items-center  justify-end pr-8 gap-2   w-full">
             {
