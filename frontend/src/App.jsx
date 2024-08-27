@@ -197,7 +197,7 @@ function App() {
       {isLoading && <Loader />}
 
       <Navbar />
-      <div className=' grid  1_5md:grid-cols-[3fr_1.5fr]  xl:grid-cols-[1.2fr_3fr_1.5fr] 1_5xl:grid-cols-[1fr_3fr_1.5fr] '>
+      <div className=' grid  1_5md:grid-cols-[3fr_1.5fr]  xl:grid-cols-[1.3fr_3fr_1.5fr] 1_5xl:grid-cols-[1.2fr_3fr_1.5fr] '>
 
         <Sidenav />
 

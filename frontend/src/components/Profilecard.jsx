@@ -105,7 +105,7 @@ useEffect(() => {
       </div>
 
       <div className=' p-4'>
-        <div className=' text-xl font-bold'>{room ? `Name : ${profileInfo?.title} ` : profileInfo?.username}</div>
+        <div className=' break-all w-full line-clamp-3 overflow-clip text-xl font-bold'>{room ? <><span className='text-lg font-roboto font-medium'>Name:</span> {profileInfo?.title}</>  : profileInfo?.username}</div>
 
         <div>
           <button className='flex items-center bg-[#99a086] py-2 px-3  text-white my-2 gap-1 rounded-full' onClick={() => handleShare()}><PiShareFat className=' text-xl' /><span className=' text-xs font-medium'>Share</span></button>
