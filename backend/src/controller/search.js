@@ -109,8 +109,10 @@ export const getUserPosts = async (req, res) => {
         },
       },
     });
-
-    res.status(200).send({ posts: user.posts });
+    const post = user.posts.filter((post)=>{
+      return (post.room==null || post.room.privateRoom==false);
+    })
+    res.status(200).send({ posts: post });
   } catch (error) {
     console.log(error);
   }
@@ -149,8 +151,10 @@ export const getUserComments = async (req, res) => {
       skip: offset,
       take: limit,
     });
-
-    res.status(200).send(comments);
+    const altcomments = comments.filter((cmt)=>{
+      return (cmt.post.room == null || cmt.post.room.privateRoom == false);
+    })
+    res.status(200).send(altcomments);
   } catch (error) {
     console.log(error);
   }
