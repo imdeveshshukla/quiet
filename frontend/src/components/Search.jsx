@@ -105,10 +105,10 @@ export const fetchUsers = async ({ debouncedSearch, setUsers, setRooms, setLoadi
         const res = await axios.get(baseAddress + 'search/getusers', {
             params: { key: debouncedSearch },
         });
-      
 
         setUsers(res.data.users)
         if(setRooms)setRooms(res.data.rooms)
+         return res.data.users
     } catch (error) {
         console.error('Error fetching users:', error);
     }

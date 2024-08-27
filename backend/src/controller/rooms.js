@@ -224,7 +224,8 @@ export const deleteRoom =async(req,res)=>{
 export const filterName = async(req,res)=>{
     const filter = req.query.filter;
     
-    if(!filter)return res.status(404).json({msg:false});
+    
+    if(filter.length<3)return res.status(200).json({msg:false});
     try{
         const names = await prisma.rooms.findFirst({
             where:{

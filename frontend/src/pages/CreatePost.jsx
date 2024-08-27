@@ -8,7 +8,7 @@ import baseAddress from "../utils/localhost";
 import axios from "axios";
 import { useSelector } from "react-redux";
 
-const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
+const CreatePost = ({ setShowCP, onNewPost, roomTitle, setPost }) => {
 
   const createPostRef = useRef(null);
   const navigate = useNavigate();
@@ -20,6 +20,18 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
   const selectFile = useRef(null);
 
   const [selectedOption, setSelectedOption] = useState('');
+const [error, seterror] = useState("")
+  const titleLimit = 300;
+  const [titleLen, setTitleLen] = useState(0)
+
+
+  const handleTitleChange = (e) => {
+    let input = String(e.target.value).slice(0, 300);
+    seterror("")
+    setTitle(input)
+    setTitleLen((input.length))
+  }
+
 
 
   const handleChange = (e) => {
@@ -32,6 +44,11 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
   const handleSubmit = async () => {
     // console.log(title + "\n" + description + "\n" + selectedOption);
+
+    if(description.length==0){
+      seterror('*Description cannot be empty')
+      return
+    }
     const formData = new FormData();
     try {
       formData.append('title', title);
@@ -39,7 +56,7 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
       formData.append('body', description);
       formData.append('postImg', image);
 
-      if(roomTitle) formData.append('subCommunity',roomTitle);
+      if (roomTitle) formData.append('subCommunity', roomTitle);
 
       setLoading(true);
       toast.loading("Posting....");
@@ -49,8 +66,7 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
         },
       });
 
-      if(setPost)
-      {
+      if (setPost) {
         console.clear();
         setPost(response.data.post);
       }
@@ -92,17 +108,18 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
     };
   }, []);
 
+ 
 
   return (
     <div className="fixed z-40 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-full  pb-10">
-      <div ref={createPostRef} className=" absolute w-[85%] xs:w-[75%] sm:w-[60%] md:w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 biggerTablet:h-5/6">
+      <div ref={createPostRef} className=" absolute w-[95%] xxs:w-[85%] xs:w-[75%] sm:w-[60%] md:w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%] overflow-auto bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 py-5 ">
         <div className="heading flex justify-between">
           <h2 className="text-xl font-bold mb-4 text-[#656923]">Write your thoughts....</h2>
           <button className="hover:bg-black w-5 h-5 rounded-full" onClick={() => { setShowCP(false) }}>
             <IoClose className="text-[#656923] m-auto" />
           </button>
         </div>
-        {!roomTitle?<div className='flex mt-6 px-28 justify-start  '>
+        {!roomTitle ? <div className='flex mt-6 px-28 justify-start  '>
           <div className='flex  hover:bg-[#808449cf]  items-center px-2 py-1  rounded-full border-[1px] border-black '>
 
             <span className=' rounded-full border-2 border-white'>
@@ -124,37 +141,47 @@ const CreatePost = ({setShowCP, onNewPost, roomTitle,setPost}) => {
 
           </div>
         </div>
-:<></>
-}
+          : <></>
+        }
 
 
         {/* Title Input */}
-        <div className="mb-4 ">
-          <label htmlFor="title" className="block text-[#656923] font-bold mb-2">
-            Title
-          </label>
-          <input
-            type="text"
+        <div className="mb-4 flex flex-col ">
+          <div className=" flex items-center justify-between">
+            <label htmlFor="title" className="block text-[#656923] font-bold mb-2">
+              Title
+            </label>
+            <div className=" text-xs font-mono">{titleLen}/{titleLimit}</div>
+
+          </div>
+          <textarea
+            
             id="title"
             value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#656923]"
+            onChange={(e) => handleTitleChange(e)}
+            className="w-full p-2 resize-none border h-20 border-gray-300 rounded-md focus:outline-none focus:border-[#656923]"
             placeholder="Write a Specific title"
             required />
         </div>
         {/* Content Textarea */}
-        <div className="mb-4">
+        <div className="mb-4 flex flex-col gap-2">
           <label htmlFor="content" className="block text-[#656923] font-bold mb-2">
             Content
           </label>
           <textarea
             id="content"
             value={description}
-            onChange={(e) => setDescription(e.target.value)}
+            onChange={(e) => {
+              setDescription(e.target.value)
+              seterror('')
+            }}
             className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#656923] h-40 resize-none"
             placeholder="Keep It Relevant"
             required
           />
+
+          <span className=" text-red-500 text-xs pl-2">{error}</span>
+
         </div>
         <div className="mb-4">
           <label htmlFor="title" className="block text-[#656923] font-bold mb-1">

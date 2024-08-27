@@ -141,13 +141,13 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
   const childs = getChildren(id) == undefined ? [] : getChildren(id);
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
-  const Navigate= useNavigate();
-  const [isOpen,setOpen] = useState(false);
-  const [delLoading,setLoading] = useState(false);
+  const Navigate = useNavigate();
+  const [isOpen, setOpen] = useState(false);
+  const [delLoading, setLoading] = useState(false);
   const dropdownRef = useRef(null);
   const dispatch = useDispatch();
-  const handleToggle = ()=>{
-    setOpen((v)=>!v)
+  const handleToggle = () => {
+    setOpen((v) => !v)
   }
   const handleClickOutside = (event) => {
     if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
@@ -161,20 +161,20 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-  async function deleteComment(id){
+  async function deleteComment(id) {
     setLoading(true);
     // console.log(userInfo?.userID);
     try {
-      const res = await axios.delete(`${baseAddress}posts/deleteComment`,{
-        data:{
+      const res = await axios.delete(`${baseAddress}posts/deleteComment`, {
+        data: {
           id
         }
       })
       dispatch(delComment(id));
       toast.success(res?.data.msg);
     } catch (error) {
-        toast.error(error.response?.data.msg);
-        console.log(error);
+      toast.error(error.response?.data.msg);
+      console.log(error);
     }
     setLoading(false);
   }
@@ -183,7 +183,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
   }
   async function getUpvote() {
-    const res = await axios.post(baseAddress+"posts/upvoteNum", { postId: postId, commentId: id });
+    const res = await axios.post(baseAddress + "posts/upvoteNum", { postId: postId, commentId: id });
 
     setUpvotes(res.data.numbers);
     res.data.upvote.forEach((item) => {
@@ -217,7 +217,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
     }
 
     try {
-      const res = await axios.post(baseAddress+"posts/vote", { commentId: id, val, postId: postId });
+      const res = await axios.post(baseAddress + "posts/vote", { commentId: id, val, postId: postId });
 
       if (res.status == 201) {
         const data = res.data.newUpvote;
@@ -262,7 +262,7 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       val = 0;
       setDownvote((upvoteNumber) => upvoteNumber - 1)
     }
-    const res = await axios.post(baseAddress+"posts/vote", { commentId: id, val, postId: postId });
+    const res = await axios.post(baseAddress + "posts/vote", { commentId: id, val, postId: postId });
     const data = res.data.newUpvote
 
     if (val == -1) {
@@ -285,37 +285,39 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
 
   return (<>
 
-    <div className="relative flex flex-col gap-2 py-2  px-4 xxs:px-7  xs:px-14  border rounded-2xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
-      <div className="relative flex gap-2 items-center">
+    <div className="relative flex flex-col gap-2 py-2  px-4 xxs:px-7  xs:px-12  border rounded-2xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
+      <div className="relative flex gap-2 w-full items-center">
 
-        <img src={user.dp ? user.dp : dp} className="relative rounded-full -top-1 -mb-4  border h-8 w-8 object-contain bg-white" alt="" loading="lazy" />
+        <div className=' h-10 w-10 rounded-full  overflow-hidden'>
+          <img src={user.dp ? user.dp : dp} className="relative object-cover bg-white " alt="" loading="lazy" />
+        </div>
 
         <div className="flex items-center w-full gap-2">
           <div className="flex flex-row justify-between">
-            <p onClick={()=> Navigate(`/u/${user.username}`)} className="relative cursor-pointer  whitespace-nowrap hover:text-green-900 truncate text-sm xxs:text-base  font-medium overflow-clip">u/{user.username}</p>
+            <p onClick={() => Navigate(`/u/${user.username}`)} className="relative cursor-pointer  whitespace-nowrap hover:text-green-900 truncate text-sm xxs:text-base  font-medium overflow-clip">u/{user.username}</p>
             {/* <a className="text-gray-500 text-xl" href="#"><i className="fa-solid fa-trash"></i></a> */}
           </div><span>•</span>
           <p className="text-gray-500 text-[9px] xxs:text-xs  line-clamp-1 overflow-clip">{getTime(createdAt)} ago</p>
-          {isLogin&&
+          {isLogin &&
             <div className="relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
 
-                <button onClick={handleToggle} className="flex items-center hover:focus:outline-none">
-                  <BsThreeDotsVertical/>
-                </button>
-                {isOpen && (
-                  <div className="absolute right-0 top-4  bg-white rounded-md shadow-lg z-10">
-                    <ul className=" bg-[#6d712eb8] rounded-md ">
-                      <li className=" text-white hover:text-black">
-                        <button onClick={() => deleteComment(id)} className="px-4 py-1 flex items-center gap-1 ">
-                            {delLoading?<SmoothLoader/>:<><span>Delete</span> <MdDelete /></>}</button>
-                      </li>
-                    </ul>
+              <button onClick={handleToggle} className="flex items-center hover:text-red-600 hover:focus:outline-none">
+                <BsThreeDotsVertical />
+              </button>
+              {isOpen && (
+                <div className="absolute right-0 top-4  bg-white rounded-md shadow-lg z-10">
+                  <ul className=" bg-[#6d712eb8] rounded-md ">
+                    <li className=" text-white hover:text-black">
+                      <button onClick={() => deleteComment(id)} className="px-4 py-1 flex items-center gap-1 ">
+                        {delLoading ? <SmoothLoader /> : <><span>Delete</span> <MdDelete /></>}</button>
+                    </li>
+                  </ul>
 
-                  </div>
-                )}
-              </div>
+                </div>
+              )}
+            </div>
 
-            }
+          }
         </div>
       </div>
       <div className=' mx-10 text-sm xs:text-base whitespace-pre-wrap break-words'><ReadMore maxLines={3} children={body} /></div>

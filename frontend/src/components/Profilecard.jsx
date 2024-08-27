@@ -11,6 +11,8 @@ import axios from 'axios';
 import SmallLoader from './SmallLoader';
 import { setBgImg } from '../redux/profile';
 import { setUserInfo } from '../redux/user';
+import dp from '../assets/dummydp.png';
+
 
 
 
@@ -93,7 +95,7 @@ useEffect(() => {
 
   return (
     <div className=' w-[80vw] xxs:w-[75vw] xs:w-[65vw] sm:w-[50vw]  1_5md:w-full mx-0    rounded-3xl  bg-[#c2c7b3] '>
-      <div className=' relative rounded-t-3xl h-32 w-full overflow-hidden'>
+      <div className=' relative rounded-t-3xl h-32 bg-gray-200 w-full overflow-hidden'>
         <img className=' w-full h-full object-cover' src={profileInfo?.bgImg || banner} alt="" />
         {(updateBtn && !room) &&<><button onClick={() => ref.current?.click()}
             className=" absolute border-black  flex text-sm font-bold bottom-2 bg-opacity-70 bg-slate-400 right-2 rounded-full p-1 border  hover:bg-gray-600">
@@ -103,7 +105,7 @@ useEffect(() => {
       </div>
 
       <div className=' p-4'>
-        <div className=' text-xl font-bold'>{room ? `Name : ${profileInfo?.title} ` : profileInfo?.username}</div>
+        <div className=' break-all w-full line-clamp-3 overflow-clip text-xl font-bold'>{room ? <><span className='text-lg font-roboto font-medium'>Name:</span> {profileInfo?.title}</>  : profileInfo?.username}</div>
 
         <div>
           <button className='flex items-center bg-[#99a086] py-2 px-3  text-white my-2 gap-1 rounded-full' onClick={() => handleShare()}><PiShareFat className=' text-xl' /><span className=' text-xs font-medium'>Share</span></button>
@@ -133,7 +135,7 @@ useEffect(() => {
           <div className=' border-b border-gray-500 mb-1 '></div>
           <div className=' cursor-default flex items-center justify-between'>
             <div className=' flex items-center gap-1'>
-              <img className='h-9 w-9 rounded-full bg-white' src={profileInfo?.dp} alt="" />
+              <img className='h-9 w-9 rounded-full bg-white' src={profileInfo?.dp ||dp } alt="" />
               <div>
                 <div className=' text-sm font-medium'>Profile</div>
                 <div className='text-xs text-gray-500'>Customise your profile</div>
@@ -152,6 +154,11 @@ useEffect(() => {
 export default Profilecard
 
 export const updateBgImg = async ({bgImg,setLoader,dispatch}) => {
+  
+  if(!bgImg){
+    return;
+  }
+  
   setLoader(true);
   
   const formData = new FormData();
