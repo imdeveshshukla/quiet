@@ -27,6 +27,7 @@ const Notification = ({setIsNfnOpen}) => {
     const Navigate =useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [bigLoader,setBigLoader] = useState(false);
+    const [RoomPost,setRoomPost] = useState(null);
     const location = useLocation();
     const handleRefresh= async()=>{
         setIsLoading(true);
@@ -92,9 +93,14 @@ const Notification = ({setIsNfnOpen}) => {
               id,
             }
           });
-          
+          console.clear();
+          console.log(res.data.post);
           if(res.status==200){
+
+            console.log(res.data.post.room);
             dispatch(setPostDetail(res.data.post))
+            if(res.data.post.room)Navigate(`/post/${res.data.post.room.id}/${res.data.post.id}`)
+            else Navigate(`/post/${res.data.post.id}`);
           }
         } catch (error) {
           console.log(error);
@@ -107,8 +113,8 @@ const Notification = ({setIsNfnOpen}) => {
         {
 
             dispatch(clearPostDetail())
-            if(location.pathname.split("/")[1] === 'post')getApost(item.postId);
-            Navigate(`/post/${item.postId}`);
+            getApost(item.postId);
+            
         }
         else
         {
