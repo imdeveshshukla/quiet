@@ -211,7 +211,7 @@ function App() {
             <Route path='/' element={<Home />} />
             {!isLogin &&  <Route path='/signup' element={<Signup />} />}
             {!isLogin && <Route path='/signin' element={<Signin />} />}
-            {!isLoginlogin && <Route path='/resetpassword' element={<Resetpass />} />}
+            {!isLogin && <Route path='/resetpassword' element={<Resetpass />} />}
             <Route path='/varifyaccount' element={<Varifyacc />} />
 
 
