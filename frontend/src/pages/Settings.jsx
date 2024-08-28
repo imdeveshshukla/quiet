@@ -438,6 +438,7 @@ function Settings() {
 
                     <span className='absolute left-2 top-[50%] translate-y-[-50%]'><SiCodeforces className='text-xl' /></span>
                     <input
+                    
                       id="cfusername"
                       name="cfusername"
                       spellCheck={"false"}
@@ -488,6 +489,7 @@ function Settings() {
                     placeholder={generatedUsername ? generatedUsername : userInfo?.username}
                     autoComplete="username"
                     disabled={true}
+                    spellCheck="false"
                     className="block flex-1 border-0 rounded-r-md bg-transparent py-1.5 pl-2 text-gray-900 placeholder:text-black focus:ring-0 sm:text-sm sm:leading-6"
                   />
                 </div>

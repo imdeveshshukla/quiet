@@ -323,7 +323,7 @@ const Room = function () {
             {
               joined ?
                 <div className='flex self-end gap-2 justify-self-end'>
-                  <button className="flex items-center gap-2 bg-black text-white  xs:py-2 px-2 xxs:px-6 rounded-lg  hover:bg-slate-500"
+                  <button className="flex items-center gap-2 bg-black text-white py-1  xs:py-2 px-2 xxs:px-6 rounded-lg  hover:bg-slate-500"
                     onClick={openPostBtn}
                   >
 
