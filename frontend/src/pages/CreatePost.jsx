@@ -155,7 +155,7 @@ const [error, seterror] = useState("")
 
           </div>
           <textarea
-            
+            spellCheck="false"
             id="title"
             value={title}
             onChange={(e) => handleTitleChange(e)}
@@ -170,6 +170,7 @@ const [error, seterror] = useState("")
           </label>
           <textarea
             id="content"
+            spellCheck="false"
             value={description}
             onChange={(e) => {
               setDescription(e.target.value)

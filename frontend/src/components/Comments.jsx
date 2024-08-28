@@ -103,7 +103,7 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
 
   return (
     <div className={isComment ? 'border bg-[#e2e4c6]  rounded-3xl border-black' : 'outline-none border bg-[#e2e4c6]  rounded-3xl border-gray-500'} >
-      <textarea onClick={() => setIsComment(true)} onChange={(e) => setcomment(e.target.value)} value={comment} className='w-full bg-transparent outline-none rounded-3xl px-4 py-2 ' placeholder='Add a Comment' name="comment" id="comment"></textarea>
+      <textarea spellCheck="false" onClick={() => setIsComment(true)} onChange={(e) => setcomment(e.target.value)} value={comment} className='w-full bg-transparent outline-none rounded-3xl px-4 py-2 ' placeholder='Add a Comment' name="comment" id="comment"></textarea>
       {isComment && <div className='flex gap-3 p-3 justify-end'>
         <button onClick={() => {
           setIsComment(false)
