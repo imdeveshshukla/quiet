@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getTime } from './Posts';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { clearNotification, setNotification, updateNotification } from '../redux/Notification';
 import { FiRefreshCcw } from "react-icons/fi";
@@ -13,6 +13,7 @@ import { addNewRoom } from '../redux/userRooms';
 import { setRoomDetail } from '../redux/roomSlice';
 import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
+import { clearPostDetail, setPostDetail } from '../redux/Postdetail';
 
 
 
@@ -26,6 +27,8 @@ const Notification = ({setIsNfnOpen}) => {
     const Navigate =useNavigate();
     const [isLoading, setIsLoading] = useState(false);
     const [bigLoader,setBigLoader] = useState(false);
+    const [RoomPost,setRoomPost] = useState(null);
+    const location = useLocation();
     const handleRefresh= async()=>{
         setIsLoading(true);
         getUserNotification()
@@ -83,11 +86,36 @@ const Notification = ({setIsNfnOpen}) => {
             toast.error(error?.response?.data.msg);
         }
     }
+    const getApost=async(id)=>{
+        try {
+          const res = await axios.get(baseAddress+"posts/getapost", { 
+            params:{
+              id,
+            }
+          });
+          console.clear();
+          console.log(res.data.post);
+          if(res.status==200){
+
+            console.log(res.data.post.room);
+            dispatch(setPostDetail(res.data.post))
+            if(res.data.post.room)Navigate(`/post/${res.data.post.room.id}/${res.data.post.id}`)
+            else Navigate(`/post/${res.data.post.id}`);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     const handleClick=(item, nId)=>{
         setIsNfnOpen(false);
         markAsRead(nId);
         if(item.postId)
-            Navigate(`/post/${item.postId}`);
+        {
+
+            dispatch(clearPostDetail())
+            getApost(item.postId);
+            
+        }
         else
         {
             if(item.title === "Join My Room")

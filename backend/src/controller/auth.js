@@ -41,7 +41,7 @@ const sendEmailVarification = async ({ userID, username, email }, res) => {
 
     let mailOptions = {
       to: email,
-      subject: "Varify Your Email",
+      subject: "Verify Your Email",
       text: `Your OTP code for quIET is: ${otp}. It will expire in 3 minutes`,
       html: `<p>Your OTP code for quIET with the username <b>${username}</b> is <b>${otp}</b>. It will expire in 3 minutes.`,
     };

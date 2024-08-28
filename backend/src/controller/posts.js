@@ -125,7 +125,6 @@ export const getPost = async (req, res) => {
 
 export const getAPost = async (req, res) => {
   // console.log(offset, limit);
-
   try {
     const post = await prisma.post.findUnique({
       where: {
@@ -138,6 +137,7 @@ export const getAPost = async (req, res) => {
             user: true,
           },
         },
+        room:true,
         upvotes: true,
       },
     });

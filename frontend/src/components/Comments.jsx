@@ -324,7 +324,8 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
       <div className="btns">
         <footer className='flex gap-4 items-center'>
           <div className={'  flex gap-2 items-center justify-center  '}>
-
+          {isLogin?
+          <>
             <span className='flex items-center'>
               <span onClick={() => upvote()} className=' text-xl cursor-pointer hover:text-blue-800'>{upvoted ? <BiSolidLike className='text-blue-600' /> : <BiLike className='' />}</span>
               <span>{upvotes}</span>
@@ -333,15 +334,17 @@ export function CommentBody2({ id, dp, body, user, createdAt, getTime, getChildr
               <span onClick={() => downvote()} className=' text-xl cursor-pointer hover:text-red-800'>{downvoted ? <BiSolidDislike className=' text-red-600' /> : <BiDislike />}</span>
               <span>{downvotes}</span>
             </span>
-
+            </>
+            :
+            <></>
+            }
 
           </div>
-
+          {isLogin&&  
           <div onClick={(id) => handleComment(id)} className=' rounded-3xl flex gap-2 items-center justify-center px-2  cursor-pointer hover:text-blue-700 bg-blue-300'>
             <RiReplyLine className='text-lg' />
             <span>{childs.length}</span>
-          </div>
-
+          </div>}
           {(childs.length != 0) && (showChild ? <span onClick={() => setShowChild(false)} className=' flex items-center gap-1 text-2xl cursor-pointer'><IoIosArrowUp /><span className=' text-xs text-blue-800 font-medium '>Hide replies</span></span> : <span onClick={() => setShowChild(true)} className='flex items-center gap-1 text-2xl cursor-pointer'><IoIosArrowDown /><span className=' text-xs text-blue-800 font-medium '>Show replies</span></span>)}
           <div>
           </div>

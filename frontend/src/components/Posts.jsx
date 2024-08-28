@@ -52,6 +52,7 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
       toast.success(res.data.msg);
       dispatch(clearPostsInfo());
       dispatch(clearHotPostsInfo());
+      Navigate('/')
       // console.log(res);
     }
     catch(err){

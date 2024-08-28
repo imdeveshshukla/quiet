@@ -18,27 +18,30 @@ const About = () => {
             </header>
             <main className=' flex flex-col gap-8  font-ubuntu text-sm xs:text-base'>
                 <div className=' '>
-                    Welcome to quIET, a social media platform designed for those who value their privacy and the freedom to express themselves without fear of judgment. We’re thrilled to have you join our community where your thoughts, ideas, and experiences can be shared freely and anonymously.
+                    Welcome to <span className='font-bold'>quIET</span>, a social media platform designed for those who value their privacy and the freedom to express themselves without fear of judgment. We’re thrilled to have you join our community where your thoughts, ideas, and experiences can be shared freely and anonymously.
                 </div>
                 <div>
                     <div className=' text-[#5d610bf8] xs:text-lg font-semibold'>What is quIET?</div>
                     <div>
-                        quIET is an anonymous social media platform where users can interact, post comments, and engage in discussions without revealing their true identity as users often face the challenge of balancing their public image with their true thoughts and feelings. In this digital age, where personal data is often at risk, quIET provides a sanctuary where you can be yourself without the pressure of maintaining a public persona. Here, every user is assigned a randomly generated username, ensuring that your real name and email address remain completely private.
+                        quIET is an <span className='font-semibold'>anonymous social media</span> platform where users can interact, post comments, and engage in discussions without revealing their true identity as users often face the challenge of balancing their public image with their true thoughts and feelings. In this digital age, where personal data is often at risk, quIET provides a sanctuary where you can be yourself without the pressure of maintaining a public persona. Here, every user is assigned a randomly generated username, ensuring that your real name and email address remain completely private.
                     </div>
                 </div>
                 <div>
                     <div className='text-[#5d610bf8]  xs:text-lg font-semibold'>Key Features</div>
                     <ul className=' list-disc pl-8'>
-                        <li>Each user is given a unique, randomly generated username. Your real name and email address are never displayed, ensuring complete anonymity.</li>
+                        <li>Each user is given a unique, <span className='font-semibold'>randomly generated username</span>. Your real name and email address are never displayed, ensuring complete anonymity.</li>
 
                         <li>
                             Discuss anything from college life and societal critiques to personal stories, or just engage in some light-hearted gossip and observations without the fear of judgment and burden of revealing your identity.
                         </li>
 
                         <li>
-                            Interact with others, comment on posts, and participate in discussions in a community that values privacy and authenticity.
+                            Interact with others, comment on posts, and participate in discussions in a community that values <span className='font-semibold'>privacy</span> and authenticity.
                         </li>
 
+                        <li>Create both public and <span className='font-semibold'>private rooms</span> to discuss topics of interest. Public rooms are open to all users, fostering a broader community dialogue. Private rooms, on the other hand, offer a more intimate setting for discussions, where only invited users can participate.</li>
+
+                        <li>The platform is built with a strong focus on <span className='font-semibold'>security</span> and anonymity. Your data is safeguarded, and all interactions are designed to protect your identity, allowing you to engage in meaningful conversations without any concerns about privacy breaches.</li>
                     </ul>
 
 
