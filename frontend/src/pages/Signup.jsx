@@ -145,7 +145,7 @@ const Signup = () => {
         }
         else if (!validatePassword(form.password)) {
             setOnSave(false)
-            setErrorPass('* Password must include a-z,A-Z,0-9,symbols and min-length of 8')
+            setErrorPass('* Password must include a-z, A-Z , 0-9, special symbol and min-length of 8')
         }
         else {
 
