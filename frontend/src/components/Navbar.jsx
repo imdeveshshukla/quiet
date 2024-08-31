@@ -124,7 +124,7 @@ const Navbar = () => {
 
         <div ref={ntfndropdownRef}>
           {
-            isLogin && <div onClick={() => setIsNfnOpen(!isNtfnOpen)} className='relative'><IoNotificationsOutline className=' text-white font-semibold cursor-pointer text-3xl' />
+            isLogin && <div onClick={() => setIsNfnOpen(!isNtfnOpen)} className='relative'><IoNotificationsOutline className=' text-black font-semibold cursor-pointer text-3xl' />
               <span className='absolute flex items-center justify-center p-2 -top-2 text-[10px] -right-1 h-4 w-4 font-bold text-white bg-red-700 rounded-full'>{notifications.length}</span>
             </div>
           }

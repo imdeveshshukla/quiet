@@ -95,7 +95,7 @@ const ProfileLayout = ({ isLoading, user }) => {
 
             </div>
             <div className=' flex gap-4'>
-              <button onClick={() => setIsOpen(false)} className='px-4 py-2 rounded-3xl bg-white' type="button">Cancle</button>
+              <button onClick={() => setIsOpen(false)} className='px-4 py-2 rounded-3xl bg-white' type="button">Cancel</button>
               <button onClick={() => handleDpChange({dpLoc,setBtnLoading,setIsOpen,dispatch})} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{btnLoading ? <SmallLoader /> : "Save"}</button>
             </div>
           </div>

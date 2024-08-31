@@ -22,7 +22,8 @@ export const CreateRoom = async (req,res)=>{
             });
     }
     let imgUrl = null;
-    console.log(`${req.file}`);
+    let rom;
+    // console.log(`${req.file}`);
     try{
         if(req.file){ 
             try{
@@ -34,8 +35,8 @@ export const CreateRoom = async (req,res)=>{
                 })
             }
         }
-        console.log("Room Image URL "+imgUrl);
-        await prisma.$transaction(async(tx)=>{
+        // console.log("Room Image URL "+imgUrl);
+        rom =  await prisma.$transaction(async(tx)=>{
             // console.log("Inside Transactions");
             const newRoom = await tx.rooms.create({
                 data:{
@@ -48,7 +49,7 @@ export const CreateRoom = async (req,res)=>{
             })
             if(newRoom.id && newRoom.CreatorId)
             {
-                console.log(newRoom.id+" "+newRoom.CreatorId);
+                // console.log(newRoom.id+" "+newRoom.CreatorId);
                 const RoomId = newRoom.id;
                 const enrolled = await tx.enrolledRooms.create({
                     data:{
@@ -59,11 +60,8 @@ export const CreateRoom = async (req,res)=>{
                 })
                 console.log("created\n");
                 console.log(enrolled);
-                return res.status(201).json({
-                    msg:"Successfully Created",
-                    newRoom,
-                    enrolled
-                })
+                return { newRoom, enrolled }; 
+                
             }
             else{
                 throw new Error("Server/Database Issue");
@@ -77,6 +75,11 @@ export const CreateRoom = async (req,res)=>{
             error:err
         })
     }
+    return res.status(201).json({
+        msg:"Successfully Created",
+        newRoom:rom.newRoom,
+        enrolled:rom.enrolled
+    })
 }
 
 export const updateRoom = async(req,res)=>{

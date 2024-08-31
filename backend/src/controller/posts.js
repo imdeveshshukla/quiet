@@ -240,6 +240,7 @@ export const getPopularPosts = async (req, res) => {
       u."dp",
       p."createdAt",
       p."updatedAt",
+      r."privateRoom",
       COALESCE((
         SELECT COUNT(*) 
         FROM "Upvote" up 
@@ -261,6 +262,7 @@ export const getPopularPosts = async (req, res) => {
       ), 0)) AS "popularityScore"
     FROM "Post" p
     LEFT JOIN "User" u ON u."userID" = p."userId"
+    LEFT JOIN "Rooms" r ON r."title" = p."subCommunity"
     ORDER BY "popularityScore" DESC, p."createdAt" DESC
     LIMIT ${limit} OFFSET ${offset};
 `;
@@ -268,8 +270,12 @@ export const getPopularPosts = async (req, res) => {
   
 let posts = JSON.parse(stringify(result));
 
-
+  posts = posts.filter((p)=>{
+    return (p.privateRoom == null || p.privateRoom!=true)
+  })
   const postIds = posts.map(post => post.id);
+  console.log("Inside Poular")
+  console.log(posts);
   const upvotes = await prisma.upvote.findMany({
     where: {
       postId: {

@@ -4,7 +4,7 @@ import { Link } from 'react-router-dom';
 import { IoHome } from "react-icons/io5";
 
 
-const NotFound = () => {
+const NotFound = ({gotError}) => {
   return (
     <div className=" left-0  top-0 w-full flex flex-col items-center justify-center h-[calc(100vh-74.46px)] bg-[#d1d3b2] ">
       <div className="flex flex-col items-center text-gray-700 mx-4">
@@ -31,9 +31,10 @@ const NotFound = () => {
 
         <h1 className="text-2xl font-bold mb-2 text-[#6d712eb8]">Page Not Found</h1>
         <p className=" mb-4 text-[#6d712eb8]">Sorry, but we can't find the page you are looking for...</p>
-        <Link to="/" className=" border-black flex items-center gap-2 border rounded py-1 px-4  hover:bg-[#c2c596e0] hover:text-blue-500">
+        {!gotError&&<Link to="/" className=" border-black flex items-center gap-2 border rounded py-1 px-4  hover:bg-[#c2c596e0] hover:text-blue-500"
+        >
           <IoHome className=' text-gray-700 ' /><span>Back to Home</span>
-        </Link>
+        </Link>}
       </div>
     </div>
   );
