@@ -4,6 +4,7 @@ import { UserCircleIcon } from '@heroicons/react/24/solid'
 import axios from 'axios'
 import LeetCode from '../components/LeetCode.jsx'
 import baseAddress from '../utils/localhost.js';
+import dp from '../assets/dummydp.png';
 import { useDispatch, useSelector } from 'react-redux';
 import { SiLeetcode } from "react-icons/si";
 import { addCodeforceRank, addLeetCodeID, clearUserInfo, setshowCf, setShowLC, setUserInfo } from '../redux/user.js';

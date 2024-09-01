@@ -21,7 +21,12 @@ export const createPost = async (req, res) => {
       url = await uploadOnCloudinary(req.file.path);
       console.log("file Object = " + url);
     } catch (err) {
-      console.log("Failed To Upload Image\n", err);
+      console.log("Failed To Upload Image\n",err);
+      const message = err.message.split(".")[0]
+      console.log(message)
+      return res.status(405).json({
+        msg:message
+      })
     }
   }
   const parsedBody = post.safeParse(postbody);

@@ -85,7 +85,7 @@ const ProfileLayout = ({ isLoading, user }) => {
             <div className='relative  rounded-full'>
               <img ref={dpRef} src={userInfo && userInfo.dp ? userInfo.dp : dp}
                 alt="Profile"
-                className="w-36 h-36 rounded-full   bg-white "
+                className="w-36 h-36 rounded-full bg-white "
               />
 
               <button onClick={() => selectFile.current?.click()} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight /></button>
