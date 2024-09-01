@@ -137,7 +137,7 @@ const Navbar = () => {
               <img
                 src={userInfo && userInfo.dp ? userInfo.dp : dp}
                 alt="Profile"
-                className="  object-cover bg-gray-200"
+                className="w-full h-full  object-cover bg-gray-200"
               />
             </button>
             {isOpen && (

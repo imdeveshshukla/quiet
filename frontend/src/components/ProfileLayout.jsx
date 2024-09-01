@@ -115,7 +115,7 @@ const ProfileLayout = ({ isLoading, user }) => {
             <img
               src={(userInfo?.username === user?.username && userInfo?.dp) ? userInfo.dp : user?.dp ? user.dp : dp}
               alt="Profile"
-              className=" object-cover bg-white"
+              className="w-full h-full object-cover bg-white"
             />
 
             </div>
