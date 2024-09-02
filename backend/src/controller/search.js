@@ -124,7 +124,7 @@ export const getUserComments = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;
   const offset = parseInt(req.query.offset) || (page - 1) * limit;
-  // console.log(page, offset);
+  console.log(page, offset);
   const { userID, username } = req.query;
   console.log(userID);
 
@@ -158,7 +158,10 @@ export const getUserComments = async (req, res) => {
     const altcomments = comments.filter((cmt)=>{
       return (cmt.post.room == null || cmt.post.room.privateRoom == false);
     })
+    console.log(altcomments);
+    
     res.status(200).send(altcomments);
+    
   } catch (error) {
     console.log(error);
   }

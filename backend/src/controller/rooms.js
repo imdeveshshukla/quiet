@@ -59,7 +59,7 @@ export const CreateRoom = async (req,res)=>{
                     }
                 })
                 console.log("created\n");
-                console.log(enrolled);
+                
                 return { newRoom, enrolled }; 
                 
             }
@@ -88,8 +88,7 @@ export const updateRoom = async(req,res)=>{
     
     const title = data.title;
 
-    console.log(data.newTitle);
-    console.log(title);
+   
     try{
         // console.log("Inside UpdateRoom");
         const room = await prisma.rooms.findFirst({
@@ -103,8 +102,6 @@ export const updateRoom = async(req,res)=>{
         if(!room?.id)return res.status(404).json({msg:"Room Not Found!"});
 
 
-        console.log("room");
-        console.log(room);
 
         if(room.CreatorId != userId){
             return res.status(401).json({
@@ -193,7 +190,7 @@ export const deleteRoom =async(req,res)=>{
 
         if(room.CreatorId != userId) return res.status(401).json({msg:"You don't have permission to Perform this Action"});
 
-        console.log(room);
+        
         await prisma.$transaction(async(tx)=>{
             console.log("Inside Transactions");
             const deletedRoom = await tx.rooms.delete({
@@ -406,7 +403,7 @@ export const getNotJoinedRoom = async(req,res)=>{
                 }
             }
         })
-        console.log(rooms);
+
         const roomIds = [];
         for (const roomObject of rooms) {
             // Extract the room ID and add it to the roomIds array

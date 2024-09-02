@@ -12,10 +12,9 @@ import { v4 as uuidv4 } from 'uuid';
 
 const Overview = () => {
   const [userData, setUserData] = useState([]);
-  const [page, setPage] = useState(1);
+  const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);
   const { user } = useOutletContext();
-  
   
   const { username } = useParams();
   const dispatch = useDispatch();
@@ -25,8 +24,8 @@ const Overview = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const getUserOverview = async (reset = false) => {
+    if (!user.userID) return;
 
-    if(!user.userID) return;
     dispatch(setSkeltonLoader());
     setIsLoading(true);
 
@@ -34,6 +33,9 @@ const Overview = () => {
       if (reset) {
         setUserData([]);
         setHasMore(true);
+        setPage(1); // Reset page to 1
+        setPostOffset(0); // Reset offsets
+        setCommentOffset(0);
       }
 
       const currentPage = reset ? 1 : page;
@@ -44,7 +46,7 @@ const Overview = () => {
           username,
           page: currentPage,
           limit: 10,
-          offset: commentOffset,
+          offset: commentOffset, 
         },
         withCredentials: true,
       });
@@ -60,18 +62,14 @@ const Overview = () => {
         withCredentials: true,
       });
 
-      console.log(res1, res2);
-      
-
       if (res1.status === 200 && res2.status === 200) {
         let res = [...res1.data, ...res2.data.posts]
           .sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt))
           .slice(0, 10);
-       
-        
+
         setUserData(prevUserData => [...prevUserData, ...res]);
 
-        let temp =  res.filter(e => 'postId' in e);
+        let temp = res.filter(e => 'postId' in e);
         let co = temp.length;
         let po = res.length - co;
         setPostOffset(prevOffset => prevOffset + po);
@@ -84,19 +82,23 @@ const Overview = () => {
     } catch (error) {
       console.log(error);
     }
+
     dispatch(setSkeltonLoader());
     setIsLoading(false);
   };
 
+  useEffect(() => {
+    window.scrollTo(0, 0);
+    getUserOverview(true);  // Ensure initial fetch always resets data
+
+  }, [user.userID]);
+
 
   useEffect(() => {
-
-    if (page >1) {
-      getUserOverview();
-    } else{
-      getUserOverview(true)
+    if (page > 1) {
+      getUserOverview();  // Fetch data for subsequent pages without resetting
     }
-  }, [page,user.userID]);
+  }, [page]);
 
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
