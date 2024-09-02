@@ -23,6 +23,8 @@ const DisplayProfile = () => {
         params: { key: username },
       });
       if(res.status==200){
+        console.log(res);
+        
         setUser(res.data);
         dispatch(setProfileInfo(res.data))
         setIsLoading(false);

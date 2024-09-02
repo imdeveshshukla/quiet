@@ -99,6 +99,7 @@ const Sidenav = () => {
 
   }
 
+
   return (<>
 
     <nav ref={navRef} className={` ${hamburger ? 'left-0' : '-left-full'} w-80 xl:w-full fixed transition-all duration-400 ease-in-out bg-[#bbc2a5] xl:bg-[#fff0]  border-4 xl:border-none  border-[#dae0cb] xl:sticky xl:left-0 z-20 xl:block  overflow-auto  p-3  h-[calc(100vh-74.47px)]  top-[74.46px] `} >
@@ -106,7 +107,9 @@ const Sidenav = () => {
       <div className="sidenav">
 
         <div className='p-3 m-2 border-b-2 border-gray-600'>
-          <NavLink onClick={() => dispatch(setShowSideNav(false))} to={"/"} className={(e) => { return e.isActive ? 'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'w-full flex rounded items-center gap-2 px-4 py-2' }}><IoHome /><span>Home</span></NavLink>
+          <NavLink onClick={() => {dispatch(setShowSideNav(false))
+            
+          }} to={"/"} className={(e) => { return e.isActive ? 'w-full flex rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'w-full flex rounded items-center gap-2 px-4 py-2' }}><IoHome /><span>Home</span></NavLink>
           <NavLink onClick={() => dispatch(setShowSideNav(false))} to={"/popular"} className={(e) => { return e.isActive ? 'flex w-full rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full rounded items-center gap-2 px-4 py-2' }}><LuArrowUpRightSquare /><span>Popular</span></NavLink>
           {!isLogin && <NavLink onClick={() => dispatch(setShowSideNav(false))} to={"/about/"} className={(e) => { return e.isActive ? 'flex w-full  rounded-2xl items-center gap-2 px-4 py-2 bg-[#65692375]' : 'flex w-full  rounded items-center gap-2 px-4 py-2' }}><BsInfoCircle /><span>About</span></NavLink>}
         </div>
@@ -125,7 +128,7 @@ const Sidenav = () => {
             <CreateRoomBtn />
 
             {roomLoader ? <div className="mx-auto"><SmoothLoader /></div> : (myAllRoom?.map(function (val) {
-              return <NavLink key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{ joined: true }} className={'w-full flex rounded items-center gap-2 pl-4 py-1 hover:bg-[#65692375]'}><IoHome /><span className=' break-all overflow-clip line-clamp-1 w-5/6'>{val?.room.title}</span></NavLink>
+              return <NavLink onClick={()=>dispatch(setShowSideNav(false))} key={val.room.id} to={`/room/${val?.room?.CreatorId}/${val?.room?.title}`} state={{ joined: true }} className={'w-full flex rounded items-center gap-2 pl-4 py-1 hover:bg-[#65692375]'}><IoHome /><span className=' break-all overflow-clip line-clamp-1 w-5/6'>{val?.room.title}</span></NavLink>
 
             }))}
           </div>
@@ -147,7 +150,7 @@ const Sidenav = () => {
         </button>
         <div className={`pl-6 m-4 gap-1 flex flex-col ${!openBar ? `hidden` : ``}`}>
           {roomLoader2 ? <div className="mx-auto"><SmoothLoader /></div> : (notJoinedRooms?.map(function (val) {
-            return <NavLink key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} className={'w-full flex rounded items-center gap-2 pl-4 py-1 hover:bg-[#65692375]'}><IoHome /><span className='break-all overflow-clip line-clamp-1 w-5/6'>{val?.title}</span></NavLink>
+            return <NavLink onClick={()=>dispatch(setShowSideNav(false))} key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} className={'w-full flex rounded items-center gap-2 pl-4 py-1 hover:bg-[#65692375]'}><IoHome /><span className='break-all overflow-clip line-clamp-1 w-5/6'>{val?.title}</span></NavLink>
           }))}
         </div>
       </div>}
