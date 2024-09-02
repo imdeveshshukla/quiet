@@ -17,6 +17,7 @@
     "@reduxjs/toolkit": "^2.2.5",
     "@tailwindcss/forms": "^0.3.4",
     "axios": "^1.7.2",
+    "browser-image-compression": "^2.0.2",
     "crypto-js": "^4.2.0",
     "date-fns": "^3.6.0",
     "dotenv": "^16.4.5",

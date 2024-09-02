@@ -7,6 +7,7 @@ import toast from "react-hot-toast";
 import baseAddress from "../utils/localhost";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import imageCompression from 'browser-image-compression';
 
 const CreatePost = ({ setShowCP, onNewPost, roomTitle, setPost }) => {
 
@@ -34,9 +35,33 @@ const [error, seterror] = useState("")
 
 
 
-  const handleChange = (e) => {
-    setImage(e.target.files[0]);
-  }
+  const handleChange = async (e) => {
+    const file = e.target.files[0];
+  
+    // Check if file exists
+    if (!file) return;
+  
+    // Check file size
+    if (file.size <= 3 * 1024 * 1024) {
+      // File size is less than or equal to 3MB, no need to compress
+      setImage(file);
+      return;
+    }
+  
+    // Compression options
+    const options = {
+      maxSizeMB: 3,
+      useWebWorker: true,
+    };
+  
+    try {
+      const compressedFile = await imageCompression(file, options);
+      console.log(compressedFile)
+      setImage(compressedFile);
+    } catch (error) {
+      console.error('Error compressing image:', error);
+    }
+  };
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
