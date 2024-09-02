@@ -15,9 +15,10 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdDelete } from 'react-icons/md';
 import SmoothLoader from '../assets/SmoothLoader';
 import { clearHotPostsInfo } from '../redux/Hotposts';
+import { toggleUserInfoUpvote } from '../redux/profile';
 
 
-const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails }) => {
+const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails,insideOverView }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -110,14 +111,25 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
     }
     if (isLogin) {
       let val = 1;
+      console.log("Inside UPvotes")
+      console.log(upvoted);
+      console.log(upvoteNumber)
       if (!upvoted) {
         setUpvoted(true);
+        if(insideOverView)
+        {
+          dispatch(toggleUserInfoUpvote(1));
+        } 
         if (downvote) setDownvotenum((val) => val - 1);
         setDownVote(false);
         val = 1;
         setUpvote((upvoteNumber) => upvoteNumber + 1);
       } else {
         setUpvoted(false);
+        if(insideOverView)
+        {
+          dispatch(toggleUserInfoUpvote(-1));
+        } 
         val = 0;
         setUpvote((upvoteNumber) => upvoteNumber - 1);
       }
@@ -158,9 +170,16 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
       return;
     }
     let val = -1;
+    console.log("Inside downvotes")
+    console.log(downvote);
+    console.log(downvoteNum);
     if (!downvote) {
       setDownVote(true);
       if (upvoted) {
+        if(insideOverView)
+        {
+          dispatch(toggleUserInfoUpvote(-1));
+        }
         setUpvote((val) => val - 1);
         setUpvoted(false);
       }

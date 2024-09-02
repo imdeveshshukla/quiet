@@ -20,13 +20,18 @@ export const profile = createSlice({
         state.profileInfo.dp= action.payload
       }
     },
-    
+    toggleUserInfoUpvote:(state,action)=>{
+      if(state.profileInfo)
+      {
+        state.profileInfo._count.upvotes += action.payload;
+      }
+    },
     clearProfileInfo:(state)=>{
         state.profileInfo=null;
     }
   },
 })
 
-export const { setProfileInfo,setBgImg,setDp,clearProfileInfo} = profile.actions
+export const { setProfileInfo,setBgImg,setDp,clearProfileInfo,toggleUserInfoUpvote} = profile.actions
 
 export default profile.reducer

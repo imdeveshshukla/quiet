@@ -134,6 +134,7 @@ const Overview = () => {
                       createdAt={e.createdAt}
                       user={e.user}
                       upvotes={e.upvotes}
+                      insideOverView={true}
                     />
               ))
             )

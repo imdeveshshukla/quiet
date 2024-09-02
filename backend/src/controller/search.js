@@ -62,6 +62,7 @@ export const getUser = async (req, res) => {
         showLC: true,
         showCf:true,
         codeforces:true,
+        upvotes:true,
         _count: {
           select: {
             posts: true,
@@ -71,7 +72,14 @@ export const getUser = async (req, res) => {
         },
       },
     });
+    // console.log("Inside FindUser")
     // console.log(user);
+    user.upvotes.forEach((up)=>{
+      if(up.upvotes == -1)
+      {
+        user._count.upvotes--;
+      }
+    })
 
     res.status(200).send(user);
   } catch (error) {}
