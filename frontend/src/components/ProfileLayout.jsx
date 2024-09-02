@@ -131,9 +131,9 @@ const ProfileLayout = ({ isLoading, user }) => {
 
 
 
-          <div className=' flex items-center gap-3  absolute  bottom-3 right-4 xxs:right-8 xs:right-12 sm:right-20 '>
+          <div className=' flex items-center gap-3  absolute  bottom-1 right-4 xxs:right-8 xs:right-12 sm:right-20 '>
             {user.showLC &&
-              <button onClick={() => setshowLCard(true)} className=' bg-black rounded-full flex p-2 items-center justify-center'>
+              <button onClick={() => setshowLCard(true)} className=' bg-black rounded-full flex p-2 items-center justify-center '>
                 <LeetCodeLogo />
               </button>
             }
@@ -144,11 +144,6 @@ const ProfileLayout = ({ isLoading, user }) => {
             <img height={16} width={16} src={cficon} alt="" />
             <div className=' text-sm xxs:text-base break-words font-semibold text-gray-800'><Codeforces rating={user?.codeforces} /></div></div>}
 
-          {/* {user.showLC && <div className='  absolute bottom-3 right-4  xxs:right-8 xs:right-12 sm:right-20 '>
-            <button onClick={() => setshowLCard(true)} className=' bg-black rounded-full flex p-2 items-center justify-center'>
-              <LeetCodeLogo />
-            </button>
-          </div>} */}
 
           {showLCard && <div className='fixed top-[74.46px] z-50 left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-md ' >
 
@@ -200,7 +195,6 @@ export const handleDpChange = async ({ dpLoc, setBtnLoading, dispatch, setIsOpen
     });
 
     if (res.status == 202) {
-      console.log(res);
 
       dispatch(setUserInfo(res.data));
       dispatch(setDp(res.data.dp))

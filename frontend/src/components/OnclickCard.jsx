@@ -9,7 +9,7 @@ const OnclickCard = ({room}) => {
 
     return (<>
         <div >
-            <button className=' text-2xl xxs:text-3xl rounded-full bg-white p-2 hover:text-blue-700 text-blue-500' onClick={() => setShowCard(!showCard)}><FaAddressCard/></button>
+            <button className=' text-xl xxs:text-3xl rounded-full bg-white p-2 hover:text-blue-700 text-blue-500' onClick={() => setShowCard(!showCard)}><FaAddressCard size={20}/></button>
             {showCard && <Card room={room} setShowCard={setShowCard} />}
         </div>
     </>

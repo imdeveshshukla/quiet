@@ -111,9 +111,6 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
     }
     if (isLogin) {
       let val = 1;
-      console.log("Inside UPvotes")
-      console.log(upvoted);
-      console.log(upvoteNumber)
       if (!upvoted) {
         setUpvoted(true);
         if(insideOverView)
@@ -170,9 +167,6 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
       return;
     }
     let val = -1;
-    console.log("Inside downvotes")
-    console.log(downvote);
-    console.log(downvoteNum);
     if (!downvote) {
       setDownVote(true);
       if (upvoted) {
