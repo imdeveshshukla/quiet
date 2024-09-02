@@ -77,17 +77,13 @@ const [error, seterror] = useState("")
         setDescription("")
         setSelectedOption("")
         setImage(null)
-        // getUserData(userInfo.email);
         onNewPost()
         setShowCP(false)
-        // navigate('/');
       }
     } catch (error) {
       toast.dismiss()
-      // navigate('/');
-      setShowCP(false);
-      toast.error("Error uploading the post!")
-      console.error('Error uploading the post:', error);
+      // setShowCP(false);
+      toast.error(error.response.data.msg);
     }
     setLoading(false);
 

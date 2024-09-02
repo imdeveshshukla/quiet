@@ -11,6 +11,7 @@ import baseAddress from '../utils/localhost';
 import { setDefaultOptions } from 'date-fns';
 import loading from '../redux/loading';
 import { SearchSkelton } from './Postskelton';
+import toast from 'react-hot-toast';
 
 
 const Search = () => {
@@ -20,6 +21,7 @@ const Search = () => {
     const [users, setUsers] = useState([]);
     const [rooms, setRooms] = useState([])
     const Navigate = useNavigate()
+    const isLogin = useSelector((state) => state.login.value);
     const debouncedSearch = useDebounce(search, 500);
     const dispatch = useDispatch()
     const showSearch = useSelector(state => state.search.value)
@@ -55,6 +57,10 @@ const Search = () => {
 
 
     const openUserProfile = (username) => {
+        if(!isLogin){
+            toast.error("Please Sign in!!!")
+            return;
+        }
         Navigate(`/u/${username}`);
         setMenu(false);
         dispatch(setShowSearch(false))
@@ -62,6 +68,11 @@ const Search = () => {
     }
 
     const openRoom = (CreatorId, title) => {
+        // console.log(isLogin);
+        if(!isLogin){
+            toast.error("Please Sign in!!!")
+            return;
+        }
         Navigate(`/room/${CreatorId}/${title}`);
         setMenu(false);
         dispatch(setShowSearch(false))

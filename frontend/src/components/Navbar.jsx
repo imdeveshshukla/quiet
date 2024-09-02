@@ -124,7 +124,7 @@ const Navbar = () => {
 
         <div ref={ntfndropdownRef}>
           {
-            isLogin && <div onClick={() => setIsNfnOpen(!isNtfnOpen)} className='relative'><IoNotificationsOutline className=' text-white font-semibold cursor-pointer text-3xl' />
+            isLogin && <div onClick={() => setIsNfnOpen(!isNtfnOpen)} className='relative'><IoNotificationsOutline className=' text-black font-semibold cursor-pointer text-3xl' />
               <span className='absolute flex items-center justify-center p-2 -top-2 text-[10px] -right-1 h-4 w-4 font-bold text-white bg-red-700 rounded-full'>{notifications.length}</span>
             </div>
           }
@@ -133,11 +133,11 @@ const Navbar = () => {
         {isLogin ? <>
           <div className="relative flex items-center gap-8" ref={dropdownRef} >
 
-            <button onClick={handleToggle} className="flex w-12 h-12 overflow-hidden items-center rounded-full border-2  border-t-orange-600 border-b-green-900 hover:border-blue-500 focus:outline-none">
+            <button onClick={handleToggle} className="flex w-12 h-12 overflow-hidden items-center rounded-full border-2  border-t-orange-600 border-b-green-900 hover:border-black focus:outline-none">
               <img
                 src={userInfo && userInfo.dp ? userInfo.dp : dp}
                 alt="Profile"
-                className="  object-cover bg-gray-200"
+                className="w-full h-full  object-cover bg-gray-200"
               />
             </button>
             {isOpen && (

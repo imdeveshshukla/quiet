@@ -85,7 +85,7 @@ const ProfileLayout = ({ isLoading, user }) => {
             <div className='relative  rounded-full'>
               <img ref={dpRef} src={userInfo && userInfo.dp ? userInfo.dp : dp}
                 alt="Profile"
-                className="w-36 h-36 rounded-full   bg-white "
+                className="w-36 h-36 rounded-full bg-white "
               />
 
               <button onClick={() => selectFile.current?.click()} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight /></button>
@@ -95,7 +95,7 @@ const ProfileLayout = ({ isLoading, user }) => {
 
             </div>
             <div className=' flex gap-4'>
-              <button onClick={() => setIsOpen(false)} className='px-4 py-2 rounded-3xl bg-white' type="button">Cancle</button>
+              <button onClick={() => setIsOpen(false)} className='px-4 py-2 rounded-3xl bg-white' type="button">Cancel</button>
               <button onClick={() => handleDpChange({dpLoc,setBtnLoading,setIsOpen,dispatch})} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{btnLoading ? <SmallLoader /> : "Save"}</button>
             </div>
           </div>
@@ -115,7 +115,7 @@ const ProfileLayout = ({ isLoading, user }) => {
             <img
               src={(userInfo?.username === user?.username && userInfo?.dp) ? userInfo.dp : user?.dp ? user.dp : dp}
               alt="Profile"
-              className=" object-cover bg-white"
+              className="w-full h-full object-cover bg-white"
             />
 
             </div>

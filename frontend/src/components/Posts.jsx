@@ -8,7 +8,7 @@ import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
 import ReadMore, { linkDecorator } from './ReadMore';
-import { clearPostsInfo } from '../redux/Post';
+import { clearPostsInfo, toggleUpvote } from '../redux/Post';
 import baseAddress from '../utils/localhost';
 import Linkify from 'react-linkify';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -131,6 +131,7 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
             sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "upvoted your post!" });
           }
           if(postDetails)dispatch(clearPostsInfo());
+          dispatch(toggleUpvote(data));
         }
 
       } catch (error) {
@@ -178,8 +179,10 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
         if (val == -1 && data.userId != data.post.userId) {
           sendNotification({ postId: data.postId, toUser: data.post.userId, fromUser: data.userId, title: "downvoted your post!" });
         }
-      }
+        if(postDetails)dispatch(clearPostsInfo());
 
+        dispatch(toggleUpvote(data));
+      }
     } catch (error) {
       console.log(error);
     }
