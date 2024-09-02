@@ -17,7 +17,7 @@ import { useSelector, useDispatch } from 'react-redux'
 import { setUserInfo, clearUserInfo } from './redux/user'
 import Settings from './pages/Settings'
 import Sidenav from './components/Sidenav'
-
+import { ErrorBoundary } from 'react-error-boundary';
 import Overview from './pages/Overview'
 import baseAddress from "./utils/localhost";
 import Postdetail from './components/Postdetail'
@@ -195,7 +195,6 @@ function App() {
 
   const room = location.pathname.includes('/room');
 
-
   return (
     <>
       {isLoading && <Loader />}
@@ -207,6 +206,7 @@ function App() {
 
 
         <div className='md:border-r-2  xl:border-x-2 border-black'>
+        <ErrorBoundary fallback={<NotFound gotError={true}/>}> 
           <Routes>
             <Route path='/' element={<Home />} />
             {!isLogin &&  <Route path='/signup' element={<Signup />} />}
@@ -243,7 +243,7 @@ function App() {
             <Route path='*' element={<NotFound/>} />
               <Route path='/room/:CreatorId/:title' element={isLogin?<Room/>:<ForbiddenPage/>} />
           </Routes>
-
+          </ErrorBoundary>
         </div>
 
           <Rightnav/>    

@@ -4,7 +4,7 @@ export const verifyToken = (req, res, next) => {
     const token = req?.headers?.cookie?.split("=")[1];
     try {
       if (!token) {
-        return res.status(401).send({ msg: "No token found" });
+        return res.status(401).send({ msg: "Please Sigin!!!" });
       }
       let payload = jwt.verify(token, process.env.SECRET_KEY);
       if (payload.email) {

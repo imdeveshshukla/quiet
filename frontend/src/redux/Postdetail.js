@@ -20,8 +20,8 @@ export const postDetailState = createSlice({
       cmts = cmts.filter((cmt)=>{
         return (cmt?.id !== action.payload)
       });
-      console.log("Inside Redux");
-      console.log(cmts);
+      // console.log("Inside Redux");
+      // console.log(cmts);
       state.post.comments = [...cmts];
     },
     clearPostDetail:(state)=>{
