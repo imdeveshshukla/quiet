@@ -8,8 +8,8 @@ import { BrowserRouter } from 'react-router-dom'
 
 
 
+{/* <React.StrictMode> */}
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <React.StrictMode>
     <Provider store={store}>
 
       <BrowserRouter>
@@ -17,5 +17,6 @@ ReactDOM.createRoot(document.getElementById('root')).render(
       </BrowserRouter>
 
     </Provider>
-</React.StrictMode>  
 )
+
+{/* </React.StrictMode>   */}

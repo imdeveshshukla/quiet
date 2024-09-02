@@ -15,6 +15,8 @@ const Overview = () => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const { user } = useOutletContext();
+  
+  
   const { username } = useParams();
   const dispatch = useDispatch();
   const isSkelton = useSelector(state => state.skelton.value);
@@ -23,6 +25,8 @@ const Overview = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const getUserOverview = async (reset = false) => {
+
+    if(!user.userID) return;
     dispatch(setSkeltonLoader());
     setIsLoading(true);
 
@@ -55,6 +59,9 @@ const Overview = () => {
         },
         withCredentials: true,
       });
+
+      console.log(res1, res2);
+      
 
       if (res1.status === 200 && res2.status === 200) {
         let res = [...res1.data, ...res2.data.posts]
@@ -89,7 +96,7 @@ const Overview = () => {
     } else{
       getUserOverview(true)
     }
-  }, [page]);
+  }, [page,user.userID]);
 
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;

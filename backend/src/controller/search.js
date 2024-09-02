@@ -83,6 +83,8 @@ export const getUserPosts = async (req, res) => {
   const offset = parseInt(req.query.offset) || (page - 1) * limit;
   // console.log(page, offset);
   const { userID, username } = req.query;
+  console.log(userID, username);
+
 
   try {
     const user = await prisma.user.findUnique({
@@ -124,6 +126,8 @@ export const getUserComments = async (req, res) => {
   const offset = parseInt(req.query.offset) || (page - 1) * limit;
   // console.log(page, offset);
   const { userID, username } = req.query;
+  console.log(userID);
+
 
   try {
     const comments = await prisma.comment.findMany({
@@ -166,6 +170,7 @@ export const getUserUpvotes = async (req, res) => {
   const offset = (page - 1) * limit;
 
   let { userId } = req.query;
+  
   try {
     let data = await prisma.upvote.findMany({
       where: {
