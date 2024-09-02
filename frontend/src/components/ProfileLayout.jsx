@@ -15,6 +15,7 @@ import LeetCode from './LeetCode';
 import LeetCodeLogo from '../assets/LeetCodeLogo'
 import Codeforces from './Codeforces';
 import { setBgImg, setDp } from '../redux/profile';
+import cficon from '../assets/cficon.ico'
 
 
 axios.defaults.withCredentials = true
@@ -37,7 +38,7 @@ const ProfileLayout = ({ isLoading, user }) => {
 
   const currentPath = location.pathname.split('/').pop();
 
-  
+
 
 
   const handleClickOutside = (event) => {
@@ -96,7 +97,7 @@ const ProfileLayout = ({ isLoading, user }) => {
             </div>
             <div className=' flex gap-4'>
               <button onClick={() => setIsOpen(false)} className='px-4 py-2 rounded-3xl bg-white' type="button">Cancel</button>
-              <button onClick={() => handleDpChange({dpLoc,setBtnLoading,setIsOpen,dispatch})} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{btnLoading ? <SmallLoader /> : "Save"}</button>
+              <button onClick={() => handleDpChange({ dpLoc, setBtnLoading, setIsOpen, dispatch })} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{btnLoading ? <SmallLoader /> : "Save"}</button>
             </div>
           </div>
 
@@ -112,32 +113,42 @@ const ProfileLayout = ({ isLoading, user }) => {
           <div className='relative  rounded-full'>
 
             <div className=' rounded-full border-2 border-[#707416ee] overflow-hidden w-32 h-32 xs:w-36 xs:h-36'>
-            <img
-              src={(userInfo?.username === user?.username && userInfo?.dp) ? userInfo.dp : user?.dp ? user.dp : dp}
-              alt="Profile"
-              className="w-full h-full object-cover bg-white"
-            />
+              <img
+                src={(userInfo?.username === user?.username && userInfo?.dp) ? userInfo.dp : user?.dp ? user.dp : dp}
+                alt="Profile"
+                className="w-full h-full object-cover bg-white"
+              />
 
             </div>
             {userInfo?.username === user.username && <button onClick={() => setIsOpen(true)} type='button' className='absolute right-[5%] bottom-[5%] text-2xl rounded-full p-1 border border-black bg-neutral-400 hover:bg-slate-300 '><PiCameraPlusLight /></button>}
           </div>
-          <div className='flex flex-col gap-1'>
-            <div className=' text-lg  xxs:text-2xl break-words xs:text-3xl font-bold'>{user.username}</div>
+          <div className=' relative flex flex-col gap-1'>
+            <div className=' text-lg   break-words sm:text-3xl font-bold'>{user.username}</div>
             <div className=' text-xs xxs:text-base font-semibold text-gray-700'>u/{user.username}</div>
             <div className=' text-sm xxs:text-base break-words font-semibold text-gray-800'>{userInfo?.bio}</div>
-            {user?.showCf&&<div className=' text-sm xxs:text-base break-words font-semibold text-gray-800'><Codeforces rating={user?.codeforces}/></div>}
+
           </div>
 
 
 
-          <div className=' 1_5md:hidden absolute top-4 right-4 xxs:right-8 xs:right-12 sm:right-20 '><OnclickCard /></div>
+          <div className=' flex items-center gap-3  absolute  bottom-3 right-4 xxs:right-8 xs:right-12 sm:right-20 '>
+            {user.showLC &&
+              <button onClick={() => setshowLCard(true)} className=' bg-black rounded-full flex p-2 items-center justify-center'>
+                <LeetCodeLogo />
+              </button>
+            }
+            {<span className='1_5md:hidden'> <OnclickCard /></span>}
+          </div>
 
+          {user?.showCf && <div className=' absolute top-4 right-4  xxs:right-8 xs:right-12 sm:right-20 flex items-center gap-2'>
+            <img height={16} width={16} src={cficon} alt="" />
+            <div className=' text-sm xxs:text-base break-words font-semibold text-gray-800'><Codeforces rating={user?.codeforces} /></div></div>}
 
-          {user.showLC && <div className='  absolute bottom-4 right-4  xxs:right-8 xs:right-12 sm:right-20 '>
+          {/* {user.showLC && <div className='  absolute bottom-3 right-4  xxs:right-8 xs:right-12 sm:right-20 '>
             <button onClick={() => setshowLCard(true)} className=' bg-black rounded-full flex p-2 items-center justify-center'>
               <LeetCodeLogo />
             </button>
-          </div>}
+          </div>} */}
 
           {showLCard && <div className='fixed top-[74.46px] z-50 left-0 w-[100vw] h-[calc(100vh-74.46px)] bg-black bg-opacity-50 backdrop-blur-md ' >
 
@@ -172,9 +183,9 @@ const ProfileLayout = ({ isLoading, user }) => {
 
 export default ProfileLayout;
 
-export const handleDpChange = async ({dpLoc, setBtnLoading, dispatch,setIsOpen}) => {
+export const handleDpChange = async ({ dpLoc, setBtnLoading, dispatch, setIsOpen }) => {
 
-  if(!dpLoc){
+  if (!dpLoc) {
     return;
   }
   const formData = new FormData();
@@ -190,7 +201,7 @@ export const handleDpChange = async ({dpLoc, setBtnLoading, dispatch,setIsOpen})
 
     if (res.status == 202) {
       console.log(res);
-      
+
       dispatch(setUserInfo(res.data));
       dispatch(setDp(res.data.dp))
       toast.success("Profile Picture Updated !")
