@@ -102,7 +102,7 @@ const Overview = () => {
 
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
-    setPage(prevPage => prevPage + 1);
+    setPage(prevPage => prevPage + 1); 
   };
 
   return (

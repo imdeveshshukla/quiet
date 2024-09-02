@@ -17,6 +17,8 @@ const CreatePost = ({ setShowCP, onNewPost, roomTitle, setPost }) => {
   const [description, setDescription] = useState('');
   const [image, setImage] = useState(null);
   const [Btnloading, setLoading] = useState(false);
+  const [mediaLoading, setmediaLoading] = useState(false)
+  const [disable, setdisable] = useState(false)
   const location = useLocation();
   const selectFile = useRef(null);
 
@@ -37,14 +39,19 @@ const [error, seterror] = useState("")
 
   const handleChange = async (e) => {
     const file = e.target.files[0];
-  
-    // Check if file exists
+    
     if (!file) return;
+    setmediaLoading(true)
+    setdisable(true)
   
     // Check file size
-    if (file.size <= 3 * 1024 * 1024) {
+    console.log(file);
+    
+    if (file.size <= 3 * 1024 * 1024) {3,145,728
       // File size is less than or equal to 3MB, no need to compress
       setImage(file);
+      setdisable(false)
+      setmediaLoading(false)
       return;
     }
   
@@ -61,7 +68,12 @@ const [error, seterror] = useState("")
     } catch (error) {
       console.error('Error compressing image:', error);
     }
+    setmediaLoading(false)
+    setdisable(false)
   };
+
+
+
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
@@ -210,19 +222,20 @@ const [error, seterror] = useState("")
             Image
           </label>
           <div className=" text-sm text-blue-900 line-clamp-1 ml-2 break-words mb-2 underline cursor-not-allowed">{image?.name}</div>
-          <div>
-            <button onClick={() => selectFile.current?.click()}
-              className='flex items-center gap-2 border-2 text-blue-800 rounded-3xl border-blue-800 px-3 py-1 bg bg-blue-300 hover:bg-blue-400'
+          <div className=" flex items-center gap-2 ">
+            <button disabled={disable} onClick={() => selectFile.current?.click()}
+              className={` ${disable && ' cursor-wait'} flex items-center gap-2 border-2 text-blue-800 rounded-3xl border-blue-800 px-3 py-1 bg bg-blue-300 hover:bg-blue-400`}
               type="button">
               <span>Upload</span><GrGallery /></button>
+              {mediaLoading && <SmallLoader/>}
           </div>
           <input onChange={(e) => handleChange(e)} accept='image/*' ref={selectFile} type="file" name="media" id="media" hidden />
         </div>
         {/* Submit Button */}
 
-        <button
+        <button disabled={disable}
           onClick={() => handleSubmit()}
-          className="bg-[#656923] flex justify-center hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none">
+          className={`${disable && 'bg-[#666923bd] cursor-wait'} bg-[#656923] flex justify-center hover:bg-[#a9aa88] w-full text-xl text-black font-bold py-2 px-4 rounded focus:outline-none`}>
           {Btnloading ? <span className=""><SmallLoader /></span> : "Post"}
         </button>
       </div>

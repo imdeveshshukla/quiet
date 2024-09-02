@@ -216,7 +216,7 @@ const varifyOtp = async (req, res) => {
       return res
         .cookie(updateUser.userID, token, {
           path: "/",
-          expires: new Date(Date.now() + 1000 * 1 * 24 * 60 * 60),
+          expires: new Date(Date.now() + 1000 * 7 * 24 * 60 * 60),
           httpOnly: true,
           sameSite: "lax",
         })
@@ -334,7 +334,7 @@ const signin = async (req, res) => {
     res
       .cookie(user.userID, token, {
         path: "/",
-        expires: new Date(Date.now() + 1000 * 1 * 24 * 60 * 60),
+        expires: new Date(Date.now() + 1000 * 7 * 24 * 60 * 60),
         httpOnly: true,
         sameSite: "lax",
       })
