@@ -63,6 +63,7 @@ const [error, seterror] = useState("")
   
     try {
       const compressedFile = await imageCompression(file, options);
+      console.log("Compressed File");
       console.log(compressedFile)
       setImage(compressedFile);
     } catch (error) {
@@ -88,6 +89,9 @@ const [error, seterror] = useState("")
     }
     const formData = new FormData();
     try {
+      console.log("Above Formadata append");
+      console.log(description);
+      console.log(image);
       formData.append('title', title);
       formData.append('topic', selectedOption);
       formData.append('body', description);
@@ -95,7 +99,9 @@ const [error, seterror] = useState("")
 
       if (roomTitle) formData.append('subCommunity', roomTitle);
       console.log("Creating Post");
-      console.log(formData);
+      for (let keyValue of formData.entries()) {
+        console.log(keyValue);
+      }
       setLoading(true);
       toast.loading("Posting....");
       const response = await axios.post(`${baseAddress}posts/postWithImg`, formData, {

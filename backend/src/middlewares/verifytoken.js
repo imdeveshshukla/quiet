@@ -11,7 +11,7 @@ export const verifyToken = (req, res, next) => {
         req.userId = payload.userId;
         req.email = payload.email;
         console.log("Token varified");
-        console.log(JSON.stringify(req));
+        console.log(req?.body || "Request Not found");
         next();
       } else res.status(401).send({ msg: "Invalid Token" });
       
