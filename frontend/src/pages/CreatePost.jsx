@@ -47,7 +47,7 @@ const [error, seterror] = useState("")
     // Check file size
     console.log(file);
     
-    if (file.size <= 3 * 1024 * 1024) {3,145,728
+    if (file.size <= 3 * 1024 * 1024) {
       // File size is less than or equal to 3MB, no need to compress
       setImage(file);
       setdisable(false)
