@@ -10,9 +10,7 @@ const post = zod.object({
   subCommunity: zod.string().optional(),
 });
 export const createPost = async (req, res) => {
-  console.log("CreatePost")
   const postbody = req.body;
-  console.log(postbody);
 
   const userId = req.userId;
 

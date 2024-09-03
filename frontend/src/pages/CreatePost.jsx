@@ -89,19 +89,19 @@ const [error, seterror] = useState("")
     }
     const formData = new FormData();
     try {
-      console.log("Above Formadata append");
-      console.log(description);
-      console.log(image);
+      // console.log("Above Formadata append");
+      // console.log(description);
+      // console.log(image);
       formData.append('title', title);
       formData.append('topic', selectedOption);
       formData.append('body', description);
       formData.append('postImg', image);
 
       if (roomTitle) formData.append('subCommunity', roomTitle);
-      console.log("Creating Post");
-      for (let keyValue of formData.entries()) {
-        console.log(keyValue);
-      }
+      // console.log("Creating Post...");
+      // for (let keyValue of formData.entries()) {
+      //   console.log(keyValue);
+      // }
       setLoading(true);
       toast.loading("Posting....");
       const response = await axios.post(`${baseAddress}posts/postWithImg`, formData, {

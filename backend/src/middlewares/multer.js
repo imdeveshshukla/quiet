@@ -8,15 +8,12 @@ const _dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
-        console.log("Multer");
         const uploadPath = path.resolve(_dirname, 'public', 'img');
-        console.log("Multer ",uploadPath)
         cb(null, uploadPath);
     },
     filename: function (req, file, cb) {
         const uniqueSuffix = Date.now();
         req.file = file;
-        console.log("Multer ",req.file);
         cb(null, `${req.userId}-${uniqueSuffix}-${file.originalname}`);
     }
 });
