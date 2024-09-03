@@ -7,7 +7,8 @@ const __filename = fileURLToPath(import.meta.url);
 const _dirname = path.dirname(__filename);
 
 const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
+  destination: function (req, file, cb) {
+        console.log("Multer");
         const uploadPath = path.resolve(_dirname, 'public', 'img');
         console.log("Multer ",uploadPath)
         cb(null, uploadPath);

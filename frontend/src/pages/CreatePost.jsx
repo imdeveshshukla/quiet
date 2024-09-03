@@ -94,7 +94,8 @@ const [error, seterror] = useState("")
       formData.append('postImg', image);
 
       if (roomTitle) formData.append('subCommunity', roomTitle);
-
+      console.log("Creating Post");
+      console.log(formData);
       setLoading(true);
       toast.loading("Posting....");
       const response = await axios.post(`${baseAddress}posts/postWithImg`, formData, {
@@ -120,7 +121,9 @@ const [error, seterror] = useState("")
     } catch (error) {
       toast.dismiss()
       // setShowCP(false);
-      toast.error(error.response.data.msg);
+      setLoading(false);
+      console.log(error);
+      toast.error(error.response?.data.msg || "Fails To Post");
     }
     setLoading(false);
 

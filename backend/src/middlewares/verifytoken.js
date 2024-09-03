@@ -10,7 +10,7 @@ export const verifyToken = (req, res, next) => {
       if (payload.email) {
         req.userId = payload.userId;
         req.email = payload.email;
-        // console.log("Token varified");
+        console.log("Token varified");
         next();
       } else res.status(401).send({ msg: "Invalid Token" });
       
