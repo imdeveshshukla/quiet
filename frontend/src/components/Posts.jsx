@@ -126,7 +126,7 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
         if(insideOverView)
         {
           dispatch(toggleUserInfoUpvote(-1));
-        } 
+        }
         val = 0;
         setUpvote((upvoteNumber) => upvoteNumber - 1);
       }
