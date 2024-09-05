@@ -83,11 +83,13 @@ export const createPost = async (req, res) => {
 export const getPost = async (req, res) => {
   const userId = req.userId;
   const page = parseInt(req.query.page) || 1;
-  const limit = parseInt(req.query.limit) || 10;
-  const offset = (page - 1) * limit;
+  const limit = parseInt(req.query.limit) || 15;
+  const offset = parseInt(req.query.offset) || 0;
   const roomTitle = req.query?.title;
   // console.log(offset, limit);
   console.log(roomTitle);
+  console.log(limit, offset);
+  
 
   try {
     const posts = await prisma.post.findMany({
@@ -114,6 +116,8 @@ export const getPost = async (req, res) => {
         (upvote) => upvote.commentId === null
       );
     });
+
+    
 
     res.status(200).json({
       posts,

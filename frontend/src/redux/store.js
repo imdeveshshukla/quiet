@@ -16,6 +16,11 @@ import userRoomsReducer from './userRooms'
 import PageReducer from './Page'
 import { roomsApi } from '../pages/RoomApis'
 import welcomeStateReducer  from './welcome'
+import onNewPostReducer from './onNewPost'
+import offsetReducer from './offset'
+
+
+
 
 export const store = configureStore({
   reducer: {
@@ -35,7 +40,9 @@ export const store = configureStore({
     rooms:userRoomsReducer,
     page:PageReducer,
     welcome: welcomeStateReducer,
-    roomsApi:roomsApi.reducer
+    roomsApi:roomsApi.reducer,
+    onNewPost: onNewPostReducer,
+    offset: offsetReducer,
   },
 
   middleware: (getDefaultMiddleware) =>

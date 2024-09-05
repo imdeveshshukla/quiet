@@ -195,7 +195,7 @@ const varifyOtp = async (req, res) => {
         { userId: userID, email: email },
         process.env.SECRET_KEY,
         {
-          expiresIn: 24 * 60 * 60,
+          expiresIn: 7*24 * 60 * 60,
         }
       );
       const updateUser = await prisma.user.update({
@@ -313,7 +313,7 @@ const signin = async (req, res) => {
       { userId: user.userID, email: user.email },
       process.env.SECRET_KEY,
       {
-        expiresIn: 24 * 60 * 60,
+        expiresIn: 7*24 * 60 * 60,
       }
     );
     console.log(token);

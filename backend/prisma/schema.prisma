@@ -39,7 +39,40 @@ model User{
 
   createdAt   DateTime  @default(now())
   updatedAt   DateTime  @updatedAt
+
+  polls Poll[]
+  votes Vote[]
 }
+
+model Poll {
+  id          String      @id @default(uuid())
+  title       String
+  description String?
+  options     PollOption[]
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  createdBy   User        @relation(fields: [userId], references: [userID])
+  userId      String
+}
+
+model PollOption {
+  id        String @id @default(uuid())
+  text      String
+  poll      Poll   @relation(fields: [pollId], references: [id])
+  pollId    String
+  votes     Vote[]
+}
+
+model Vote {
+  id        String   @id @default(uuid())
+  user      User     @relation(fields: [userId], references: [userID])
+  userId    String
+  option    PollOption @relation(fields: [optionId], references: [id])
+  optionId  String
+  createdAt DateTime @default(now())
+
+}
+
 
 
 
