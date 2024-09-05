@@ -24,7 +24,8 @@ import { setUserPollvote } from '../redux/userpolls';
 
 
 
-const Polls = ({ poll,setPollVote, user, inRoom, topic }) => {
+const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
+
 
     const userInfo = useSelector(state => state.user.userInfo);
     const isLogin = useSelector(state => state.login.value);
@@ -49,6 +50,7 @@ const Polls = ({ poll,setPollVote, user, inRoom, topic }) => {
     useEffect(() => {
 
         const totalVotesPerPoll = poll?.options?.reduce((total, option) => total + option.votes.length, 0);
+
         setTotalVotes(totalVotesPerPoll)
 
     }, [poll]); // Run this effect when options change
@@ -183,7 +185,7 @@ const Polls = ({ poll,setPollVote, user, inRoom, topic }) => {
                     </div>
 
 
-                    <div className=' text-end text-sm mt-1 mr-2 text-gray-700'>Total_votes: {totalVotes}</div>
+                    <div className=' text-end text-sm mt-1 mr-2 text-gray-700'>Total_votes: {totalVotes||0}</div>
 
                 </main>
 

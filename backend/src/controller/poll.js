@@ -1,7 +1,7 @@
 import prisma from "../../db/db.config.js";
 
 export const createPoll = async (req, res) => {
-  const { title, options } = req.body;
+  const { title, options,subCommunity } = req.body;
   try {
     const poll = await prisma.poll.create({
       data: {
@@ -12,6 +12,7 @@ export const createPoll = async (req, res) => {
           })),
         },
         userId: req.userId,
+        subCommunity: subCommunity
       },
     });
     res.status(200).send(poll);
@@ -116,11 +117,15 @@ export const getAllPolls= async(req,res)=>{
     
     const limit= parseInt(req.query.limit) ||15;
     const offset= parseInt(req.query.offset) || 0;
-    console.log(limit, offset);
+    const subCommunity = req.query?.subCommunity;
     
-
+    console.log(limit, offset, subCommunity);
+    
     try {
         const poll = await prisma.poll.findMany({
+          where:{
+            subCommunity:subCommunity?subCommunity:null,
+          },
           include: {
             options: {
               include: {
@@ -133,10 +138,13 @@ export const getAllPolls= async(req,res)=>{
           take:limit,
         });
     
-    
         res.status(200).send(poll);
       } catch (error) {
         console.error(error);
         res.status(500).send({ error: "Error fetching poll" });
       }
+}
+
+export const deletePoll = async(req,res)=>{
+
 }

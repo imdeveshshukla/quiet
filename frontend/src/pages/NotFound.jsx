@@ -29,12 +29,13 @@ const NotFound = ({gotError}) => {
 
         </div>
 
-        <h1 className="text-2xl font-bold mb-2 text-[#6d712eb8]">Page Not Found</h1>
+        <h1 className="text-2xl font-bold mb-2 text-[#6d712eb8]">{gotError?"Some Technical Error":"Page Not Found"}</h1>
         <p className=" mb-4 text-[#6d712eb8]">Sorry, but we can't find the page you are looking for...</p>
         {!gotError&&<Link to="/" className=" border-black flex items-center gap-2 border rounded py-1 px-4  hover:bg-[#c2c596e0] hover:text-blue-500"
         >
           <IoHome className=' text-gray-700 ' /><span>Back to Home</span>
         </Link>}
+        
       </div>
     </div>
   );

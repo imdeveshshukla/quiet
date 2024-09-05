@@ -222,8 +222,8 @@ function App() {
 
 
               <Route path='create' element={<CreatePostorPoll/>}>
-                <Route path='poll' element={<CreatePoll />} />
-                <Route path='post' element={<CreatePost />} />
+                <Route path='poll' element={<CreatePoll/>} />
+                <Route path='post' element={<CreatePost/>} />
               </Route>
 
 

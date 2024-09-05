@@ -53,21 +53,24 @@ model Poll {
   updatedAt   DateTime    @updatedAt
   createdBy   User        @relation(fields: [userId], references: [userID])
   userId      String
+
+  subCommunity String? 
+  room Rooms? @relation(fields: [subCommunity],references: [title],onDelete: Cascade,onUpdate: Cascade)
 }
 
 model PollOption {
   id        String @id @default(uuid())
   text      String
-  poll      Poll   @relation(fields: [pollId], references: [id])
+  poll      Poll   @relation(fields: [pollId], references: [id],onDelete: Cascade,onUpdate: Cascade)
   pollId    String
   votes     Vote[]
 }
 
 model Vote {
   id        String   @id @default(uuid())
-  user      User     @relation(fields: [userId], references: [userID])
+  user      User     @relation(fields: [userId], references: [userID],onDelete: Cascade,onUpdate: Cascade)
   userId    String
-  option    PollOption @relation(fields: [optionId], references: [id])
+  option    PollOption @relation(fields: [optionId], references: [id],onDelete: Cascade,onUpdate: Cascade)
   optionId  String
   createdAt DateTime @default(now())
 
@@ -160,6 +163,7 @@ model Rooms{
   UsersEnrolled EnrolledRooms[] @relation("RoomsId")
   
   posts Post[] 
+  polls Poll[]
   @@unique([id,title])
 }
 
