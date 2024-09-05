@@ -5,7 +5,7 @@ import { createPoll, getAllPolls, getPoll, votePoll } from "../controller/poll.j
 
 const pollRoutes = express.Router();
 
-pollRoutes.get('/getpoll/:pollId', getPoll );
+pollRoutes.get('/getpoll/', getPoll );
 pollRoutes.get('/getallpolls/', getAllPolls );
 pollRoutes.post('/createpoll', verifyToken, createPoll );
 pollRoutes.post('/votepoll', verifyToken, votePoll );

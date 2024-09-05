@@ -118,7 +118,7 @@ const Home = () => {
         dataLength={posts.length}
         next={fetchMoreData}
         hasMore={hasMore}
-        loader={<Postskelton />}
+        loader={<div className='py-2'><Postskelton/></div>}
         endMessage={
           <p className='text-center break-words font-semibold p-4'>
             {`${posts.length === 0 ? "It looks like there's no posts to display." : "You've reached the end of the page!"}`}
@@ -133,9 +133,9 @@ const Home = () => {
         </div>
 
         <div className="post">
-          {(isSkelton && posts.length === 0) ? (
+          { (posts.length === 0) ? (
             <Postskelton />
-          ) : (
+          ) :(
             posts?.map((post) => (
               'body' in post ? (
                 <Posts

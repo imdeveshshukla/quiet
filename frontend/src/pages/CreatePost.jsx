@@ -56,8 +56,6 @@ const CreatePost = () => {
     setmediaLoading(true)
     setdisable(true)
 
-    // Check file size
-    console.log(file);
 
     if (file.size <= 3 * 1024 * 1024) {
       // File size is less than or equal to 3MB, no need to compress
@@ -75,8 +73,6 @@ const CreatePost = () => {
 
     try {
       const compressedFile = await imageCompression(file, options);
-      console.log("Compressed File");
-      console.log(compressedFile)
       setImage(compressedFile);
     } catch (error) {
       console.error('Error compressing image:', error);
@@ -101,19 +97,13 @@ const CreatePost = () => {
     }
     const formData = new FormData();
     try {
-      // console.log("Above Formadata append");
-      // console.log(description);
-      // console.log(image);
       formData.append('title', title);
       formData.append('topic', selectedOption);
       formData.append('body', description);
       formData.append('postImg', image);
 
       if (roomTitle) formData.append('subCommunity', roomTitle);
-      // console.log("Creating Post...");
-      // for (let keyValue of formData.entries()) {
-      //   console.log(keyValue);
-      // }
+  
       setLoading(true);
       toast.loading("Posting....");
       const response = await axios.post(`${baseAddress}posts/postWithImg`, formData, {
@@ -123,7 +113,6 @@ const CreatePost = () => {
       });
 
       if (setPost) {
-        console.clear();
         setPost(response.data.post);
       }
       if (response.status == 201) {
@@ -202,7 +191,7 @@ const CreatePost = () => {
         onChange={(e) => handleTitleChange(e)}
         className="w-full p-2 resize-none border h-20 border-gray-300 rounded-md focus:outline-none focus:border-[#656923]"
         placeholder="Write a Specific title"
-        required />
+         />
     </div>
     {/* Content Textarea */}
     <div className="mb-4 flex flex-col gap-2">
@@ -219,7 +208,7 @@ const CreatePost = () => {
         }}
         className="w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:border-[#656923] h-40 resize-none"
         placeholder="Keep It Relevant"
-        required
+        
       />
 
       <span className=" text-red-500 text-xs pl-2">{error}</span>
@@ -258,9 +247,6 @@ export const CreatePostorPoll = ({ roomTitle, setPost }) => {
   const Navigate = useNavigate()
   const location = useLocation();
   const currentPath = location.pathname.split('/').pop();
-  console.log(currentPath);
-
-
 
 
 
@@ -316,8 +302,18 @@ export const CreatePoll = () => {
   const [title, setTitle] = useState('');
   const [options, setOptions] = useState(['', '']);
   const [loading, setloading] = useState(false)
+  const titleLimit = 150;
+  const [titleLen, setTitleLen] = useState(0)
   const dispatch = useDispatch()
   const Navigate = useNavigate()
+
+  const handleTitleChange=(e)=>{
+    
+    let input = String(e.target.value).slice(0, 150);
+
+    setTitle(input)
+    setTitleLen(input.length)
+  }
 
   const handleOptionChange = (index, value) => {
     const newOptions = [...options];
@@ -348,7 +344,7 @@ export const CreatePoll = () => {
         title: poll.title,
         options: poll.options,
       })
-      console.log(res);
+
 
       if (res.status == 200) {
         setTitle('');
@@ -371,16 +367,23 @@ export const CreatePoll = () => {
     <form  onSubmit={handleSubmit} className=" flex flex-col ">
       <div>
       <div>
-        <label className="block text-sm font-medium text-gray-700">Poll Title</label>
-        <input
-          type="text"
-          spellCheck="false"
-          value={title}
-          onChange={(e) => setTitle(e.target.value)}
-          required
-          className="mt-1 block w-full outline-none px-3 py-2 border  focus:border-[#656923] border-gray-300 rounded-md"
-          placeholder="Write a Specific title"
-        />
+      <div className=" flex items-center justify-between">
+        <label htmlFor="title" className="block text-[#656923] font-bold mb-2">
+          Title
+        </label>
+        <div className=" text-xs font-mono">{titleLen}/{titleLimit}</div>
+
+      </div>
+        
+
+        <textarea
+        spellCheck="false"
+        id="title"
+        value={title}
+        onChange={(e) => handleTitleChange(e)}
+        className="w-full p-2 resize-none border h-20 border-gray-300 rounded-md focus:outline-none focus:border-[#656923]"
+        placeholder="Write a Specific title"
+        required />
       </div>
 
       <div className="mt-4">

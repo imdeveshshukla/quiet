@@ -96,7 +96,7 @@ const ProfilePosts = () => {
             endMessage={<p className='text-center break-words font-semibold p-4'>{`${userPost.length === 0 ? "It looks like the user hasn't made any posts yet." : "You've reached the end of the page!"}`}</p>}
         >
             <div className=''>
-                {(isSkelton && userPost.length === 0) ? <Postskelton /> :
+                {
                     userPost.map(post => (
                         <Posts key={uuidv4()} joined={true} post={post} topic={post.topic} inRoom={post.subCommunity} room={post.room} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
                     ))
@@ -186,7 +186,7 @@ export const ProfilePoll= ()=>{
             endMessage={<p className='text-center break-words font-semibold p-4'>{`${userPoll.length === 0 ? "It looks like the user hasn't made any posts yet." : "You've reached the end of the page!"}`}</p>}
         >
             <div className=''>
-                {(isSkelton && userPoll.length === 0) ? <PollSkelton /> :
+                {
                     userPoll.map(poll => (
                         <Polls key={poll.id} poll={poll} />
                     ))
@@ -202,7 +202,8 @@ export const ProfilePostOrPoll= ()=>{
     return(
         <div>
             <div className='flex gap-2 justify-end mx-4 xxs:mx-8 mt-6'>
-    <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'} px-3 py-1 rounded-md`}>
+                
+    <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'}  rounded-md`}>
         <input 
             className='size-4 hidden' 
             onChange={() => setdisVal("post")} 
@@ -213,14 +214,14 @@ export const ProfilePostOrPoll= ()=>{
             id="post" 
         />
         <label 
-            className={`font-semibold font-roboto cursor-pointer ${disVal === 'post' ? 'text-white' : 'text-gray-700'}`} 
+            className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'post' ? 'text-white' : 'text-gray-700'}`} 
             htmlFor="post">
             Post
         </label>
     </div>
-    <div className={`flex items-center gap-1 ${disVal === 'poll' ? 'bg-[#65692375]' : 'bg-gray-200'} px-3 py-1 rounded-md`}>
+    <div className={`flex items-center ${disVal === 'poll' ? 'bg-[#65692375]' : 'bg-gray-200'}  rounded-md`}>
         <input 
-            className='size-4 hidden' 
+            className=' hidden' 
             onChange={() => setdisVal("poll")} 
             checked={disVal === "poll"} 
             type="radio" 
@@ -229,7 +230,7 @@ export const ProfilePostOrPoll= ()=>{
             id="poll" 
         />
         <label 
-            className={`font-semibold font-roboto cursor-pointer ${disVal === 'poll' ? 'text-white' : 'text-gray-700'}`} 
+            className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'poll' ? 'text-white' : 'text-gray-700'}`} 
             htmlFor="poll">
             Poll
         </label>

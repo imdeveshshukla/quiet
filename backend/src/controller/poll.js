@@ -85,11 +85,11 @@ export const votePoll = async (req, res) => {
 };
 
 export const getPoll = async (req, res) => {
-  const { pollId } = req.params;
+  const id = req.query.id;
 
   try {
     const poll = await prisma.poll.findUnique({
-      where: { id: pollId },
+      where: { id },
       include: {
         options: {
           include: {

@@ -89,7 +89,7 @@ const fetchMoreData = () => {
             endMessage={<p className='text-center break-words font-semibold p-4'>{`${userPost.length === 0 ? "It looks like the user hasn't made any upvotes yet." : "You've reached the end of the page!"}`}</p>}
         >
             <div className='py-8'>
-                {(isSkelton && userPost.length === 0) ? <></> :
+                {
                     userPost.map(post => (
                         <Posts key={uuidv4()} post={post} joined={true} inRoom={post.subCommunity} room={post.room} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
                     ))

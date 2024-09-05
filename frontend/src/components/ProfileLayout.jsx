@@ -125,13 +125,14 @@ const ProfileLayout = ({ isLoading, user }) => {
           <div className=' relative flex flex-col xs:gap-1'>
             <div className=' text-lg   break-words sm:text-3xl font-bold'>{user.username}</div>
             <div className=' text-xs xxs:text-base font-semibold text-gray-700'>u/{user.username}</div>
-            <div className=' text-xs  break-words font-semibold text-blue-900 break-all overflow-clip line-clamp-2'>{user.bio&&`"${user.bio}"`}</div>
+
+            <div className=' text-xs mr-8 xs:mr-8 sm:mr-20 break-words font-semibold text-blue-900 break-all overflow-clip line-clamp-3'>{user.bio&&`"${user.bio}"`}</div>
 
           </div>
 
 
 
-          <div className=' flex items-center gap-3  absolute  bottom-1 right-4 xxs:right-8 xs:right-12 sm:right-20 '>
+          <div className=' flex items-center gap-3  absolute  bottom-0 right-4 xxs:right-8 xs:right-12 sm:right-20 '>
             {user.showLC &&
               <button onClick={() => setshowLCard(true)} className=' bg-black rounded-full flex p-2 items-center justify-center '>
                 <LeetCodeLogo />

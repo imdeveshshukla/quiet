@@ -115,7 +115,7 @@ const Overview = () => {
         endMessage={<p className='text-center break-words font-semibold p-4'>{`${userData.length === 0 ? "It looks like the user hasn't made any posts or comments yet." : "You've reached the end of the page!"}`}</p>}
       >
         <div className='py-8'>
-          {isSkelton && userData.length === 0 ? null :
+          {
             (
               userData.map((e) => (
                 'postId' in e

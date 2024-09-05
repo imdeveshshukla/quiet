@@ -24,7 +24,7 @@ import { setUserPollvote } from '../redux/userpolls';
 
 
 
-const Polls = ({ poll, user, inRoom, topic }) => {
+const Polls = ({ poll,setPollVote, user, inRoom, topic }) => {
 
     const userInfo = useSelector(state => state.user.userInfo);
     const isLogin = useSelector(state => state.login.value);
@@ -63,13 +63,14 @@ const Polls = ({ poll, user, inRoom, topic }) => {
                 pollOptionId: selectedOption,
             });
 
-            console.log(res);
-
 
             if (res.status === 200) {
                 setHasVoted(true);
                 dispatch(setPollvote(res.data))
                 dispatch(setUserPollvote(res.data))
+                if(setPollVote){
+                    setPollVote(res.data)
+                }
             }
         } catch (error) {
             console.error('Error voting:', error);
@@ -101,11 +102,23 @@ const Polls = ({ poll, user, inRoom, topic }) => {
         };
     }, []);
 
+    const handleClick = (e,id) => {
+
+        if (e.target.closest('.exclude-click')) {
+          return;
+        }
+        Navigate(`/poll/${id}`)
+        console.log("click");
+        
+        
+    
+      };
+
 
     return (
-        <div key={poll.id}>
-            <div className='px-4 py-2 xxs:px-8 xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
-                <header className='flex gap-2 items-center my-2'>
+        <div onClick={(e)=>handleClick(e, poll.id)} key={poll.id}>
+            <div className='px-4 py-2 xxs:px-8 cursor-default xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
+                <header className='flex gap-2 items-center my-2 exclude-click'>
                     <img onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} src={poll?.createdBy?.dp || dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
                     <div className=' flex flex-wrap gap-1 xs:gap-2 md:gap-4 items-center'>
                         <span onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{poll?.createdBy?.username}</span>•{(inRoom && <><span onClick={() => Navigate(`/room/${user.userID}/${room.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room?.title}</span> <span>•</span></>)
@@ -113,9 +126,9 @@ const Polls = ({ poll, user, inRoom, topic }) => {
 
                     </div>
                     {poll?.userId === userInfo?.userID ?
-                        <div className="relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
+                        <div className="exclude-click relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
 
-                            <button onClick={handleToggle} className="flex items-center hover:focus:outline-none">
+                            <button onClick={handleToggle} className="flex  items-center hover:focus:outline-none">
                                 <BsThreeDotsVertical />
                             </button>
                             {isOpen && (
@@ -132,11 +145,9 @@ const Polls = ({ poll, user, inRoom, topic }) => {
                         </div> : <></>}
                 </header>
                 <main className=''>
-                    <div className=' text-lg font-roboto font-medium '>{poll?.title}</div>
+                    <div  className=' my-2 font-sans'><ReadMore children={poll?.title} maxLines={3} /></div>
 
-                    <div className='relative flex flex-col gap-1'>
-
-
+                    <div className='relative flex flex-col gap-2 '>
 
                         {poll?.options?.map(option => (
 
@@ -145,9 +156,9 @@ const Polls = ({ poll, user, inRoom, topic }) => {
                                     handleVote(option.id)
                                     setLoadingOptionId(option.id)
                                 }
-                            }} key={`${uuidv4()}${option.id}`} className='option cursor-pointer relative  '>
-                                <div className={` ${option.votes.some(vote => vote.userId == userInfo?.userID) && ' shadow-md shadow-current'} flex justify-between items-center   relative border-2 bg-gray-200 px-2 py-1  rounded-md border-[#6d712eb8]`}>
-                                    <span className=' text-sm  font-ubuntu font-semibold'>{option.text}</span>
+                            }} key={`${uuidv4()}${option.id}`} className='exclude-click option cursor-pointer relative  '>
+                                <div className={` ${option.votes.some(vote => vote.userId == userInfo?.userID) && '  shadow-green-900'} flex justify-between items-center shadow-inner shadow-black  relative  bg-gray-200 px-2 py-1  rounded-md `}>
+                                    <span className=' text-sm  font-ubuntu break-all break-words line-clamp-1 mr-2  font-semibold'>{option.text}</span>
                                     <span className=' text-xs font-semibold'>{`${((option.votes.length * 100 / totalVotes) || 0).toFixed(2)}%`}</span>
 
                                 </div>
@@ -160,7 +171,7 @@ const Polls = ({ poll, user, inRoom, topic }) => {
 
                                 <div style={{
                                     width: `${(option.votes.length * 100 / totalVotes)}%`
-                                }} className={`absolute top-0 rounded-md ${option.votes.some(vote => vote.userId == userInfo?.userID) ? 'bg-[#c2c84da9]' : 'bg-[#f9ff86a9]'} min-h-full `}>
+                                }} className={`absolute top-0 rounded-md ${option.votes.some(vote => vote.userId == userInfo?.userID) ? 'bg-green-400 shadow-green-700 bg-opacity-60' : 'bg-blue-300 shadow-blue-700 bg-opacity-60'} min-h-full shadow-inner `}>
 
                                 </div>
                             </button>
