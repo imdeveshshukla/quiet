@@ -84,6 +84,31 @@ export const CommentSkelton = () => {
 }
 
 
+export const PollSkelton= ()=>{
+    return(
+        <div className=" h-full rounded-3xl m-2 p-2 xxs:m-6 xxs:p-4 bg-[#a3a674f0] animate-pulse">
+            <header className='flex gap-2 items-center my-2'>
+                <div className="w-8 h-8 rounded-full bg-white"></div>
+                <div className='h-4 bg-gray-300 w-32 my-2 rounded'></div>
+            </header>
+
+            <main className='cursor-pointer'>
+                <div className='h-7 bg-gray-300 w-4/5 my-2 rounded'></div>
+               
+                <div className='h-5 bg-gray-300 w-full my-2 rounded'></div>
+                <div className='h-5 bg-gray-300 w-full my-2 rounded'></div>
+                <div className='h-5 bg-gray-300 w-full my-2 rounded'></div>
+                
+                <div className='h-5 bg-gray-300 w-full my-2 rounded'></div>
+                
+            </main>
+
+           
+        </div>
+    )
+}
+
+
 export const ProfileSkelton = () => {
     return (<>
         <div className=" h-full rounded-3xl m-2 p-2 xxs:m-6 xxs:p-4 bg-[#a3a674f0] animate-pulse">

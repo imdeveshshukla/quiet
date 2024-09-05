@@ -18,6 +18,7 @@ import { roomsApi } from '../pages/RoomApis'
 import welcomeStateReducer  from './welcome'
 import onNewPostReducer from './onNewPost'
 import offsetReducer from './offset'
+import userPollReducer  from './userpolls'
 
 
 
@@ -31,6 +32,7 @@ export const store = configureStore({
     skelton: skeltonReducer,
     postDetail: postDetailReducer,
     userpost: userPostReducer,
+    userpoll: userPollReducer,
     hotpost: HotPostReducer,
     notification: NotificationReducer,
     profile: profileReducer,
@@ -43,6 +45,7 @@ export const store = configureStore({
     roomsApi:roomsApi.reducer,
     onNewPost: onNewPostReducer,
     offset: offsetReducer,
+
   },
 
   middleware: (getDefaultMiddleware) =>

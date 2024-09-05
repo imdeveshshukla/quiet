@@ -41,7 +41,7 @@ import Rightnav from './components/Rightnav'
 import DisplayProfile from './pages/DisplayProfile'
 import ProfileComments from './pages/ProfileComments'
 import Profileupvoted from './pages/Profileupvoted'
-import ProfilePosts from './pages/ProfilePosts'
+import ProfilePosts, { ProfilePostOrPoll } from './pages/ProfilePosts'
 import Search from './components/Search';
 import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
@@ -229,7 +229,7 @@ function App() {
 
               <Route path='u/:username' element={<DisplayProfile />} >
                 <Route path='overview' element={<Overview />} />
-                <Route path='posts' element={<ProfilePosts />} />
+                <Route path='posts' element={<ProfilePostOrPoll />} />
                 <Route path='upvoted' element={<Profileupvoted />} />
                 <Route path='commented' element={<ProfileComments />} />
               </Route>
