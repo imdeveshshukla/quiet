@@ -28,18 +28,15 @@ const CreatePost = () => {
   const [disable, setdisable] = useState(false)
   const location = useLocation();
   const selectFile = useRef(null);
-  const { roomTitle, setPost } = useOutletContext()
+  const { roomTitle,roomCreatorId } = useOutletContext()
   const [selectedOption, setSelectedOption] = useState('');
   const [error, seterror] = useState("")
   const titleLimit = 300;
   const [titleLen, setTitleLen] = useState(0)
   const dispatch = useDispatch()
 
-
-
-
-
-
+  // console.log("Inside CreatePost");
+  // console.log(roomTitle," ",roomCreatorId);
   const handleTitleChange = (e) => {
     let input = String(e.target.value).slice(0, 300);
     seterror("")
@@ -75,8 +72,7 @@ const CreatePost = () => {
 
     try {
       const compressedFile = await imageCompression(file, options);
-      console.log("Compressed File");
-      console.log(compressedFile)
+      console.log("Compressed File ",compressedFile);
       setImage(compressedFile);
     } catch (error) {
       console.error('Error compressing image:', error);
@@ -123,7 +119,6 @@ const CreatePost = () => {
       });
 
       if (setPost) {
-        console.clear();
         setPost(response.data.post);
       }
       if (response.status == 201) {
@@ -134,9 +129,15 @@ const CreatePost = () => {
         setDescription("")
         setSelectedOption("")
         setImage(null)
-        dispatch(setOnNewPost(true))
-        navigate('/')
-
+        if(!roomTitle)
+        {
+          dispatch(setOnNewPost(true))
+          navigate('/')
+        }
+        else{
+          dispatch(setOnNewRoomPost(true));
+          navigate(`/room/${roomCreatorId}/${roomTitle}`);
+        }
       }
     } catch (error) {
       toast.dismiss()
@@ -179,7 +180,6 @@ const CreatePost = () => {
           <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="lifestyle">Lifestyle</option>
           <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="lucknow">Lucknow</option>
         </select>
-
       </div>
     </div>
       : <></>
@@ -253,22 +253,22 @@ const CreatePost = () => {
 export default CreatePost;
 
 
-export const CreatePostorPoll = ({ roomTitle, setPost }) => {
+export const CreatePostorPoll = () => {
   const createRef = useRef()
   const Navigate = useNavigate()
   const location = useLocation();
+  const { roomTitle,roomCreatorId } = useSelector((state)=>state.roomCreatePost.value);
   const currentPath = location.pathname.split('/').pop();
   console.log(currentPath);
-
-
-
-
-
+  
+  // console.log(roomTitle," ",roomCreatorId);
 
   const handleClickOutside = (event) => {
 
     if (createRef.current && !createRef.current.contains(event.target)) {
-      Navigate('/')
+      // console.log("Clicked OutSide ",roomTitle)
+      if(!roomTitle)Navigate('/')
+      else Navigate(`/room/${roomCreatorId}/${roomTitle}`);
     }
   };
 
@@ -291,17 +291,16 @@ export const CreatePostorPoll = ({ roomTitle, setPost }) => {
     <div className="fixed z-40 bg-[#0005] top-0 left-0 backdrop-blur-sm min-h-screen min-w-full ">
 
       <div ref={createRef} className=" h-[90%] absolute w-[95%] xxs:w-[85%] xs:w-[75%] sm:w-[60%] md:w-[50%] left-[50%] top-[50%] translate-y-[-50%] translate-x-[-50%]  bg-[#d5d6b5] shadow-md shadow-current rounded-lg px-6 pb-2 ">
-        <button className=" fixed right-1 top-1 flex items-center justify-center z-auto  w-5 h-5 rounded-full" onClick={() => Navigate('/')}>
+        <button className=" fixed right-1 top-1 flex items-center justify-center z-auto  w-5 h-5 rounded-full" onClick={() => roomTitle?Navigate(`/room/${roomCreatorId}/${roomTitle}`):Navigate('/')}>
           <IoClose className="text-[#404214] hover:text-red-600 text-2xl" />
         </button>
         <div className=' grid grid-cols-2  items-center mb-2 '>
           <NavLink to="post" className={(e) => ` ${e.isActive && ' bg-[#8e913c75] border-[#626424] border-b-4 rounded-b-xl'}  flex py-1 justify-center font-bold items-center   `}>Post</NavLink>
           <NavLink to="poll" className={(e) => ` ${e.isActive && ' bg-[#8e913c75] border-[#626424] border-b-4 rounded-b-xl'}  flex py-1 justify-center font-bold items-center   `}>Poll</NavLink>
-
         </div>
 
 
-        <Outlet context={{ roomTitle, setPost }} />
+        <Outlet context={{ roomTitle,roomCreatorId }} />
       </div>
     </div>
   </>)
@@ -310,6 +309,7 @@ export const CreatePostorPoll = ({ roomTitle, setPost }) => {
 
 import { RiDeleteBin6Line } from "react-icons/ri";
 import { BsPlusSquareDotted } from "react-icons/bs";
+import { setOnNewRoomPost } from "../redux/RoomCreatePosts";
 
 
 export const CreatePoll = () => {
@@ -318,13 +318,13 @@ export const CreatePoll = () => {
   const [loading, setloading] = useState(false)
   const dispatch = useDispatch()
   const Navigate = useNavigate()
+  const { roomTitle,roomCreatorId } = useOutletContext()
 
   const handleOptionChange = (index, value) => {
     const newOptions = [...options];
     newOptions[index] = value;
     setOptions(newOptions);
   };
-
   const handleAddOption = () => {
     if (options.length == 7) {
       toast("Options_Limit_Reached", {
@@ -342,11 +342,12 @@ export const CreatePoll = () => {
       title,
       options: options.filter(option => option.trim() !== ''),
     };
-
+    console.log("Handle SUbmit",roomTitle);
     try {
       const res = await axios.post(`${baseAddress}poll/createpoll`, {
         title: poll.title,
         options: poll.options,
+        subCommunity:roomTitle
       })
       console.log(res);
 
@@ -354,7 +355,8 @@ export const CreatePoll = () => {
         setTitle('');
         setOptions(['', '']);
         dispatch(setOnNewPost(true));
-        Navigate('/')
+        if(!roomTitle)Navigate('/')
+        else Navigate(`/room/${roomCreatorId}/${roomTitle}`);
 
       }
     } catch (error) {

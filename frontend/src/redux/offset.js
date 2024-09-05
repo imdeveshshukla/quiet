@@ -13,12 +13,12 @@ export const offsetState = createSlice({
   reducers: {
     setPostOffset: (state, action) => {
       state.value.postOffSet += action.payload;
-      console.log(state.value);
+      // console.log(state.value);
       
     },
     setPollOffset: (state, action) => {
       state.value.pollOffSet += action.payload;
-      console.log(state.value);
+      // console.log(state.value);
       
     },
     clearOffset: (state) => {

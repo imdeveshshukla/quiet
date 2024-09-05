@@ -10,11 +10,11 @@ import { clearPostsInfo, setPost } from '../redux/Post';
 import { setSkeltonLoader } from '../redux/skelton';
 import { GrRefresh } from "react-icons/gr";
 import SmallLoader from '../components/SmallLoader';
-import { increment, Reset } from '../redux/Page';
 import baseAddress from "../utils/localhost";
 import { setOnNewPost } from '../redux/onNewPost';
 import Polls from '../components/Polls';
 import { clearOffset, setPollOffset, setPostOffset } from '../redux/offset';
+import { addRoomCreatorId, addRoomTitle, setOnNewRoomPost } from '../redux/RoomCreatePosts';
 
 
 const Home = () => {
@@ -100,6 +100,9 @@ const Home = () => {
 
   // Initial fetch when the component is mounted
   useEffect(() => {
+    dispatch(addRoomTitle(null));
+    dispatch(addRoomCreatorId(null));
+    dispatch(setOnNewRoomPost(false));
     if (posts.length === 0) {
       getPost(true);
     }
@@ -109,7 +112,6 @@ const Home = () => {
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
     getPost(); // Fetch next set of data
-    dispatch(increment()); // Increment the page count
   };
 
   return (
