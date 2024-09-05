@@ -9,12 +9,59 @@ export const postState = createSlice({
   initialState,
   reducers: {
     setPost: (state, action) => {
-      Array.from(action.payload).map(item=>{
-        let elm= state.posts.find(it=> it.id==item.id )
-        if(!elm)
-          state.posts.push(item);
-      })
+      const newPosts = action.payload;
+      
+      // Filter out any posts that already exist based on their ID
+      const uniquePosts = newPosts.filter(
+        (newPost) => !state.posts.some((post) => post.id === newPost.id)
+      );
+      
+      // Append unique posts to the state
+      state.posts = [...state.posts, ...uniquePosts];
+      
+      console.log(state.posts);
     },
+    
+    
+    setPollvote: (state, action) => {
+      const { optionId, userId, option: { pollId } } = action.payload;
+  
+      state.posts = state.posts.map(poll => {
+          if (poll.id === pollId) {
+              const updatedOptions = poll.options.map(option => {
+
+                  const updatedVotes = option.votes.filter(vote => vote.userId !== userId);
+  
+                  if (option.id === optionId) {
+
+                      return {
+                          ...option,
+                          votes: [...updatedVotes, action.payload] 
+                      };
+                  }
+  
+                  return {
+                      ...option,
+                      votes: updatedVotes
+                  };
+              });
+  
+              return {
+                  ...poll,
+                  options: updatedOptions
+              };
+          }
+          return poll;
+      });
+  
+      console.log("Updated Posts State:", state.posts);
+  }
+  
+  ,
+  
+
+  
+
     setPostComment: (state, action) => {
       let post = state.posts.find((post) => post.id == action.payload.postId);
       if(post){
@@ -48,6 +95,6 @@ export const postState = createSlice({
   },
 });
 
-export const { setPost, setPostComment, toggleUpvote,clearPostsInfo } = postState.actions;
+export const { setPost, setPostComment,setPollvote, toggleUpvote,clearPostsInfo } = postState.actions;
 
 export default postState.reducer;

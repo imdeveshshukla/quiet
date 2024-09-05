@@ -11,11 +11,11 @@ import SmallLoader from './SmallLoader'
 import { setSkeltonLoader } from '../redux/skelton';
 import { useNavigate } from 'react-router-dom';
 import { IoMdAddCircleOutline } from "react-icons/io";
-import CreatePost from '../pages/CreatePost';
+import CreatePost, { CreatePostorPoll } from '../pages/CreatePost';
 import baseAddress from '../utils/localhost';
 
 
-const Createpost = ({ onNewPost }) => {
+const Createpost = () => {
   const userInfo = useSelector((state) => state.user.userInfo);
   const selectFile = useRef(null);
   const Navigate = useNavigate()
@@ -48,7 +48,7 @@ const Createpost = ({ onNewPost }) => {
     setLoading(true);
     toast.loading("Posting....");
     try {
-      const response = await axios.post(baseAddress+'posts/postWithImg', formData, {
+      const response = await axios.post(baseAddress + 'posts/postWithImg', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -61,7 +61,6 @@ const Createpost = ({ onNewPost }) => {
         setDescription("")
         setSelectedOption("")
         setImage(null)
-        onNewPost()
       }
     } catch (error) {
       toast.dismiss()
@@ -73,9 +72,10 @@ const Createpost = ({ onNewPost }) => {
 
   return (
     <>
-      {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP} />}
+
       <div className=' p-4 xs:p-8 flex relative justify-center gap-4' >
-        <div onClick={() => { setShowCP(true) }} className=' w-[80%] 2_md:w-[60%] cursor-pointer'>
+        <div onClick={() => Navigate('/create')}
+          className=' w-[80%] 2_md:w-[60%] cursor-pointer'>
           <div className="hover:cursor-pointer hover:bg-[#4140401b]  relative flex flex-col gap-2 py-2 px-5 xxs:px-14  border rounded-xl bg-[#e2e4c6] shadow-md shadow-current justify-center">
             <div className="relative flex gap-2 items-center">
               <IoMdAddCircleOutline size={30} className='text-[#656923]' />

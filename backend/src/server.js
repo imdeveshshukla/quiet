@@ -8,6 +8,7 @@ import cors from'cors';
 import postRoutes from "./routes/posts.js";
 import roomsRouter from "./routes/roomsRouter.js";
 import searchRouter from "./routes/search.js";
+import pollRoutes from "./routes/poll.js";
 
 
 dotenv.config({
@@ -63,6 +64,7 @@ app.get('/', (req, res) => {
 app.use('/auth/',authRouter);
 app.use('/u/',userRouter);
 app.use('/posts',postRoutes);
+app.use('/poll',pollRoutes);
 app.use('/rooms',roomsRouter);
 app.use('/search/', searchRouter);
 
