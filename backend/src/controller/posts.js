@@ -18,18 +18,18 @@ export const createPost = async (req, res) => {
   if (req.file) {
     try {
       url = await uploadOnCloudinary(req.file.path);
-      console.log("file Object = " + url);
+      // console.log("file Object = " + url);
     } catch (err) {
       console.log("Failed To Upload Image\n",err);
       const message = err.message.split(".")[0]
-      console.log(message)
+      // console.log(message)
       return res.status(405).json({
         msg:message
       })
     }
   }
   const parsedBody = post.safeParse(postbody);
-  console.log(parsedBody);
+  // console.log(parsedBody);
 
   if (parsedBody.error)
     res.status(405).json({
@@ -87,9 +87,7 @@ export const getPost = async (req, res) => {
   const offset = parseInt(req.query.offset) || 0;
   const roomTitle = req.query?.title;
   // console.log(offset, limit);
-  console.log(roomTitle);
-  console.log(limit, offset);
-  
+  // console.log(roomTitle);
 
   try {
     const posts = await prisma.post.findMany({
@@ -196,7 +194,7 @@ export const getHotPost = async (req, res) => {
 export const deletePost = async(req,res) =>{
   const userId = req.userId;
   const id = req.body.id;
-  console.log(id);
+  // console.log(id);
   try{
     
     const post = await prisma.post.findFirst({
@@ -282,8 +280,8 @@ let posts = JSON.parse(stringify(result));
     return (p.privateRoom == null || p.privateRoom!=true)
   })
   const postIds = posts.map(post => post.id);
-  console.log("Inside Poular")
-  console.log(posts);
+  // console.log("Inside Poular")
+  // console.log(posts);
   const upvotes = await prisma.upvote.findMany({
     where: {
       postId: {

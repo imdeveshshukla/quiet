@@ -19,7 +19,7 @@ const usersSignInSchema = z.object({
 
 const sendEmailVarification = async ({ userID, username, email }, res) => {
   try {
-    console.log(userID, email);
+    // console.log(userID, email);
 
     const otp = `${Math.floor(1000 + Math.random() * 9000)}`;
     const hashOtp = await bcrypt.hash(otp, 10);
@@ -55,7 +55,7 @@ const sendEmailVarification = async ({ userID, username, email }, res) => {
           userID: userID,
         },
       });
-      console.log(isUser);
+      // console.log(isUser);
 
       if (isUser) {
         const updateUser = await prisma.userVarify.update({
@@ -68,7 +68,7 @@ const sendEmailVarification = async ({ userID, username, email }, res) => {
             expiresAt: Date.now() + 180000,
           },
         });
-        console.log(updateUser);
+        // console.log(updateUser);
       } else {
         const userdata = await prisma.userVarify.create({
           data: {
@@ -78,7 +78,7 @@ const sendEmailVarification = async ({ userID, username, email }, res) => {
             expiresAt: Date.now() + 180000,
           },
         });
-        console.log(userdata);
+        // console.log(userdata);
       }
 
       res
@@ -103,10 +103,7 @@ const signup = async (req, res) => {
       res.json({ message: "Credentials cannot be empty" });
     }
     const hashPass = bcrypt.hashSync(password, 10);
-    //here checks --------------
-    var token = jwt.sign({ email: email }, process.env.SECRET_KEY, {
-      expiresIn: "1d",
-    });
+    
 
     const isuser = await prisma.user.findFirst({
       where: {
@@ -145,7 +142,7 @@ const signup = async (req, res) => {
         },
       });
     }
-    console.log(newUser);
+    // console.log(newUser);
     await sendEmailVarification(newUser, res);
   } catch (error) {
     console.log(error);
@@ -195,7 +192,7 @@ const varifyOtp = async (req, res) => {
         { userId: userID, email: email },
         process.env.SECRET_KEY,
         {
-          expiresIn: 7*24 * 60 * 60,
+          expiresIn: 24 * 60 * 60 * 7,
         }
       );
       const updateUser = await prisma.user.update({
@@ -229,7 +226,7 @@ const varifyOtp = async (req, res) => {
 };
 
 const resendOtp = async (req, res) => {
-  console.log(req.body);
+  // console.log(req.body);
   try {
     await sendEmailVarification(req.body, res);
   } catch (error) {
@@ -239,7 +236,7 @@ const resendOtp = async (req, res) => {
 
 const resetPassword = async (req, res) => {
   const { email } = req.body;
-  console.log(req.body);
+  // console.log(req.body);
 
   const user = await prisma.user.findUnique({
     where: {
@@ -301,7 +298,7 @@ const signin = async (req, res) => {
         ],
       },
     });
-    console.log(user);
+    // console.log(user);
 
     if (!user) {
       return res
@@ -313,15 +310,15 @@ const signin = async (req, res) => {
       { userId: user.userID, email: user.email },
       process.env.SECRET_KEY,
       {
-        expiresIn: 7*24 * 60 * 60,
+        expiresIn: 24 * 60 * 60 * 7,
       }
     );
-    console.log(token);
+    // console.log(token);
 
     const hashPass = user.password;
     const isVarified = user.isVarified;
     const validPass = bcrypt.compareSync(password, hashPass);
-    console.log(validPass);
+    // console.log(validPass);
     if (!isVarified) {
       res.status(404).send({ msg: "User is not varified!" });
     }
