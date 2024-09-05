@@ -56,13 +56,14 @@ export const getUser = async (req, res) => {
         userID: true,
         username: true,
         dp: true,
-        bgImg:true,
+        bio: true,
+        bgImg: true,
         createdAt: true,
         leetcode: true,
         showLC: true,
-        showCf:true,
-        codeforces:true,
-        upvotes:true,
+        showCf: true,
+        codeforces: true,
+        upvotes: true,
         _count: {
           select: {
             posts: true,
@@ -74,12 +75,11 @@ export const getUser = async (req, res) => {
     });
     // console.log("Inside FindUser")
     // console.log(user);
-    user.upvotes.forEach((up)=>{
-      if(up.upvotes == -1)
-      {
+    user.upvotes.forEach((up) => {
+      if (up.upvotes == -1) {
         user._count.upvotes--;
       }
-    })
+    });
 
     res.status(200).send(user);
   } catch (error) {}
@@ -92,7 +92,6 @@ export const getUserPosts = async (req, res) => {
   // console.log(page, offset);
   const { userID, username } = req.query;
   // console.log(userID, username);
-
 
   try {
     const user = await prisma.user.findUnique({
@@ -119,12 +118,39 @@ export const getUserPosts = async (req, res) => {
         },
       },
     });
-    const post = user.posts.filter((post)=>{
-      return (post.room==null || post.room.privateRoom==false);
-    })
+    const post = user.posts.filter((post) => {
+      return post.room == null || post.room.privateRoom == false;
+    });
     res.status(200).send({ posts: post });
   } catch (error) {
     console.log(error);
+  }
+};
+
+export const getUserPolls = async (req, res) => {
+  const userId = req.query.userId;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset =  (page - 1) * limit;
+  try {
+    const poll = await prisma.poll.findMany({
+      where: {
+        userId,
+      },
+      include: {
+        options: {
+          include: {
+            votes: true,
+          },
+        },
+        createdBy: true,
+      },
+      skip:offset,
+      take:limit,
+    });
+     res.status(200).send(poll);
+  } catch (error) {
+     res.staus(401).send(error);
   }
 };
 
@@ -135,7 +161,6 @@ export const getUserComments = async (req, res) => {
   // console.log(page, offset);
   const { userID, username } = req.query;
   // console.log(userID);
-
 
   try {
     const comments = await prisma.comment.findMany({
@@ -169,7 +194,6 @@ export const getUserComments = async (req, res) => {
     // console.log(altcomments);
     
     res.status(200).send(altcomments);
-    
   } catch (error) {
     console.log(error);
   }
@@ -181,7 +205,7 @@ export const getUserUpvotes = async (req, res) => {
   const offset = (page - 1) * limit;
 
   let { userId } = req.query;
-  
+
   try {
     let data = await prisma.upvote.findMany({
       where: {
@@ -229,14 +253,13 @@ export const getLCdata = async (req, res) => {
     const username = bytes.toString(CryptoJS.enc.Utf8);
     // console.log("LC_username", username);
 
-    const data =await getLeetCodeData(username);
-    
+    const data = await getLeetCodeData(username);
 
     const user = data.matchedUser;
 
     if (!user) {
       res.status(404).send("user not found");
-      return
+      return;
     }
 
     const solved = user.submitStats.acSubmissionNum;

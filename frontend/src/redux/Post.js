@@ -18,8 +18,7 @@ export const postState = createSlice({
       
       // Append unique posts to the state
       state.posts = [...state.posts, ...uniquePosts];
-      
-      console.log(state.posts);
+     
     },
     
     
@@ -54,7 +53,7 @@ export const postState = createSlice({
           return poll;
       });
   
-      console.log("Updated Posts State:", state.posts);
+      
   }
   
   ,

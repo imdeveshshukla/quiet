@@ -20,7 +20,7 @@ const SmoothLoaderN = () => {
         >
           <animate
             attributeName="stroke-dashoffset"
-            values="0;100"
+            values="100;0"
             dur="0.7s"
             repeatCount="indefinite"
           />

@@ -1,5 +1,5 @@
 import express from 'express'
-import { getUserPosts, getUsers, getUserComments, getUserUpvotes,  getLCdata } from '../controller/search.js'
+import { getUserPosts, getUsers, getUserComments, getUserUpvotes,  getLCdata, getUserPolls } from '../controller/search.js'
 import { getUser } from '../controller/search.js'
 
 
@@ -9,6 +9,7 @@ searchRouter.get("/getusers/", getUsers);
 searchRouter.get("/getauser/", getUser);
 searchRouter.post("/getLCdata/", getLCdata);
 searchRouter.get("/getuserposts/", getUserPosts);
+searchRouter.get("/getuserpolls/", getUserPolls);
 searchRouter.get("/getusercomments/", getUserComments);
 searchRouter.get("/getuserupvotes/", getUserUpvotes);
 

@@ -21,7 +21,7 @@ import { ErrorBoundary } from 'react-error-boundary';
 import Overview from './pages/Overview'
 import baseAddress from "./utils/localhost";
 import Postdetail from './components/Postdetail'
-import Postskelton, { CommentSkelton, ProfileSkelton } from './components/Postskelton'
+import Postskelton, { CommentSkelton, PollSkelton, ProfileSkelton } from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
 import HotTopicPosts from './pages/HotTopicPosts'
 import sportsdp from './assets/sportsdp.jpg'
@@ -41,7 +41,7 @@ import Rightnav from './components/Rightnav'
 import DisplayProfile from './pages/DisplayProfile'
 import ProfileComments from './pages/ProfileComments'
 import Profileupvoted from './pages/Profileupvoted'
-import ProfilePosts from './pages/ProfilePosts'
+import ProfilePosts, { ProfilePostOrPoll } from './pages/ProfilePosts'
 import Search from './components/Search';
 import { setShowSearch } from './redux/search';
 import Room from './pages/Room'
@@ -54,6 +54,7 @@ import About, { WelcomePage } from './components/About'
 import { hide } from './redux/welcome'
 import CreatePost, { CreatePoll, CreatePostorPoll } from './pages/CreatePost'
 import Polls from './components/Polls'
+import PollDetail from './components/PollDetail'
 
 
 
@@ -229,14 +230,16 @@ function App() {
 
               <Route path='u/:username' element={<DisplayProfile />} >
                 <Route path='overview' element={<Overview />} />
-                <Route path='posts' element={<ProfilePosts />} />
+                <Route path='posts' element={<ProfilePostOrPoll />} />
                 <Route path='upvoted' element={<Profileupvoted />} />
                 <Route path='commented' element={<ProfileComments />} />
               </Route>
 
-              <Route path='/post/:roomid/:id' element={isSkelton ? <Postskelton /> : <Postdetail myRooms={myAllRoom} />} />
+              <Route path='/post/:roomid/:id' element={<Postdetail myRooms={myAllRoom} />} />
 
-              <Route path='/post/:id' element={isSkelton ? <Postskelton /> : <Postdetail />} />
+              <Route path='/post/:id' element={ <Postdetail />} />
+              <Route path='/poll/:id' element={ <PollDetail />} />
+
               <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg} />} />
               <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg} />} />
               <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"IET-Lucnow"} dp={ietdp} bg={ietbg} />} />

@@ -37,7 +37,7 @@ const ReadMore = ({ children, maxLines = 10 }) => {
         <Linkify componentDecorator={linkDecorator}>{children}</Linkify>
       </div>
       {isOverflowing && (
-        <button onClick={toggleIsTruncated} className="text-blue-500 mt-2 exclude-click">
+        <button onClick={toggleIsTruncated} className="text-blue-500 exclude-click mt-2 exclude-click">
           {isTruncated ? 'Read More' : 'Show Less'}
         </button>
       )}
