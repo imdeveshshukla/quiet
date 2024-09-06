@@ -111,7 +111,7 @@ export const CommentBox = ({ commentId = null, setOpenBox, setShowChild, openBox
           setOpenBox(false)
 
         }} className='px-4 py-2 rounded-3xl bg-gray-500 ' type="button">Cancel</button>
-        <button onClick={() => addComment()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{!loading ? (openBox ? "Reply" : "Comment") : <SmallLoader />}</button>
+        <button onClick={() => addComment()} className='px-4 py-2 rounded-3xl bg-blue-700' type="button">{!loading ? (openBox ? "Reply" : "Comment") : <SmoothLoader />}</button>
       </div>}
     </div>
   )

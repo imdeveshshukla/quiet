@@ -15,6 +15,7 @@ import { setOnNewPost } from '../redux/onNewPost';
 import Polls from '../components/Polls';
 import { clearOffset, setPollOffset, setPostOffset } from '../redux/offset';
 import { addRoomCreatorId, addRoomTitle, setOnNewRoomPost } from '../redux/RoomCreatePosts';
+import SmoothLoader from '../assets/SmoothLoader';
 
 
 const Home = () => {
@@ -132,7 +133,7 @@ const Home = () => {
         {isLogin && <Createpost />}
         <div className='flex items-center justify-end mx-4 mt-3'>
           <span onClick={() => handleNewPost()} className='bg-[#eff1d3] rounded-full p-1'>
-            {isLoading ? <SmallLoader /> : <GrRefresh className='cursor-pointer text-blue-500 text-xl font-extrabold' />}
+            {isLoading ? <SmoothLoader /> : <GrRefresh className='cursor-pointer text-blue-500 text-xl font-extrabold' />}
           </span>
         </div>
 

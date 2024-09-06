@@ -19,10 +19,11 @@ import { decreaseUserPost, toggleUserInfoUpvote } from '../redux/profile';
 import { setOnNewPost } from '../redux/onNewPost';
 import { deleteUserPost } from '../redux/userposts';
 import { decreaseRoomPost } from '../redux/roomSlice';
+import ConfirmWindow from './ConfirmWindow';
 
 
 
-const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user,profilepost, upvotes,joined,postDetails,insideOverView }) => {
+const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user,profilepost, upvotes,joined,postDetails,insideOverView, deleteOverPost, deletePopularPost }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -45,7 +46,27 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
     }
 
   };
+
+
+
+  const [itemId, setitemId] = useState(null);
+  const [openConfirm, setOpenConfirm] = useState(false)
+  const [ifDelete, setifDelete] = useState(false);
+
+  const handleDeletePost=(id)=>{
+      setitemId(id);
+      setOpenConfirm(true)   
+  }
+
+  useEffect(() => {
+      if(ifDelete){
+          deletePost(itemId)
+      }
+  }, [ifDelete])
+
+
   async function deletePost(id){
+
     // console.log(id);
     setLoading(true);
     try{
@@ -59,8 +80,13 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
 //       dispatch(clearHotPostsInfo());
         dispatch(deleteUserPost(id))
         dispatch(deleteHomePost(id))
+      if(insideOverView){
+          deleteOverPost(id)
+        }
+        if(deletePopularPost){
+          deletePopularPost(id)
+        }
         dispatch(decreaseUserPost())
-      
 //       dispatch(clearPostsInfo());
       if(inRoom)
       {
@@ -251,6 +277,7 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
 
   return (
     <>
+    {openConfirm && <ConfirmWindow msg={"Are you certain you want to delete this post? This can't be undone."} setOpenConfirm={setOpenConfirm} setifDelete={setifDelete}/>}
       <div className='px-4 py-2 xxs:px-8 xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
         <header className='flex gap-2 items-center my-2'>
           <img onClick={()=> Navigate(`/u/${user?.username}`)} src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
@@ -263,14 +290,14 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
             <div className="relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
 
                 <button onClick={handleToggle} className="flex items-center hover:focus:outline-none">
-                  <BsThreeDotsVertical/>
+                  {delLoading?<SmoothLoader/>:<BsThreeDotsVertical/>}
                 </button>
                 {isOpen && (
-                  <div className="absolute right-0 top-4  bg-white rounded-md shadow-lg z-10">
+                  <div className="absolute right-1 bottom-6  bg-white rounded-md shadow-lg z-10">
                     <ul className=" bg-[#6d712eb8] rounded-md ">
                       <li className=" text-white hover:text-black">
-                        <button onClick={() => deletePost(id)} className="px-4 py-1 flex items-center gap-1 ">
-                            {delLoading?<SmoothLoader/>:<><span>Delete</span> <MdDelete /></>}</button>
+                        <button onClick={() => handleDeletePost(id)} className="px-4 py-1 flex items-center gap-1 ">
+                            {<><span>Delete</span> <MdDelete /></>}</button>
                       </li>
                     </ul>
 

@@ -361,14 +361,14 @@ const Room = function () {
             {
               joined ?
                 <div className='flex self-end gap-2 justify-self-end'>
-                  <button className="flex items-center gap-2 bg-[#656923] text-white py-1  xs:py-2 px-2 xxs:px-6 rounded-lg  hover:bg-slate-500"
+                  <button className="flex items-center gap-2 bg-[#6c712eb7] text-white py-1  xs:py-2 px-2 xxs:px-6 rounded-lg  hover:bg-slate-500"
                     onClick={openPostBtn}
                   >
 
                     <RiAddBoxLine className=" text-xl" />
                     <span className="text-sm pt-0 mt-0 self-center no-underline">{"Post"}</span>
                   </button>
-                  {isOwner && <button className="flex bg-[#656923] items-center gap-2 text-white py-1 xs:py-2 px-3 rounded-lg self-center hover:bg-slate-500"
+                  {isOwner && <button className="flex bg-[#6c712eb7] items-center gap-2 text-white py-1 xs:py-2 px-3 rounded-lg self-center hover:bg-slate-500"
                     onClick={() => setShowAddMem(true)}
                   >
                     <BsPersonFillAdd className=" text-xl" />
@@ -377,7 +377,7 @@ const Room = function () {
                 </div>
                 :
                 <>
-                  <button className=" flex items-center gap-2 bg-[#656923] text-white py-1 xs:py-2 px-6 rounded-lg self-center hover:bg-slate-500"
+                  <button className=" flex items-center gap-2 bg-[#6c712eb7] text-white py-1 xs:py-2 px-6 rounded-lg self-center hover:bg-slate-500"
                     onClick={joinRoom}
                   >
 
@@ -393,7 +393,7 @@ const Room = function () {
                 </button>
                 {isOpen && (
                   <div className="absolute right-0 top-10  bg-white rounded-md shadow-lg z-10">
-                    <ul className=" bg-[#656923] rounded-md ">
+                    <ul className=" bg-[#6c712eb7] rounded-md ">
                       {isOwner ? <>
                         <li className=" text-white rounded-md hover:bg-gray-700">
                           <button onClick={() => deleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
@@ -420,7 +420,7 @@ const Room = function () {
               </div>}
           </div>
           <div className='flex items-center relative  justify-end pr-8   w-full text-center text-lg xxs:text-2xl xs:text-3xl font-bold'>
-            <img className=" w-7 xxs:w-8 xs:w-9 rounded-l-lg " src={q} alt="" /><span className=" overflow-clip line-clamp-1 break-all max-w-[70%] bg-white text-[#656923] font-ubuntu rounded-r-lg px-1">{roomDetail?.title}</span>
+            <img className=" w-7 xxs:w-8 xs:w-9 rounded-l-lg " src={q} alt="" /><span className=" overflow-clip line-clamp-1 break-all max-w-[70%] bg-white text-[#6c712ed0] font-ubuntu rounded-r-lg px-1">{roomDetail?.title}</span>
           </div>
         </div>
         <div className='h-[1.5px] bg-gray-800 mt-6'></div>

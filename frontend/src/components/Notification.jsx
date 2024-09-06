@@ -14,6 +14,7 @@ import { setRoomDetail } from '../redux/roomSlice';
 import toast from 'react-hot-toast';
 import { v4 as uuidv4 } from 'uuid';
 import { clearPostDetail, setPostDetail } from '../redux/Postdetail';
+import SmoothLoader from '../assets/SmoothLoader';
 
 
 
@@ -157,7 +158,7 @@ const Notification = ({setIsNfnOpen}) => {
     return (
         <div className=' rounded-2xl shadow-md shadow-current absolute top-20 right-2  xxs:right-5 xs:right-20  w-[96vw] xxs:w-[90vw] xs:w-[75vw]  sm:w-[55vw]  2_sm:w-[50vw] md:w-[46vw] 1_5md:w-[43vw]  2_md:w-[40vw]  lg:w-[37vw] 1_5lg:w-[33vw] xl:w-[30vw]  bg-[#c2c7b3] '>
 
-            <span  className=' absolute right-4 top-2 text-white text-xl'>{isLoading?<SmallLoader/>:<FiRefreshCcw className=' cursor-pointer' onClick={()=>handleRefresh()}/>}</span>
+            <span  className=' absolute right-4 top-1 text-white text-xl'>{isLoading?<SmoothLoader/>:<FiRefreshCcw className=' cursor-pointer' onClick={()=>handleRefresh()}/>}</span>
 
             <div className=' bg-[#6f742b] text-white rounded-t-2xl text-center p-1'>Notifications</div>
             {notifications.length==0 && <div className=' p-4  text-red-950 text-center font-semibold'>You're all caught up! No new notifications.</div>}

@@ -55,6 +55,7 @@ import { hide } from './redux/welcome'
 import CreatePost, { CreatePoll, CreatePostorPoll } from './pages/CreatePost'
 import Polls from './components/Polls'
 import PollDetail from './components/PollDetail'
+import ConfirmWindow from './components/ConfirmWindow'
 
 
 
@@ -219,6 +220,7 @@ function App() {
 
 
               <Route path='/popular' element={<Popular />} />
+              <Route path='/confirm' element={<ConfirmWindow />} />
 
 
               <Route path='create' element={<CreatePostorPoll/>}>

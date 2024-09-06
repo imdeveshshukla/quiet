@@ -19,6 +19,10 @@ const Popular = () => {
     const dispatch = useDispatch();
 
 
+    const deletePopularPost=(id)=>{
+        setPosts(posts.filter(post=> post.id!==id));
+    }
+
 
     const getPosts = async (reset = false) => {
         setisLoading(true)
@@ -82,7 +86,7 @@ const Popular = () => {
                     <div className='py-8'>
                         {
                             posts.map(post => (
-                                <Posts key={uuidv4()} id={post.id} title={post.title} body={post.body} media={post.img} countComment={String(post.commentCount).substring(0, post.commentCount.length - 1)} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
+                                <Posts key={uuidv4()} id={post.id} title={post.title} body={post.body} media={post.img} countComment={String(post.commentCount).substring(0, post.commentCount.length - 1)} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} deletePopularPost={deletePopularPost}/>
                             ))
                         }
                     </div>
