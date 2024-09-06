@@ -125,7 +125,6 @@ const Room = function () {
     }
   }
   function openPostBtn() {
-    // setShowCP(true);
     dispatch(addRoomTitle(title));
     dispatch(addRoomCreatorId(CreatorId));
     

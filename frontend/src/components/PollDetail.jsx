@@ -47,8 +47,10 @@ const PollDetail = () => {
         try {
             // console.clear();
             // console.log("Fetching Poll");
-            // const isRoom = await axios.get(`{baseAddress}poll/getpollRoom`,{
-            //     id
+            // const isRoom = await axios.get(`${baseAddress}poll/getpollRoom`,{
+            //     params: {
+            //         id,
+            //     },
             // });
             // console.log(isRoom);
 
