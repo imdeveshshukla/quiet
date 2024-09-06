@@ -19,13 +19,14 @@ import { v4 as uuidv4 } from 'uuid';
 import SmallLoader from './SmallLoader';
 import SmoothLoaderN from '../assets/SmoothLoaderN';
 import { deleteUserPoll, setUserPollvote } from '../redux/userpolls';
+import { decreaseRoomPolls } from '../redux/roomSlice';
 
 axios.defaults.withCredentials = true
 
 
 
 
-const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
+const Polls = ({ poll, setPollVote, user, inRoom, room, topic, joined }) => {
 
 
     const userInfo = useSelector(state => state.user.userInfo);
@@ -65,6 +66,15 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
             })
             return;
         }
+        if(inRoom)
+        {
+            if(!joined){
+                toast("First Join Room", {
+                    icon: 'ℹ️',
+                })
+                return;
+            }
+        }
         setloading(true)
 
         try {
@@ -103,6 +113,7 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
 
 const deletePoll=async(id)=>{
     try {
+        setLoading(true)
         const res= await axios.delete(`${baseAddress}poll/deletepoll`,{
             params:{
                 id,
@@ -113,9 +124,12 @@ const deletePoll=async(id)=>{
             toast.success("Poll Deleted!")
             dispatch(deleteUserPoll(id))
             dispatch(deleteHomePost(id))
+            if(inRoom)dispatch(decreaseRoomPolls())
         }
+        setLoading(false);
     } catch (error) {
-        
+        console.log(error);
+        toast.error("Server Issue");
     }
 }
 

@@ -76,9 +76,10 @@ const Room = function () {
   const dropdownRef = useRef(null);
   const [isOpen, setisOpen] = useState(false);
   const [showCard, setShowCard] = useState(false)
-
-  
   const [page2,setPage2] = useState(0);
+  
+  const onNewRoomPost = useSelector((state)=>state.roomCreatePost.value.onNewRoomPost);
+  
   
 
   const [showChangeTitleBox, setBox] = useState(false);
@@ -192,6 +193,8 @@ const Room = function () {
     dispatch(roomsApi.util.invalidateTags([{ type: 'Room', id: title }]));
     if (joined || !privateRoom) 
     {
+      setPage(0);
+      setPage2(0);
       getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
       getPost();
     }
@@ -207,6 +210,8 @@ const Room = function () {
     if (joined || !privateRoom) {
       setPage2(0)
       setPage(0);
+      dispatch(clearPollInfo());
+      dispatch(clearHotPostsInfo());
       getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
       getPost();
       setHasMore(true);
@@ -219,12 +224,16 @@ const Room = function () {
       dispatch(clearHotPostsInfo());
       dispatch(clearPollInfo());
     }
-  }, [data, title, disVal])
+  }, [data, title])
+
+  // useEffect(()=>{
+
+  // },[disValue])
 
   useEffect(() => {
     if (joined || !privateRoom) {
-      setPage(1);
-      setPage2(1);
+      setPage(0);
+      setPage2(0);
       getPost();
       getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
       setHasMore(true);
@@ -242,10 +251,22 @@ const Room = function () {
 
 
   function onNewPost(){
-    setPage(1);
+    setPage(0);
+    setPage2(0);
+    dispatch(clearHotPostsInfo())
+    dispatch(clearPollInfo())
     setHasMore(true);
-    refresh();
+    dispatch(roomsApi.util.invalidateTags([{ type: 'Room', id: title }]));
+    // refresh();
   }
+
+  useEffect(()=>{
+    if(onNewRoomPost){
+      if(onNewRoomPost === 'post')setdisVal("post")
+      else setdisVal("poll")
+      onNewPost();
+    }
+  },[onNewRoomPost])
 
   
 
@@ -410,7 +431,7 @@ const Room = function () {
                 <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'}  rounded-md`}>
                     <input 
                         className='size-4 hidden' 
-                        onChange={() => (setdisVal("post"),setPage(1))} 
+                        onChange={() => (setdisVal("post"))} 
                         checked={disVal === "post"} 
                         type="radio" 
                         value="post" 
@@ -426,7 +447,7 @@ const Room = function () {
                 <div className={`flex items-center ${disVal === 'poll' ? 'bg-[#65692375]' : 'bg-gray-200'}  rounded-md`}>
                     <input 
                         className=' hidden' 
-                        onChange={() => (setdisVal("poll"),setPage2(1))} 
+                        onChange={() => (setdisVal("poll"))} 
                         checked={disVal === "poll"} 
                         type="radio" 
                         value="poll" 
@@ -520,18 +541,18 @@ export const RoomPolls = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,
             loader={<Postskelton />}
             endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No posts available to display!</p>}
           >
-            {/* <Hottopic topic={title} dp={dp} bg={bg} /> */}
-
-            {/* <div className=' flex items-center justify-end mx-4 mt-3'>
-              <span onClick={() => (refresh())} className=' bg-[#eff1d3] rounded-full p-1'>
-                {isSkelton ? <SmallLoader /> : <GrRefresh className=' cursor-pointer text-blue-500 text-xl font-extrabold' />}
-              </span>
-            </div> */}
 
             <div className="post">
               {(
                 hotposts.map((post) => (
-                  <Polls poll={post} room={data?.room} inRoom={true}/>
+                  <Polls 
+                  key={post?.id}
+                  poll={post} 
+                  room={data?.room} 
+                  inRoom={true}
+                  joined = {joined}
+
+                  />
                 )
                 )
               )}

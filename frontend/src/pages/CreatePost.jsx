@@ -126,7 +126,7 @@ const CreatePost = () => {
           navigate('/')
         }
         else{
-          dispatch(setOnNewRoomPost(true));
+          dispatch(setOnNewRoomPost("post"));
           navigate(`/room/${roomCreatorId}/${roomTitle}`);
         }
       }
@@ -354,7 +354,11 @@ export const CreatePoll = () => {
         setOptions(['', '']);
         dispatch(setOnNewPost(true));
         if(!roomTitle)Navigate('/')
-        else Navigate(`/room/${roomCreatorId}/${roomTitle}`);
+        else
+        {
+          dispatch(setOnNewRoomPost("poll"));
+          Navigate(`/room/${roomCreatorId}/${roomTitle}`);
+        }
 
       }
     } catch (error) {

@@ -12,7 +12,7 @@ const PollDetail = () => {
     const { id } = useParams();
     const [poll, setpoll] = useState({})
     const [loading, setloading] = useState(false)
-
+    
 
 
     const setPollVote = (res) => {
@@ -45,6 +45,13 @@ const PollDetail = () => {
 
         setloading(true)
         try {
+            // console.clear();
+            // console.log("Fetching Poll");
+            // const isRoom = await axios.get(`{baseAddress}poll/getpollRoom`,{
+            //     id
+            // });
+            // console.log(isRoom);
+
             const res = await axios.get(`${baseAddress}poll/getpoll`, {
                 params: {
                     id,
