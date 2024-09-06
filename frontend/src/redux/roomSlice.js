@@ -21,12 +21,15 @@ export const roomSlice = createSlice({
     changeTitle:(state,action)=>{
       state.roomInfo.title = action.payload
     },
+    decreaseRoomPost:(state)=>{
+      state.roomInfo._count.posts -= 1;
+    },
     clearRoomDetail:(state)=>{
       state.roomInfo=null;
     },
   },
 })
 
-export const { setRoomDetail,changeBgImg,clearRoomDetail, changeDpImg,changeTitle } = roomSlice.actions;
+export const { setRoomDetail,changeBgImg,clearRoomDetail, changeDpImg,changeTitle,decreaseRoomPost } = roomSlice.actions;
 
 export default roomSlice.reducer

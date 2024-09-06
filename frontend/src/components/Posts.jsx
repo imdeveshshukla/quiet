@@ -14,8 +14,9 @@ import Linkify from 'react-linkify';
 import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdDelete } from 'react-icons/md';
 import SmoothLoader from '../assets/SmoothLoader';
-import { clearHotPostsInfo } from '../redux/Hotposts';
+import { clearHotPostsInfo, deleteHotPostsInfo } from '../redux/Hotposts';
 import { toggleUserInfoUpvote } from '../redux/profile';
+import { decreaseRoomPost } from '../redux/roomSlice';
 
 
 const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails,insideOverView }) => {
@@ -52,8 +53,12 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
       });
       toast.success(res.data.msg);
       dispatch(clearPostsInfo());
-      dispatch(clearHotPostsInfo());
-      Navigate('/')
+      if(inRoom)
+      {
+        dispatch(deleteHotPostsInfo(id));
+        dispatch(decreaseRoomPost());
+      }
+      // Navigate('/')
       // console.log(res);
     }
     catch(err){

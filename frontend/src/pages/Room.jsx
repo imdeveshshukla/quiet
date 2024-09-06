@@ -37,6 +37,10 @@ import { BiEdit } from "react-icons/bi";
 import { CiEdit } from "react-icons/ci";
 import roomDp from '../assets/roomdp.jpg'
 import OnclickCard from "../components/OnclickCard";
+import { addRoomCreatorId, addRoomTitle } from "../redux/RoomCreatePosts";
+import getRoomsPolls from "../utils/getRoomPolls";
+import { clearPollInfo, setPoll } from '../redux/userpolls';
+import Polls from "../components/Polls";
 
 
 
@@ -62,8 +66,8 @@ const Room = function () {
   const [showCP, setShowCP] = useState(false);
   const navigate = useNavigate();
   const isSkelton = useSelector((state) => state.skelton.value);
-  const hotposts = useSelector((state) => state.hotpost.hotposts);
-  const [page, setPage] = useState(1);
+  const [disVal, setdisVal] = useState("post")
+  const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);  //testing
   const [gotPost, setPost] = useState([]);
   const isOwner = (CreatorId === userData?.userID && joined);
@@ -72,6 +76,10 @@ const Room = function () {
   const dropdownRef = useRef(null);
   const [isOpen, setisOpen] = useState(false);
   const [showCard, setShowCard] = useState(false)
+
+  
+  const [page2,setPage2] = useState(0);
+  
 
   const [showChangeTitleBox, setBox] = useState(false);
   function handleToggle() {
@@ -104,7 +112,11 @@ const Room = function () {
     }
   }
   function openPostBtn() {
-    setShowCP(true);
+    // setShowCP(true);
+    dispatch(addRoomTitle(title));
+    dispatch(addRoomCreatorId(CreatorId));
+    
+    navigate('/create')
   }
 
   async function joinRoom() {
@@ -138,22 +150,20 @@ const Room = function () {
 
   const getPost = async () => {
 
-    // setisLoading(true)
-
     if (!joined && privateRoom) {
       setHasMore(false);
       dispatch(setHotPost([]))
       return;
     }
     else {
-      if (page == 1) {
+      if (page == 0) {
         dispatch(clearHotPostsInfo())
       }
       try {
-        dispatch(setSkeltonLoader())
+        // dispatch(setSkeltonLoader())
         const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
           params: {
-            page,
+            offset: page,
             limit: 10,
           },
         });
@@ -164,26 +174,27 @@ const Room = function () {
           if (fetchedPosts.length < 10) {
             setHasMore(false);
           }
-          dispatch(setSkeltonLoader())
+          // dispatch(setSkeltonLoader())
           dispatch(setHotPost(fetchedPosts));
-          // console.log(fetchedPosts);
         }
       } catch (error) {
         console.log(error);
         setHasMore(false); // Stop fetching if there's an error
-        dispatch(setSkeltonLoader())
+        // dispatch(setSkeltonLoader())
       }
 
     }
-
-
   };
 
   // console.clear();
 
   async function refresh() {
     dispatch(roomsApi.util.invalidateTags([{ type: 'Room', id: title }]));
-    if (joined || !privateRoom) getPost();
+    if (joined || !privateRoom) 
+    {
+      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
+      getPost();
+    }
   }
 
   async function onStart() {
@@ -194,8 +205,10 @@ const Room = function () {
 
     setJoined(data?.joined);
     if (joined || !privateRoom) {
+      setPage2(0)
+      setPage(0);
+      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
       getPost();
-      setPage(1);
       setHasMore(true);
     }
     setisLoading2(false);
@@ -204,13 +217,16 @@ const Room = function () {
     onStart();
     return () => {
       dispatch(clearHotPostsInfo());
+      dispatch(clearPollInfo());
     }
-  }, [data, title])
+  }, [data, title, disVal])
 
   useEffect(() => {
     if (joined || !privateRoom) {
-      getPost();
       setPage(1);
+      setPage2(1);
+      getPost();
+      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
       setHasMore(true);
     }
   }, [joined, privateRoom])
@@ -219,17 +235,19 @@ const Room = function () {
     if (joined || !privateRoom) getPost();
   }, [page])
 
+  useEffect(()=>{
+    if(joined || !privateRoom)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
+  },[page2])
 
-  function onNewPost() {
+
+
+  function onNewPost(){
     setPage(1);
     setHasMore(true);
     refresh();
   }
 
-  const fetchMoreData = () => {
-    if (isLoading || !hasMore) return;
-    setPage((prevPage) => prevPage + 1);
-  };
+  
 
   const updateBgImg = async (e) => {
     setLoader1(true);
@@ -291,11 +309,10 @@ const Room = function () {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
-
+  
 
   return (
     <>
-      {showCP && <CreatePost showCP={showCP} onNewPost={onNewPost} setShowCP={setShowCP} roomTitle={title} setPost={setPost} />}
       {showAddMem && <AddMemBox setShow={setShowAddMem} id={title} />}
       {showChangeTitleBox && <AddMemBox setShow={setBox} id={roomDetail?.title} update={roomDetail?.title} />}
       <div className="w-full">
@@ -323,14 +340,14 @@ const Room = function () {
             {
               joined ?
                 <div className='flex self-end gap-2 justify-self-end'>
-                  <button className="flex items-center gap-2 bg-black text-white py-1  xs:py-2 px-2 xxs:px-6 rounded-lg  hover:bg-slate-500"
+                  <button className="flex items-center gap-2 bg-[#656923] text-white py-1  xs:py-2 px-2 xxs:px-6 rounded-lg  hover:bg-slate-500"
                     onClick={openPostBtn}
                   >
 
                     <RiAddBoxLine className=" text-xl" />
                     <span className="text-sm pt-0 mt-0 self-center no-underline">{"Post"}</span>
                   </button>
-                  {isOwner && <button className="flex bg-black items-center gap-2 text-white py-1 xs:py-2 px-3 rounded-lg self-center hover:bg-slate-500"
+                  {isOwner && <button className="flex bg-[#656923] items-center gap-2 text-white py-1 xs:py-2 px-3 rounded-lg self-center hover:bg-slate-500"
                     onClick={() => setShowAddMem(true)}
                   >
                     <BsPersonFillAdd className=" text-xl" />
@@ -339,7 +356,7 @@ const Room = function () {
                 </div>
                 :
                 <>
-                  <button className=" flex items-center gap-2 bg-black text-white py-1 xs:py-2 px-6 rounded-lg self-center hover:bg-slate-500"
+                  <button className=" flex items-center gap-2 bg-[#656923] text-white py-1 xs:py-2 px-6 rounded-lg self-center hover:bg-slate-500"
                     onClick={joinRoom}
                   >
 
@@ -350,12 +367,12 @@ const Room = function () {
             }{!joined ? <></> :
               <div className="relative flex items-center gap-8" ref={dropdownRef} >
 
-                <button onClick={handleToggle} className="flex items-center rounded-full border-2 border-black hover:border-white focus:outline-none">
+                <button onClick={handleToggle} className="flex items-center rounded-full border-2 border-[#656923] text-[#656923] hover:border-white focus:outline-none">
                   <BsThreeDots />
                 </button>
                 {isOpen && (
                   <div className="absolute right-0 top-10  bg-white rounded-md shadow-lg z-10">
-                    <ul className=" bg-black rounded-md ">
+                    <ul className=" bg-[#656923] rounded-md ">
                       {isOwner ? <>
                         <li className=" text-white rounded-md hover:bg-gray-700">
                           <button onClick={() => deleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
@@ -365,7 +382,7 @@ const Room = function () {
                         <hr />
                         <li className=" text-white rounded-md hover:bg-gray-700">
                           <button onClick={() => setBox(true)} to={"/"} className="px-4 py-1 flex items-center m-auto gap-3 ">
-                            <span className="m-auto text-center">Title</span> <CiEdit />
+                            <span className="m-auto text-center ">Title</span> <CiEdit />
                           </button>
                         </li>
                       </> : <>
@@ -382,15 +399,71 @@ const Room = function () {
               </div>}
           </div>
           <div className='flex items-center relative  justify-end pr-8   w-full text-center text-lg xxs:text-2xl xs:text-3xl font-bold'>
-            <img className=" w-7 xxs:w-8 xs:w-9 rounded-l-lg " src={q} alt="" /><span className=" overflow-clip line-clamp-1 break-all max-w-[70%] bg-white font-ubuntu rounded-r-lg px-1">{roomDetail?.title}</span>
+            <img className=" w-7 xxs:w-8 xs:w-9 rounded-l-lg " src={q} alt="" /><span className=" overflow-clip line-clamp-1 break-all max-w-[70%] bg-white text-[#656923] font-ubuntu rounded-r-lg px-1">{roomDetail?.title}</span>
           </div>
         </div>
         <div className='h-[1.5px] bg-gray-800 mt-6'></div>
 
       </div>
+      <div className='flex gap-2 justify-end mx-4 xxs:mx-8 mt-6'>
+                
+                <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'}  rounded-md`}>
+                    <input 
+                        className='size-4 hidden' 
+                        onChange={() => (setdisVal("post"),setPage(1))} 
+                        checked={disVal === "post"} 
+                        type="radio" 
+                        value="post" 
+                        name="post_poll" 
+                        id="post" 
+                    />
+                    <label 
+                        className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'post' ? 'text-white' : 'text-gray-700'}`} 
+                        htmlFor="post">
+                        Post
+                    </label>
+                </div>
+                <div className={`flex items-center ${disVal === 'poll' ? 'bg-[#65692375]' : 'bg-gray-200'}  rounded-md`}>
+                    <input 
+                        className=' hidden' 
+                        onChange={() => (setdisVal("poll"),setPage2(1))} 
+                        checked={disVal === "poll"} 
+                        type="radio" 
+                        value="poll" 
+                        name="post_poll" 
+                        id="poll" 
+                    />
+                    <label 
+                        className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'poll' ? 'text-white' : 'text-gray-700'}`} 
+                        htmlFor="poll">
+                        Poll
+                    </label>
+                </div>
+            </div>
+      {
+        disVal === "post"?
+        <RoomPost privateRoom={privateRoom} joined={joined} hasMore={hasMore} isLoading={isLoading} setPage={setPage} refresh={refresh} data={data}/>
+        :
+        <RoomPolls privateRoom={privateRoom} joined={joined} hasMore={hasMore} isLoading={isLoading} setPage={setPage2} refresh={refresh} data={data} />
+      }
+    </>
+  )
+}
+
+export default Room;
+
+export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,data})=>{
+
+  const hotposts = useSelector((state) => state.hotpost.hotposts);
+  const isSkelton = useSelector((state) => state.skelton.value);
 
 
-      <div className=' min-h-screen xs:pl-8 sm:pl-16'>
+
+  const fetchMoreData = () => {
+    if (isLoading || !hasMore) return;
+    setPage((prevPage) => prevPage + 10);
+  };
+  return <div className=' min-h-screen xs:pl-8 sm:pl-16'>
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}
@@ -401,16 +474,10 @@ const Room = function () {
           >
             {/* <Hottopic topic={title} dp={dp} bg={bg} /> */}
 
-            <div className=' flex items-center justify-end mx-4 mt-3'>
-              <span onClick={() => (refresh())} className=' bg-[#eff1d3] rounded-full p-1'>
-                {isSkelton ? <SmallLoader /> : <GrRefresh className=' cursor-pointer text-blue-500 text-xl font-extrabold' />}
-              </span>
-            </div>
+            
 
             <div className="post">
-              {(hotposts.length == 0 && isSkelton) ? (
-                <Postskelton />
-              ) : (
+              { (
                 hotposts.map((post) => (
                   <Posts
                     key={post.id}
@@ -434,8 +501,42 @@ const Room = function () {
           </InfiniteScroll>
         }
       </div>
-    </>
-  )
 }
 
-export default Room;
+export const RoomPolls = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,data})=>{
+  const hotposts = useSelector(state => state.userpoll.polls);
+  const isSkelton = useSelector((state) => state.skelton.value);
+
+  const fetchMoreData = () => {
+    if (isLoading || !hasMore) return;
+    setPage((prevPage) => prevPage + 10);
+  };
+  return <div className=' min-h-screen xs:pl-8 sm:pl-16'>
+        {privateRoom && !joined ? <ForbiddenPage /> :
+          <InfiniteScroll
+            dataLength={hotposts.length}
+            next={fetchMoreData}
+            hasMore={hasMore}
+            loader={<Postskelton />}
+            endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No posts available to display!</p>}
+          >
+            {/* <Hottopic topic={title} dp={dp} bg={bg} /> */}
+
+            {/* <div className=' flex items-center justify-end mx-4 mt-3'>
+              <span onClick={() => (refresh())} className=' bg-[#eff1d3] rounded-full p-1'>
+                {isSkelton ? <SmallLoader /> : <GrRefresh className=' cursor-pointer text-blue-500 text-xl font-extrabold' />}
+              </span>
+            </div> */}
+
+            <div className="post">
+              {(
+                hotposts.map((post) => (
+                  <Polls poll={post} room={data?.room} inRoom={true}/>
+                )
+                )
+              )}
+            </div>
+          </InfiniteScroll>
+        }
+      </div>
+}
