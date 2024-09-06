@@ -19,6 +19,10 @@ import { v4 as uuidv4 } from 'uuid';
 import SmallLoader from './SmallLoader';
 import SmoothLoaderN from '../assets/SmoothLoaderN';
 import { deleteUserPoll, setUserPollvote } from '../redux/userpolls';
+import { IoMdShare } from "react-icons/io";
+import ConfirmWindow from './ConfirmWindow';
+
+
 
 axios.defaults.withCredentials = true
 
@@ -38,26 +42,27 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
     const [loading, setloading] = useState(false)
     const dropdownRef = useRef(null);
 
-
-
+    
+    
+    
     const [hasVoted, setHasVoted] = useState(false);
     const [loadingOptionId, setLoadingOptionId] = useState(null);
 
 
-
-
+    
+    
     const [totalVotes, setTotalVotes] = useState(0);
-
+    
     useEffect(() => {
-
+        
         const totalVotesPerPoll = poll?.options?.reduce((total, option) => total + option.votes.length, 0);
-
+        
         setTotalVotes(totalVotesPerPoll)
-
+        
     }, [poll]); // Run this effect when options change
+    
 
-
-
+    
     const handleVote = async (selectedOption) => {
         if(!isLogin){
             toast("Login to vote", {
@@ -87,8 +92,8 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
         setloading(false)
         setLoadingOptionId(null)
     };
-
-
+    
+    
     const handleToggle = () => {
         setOpen((v) => !v)
     }
@@ -96,19 +101,38 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setOpen(false);
         }
-
+        
     };
+    
+    const [itemId, setitemId] = useState(null);
+    const [openConfirm, setOpenConfirm] = useState(false)
+    const [ifDelete, setifDelete] = useState(false);
 
+    const handleDeletePoll=(id)=>{
+        setitemId(id);
+        setOpenConfirm(true)   
+    }
+
+    useEffect(() => {
+        if(ifDelete){
+            deletePoll(itemId)
+        }
+    }, [ifDelete])
+    
 
 
 const deletePoll=async(id)=>{
+
+    
+
+    setLoading(true)
+
     try {
         const res= await axios.delete(`${baseAddress}poll/deletepoll`,{
             params:{
                 id,
             }
         })
-        console.log(res);
         if(res.status==202){
             toast.success("Poll Deleted!")
             dispatch(deleteUserPoll(id))
@@ -117,6 +141,7 @@ const deletePoll=async(id)=>{
     } catch (error) {
         
     }
+    setLoading(false)
 }
 
 
@@ -135,12 +160,35 @@ const deletePoll=async(id)=>{
         Navigate(`/poll/${id}`)
         console.log("click");
 
-
-
     };
 
+    const handleShare = async(poll)=>{
+        
+        if (navigator.share) {
+          try {
+            await navigator.share({
+              title: poll?.title,
+              text: `Check out ${poll?.createdBy?.username}'s latest poll on our site!`,
+              url: `${window.location.origin}/poll/${poll?.id}`,
+            });
+          } catch (error) {
+            console.error('Error in post sharing', error);
+          }
+        } else {
+          navigator.clipboard.writeText(`${window.location.origin}/poll/${poll?.id}/$`)
+            .then(() => {
+              alert('Post link copied to clipboard');
+            })
+            .catch((error) => {
+              console.error('Error in Post copying link to clipboard', error);
+            });
+        }
+    
+      }
 
-    return (
+
+    return (<>
+            {openConfirm && <ConfirmWindow msg={"Are you certain you want to delete this poll? This can't be undone."} setOpenConfirm={setOpenConfirm} setifDelete={setifDelete}/>}
         <div onClick={(e) => handleClick(e, poll?.id)} key={poll.id}>
             <div className='px-4 py-2 xxs:px-8 cursor-default xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
                 <header className='flex gap-2 items-center my-2 exclude-click'>
@@ -154,14 +202,20 @@ const deletePoll=async(id)=>{
                         <div className="exclude-click relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
 
                             <button onClick={handleToggle} className="flex  items-center hover:focus:outline-none">
-                                <BsThreeDotsVertical />
+                                {delLoading ? <SmoothLoader /> :<BsThreeDotsVertical />}
                             </button>
                             {isOpen && (
-                                <div className="absolute right-0 top-4  bg-white rounded-md shadow-lg z-10">
+                                <div className="absolute right-1 bottom-6  bg-white rounded-md shadow-lg z-10">
                                     <ul className=" bg-[#6d712eb8] rounded-md ">
                                         <li className=" text-white hover:text-black">
-                                            <button onClick={() => deletePoll(poll?.id)} className="px-4 py-1 flex items-center gap-1 ">
-                                                {delLoading ? <SmoothLoader /> : <><span>Delete</span> <MdDelete /></>}</button>
+                                            <button onClick={() => handleDeletePoll(poll?.id)} className="px-4 py-1 w-full flex items-center justify-center gap-1 ">
+                                                { <><span>Delete</span> <MdDelete /></>}</button>
+                                        </li>
+                                        <hr />
+                                        <li className=" text-white hover:text-black">
+                                            <button onClick={()=>handleShare(poll)} className='px-4 py-1 flex items-center justify-center gap-2 '>
+                                                Share<IoMdShare/>
+                                            </button>
                                         </li>
                                     </ul>
 
@@ -218,6 +272,7 @@ const deletePoll=async(id)=>{
             <div className=' bg-gray-700 h-[1px]'></div>
 
         </div>
+</>
     )
 }
 

@@ -23,6 +23,10 @@ const Overview = () => {
   const [commentOffset, setCommentOffset] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
 
+  const deleteOverPost= (id)=>{
+    setUserData(userData.filter(post=>post.id!==id))
+  }
+
   const getUserOverview = async (reset = false) => {
     if (!user.userID) return;
 
@@ -135,6 +139,7 @@ const Overview = () => {
                       user={e.user}
                       upvotes={e.upvotes}
                       insideOverView={true}
+                      deleteOverPost={deleteOverPost}
                     />
               ))
             )

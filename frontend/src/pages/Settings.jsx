@@ -394,7 +394,7 @@ function Settings() {
                     />
                   </div>
                   <button onClick={() => addLC()} className=' flex  items-center justify-center px-4 bg-[#e3a300] font-medium rounded-md shadow-sm ring-1 ring-inset ring-gray-300 text-sm '>
-                    {isLoading ? <SmallLoader /> : <span>Add</span>}
+                    {isLoading ? <SmoothLoader /> : <span>Add</span>}
                   </button>
                 </div>
                 <div className='mt-1 ml-2' role="alert" style={{ color: "red", fontSize: "12px" }}>{error}</div>
@@ -454,13 +454,11 @@ function Settings() {
                     />
                   </div>
                   <button onClick={() => addCF()} className=' flex  items-center justify-center px-4 bg-[#e3a300] font-medium rounded-md shadow-sm ring-1 ring-inset ring-gray-300 text-sm '>
-                    {isLoading2 ? <SmallLoader /> : <span>Add</span>}
+                    {isLoading2 ? <SmoothLoader /> : <span>Add</span>}
                   </button>
                 </div>
                 <div className='mt-1 ml-2' role="alert" style={{ color: "red", fontSize: "12px" }}>{error2}</div>
               </>}
-
-
             </div>
           </div>
           <div>
