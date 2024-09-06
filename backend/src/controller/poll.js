@@ -87,6 +87,8 @@ export const votePoll = async (req, res) => {
 
 export const getPoll = async (req, res) => {
   const id = req.query.id;
+  console.log(id);
+  
 
   try {
     const poll = await prisma.poll.findUnique({
@@ -146,5 +148,17 @@ export const getAllPolls= async(req,res)=>{
 }
 
 export const deletePoll = async(req,res)=>{
+    const id= req.query.id;
+
+    try {
+      const poll= await prisma.poll.delete({
+        where:{
+          id,
+        }
+      })
+      return res.status(202).send(poll);
+    } catch (error) {
+      res.status(500).send(error)
+    }
 
 }

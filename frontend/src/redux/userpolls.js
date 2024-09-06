@@ -16,6 +16,9 @@ export const userPollState = createSlice({
       })
       
     },
+    deleteUserPoll:(state,action)=>{
+      state.polls= state.polls.filter(poll=> poll.id!==action.payload);
+    },
     setUserPollvote: (state, action) => {
       const { optionId,userId, option: { pollId } } = action.payload;
   
@@ -56,7 +59,7 @@ export const userPollState = createSlice({
   },
 });
 
-export const { setPoll,setUserPollvote, clearPollInfo } =
+export const { setPoll,setUserPollvote,deleteUserPoll, clearPollInfo } =
   userPollState.actions;
 
 export default userPollState.reducer;

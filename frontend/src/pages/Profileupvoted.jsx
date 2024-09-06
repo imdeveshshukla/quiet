@@ -6,7 +6,7 @@ import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSkeltonLoader } from '../redux/skelton';
 import axios from 'axios';
 import baseAddress from "../utils/localhost";
-import { clearPostsInfo, setPost } from '../redux/userposts';
+import { clearUserPostsInfo, setPost } from '../redux/userposts';
 import { useOutletContext } from 'react-router-dom';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -29,7 +29,7 @@ const Profileupvoted = () => {
     setisLoading(true)
     try {
         if (reset) {
-            dispatch(clearPostsInfo());
+            dispatch(clearUserPostsInfo());
             setPage(1);
             setHasMore(true);
         }
@@ -70,8 +70,11 @@ const Profileupvoted = () => {
 
 
 useEffect(() => {
-    if(page==1) dispatch(clearPostsInfo())
-    getUserUpvotes()
+    if(page==1){
+        getUserUpvotes(true)
+    }else{
+        getUserUpvotes()
+    }
 }, [page]);
 
 const fetchMoreData = () => {

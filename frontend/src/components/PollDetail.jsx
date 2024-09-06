@@ -3,8 +3,7 @@ import { useParams } from 'react-router-dom'
 import baseAddress from '../utils/localhost';
 import Polls from './Polls';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { setSkeltonLoader } from '../redux/skelton';
+
 import { PollSkelton } from './Postskelton';
 
 
