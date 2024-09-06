@@ -2,6 +2,7 @@ import axios from "axios";
 import baseAddress from "./localhost";
 
 const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPostsInfo,setSkeltonLoader,setHasMore,page,title)=>{
+    
     if (!joined && privateRoom) {
         setHasMore(false);
         dispatch(setHotPost([]))
@@ -25,6 +26,7 @@ const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPosts
             const fetchedPosts = res.data;
   
             if (fetchedPosts?.length < 10) {
+              console.log('hasmore2 ',false);
               setHasMore(false);
             }
 

@@ -186,15 +186,25 @@ export const isPollFromRoom = async(req,res)=>{
       }
     });
 
-    if(poll?.room == null)return res.status(200).json({ fetch:true });
+    if(poll?.subCommunity == null)return res.status(200).json({ fetch:true });
     
     // console.log(poll);
-    res.status(200).json({poll});
+    const users = poll.room.UsersEnrolled;
+    let found = false;
+    users.map((user)=>{
+      if(user.userId === userId)
+      {
+        found = true;
+        return;
+      }
+    })
+    return res.status(200).json({fetch:found});
   }
   catch(err)
   {
     console.log(err);
     return res.status(500).json({
+      fetch:false,
       msg:"Server Issue"
     })
   }
