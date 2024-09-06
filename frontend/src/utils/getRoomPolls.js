@@ -28,7 +28,7 @@ const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPosts
               setHasMore(false);
             }
 
-            console.log("polls ",fetchedPosts);
+            // console.log("polls ",fetchedPosts);
             // dispatch(setSkeltonLoader())
             dispatch(setHotPost(fetchedPosts));
           }

@@ -168,11 +168,12 @@ export const deletePoll = async(req,res)=>{
 
 export const isPollFromRoom = async(req,res)=>{
   const userId = req.userId;
-  const pollId = req.body.id;
+  const pollId = req.query?.id;
   console.log("Here it is");
-  console.log(pollId)
+  console.log(userId);
+  console.log(pollId);
   try{
-    const res = await prisma.poll.findFirst({
+    const poll = await prisma.poll.findFirst({
       where:{
         id:pollId
       },
@@ -181,15 +182,14 @@ export const isPollFromRoom = async(req,res)=>{
           include:{
             UsersEnrolled:true
           }
-        },
-        subCommunity:true,
+        }
       }
     });
 
-    if(res.subCommunity == null)return res.status(200).json({ fetch:true });
+    if(poll?.room == null)return res.status(200).json({ fetch:true });
     
-    console.log(res);
-    res.status(200).json({res});
+    // console.log(poll);
+    res.status(200).json({poll});
   }
   catch(err)
   {
