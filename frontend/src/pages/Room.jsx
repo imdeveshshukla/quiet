@@ -233,6 +233,10 @@ const Room = function () {
     setisLoading2(false);
   }
   useEffect(() => {
+    setPage(0);
+    setPage2(0)
+    setHasMore(true)
+    setHasMore2(true)
     onStart();
     return () => {
       dispatch(clearHotPostsInfo());
@@ -442,7 +446,7 @@ const Room = function () {
         <div className='h-[1.5px] bg-gray-800 mt-6'></div>
 
       </div>
-      <div className='flex gap-2 justify-end mx-4 xxs:mx-8 mt-6'>
+      <div className='flex gap-2 justify-end mx-4 xxs:mx-8 my-6'>
                 
                 <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'}  rounded-md`}>
                     <input 
@@ -501,7 +505,7 @@ export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,d
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
-  return <div className=' min-h-screen xs:pl-8 sm:pl-16'>
+  return <div className=' min-h-fit xs:pl-8 sm:pl-16'>
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}
@@ -549,7 +553,7 @@ export const RoomPolls = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
-  return <div className=' min-h-screen xs:pl-8 sm:pl-16'>
+  return <div className=' min-h-fit xs:pl-8 sm:pl-16'>
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}

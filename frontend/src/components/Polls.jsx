@@ -212,19 +212,19 @@ const deletePoll=async(id)=>{
                             || (topic && <><span onClick={() => Navigate(`/q/${"topic"}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(poll?.createdAt)} ago`}</span>
 
                     </div>
-                    {poll?.userId === userInfo?.userID ?
+                    {
                         <div className="exclude-click relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
 
                             <button onClick={handleToggle} className="flex  items-center hover:focus:outline-none">
                                 {delLoading ? <SmoothLoader /> :<BsThreeDotsVertical />}
                             </button>
                             {isOpen && (
-                                <div className="absolute right-1 bottom-6  bg-white rounded-md shadow-lg z-10">
+                                <div className=" absolute right-4 bottom-4  bg-white rounded-md shadow-lg z-10">
                                     <ul className=" bg-[#6d712eb8] rounded-md ">
-                                        <li className=" text-white hover:text-black">
+                                        {poll?.userId === userInfo?.userID  && <li className=" text-white hover:text-black">
                                             <button onClick={() => handleDeletePoll(poll?.id)} className="px-4 py-1 w-full flex items-center justify-center gap-1 ">
                                                 { <><span>Delete</span> <MdDelete /></>}</button>
-                                        </li>
+                                        </li>}
                                         <hr />
                                         <li className=" text-white hover:text-black">
                                             <button onClick={()=>handleShare(poll)} className='px-4 py-1 flex items-center justify-center gap-2 '>
@@ -235,7 +235,7 @@ const deletePoll=async(id)=>{
 
                                 </div>
                             )}
-                        </div> : <></>}
+                        </div>}
                 </header>
                 <main className=''>
                     <div className=' text-lg font-bold my-2 font-sans'><ReadMore children={poll?.title} maxLines={3} /></div>
