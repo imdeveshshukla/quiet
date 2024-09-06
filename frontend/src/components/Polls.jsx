@@ -22,6 +22,7 @@ import { deleteUserPoll, setUserPollvote } from '../redux/userpolls';
 import { IoMdShare } from "react-icons/io";
 import ConfirmWindow from './ConfirmWindow';
 
+import { decreaseRoomPolls } from '../redux/roomSlice';
 
 
 axios.defaults.withCredentials = true
@@ -29,7 +30,7 @@ axios.defaults.withCredentials = true
 
 
 
-const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
+const Polls = ({ poll, setPollVote, user, inRoom, room, topic, joined }) => {
 
 
     const userInfo = useSelector(state => state.user.userInfo);
@@ -69,6 +70,15 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
                 icon: 'ℹ️',
             })
             return;
+        }
+        if(inRoom)
+        {
+            if(!joined){
+                toast("First Join Room", {
+                    icon: 'ℹ️',
+                })
+                return;
+            }
         }
         setloading(true)
 
@@ -128,6 +138,7 @@ const deletePoll=async(id)=>{
     setLoading(true)
 
     try {
+        setLoading(true)
         const res= await axios.delete(`${baseAddress}poll/deletepoll`,{
             params:{
                 id,
@@ -137,9 +148,12 @@ const deletePoll=async(id)=>{
             toast.success("Poll Deleted!")
             dispatch(deleteUserPoll(id))
             dispatch(deleteHomePost(id))
+            if(inRoom)dispatch(decreaseRoomPolls())
         }
+        setLoading(false);
     } catch (error) {
-        
+        console.log(error);
+        toast.error("Server Issue");
     }
     setLoading(false)
 }

@@ -24,12 +24,15 @@ export const roomSlice = createSlice({
     decreaseRoomPost:(state)=>{
       state.roomInfo._count.posts -= 1;
     },
+    decreaseRoomPolls:(state)=>{
+      state.roomInfo._count.polls -= 1;
+    },
     clearRoomDetail:(state)=>{
       state.roomInfo=null;
     },
   },
 })
 
-export const { setRoomDetail,changeBgImg,clearRoomDetail, changeDpImg,changeTitle,decreaseRoomPost } = roomSlice.actions;
+export const { setRoomDetail,changeBgImg,clearRoomDetail, changeDpImg,changeTitle,decreaseRoomPost,decreaseRoomPolls } = roomSlice.actions;
 
 export default roomSlice.reducer

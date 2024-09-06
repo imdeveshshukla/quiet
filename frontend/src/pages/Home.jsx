@@ -105,7 +105,7 @@ const Home = () => {
   useEffect(() => {
     dispatch(addRoomTitle(null));
     dispatch(addRoomCreatorId(null));
-    dispatch(setOnNewRoomPost(false));
+    dispatch(setOnNewRoomPost(null));
     if (posts.length === 0) {
       getPost(true);
     }

@@ -4,7 +4,7 @@ const initialState = {
   value: {
     roomTitle:null,
     roomCreatorId:null,
-    onNewRoomPost:false
+    onNewRoomPost:null
   },
 }
 

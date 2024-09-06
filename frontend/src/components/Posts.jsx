@@ -15,7 +15,7 @@ import { BsThreeDotsVertical } from "react-icons/bs";
 import { MdDelete } from 'react-icons/md';
 import SmoothLoader from '../assets/SmoothLoader';
 import { clearHotPostsInfo, deleteHotPostsInfo } from '../redux/Hotposts';
-import { toggleUserInfoUpvote } from '../redux/profile';
+import { decreaseUserPost, toggleUserInfoUpvote } from '../redux/profile';
 import { setOnNewPost } from '../redux/onNewPost';
 import { deleteUserPost } from '../redux/userposts';
 import { decreaseRoomPost } from '../redux/roomSlice';
@@ -80,13 +80,13 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
 //       dispatch(clearHotPostsInfo());
         dispatch(deleteUserPost(id))
         dispatch(deleteHomePost(id))
-        if(insideOverView){
+      if(insideOverView){
           deleteOverPost(id)
         }
         if(deletePopularPost){
           deletePopularPost(id)
         }
-        
+        dispatch(decreaseUserPost())
 //       dispatch(clearPostsInfo());
       if(inRoom)
       {
