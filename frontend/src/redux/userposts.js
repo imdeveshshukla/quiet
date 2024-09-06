@@ -16,6 +16,9 @@ export const userPostState = createSlice({
       })
       // state.posts = [...state.posts, ...action.payload];
     },
+    deleteUserPost:(state,action)=>{
+      state.posts= state.posts.filter(post=>post.id!==action.payload)
+    },
     setUserPostComment: (state, action) => {
       let post = state.posts.find((post) => post.id == action.payload.postId);
 
@@ -44,13 +47,13 @@ export const userPostState = createSlice({
         }
       }
     },
-    clearPostsInfo: (state) => {
+    clearUserPostsInfo: (state) => {
       state.posts = [];
     },
   },
 });
 
-export const { setPost, setUserPostComment, toggleUserUpvote, clearPostsInfo } =
+export const { setPost,deleteUserPost, setUserPostComment, toggleUserUpvote, clearUserPostsInfo } =
   userPostState.actions;
 
 export default userPostState.reducer;

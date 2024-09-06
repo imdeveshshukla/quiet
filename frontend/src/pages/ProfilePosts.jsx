@@ -4,7 +4,7 @@ import Postskelton, { PollSkelton } from '../components/Postskelton';
 import { useSelector, useDispatch } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSkeltonLoader } from '../redux/skelton';
-import userposts, { clearPostsInfo, setPost } from '../redux/userposts';
+import userposts, {  clearUserPostsInfo, setPost } from '../redux/userposts';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { useOutletContext, useParams } from 'react-router-dom';
@@ -31,11 +31,11 @@ const ProfilePosts = () => {
 
 
     const getUserPost = async (reset = false) => {
-        dispatch(setSkeltonLoader());
+      
         setisLoading(true)
         try {
             if (reset) {
-                dispatch(clearPostsInfo());
+                dispatch(clearUserPostsInfo());
                 setPage(1);
                 setHasMore(true);
             }
@@ -64,7 +64,7 @@ const ProfilePosts = () => {
         } catch (error) {
             console.log(error);
         }
-        dispatch(setSkeltonLoader());
+      
         setisLoading(false)
     };
     
@@ -98,7 +98,7 @@ const ProfilePosts = () => {
             <div className=''>
                 {
                     userPost.map(post => (
-                        <Posts key={uuidv4()} joined={true} post={post} topic={post.topic} inRoom={post.subCommunity} room={post.room} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} />
+                        <Posts key={uuidv4()} joined={true} post={post} topic={post.topic} inRoom={post.subCommunity} room={post.room} id={post.id} title={post.title} body={post.body} media={post.img} countComment={post.comments?.length} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} profilepost={user} />
                     ))
                 }
             </div>
@@ -177,7 +177,6 @@ export const ProfilePoll= ()=>{
     
 
     return (
-
             <InfiniteScroll
             dataLength={userPoll?.length}
             next={fetchMoreData}

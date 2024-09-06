@@ -35,7 +35,7 @@ const ProfileComments = () => {
 
 
   const getUserComment = async (reset = false) => {
-    dispatch(setSkeltonLoader());
+    // dispatch(setSkeltonLoader());
     setisLoading(true)
     try {
       if (reset) {
@@ -66,13 +66,11 @@ const ProfileComments = () => {
     } catch (error) {
       console.log(error);
     }
-    dispatch(setSkeltonLoader());
+    // dispatch(setSkeltonLoader());
     setisLoading(false)
   };
 
   useEffect(() => {
-
-
     getUserComment(true);
   }, [username]);
 

@@ -8,7 +8,7 @@ import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
 import ReadMore, { linkDecorator } from './ReadMore';
-import { clearPostsInfo, toggleUpvote } from '../redux/Post';
+import { clearPostsInfo, deleteHomePost, toggleUpvote } from '../redux/Post';
 import baseAddress from '../utils/localhost';
 import Linkify from 'react-linkify';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -16,10 +16,13 @@ import { MdDelete } from 'react-icons/md';
 import SmoothLoader from '../assets/SmoothLoader';
 import { clearHotPostsInfo, deleteHotPostsInfo } from '../redux/Hotposts';
 import { toggleUserInfoUpvote } from '../redux/profile';
+import { setOnNewPost } from '../redux/onNewPost';
+import { deleteUserPost } from '../redux/userposts';
 import { decreaseRoomPost } from '../redux/roomSlice';
 
 
-const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user, upvotes,joined,postDetails,insideOverView }) => {
+
+const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user,profilepost, upvotes,joined,postDetails,insideOverView }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
@@ -51,8 +54,14 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
           id
         }
       });
-      toast.success(res.data.msg);
-      dispatch(clearPostsInfo());
+      toast.success(res?.data?.msg);
+
+//       dispatch(clearHotPostsInfo());
+        dispatch(deleteUserPost(id))
+        dispatch(deleteHomePost(id))
+
+      
+//       dispatch(clearPostsInfo());
       if(inRoom)
       {
         dispatch(deleteHotPostsInfo(id));
@@ -250,7 +259,7 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
               || (topic && <><span onClick={()=> Navigate(`/q/${topic}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
             
           </div>
-      {   user?.username===userInfo?.username?
+      {user?.username===userInfo?.username?
             <div className="relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
 
                 <button onClick={handleToggle} className="flex items-center hover:focus:outline-none">
@@ -270,9 +279,9 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
               </div>:<></>}
         </header>
         <main className=''>
-          <div className='text-lg font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}><Linkify componentDecorator={linkDecorator}>{title}</Linkify></div>
+          <div className='text-lg font-sans font-bold my-2 whitespace-pre-wrap break-words overflow-clip ' style={{ display: '-webkit-box', WebkitBoxOrient: 'vertical', lineHeight: '1.3em', wordBreak: 'break-word' }}><Linkify componentDecorator={linkDecorator}>{title}</Linkify></div>
 
-          <div className={` my-2 whitespace-pre-wrap break-words`}>
+          <div className={` my-2 font-sans whitespace-pre-wrap break-words`}>
             <ReadMore children={body} maxLines={media ? 2 : 10} />
           </div>
 

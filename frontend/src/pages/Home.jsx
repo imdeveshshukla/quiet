@@ -85,6 +85,7 @@ const Home = () => {
   // Trigger post fetching when offsets are reset
   useEffect(() => {
     if (reset) {
+      setHasMore(true)
       getPost(true);
       setReset(false); // Reset the flag after fetching data
     }
@@ -93,6 +94,7 @@ const Home = () => {
   // Trigger new post fetch when a new post is created
   useEffect(() => {
     if (onNewPost) {
+      window.scrollTo(0,0)
       handleNewPost();
       dispatch(setOnNewPost(false));
     }

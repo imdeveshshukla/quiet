@@ -5,11 +5,11 @@ import { createPoll, deletePoll, getAllPolls, getPoll, votePoll } from "../contr
 
 const pollRoutes = express.Router();
 
-pollRoutes.get('/getpoll/:pollId', getPoll );
+pollRoutes.get('/getpoll/', getPoll );
 pollRoutes.get('/getallpolls/', getAllPolls);
 pollRoutes.post('/createpoll', verifyToken, createPoll );
 pollRoutes.post('/votepoll', verifyToken, votePoll );
-pollRoutes.delete('/delete',verifyToken,deletePoll);
+pollRoutes.delete('/deletepoll',verifyToken,deletePoll);
 
 
 export default pollRoutes;

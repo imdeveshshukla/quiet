@@ -20,6 +20,10 @@ export const postState = createSlice({
       state.posts = [...state.posts, ...uniquePosts];
      
     },
+    deleteHomePost:(state,action)=>{
+      state.posts= state.posts.filter(post=>post.id!==action.payload)
+    },
+  
     
     
     setPollvote: (state, action) => {
@@ -94,6 +98,6 @@ export const postState = createSlice({
   },
 });
 
-export const { setPost, setPostComment,setPollvote, toggleUpvote,clearPostsInfo } = postState.actions;
+export const { setPost,deleteHomePost, setPostComment,setPollvote,deleteHomePoll, toggleUpvote,clearPostsInfo } = postState.actions;
 
 export default postState.reducer;

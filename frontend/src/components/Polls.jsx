@@ -8,7 +8,7 @@ import { BiUpvote, BiDownvote } from "react-icons/bi";
 import { GoComment } from "react-icons/go";
 import { RiShareForwardLine } from "react-icons/ri";
 import ReadMore, { linkDecorator } from './ReadMore';
-import { clearPostsInfo, setPollvote, toggleUpvote } from '../redux/Post';
+import { clearPostsInfo, deleteHomePost, setPollvote, toggleUpvote } from '../redux/Post';
 import baseAddress from '../utils/localhost';
 import Linkify from 'react-linkify';
 import { BsThreeDotsVertical } from "react-icons/bs";
@@ -18,13 +18,14 @@ import { getTime } from './Posts';
 import { v4 as uuidv4 } from 'uuid';
 import SmallLoader from './SmallLoader';
 import SmoothLoaderN from '../assets/SmoothLoaderN';
-import { setUserPollvote } from '../redux/userpolls';
+import { deleteUserPoll, setUserPollvote } from '../redux/userpolls';
+
+axios.defaults.withCredentials = true
 
 
 
 
-
-const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
+const Polls = ({ poll, setPollVote, user, inRoom, room, topic }) => {
 
 
     const userInfo = useSelector(state => state.user.userInfo);
@@ -58,6 +59,12 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
 
 
     const handleVote = async (selectedOption) => {
+        if(!isLogin){
+            toast("Login to vote", {
+                icon: 'ℹ️',
+            })
+            return;
+        }
         setloading(true)
 
         try {
@@ -70,7 +77,7 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
                 setHasVoted(true);
                 dispatch(setPollvote(res.data))
                 dispatch(setUserPollvote(res.data))
-                if(setPollVote){
+                if (setPollVote) {
                     setPollVote(res.data)
                 }
             }
@@ -94,7 +101,23 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
 
 
 
-
+const deletePoll=async(id)=>{
+    try {
+        const res= await axios.delete(`${baseAddress}poll/deletepoll`,{
+            params:{
+                id,
+            }
+        })
+        console.log(res);
+        if(res.status==202){
+            toast.success("Poll Deleted!")
+            dispatch(deleteUserPoll(id))
+            dispatch(deleteHomePost(id))
+        }
+    } catch (error) {
+        
+    }
+}
 
 
     useEffect(() => {
@@ -104,21 +127,21 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
         };
     }, []);
 
-    const handleClick = (e,id) => {
+    const handleClick = (e, id) => {
 
         if (e.target.closest('.exclude-click')) {
-          return;
+            return;
         }
         Navigate(`/poll/${id}`)
         console.log("click");
-        
-        
-    
-      };
+
+
+
+    };
 
 
     return (
-        <div onClick={(e)=>handleClick(e, poll.id)} key={poll.id}>
+        <div onClick={(e) => handleClick(e, poll?.id)} key={poll.id}>
             <div className='px-4 py-2 xxs:px-8 cursor-default xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
                 <header className='flex gap-2 items-center my-2 exclude-click'>
                     <img onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} src={poll?.createdBy?.dp || dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
@@ -137,7 +160,7 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
                                 <div className="absolute right-0 top-4  bg-white rounded-md shadow-lg z-10">
                                     <ul className=" bg-[#6d712eb8] rounded-md ">
                                         <li className=" text-white hover:text-black">
-                                            <button onClick={() => deletePost(id)} className="px-4 py-1 flex items-center gap-1 ">
+                                            <button onClick={() => deletePoll(poll?.id)} className="px-4 py-1 flex items-center gap-1 ">
                                                 {delLoading ? <SmoothLoader /> : <><span>Delete</span> <MdDelete /></>}</button>
                                         </li>
                                     </ul>
@@ -147,7 +170,7 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
                         </div> : <></>}
                 </header>
                 <main className=''>
-                    <div  className=' my-2 font-sans'><ReadMore children={poll?.title} maxLines={3} /></div>
+                    <div className=' text-lg font-bold my-2 font-sans'><ReadMore children={poll?.title} maxLines={3} /></div>
 
                     <div className='relative flex flex-col gap-2 '>
 
@@ -160,7 +183,7 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
                                 }
                             }} key={`${uuidv4()}${option.id}`} className='exclude-click option cursor-pointer relative  '>
                                 <div className={` ${option.votes.some(vote => vote.userId == userInfo?.userID) && '  shadow-green-900'} flex justify-between items-center shadow-inner shadow-black  relative  bg-gray-200 px-2 py-1  rounded-md `}>
-                                    <span className=' text-sm  font-ubuntu break-all break-words line-clamp-1 mr-2  font-semibold'>{option.text}</span>
+                                    <span className=' text-gray-800 font-ubuntu break-all break-words line-clamp-1 mr-2  font-medium'>{option.text}</span>
                                     <span className=' text-xs font-semibold'>{`${((option.votes.length * 100 / totalVotes) || 0).toFixed(2)}%`}</span>
 
                                 </div>
@@ -185,7 +208,7 @@ const Polls = ({ poll,setPollVote, user, inRoom,room , topic }) => {
                     </div>
 
 
-                    <div className=' text-end text-sm mt-1 mr-2 text-gray-700'>Total_votes: {totalVotes||0}</div>
+                    <div className=' text-end text-sm mt-1 mr-2 text-gray-700'>Total_votes: {totalVotes || 0}</div>
 
                 </main>
 
