@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 import baseAddress from '../utils/localhost';
 import Polls from './Polls';
 import axios from 'axios';
@@ -12,7 +12,7 @@ const PollDetail = () => {
     const { id } = useParams();
     const [poll, setpoll] = useState({})
     const [loading, setloading] = useState(false)
-    
+    const Navigate = useNavigate();    
 
 
     const setPollVote = (res) => {
@@ -45,14 +45,18 @@ const PollDetail = () => {
 
         setloading(true)
         try {
-            // console.clear();
-            // console.log("Fetching Poll");
-            // const isRoom = await axios.get(`${baseAddress}poll/getpollRoom`,{
-            //     params: {
-            //         id,
-            //     },
-            // });
-            // console.log(isRoom);
+            console.log("Fetching Poll");
+            const isRoom = await axios.get(`${baseAddress}poll/getpollRoom`,{
+                params: {
+                    id,
+                },
+            });
+            if(!(isRoom.data?.fetch))
+            {
+                Navigate('/');
+                console.log("Access Denied");
+                return;
+            }
 
             const res = await axios.get(`${baseAddress}poll/getpoll`, {
                 params: {

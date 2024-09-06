@@ -70,6 +70,7 @@ const Room = function () {
   const [disVal, setdisVal] = useState("post")
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);  //testing
+  const [hasMore2, setHasMore2] = useState(true); 
   const [gotPost, setPost] = useState([]);
   const isOwner = (CreatorId === userData?.userID && joined);
   const [showAddMem, setShowAddMem] = useState(false);
@@ -82,7 +83,8 @@ const Room = function () {
   const onNewRoomPost = useSelector((state)=>state.roomCreatePost.value.onNewRoomPost);
   
   
-
+  
+  console.log("Out Side ",hasMore," ",hasMore2);
   const [showChangeTitleBox, setBox] = useState(false);
   function handleToggle() {
     setisOpen((isOpen) => !isOpen)
@@ -127,7 +129,6 @@ const Room = function () {
   function openPostBtn() {
     dispatch(addRoomTitle(title));
     dispatch(addRoomCreatorId(CreatorId));
-    
     navigate('/create')
   }
 
@@ -161,6 +162,7 @@ const Room = function () {
 
 
   const getPost = async () => {
+    console.log("In Side getPost ",hasMore," ",hasMore2);
 
     if (!joined && privateRoom) {
       setHasMore(false);
@@ -206,7 +208,7 @@ const Room = function () {
     {
       setPage(0);
       setPage2(0);
-      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
+      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
       getPost();
     }
   }
@@ -223,7 +225,8 @@ const Room = function () {
       setPage(0);
       dispatch(clearPollInfo());
       dispatch(clearHotPostsInfo());
-      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
+      setdisVal("post");
+      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
       getPost();
       setHasMore(true);
     }
@@ -246,7 +249,7 @@ const Room = function () {
       setPage(0);
       setPage2(0);
       getPost();
-      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
+      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
       setHasMore(true);
     }
   }, [joined, privateRoom])
@@ -256,7 +259,7 @@ const Room = function () {
   }, [page])
 
   useEffect(()=>{
-    if(joined || !privateRoom)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore,page2,title);
+    if(joined || !privateRoom)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
   },[page2])
 
 
@@ -478,7 +481,7 @@ const Room = function () {
         disVal === "post"?
         <RoomPost privateRoom={privateRoom} joined={joined} hasMore={hasMore} isLoading={isLoading} setPage={setPage} refresh={refresh} data={data}/>
         :
-        <RoomPolls privateRoom={privateRoom} joined={joined} hasMore={hasMore} isLoading={isLoading} setPage={setPage2} refresh={refresh} data={data} />
+        <RoomPolls privateRoom={privateRoom} joined={joined} hasMore={hasMore2} isLoading={isLoading} setPage={setPage2} refresh={refresh} data={data} />
       }
     </>
   )
@@ -491,6 +494,7 @@ export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,d
   const hotposts = useSelector((state) => state.hotpost.hotposts);
   const isSkelton = useSelector((state) => state.skelton.value);
 
+  console.log("RoomPost ",hasMore," ");
 
 
   const fetchMoreData = () => {
@@ -540,7 +544,7 @@ export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,d
 export const RoomPolls = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,data})=>{
   const hotposts = useSelector(state => state.userpoll.polls);
   const isSkelton = useSelector((state) => state.skelton.value);
-
+  console.log("RoomPolls ",hasMore," ");
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
