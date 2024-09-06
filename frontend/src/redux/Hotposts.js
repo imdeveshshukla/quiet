@@ -43,13 +43,17 @@ export const HotPostState = createSlice({
         }
       }
     },
+    deleteHotPostsInfo:(state,action)=>{
+      let posts = state.hotposts.filter((post)=> post.id != action.payload);
+      state.hotposts = [...posts];
+    },
     clearHotPostsInfo: (state) => {
       state.hotposts = [];
     },
   },
 });
 
-export const { setHotPost, setHotPostComment, toggleUserUpvote, clearHotPostsInfo } =
+export const { setHotPost, setHotPostComment, toggleUserUpvote, clearHotPostsInfo,deleteHotPostsInfo } =
   HotPostState.actions;
 
 export default HotPostState.reducer;

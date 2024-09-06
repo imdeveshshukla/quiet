@@ -321,6 +321,7 @@ export const showRoom = async(req,res)=>{
                 _count:{
                     select:{
                         posts:true,
+                        polls:true
                     }
                 }
             }

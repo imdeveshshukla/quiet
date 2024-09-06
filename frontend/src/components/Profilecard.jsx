@@ -124,7 +124,11 @@ useEffect(() => {
             <span className=' font-medium text-sm'>{profileInfo?.createdAt?.split("T")[0]}</span>
             <span className=' text-sm text-gray-700'>Cake day</span>
           </div>
-          {room ? <></> : <div className=' flex flex-col items-start'>
+          {room ? <div className=' flex flex-col items-start'>
+            <span className=' font-medium text-sm'>{profileInfo?._count?.polls || 0}</span>
+            <span className=' text-sm text-gray-700'>Polls</span></div>
+            : 
+            <div className=' flex flex-col items-start'>
             <span className=' font-medium text-sm'>{profileInfo?._count?.upvotes || 0}</span>
             <span className=' text-sm text-gray-700'>Upvotes</span>
           </div>}
