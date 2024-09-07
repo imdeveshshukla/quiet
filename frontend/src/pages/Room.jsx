@@ -47,9 +47,10 @@ import Polls from "../components/Polls";
 
 const Room = function () {
   const location = useLocation();
+  const navlink = location?.state;
   const { title, CreatorId } = useParams();
 
-  const { data, isLoading, isError, error } = useGetRoomDetailsQuery(title)
+  const { data, isLoading, isError, error } = useGetRoomDetailsQuery(title);
 
   const [joined, setJoined] = useState(false);
   const dispatch = useDispatch();
@@ -63,27 +64,24 @@ const Room = function () {
   const [isLoading2, setisLoading2] = useState(false)
   const ref = useRef(null);
   const dpref = useRef(null)
-  const [showCP, setShowCP] = useState(false);
   const navigate = useNavigate();
   const isSkelton = useSelector((state) => state.skelton.value);
   const [disVal, setdisVal] = useState("post")
   const [page, setPage] = useState(0);
   const [hasMore, setHasMore] = useState(true);  //testing
   const [hasMore2, setHasMore2] = useState(true); 
-  const [gotPost, setPost] = useState([]);
   const isOwner = (CreatorId === userData?.userID && joined);
   const [showAddMem, setShowAddMem] = useState(false);
   const [privateRoom, setPrivateRoom] = useState(true);
   const dropdownRef = useRef(null);
   const [isOpen, setisOpen] = useState(false);
-  const [showCard, setShowCard] = useState(false)
   const [page2,setPage2] = useState(0);
   
   const onNewRoomPost = useSelector((state)=>state.roomCreatePost.value.onNewRoomPost);
   
   
   
-  console.log("Out Side ",hasMore," ",hasMore2);
+  // console.log("Out Side ",hasMore," ",hasMore2);
   const [showChangeTitleBox, setBox] = useState(false);
   function handleToggle() {
     setisOpen((isOpen) => !isOpen)
@@ -150,10 +148,10 @@ const Room = function () {
 
 
   const getPost = async () => {
-    console.log("In Side getPost ",hasMore," ",hasMore2);
-
+    // console.log("In Side getPost ",hasMore," ",hasMore2," ",joined," ",privateRoom);
     if (!joined && privateRoom) {
-      setHasMore(false);
+      // setHasMore(false);
+      setisLoading2(false);
       dispatch(setHotPost([]))
       return;
     }
@@ -173,18 +171,21 @@ const Room = function () {
         if (res.status === 200) {
           const fetchedPosts = res.data.posts;
 
+          dispatch(setHotPost(fetchedPosts));
+
           if (fetchedPosts.length < 10) {
             setHasMore(false);
           }
           // dispatch(setSkeltonLoader())
-          dispatch(setHotPost(fetchedPosts));
+          setisLoading2(false);
         }
       } catch (error) {
         console.log(error);
         setHasMore(false); // Stop fetching if there's an error
+        setisLoading2(false); 
         // dispatch(setSkeltonLoader())
       }
-
+      
     }
   };
 
@@ -196,60 +197,87 @@ const Room = function () {
     {
       setPage(0);
       setPage2(0);
-      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
+      setHasMore(true);
+      setHasMore2(true);
       getPost();
+      // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
     }
   }
 
   async function onStart() {
+    // console.log("Mai aa gaya on start par lol ",isLoading);
     if (isLoading) return;
     setisLoading2(true);
     dispatch(setRoomDetail(data?.room));
     setPrivateRoom(data?.room?.privateRoom);
 
     setJoined(data?.joined);
-    if (joined || !privateRoom) {
-      setPage2(0)
-      setPage(0);
+    if (data?.joined || !(data?.room?.privateRoom)) {
       dispatch(clearPollInfo());
       dispatch(clearHotPostsInfo());
       setdisVal("post");
-      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
       getPost();
-      setHasMore(true);
+      // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
     }
     setisLoading2(false);
   }
   useEffect(() => {
+    // console.log("Main data and title value useEffect");
+    setisLoading2(true);
+    setPage2(0)
+    setPage(0);
+    dispatch(clearPollInfo());
+    dispatch(clearHotPostsInfo());
+    setHasMore(true);
+    setHasMore2(true);
     onStart();
+    setisLoading2(false);
     return () => {
+      setPage(0);
+      setPage2(0);
+      setHasMore(true);
+      setHasMore2(true);
       dispatch(clearHotPostsInfo());
       dispatch(clearPollInfo());
     }
   }, [data, title])
 
-  // useEffect(()=>{
-
-  // },[disValue])
+  useEffect(()=>{
+    // console.log("Mai dis Value wala use Effect " ,disVal);
+    if(disVal==='poll') console.log("Changed To Poll LOL");
+    else console.log("Changed To Post LOL");//getPost(true);
+  },[disVal])
 
   useEffect(() => {
+    // console.log("Mai joined or privateROom val useEffect",joined, privateRoom);
     if (joined || !privateRoom) {
       setPage(0);
       setPage2(0);
-      getPost();
-      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
       setHasMore(true);
+      setHasMore2(true);
+      // getPost();
+      // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
     }
   }, [joined, privateRoom])
 
+
+  const handleClickOutside = (event) => {
+    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+      setisOpen(false);
+    }
+  };
   useEffect(() => {
-    if (joined || !privateRoom) getPost();
-  }, [page])
+    // console.log("Mai Khali useEffect");
 
-  useEffect(()=>{
-    if(joined || !privateRoom)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
-  },[page2])
-
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      setPage(0);
+      setPage2(0);
+      setHasMore(true);
+      setHasMore2(true);
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, []);
 
 
   function onNewPost(){
@@ -321,17 +349,7 @@ const Room = function () {
   }
 
 
-  const handleClickOutside = (event) => {
-    if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
-      setisOpen(false);
-    }
-  };
-  useEffect(() => {
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
-    };
-  }, []);
+  
   
 
   return (
@@ -465,9 +483,9 @@ const Room = function () {
             </div>
       {
         disVal === "post"?
-        <RoomPost privateRoom={privateRoom} joined={joined} hasMore={hasMore} isLoading={isLoading} setPage={setPage} refresh={refresh} data={data}/>
+        <RoomPost title={title} privateRoom={privateRoom} joined={navlink?.joined || joined} data={data}/>
         :
-        <RoomPolls privateRoom={privateRoom} joined={joined} hasMore={hasMore2} isLoading={isLoading} setPage={setPage2} refresh={refresh} data={data} />
+        <RoomPolls title={title} privateRoom={privateRoom} joined={navlink?.joined || joined} data={data}/>
       }
     </>
   )
@@ -475,13 +493,67 @@ const Room = function () {
 
 export default Room;
 
-export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,data})=>{
+export const RoomPost = ({title,privateRoom,joined,data})=>{
 
   const hotposts = useSelector((state) => state.hotpost.hotposts);
-  const isSkelton = useSelector((state) => state.skelton.value);
+  const [hasMore,setHasMore] = useState(true);
+  const [isLoading,setisLoading] = useState(false)
+  const [page,setPage] = useState(0);
+  const dispatch = useDispatch();
+  
+  const getPost = async (initial) => {
+    setisLoading(true);
+    if (!joined && privateRoom) {
+      console.log("setHasMOre ",joined,privateRoom);
+      setHasMore(false);
+      setisLoading(false);
+      dispatch(setHotPost([]))
+      return;
+    }
+    else {
+      if (page == 0 || initial) {
+        setPage(0);
+        dispatch(clearHotPostsInfo())
+      }
+      try {
+        // dispatch(setSkeltonLoader())
+        const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
+          params: {
+            offset: initial?0:page,
+            limit: 10,
+          },
+        });
 
-  console.log("RoomPost ",hasMore," ");
+        if (res.status === 200) {
+          const fetchedPosts = res.data.posts;
 
+          dispatch(setHotPost(fetchedPosts));
+
+          if (fetchedPosts.length < 10) {
+            console.log("setHasMOre ",fetchedPosts.length)
+            setHasMore(false);
+          }
+          setisLoading(false);
+        }
+      } catch (error) {
+        console.log(error);
+        setHasMore(false); // Stop fetching if there's an error
+      }
+      
+    }
+  };  
+  
+  useEffect(()=>{
+      setPage(0);
+      dispatch(clearHotPostsInfo());
+      setHasMore(true);
+      getPost(true)
+  },[title,data,joined,privateRoom])
+
+  useEffect(() => {
+    console.log(page," ",joined);
+    if (joined || !privateRoom) getPost();
+  }, [page])
 
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
@@ -496,12 +568,14 @@ export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,d
             loader={<Postskelton />}
             endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No posts available to display!</p>}
           >
-            {/* <Hottopic topic={title} dp={dp} bg={bg} /> */}
 
             
 
             <div className="post">
-              { (
+              { 
+                (isLoading && (hotposts.length)==0) ? (
+                <Postskelton />
+              ):(
                 hotposts.map((post) => (
                   <Posts
                     key={post.id}
@@ -515,7 +589,7 @@ export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,d
                     user={post?.user}
                     upvotes={post?.upvotes}
                     inRoom={true}
-                    room={data.room}
+                    room={data?.room}
                     joined={joined}
                   />
                 )
@@ -527,10 +601,25 @@ export const RoomPost = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,d
       </div>
 }
 
-export const RoomPolls = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,data})=>{
+export const RoomPolls = ({title,privateRoom,joined,data})=>{
   const hotposts = useSelector(state => state.userpoll.polls);
-  const isSkelton = useSelector((state) => state.skelton.value);
+  const [page,setPage] = useState(0);
+  const [isLoading,setisLoading] = useState(false)
+  const [hasMore,setHasMore] = useState(true);
+  const dispatch = useDispatch();
+
   console.log("RoomPolls ",hasMore," ");
+  useEffect(()=>{
+    setPage(0);
+    dispatch(clearPollInfo());
+    setHasMore(true);
+    getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,setHasMore,0,title)
+},[title,data,joined,privateRoom])
+
+  useEffect(() => {
+    console.log(page," ",joined);
+    if (joined || !privateRoom) getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,setHasMore,page,title);
+  }, [page])
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
@@ -542,11 +631,13 @@ export const RoomPolls = ({privateRoom,joined,hasMore,isLoading,setPage,refresh,
             next={fetchMoreData}
             hasMore={hasMore}
             loader={<Postskelton />}
-            endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No posts available to display!</p>}
+            endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No Polls available to display!</p>}
           >
 
             <div className="post">
-              {(
+              {(isLoading && (hotposts.length)==0) ? (
+                <Postskelton />
+              ):(
                 hotposts.map((post) => (
                   <Polls 
                   key={post?.id}
