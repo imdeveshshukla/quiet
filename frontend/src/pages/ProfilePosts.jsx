@@ -169,11 +169,10 @@ export const ProfilePoll= ()=>{
 
 
     const fetchMoreData = () => {
-        setTimeout(() => {
-            console.log("ProfilePoll ",isLoading)
-            if (isLoading || !hasMore) return;
-            setPage(prevPage => prevPage + 1);
-        }, 1500);
+        console.log("Inside Profile Polls ",isLoading)
+        if (isLoading || !hasMore) return;
+        setPage(prevPage => prevPage + 1);
+
     };
     
 
