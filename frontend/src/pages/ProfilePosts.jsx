@@ -84,6 +84,7 @@ const ProfilePosts = () => {
     const fetchMoreData = () => {
         if (isLoading || !hasMore) return;
         setPage(prevPage => prevPage + 1);
+        
     };
 
 
@@ -133,7 +134,7 @@ export const ProfilePoll= ()=>{
                 params:{
                     userId: user.userID,
                     page,
-                    limit: 10,
+                    limit: 15,
                 }
             })
 
@@ -168,8 +169,11 @@ export const ProfilePoll= ()=>{
 
 
     const fetchMoreData = () => {
-        if (isLoading || !hasMore) return;
-        setPage(prevPage => prevPage + 1);
+        setTimeout(() => {
+            console.log("ProfilePoll ",isLoading)
+            if (isLoading || !hasMore) return;
+            setPage(prevPage => prevPage + 1);
+        }, 1500);
     };
     
 

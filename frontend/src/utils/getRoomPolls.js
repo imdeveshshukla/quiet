@@ -1,7 +1,7 @@
 import axios from "axios";
 import baseAddress from "./localhost";
 
-const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPostsInfo,setisLoading,setHasMore,page,title)=>{
+const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPostsInfo,setisLoading,isLoading,setHasMore,page,title)=>{
     setisLoading(true);
     if (!joined && privateRoom) {
         setHasMore(false);
@@ -15,6 +15,7 @@ const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPosts
         }
         try {
         //   dispatch(setSkeltonLoader())
+          console.log("InsidegetPolls ",isLoading)
           const res = await axios.get(`${baseAddress}poll/getallpolls`, {
             params: {
               offset: page,
@@ -31,11 +32,13 @@ const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPosts
             }
 
             setisLoading(false);
+            console.log("InsidegetPolls ",isLoading)
           }
         } catch (error) {
           console.log(error);
           setHasMore(false); // Stop fetching if there's an error
           setisLoading(false);
+          console.log("InsidegetPolls ",isLoading)
         }
   
       }
