@@ -254,11 +254,11 @@ const Room = function () {
     }
   }, [data, title])
 
-  useEffect(()=>{
-    // console.log("Mai dis Value wala use Effect " ,disVal);
-    if(disVal==='poll') console.log("Changed To Poll LOL");
-    else console.log("Changed To Post LOL");//getPost(true);
-  },[disVal])
+  // useEffect(()=>{
+  //   // console.log("Mai dis Value wala use Effect " ,disVal);
+  //   if(disVal==='poll') console.log("Changed To Poll LOL");
+  //   else console.log("Changed To Post LOL");//getPost(true);
+  // },[disVal])
 
   useEffect(() => {
     // console.log("Mai joined or privateROom val useEffect",joined, privateRoom);
@@ -553,7 +553,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
           dispatch(setHotPost(fetchedPosts));
 
           if (fetchedPosts.length < 10) {
-            console.log("setHasMOre ",fetchedPosts.length)
+            // console.log("setHasMOre ",fetchedPosts.length)
             setHasMore(false);
           }
           setisLoading(false);
@@ -581,7 +581,6 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   },[title,data,joined,privateRoom])
 
   useEffect(() => {
-    // console.log(page," ",joined);
     if (joined || !privateRoom) 
     {
       if(page>0)getPost();
@@ -589,7 +588,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   }, [page])
 
   const fetchMoreData = () => {
-    if (isLoading || !hasMore) return;
+    if (!hasMore) return;
     
     setPage((prevPage) => prevPage + 10);
   };
@@ -652,7 +651,6 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
 },[title])
 
   useEffect(() => {
-    console.log(page," ",joined);
     if (joined || !privateRoom) 
     {
       if(page>0)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,isLoading,setHasMore,page,title);
@@ -660,15 +658,15 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
   }, [page])
 
   const fetchMoreData = () => {
-    console.log("InPolls ",page,isLoading,hasMore);
     if (!hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
-  return <div className=' min-h-fit xs:pl-8 sm:pl-16'>
+  return <div className='min-h-fit xs:pl-8 sm:pl-16'>
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}
-            next={fetchMoreData }
+            next={fetchMoreData}
+
             hasMore={hasMore}
             loader={<PollSkelton />}
             endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No Polls available to display!</p>}

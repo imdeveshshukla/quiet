@@ -309,6 +309,11 @@ export const CreatePoll = () => {
   const dispatch = useDispatch()
   const Navigate = useNavigate()
   const { roomTitle,roomCreatorId } = useOutletContext()
+  const [selectedOption, setSelectedOption] = useState(null);
+
+  const handleSelectChange = (event) => {
+    setSelectedOption(event.target.value);
+  };
 
   const handleTitleChange=(e)=>{
     
@@ -344,6 +349,7 @@ export const CreatePoll = () => {
       const res = await axios.post(`${baseAddress}poll/createpoll`, {
         title: poll.title,
         options: poll.options,
+        topic: selectedOption,
         subCommunity:roomTitle
       })
 
@@ -372,6 +378,29 @@ export const CreatePoll = () => {
   return (<div className=" relative h-[90%] overflow-auto">
     <h2 className="text-xl font-bold mb-2 text-[#656923]">Create Poll....</h2>
     <form  onSubmit={handleSubmit} className=" flex flex-col ">
+    {!roomTitle ? <div className='flex mt-2 px-28 justify-start  '>
+      <div className='flex  hover:bg-[#808449cf]  items-center px-2 py-1  rounded-full border-[1px] border-black '>
+
+        <span className=' rounded-full border-2 border-white'>
+          <svg width="30" height="30" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="15" cy="15" r="15" fill="black" />
+            <text x="50%" y="50%" fontSize="18" textAnchor="middle" fill="white" fontFamily="Arial, sans-serif" dominantBaseline="middle">q/</text>
+          </svg>
+        </span>
+        <select className=' cursor-pointer bg-transparent  px-2 sm:px-4   outline-none' id="options" value={selectedOption} onChange={(e) => handleSelectChange(e)}>
+
+          <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="">Select a Topic</option>
+          <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="sports">Sports</option>
+          <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="dsa">DSA</option>
+          <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="iet">IET</option>
+          <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="entertainment">Entertainment</option>
+          <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="lifestyle">Lifestyle</option>
+          <option className='bg-[#808449] text-white font-extralight  1_5md:text-lg' value="lucknow">Lucknow</option>
+        </select>
+      </div>
+    </div>
+      : <></>
+    }
       <div>
       <div>
       <div className=" flex items-center justify-between">

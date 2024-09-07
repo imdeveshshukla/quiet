@@ -208,7 +208,7 @@ const deletePoll=async(id)=>{
                     <img onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} src={poll?.createdBy?.dp || dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
                     <div className=' flex flex-wrap gap-1 xs:gap-2 md:gap-4 items-center'>
                         <span onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{poll?.createdBy?.username}</span>•{(inRoom && <><span onClick={() => Navigate(`/room/${user.userID}/${room?.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room?.title}</span> <span>•</span></>)
-                            || (topic && <><span onClick={() => Navigate(`/q/${"topic"}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(poll?.createdAt)} ago`}</span>
+                            || (topic && <><span onClick={() => Navigate(`/q/${topic}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(poll?.createdAt)} ago`}</span>
 
                     </div>
                     {
