@@ -228,6 +228,7 @@ export const deletePost = async(req,res) =>{
 }
 
 
+
 export const getPopularPosts = async (req, res) => {
   const page = parseInt(req.query.page) || 1;
   const limit = parseInt(req.query.limit) || 10;

@@ -23,7 +23,7 @@ import baseAddress from "./utils/localhost";
 import Postdetail from './components/Postdetail'
 import Postskelton, { CommentSkelton, PollSkelton, ProfileSkelton } from './components/Postskelton'
 import { setSkeltonLoader } from './redux/skelton'
-import HotTopicPosts from './pages/HotTopicPosts'
+import HotTopicPosts, { HotTopicPostsorPolls } from './pages/HotTopicPosts'
 import sportsdp from './assets/sportsdp.jpg'
 import sportsbg from './assets/sportsbg.jpg'
 import ietdp from './assets/ietdp.png'
@@ -241,12 +241,12 @@ function App() {
               <Route path='/post/:id' element={ <Postdetail />} />
               <Route path='/poll/:id' element={ <PollDetail />} />
 
-              <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg} />} />
-              <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg} />} />
-              <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"I.E.T"}  dp={ietdp} bg={ietbg} />} />
-              <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg} />} />
-              <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg} />} />
-              <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />
+              <Route path='/q/sports' element={<HotTopicPostsorPolls topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg} />} />
+              <Route path='/q/lucknow' element={<HotTopicPostsorPolls topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg} />} />
+              <Route path='/q/iet' element={<HotTopicPostsorPolls topic={"iet"} title={"I.E.T"}  dp={ietdp} bg={ietbg} />} />
+              <Route path='/q/lifestyle' element={<HotTopicPostsorPolls topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg} />} />
+              <Route path='/q/entertainment' element={<HotTopicPostsorPolls topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg} />} />
+              <Route path='/q/dsa' element={<HotTopicPostsorPolls topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />
               <Route path='/setting/' element={<Settings />} />
               <Route path="/test/" element={<Postskelton />} />
               <Route path="/about/" element={<About />} />

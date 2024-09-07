@@ -1,20 +1,22 @@
 import prisma from "../../db/db.config.js";
 
 export const createPoll = async (req, res) => {
-  const { title, options,subCommunity } = req.body;
+  const { title, options,subCommunity,topic } = req.body;
   try {
     const poll = await prisma.poll.create({
       data: {
         title,
+        topic,
         options: {
           create: options.map((option) => ({
             text: option,
           })),
         },
         userId: req.userId,
-        subCommunity: subCommunity
+        subCommunity: subCommunity,
       },
     });
+    // console.log(poll);
     res.status(200).send(poll);
   } catch (error) {
     console.log(error);
@@ -115,6 +117,9 @@ export const getPoll = async (req, res) => {
 };
 
 
+
+
+
 export const getAllPolls= async(req,res)=>{
     
     const limit= parseInt(req.query.limit) ||15;
@@ -149,6 +154,43 @@ export const getAllPolls= async(req,res)=>{
         res.status(500).send({ error: "Error fetching poll" });
       }
 }
+
+export const getHotPolls = async(req,res)=>{
+  const topic = req.query.topic;
+  const page = parseInt(req.query.page) || 1;
+  const limit = parseInt(req.query.limit) || 10;
+  const offset = (page - 1) * limit;
+
+  console.log(topic)
+  try {
+    const polls = await prisma.poll.findMany({
+      where:{
+        topic
+      },
+      include: {
+        options: {
+          include: {
+            votes: true,
+          },
+        },
+        createdBy:true
+      },
+      orderBy: {
+        createdAt: "desc",
+      },
+      skip: offset,
+      take: limit,
+    })
+    console.log(polls);
+    res.status(200).send(polls);
+  } catch (error) {
+    res.status(500).json({
+      msg:"Server Issue",
+      error:error.message
+    })
+  }
+}
+
 
 export const deletePoll = async(req,res)=>{
     const id= req.query.id;
@@ -209,3 +251,4 @@ export const isPollFromRoom = async(req,res)=>{
     })
   }
 }
+
