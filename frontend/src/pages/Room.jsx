@@ -211,7 +211,7 @@ const Room = function () {
       setPage2(0);
       setHasMore(true);
       setHasMore2(true);
-      getPost();
+      // getPost();
       // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
     }
   }
@@ -225,10 +225,10 @@ const Room = function () {
 
     setJoined(data?.joined);
     if (data?.joined || !(data?.room?.privateRoom)) {
-      dispatch(clearPollInfo());
-      dispatch(clearHotPostsInfo());
+      // dispatch(clearPollInfo());
+      // dispatch(clearHotPostsInfo());
       setdisVal("post");
-      getPost();
+      // getPost();
       // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
     }
     setisLoading2(false);
@@ -238,8 +238,8 @@ const Room = function () {
     setisLoading2(true);
     setPage2(0)
     setPage(0);
-    dispatch(clearPollInfo());
-    dispatch(clearHotPostsInfo());
+    // dispatch(clearPollInfo());
+    // dispatch(clearHotPostsInfo());
     setHasMore(true);
     setHasMore2(true);
     onStart();
@@ -249,8 +249,8 @@ const Room = function () {
       setPage2(0);
       setHasMore(true);
       setHasMore2(true);
-      dispatch(clearHotPostsInfo());
-      dispatch(clearPollInfo());
+      // dispatch(clearHotPostsInfo());
+      // dispatch(clearPollInfo());
     }
   }, [data, title])
 
@@ -558,19 +558,26 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   };  
   
   useEffect(()=>{
+      console.log("Inside useeffect")
       setPage(0);
       dispatch(clearHotPostsInfo());
       setHasMore(true);
-      getPost(true)
+      setisLoading(true);
+      const timeID = setTimeout(getPost(true),1500);
+      return ()=> clearTimeout(timeID);
   },[title,data,joined,privateRoom])
 
   useEffect(() => {
     console.log(page," ",joined);
-    if (joined || !privateRoom) getPost();
+    if (joined || !privateRoom) 
+    {
+      if(page>0)getPost();
+    }   
   }, [page])
 
   const fetchMoreData = () => {
     if (isLoading || !hasMore) return;
+    
     setPage((prevPage) => prevPage + 10);
   };
   return <div className=' min-h-fit xs:pl-8 sm:pl-16'>
