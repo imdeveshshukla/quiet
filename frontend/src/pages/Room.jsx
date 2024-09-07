@@ -15,7 +15,7 @@ import { addNewRoom, setRooms } from "../redux/userRooms";
 import CreatePost from "./CreatePost";
 import { clearHotPostsInfo, setHotPost } from "../redux/Hotposts";
 import { setSkeltonLoader } from "../redux/skelton";
-import Postskelton from "../components/Postskelton";
+import Postskelton, { PollSkelton } from "../components/Postskelton";
 import Posts from "../components/Posts";
 import InfiniteScroll from "react-infinite-scroll-component";
 import { SiTestin } from "react-icons/si";
@@ -515,10 +515,18 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   const [page,setPage] = useState(0);
   const dispatch = useDispatch();
   
+  const [cancelTokenSource, setCancelTokenSource] = useState(null);
   const getPost = async (initial) => {
+    if (cancelTokenSource) {
+      // cancelTokenSource.cancel('Previous request canceled due to new topic.');
+    }
+
+    const source = axios.CancelToken.source();
+    setCancelTokenSource(source);
+
     setisLoading(true);
     if (!joined && privateRoom) {
-      console.log("setHasMOre ",joined,privateRoom);
+      // console.log("setHasMOre ",joined,privateRoom);
       setHasMore(false);
       setisLoading(false);
       dispatch(setHotPost([]))
@@ -532,6 +540,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
       try {
         // dispatch(setSkeltonLoader())
         const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
+          cancelToken: source.token,
           params: {
             offset: initial?0:page,
             limit: 10,
@@ -550,25 +559,29 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
           setisLoading(false);
         }
       } catch (error) {
-        console.log(error);
-        setHasMore(false); // Stop fetching if there's an error
+        if (axios.isCancel(error)) {
+          console.log('Request canceled:', error.message);
+        } else {
+          console.error(error);
+          setHasMore(false);  // Disable further fetching in case of error
+        } // Stop fetching if there's an error
       }
       
     }
-  };  
+  };
   
   useEffect(()=>{
-      console.log("Inside useeffect")
+      // console.log("Inside useeffect")
       setPage(0);
       dispatch(clearHotPostsInfo());
       setHasMore(true);
       setisLoading(true);
-      const timeID = setTimeout(getPost(true),1500);
+      const timeID = setTimeout(getPost(true),500);
       return ()=> clearTimeout(timeID);
   },[title,data,joined,privateRoom])
 
   useEffect(() => {
-    console.log(page," ",joined);
+    // console.log(page," ",joined);
     if (joined || !privateRoom) 
     {
       if(page>0)getPost();
@@ -629,19 +642,24 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
   const [hasMore,setHasMore] = useState(true);
   const dispatch = useDispatch();
 
-  console.log("RoomPolls ",hasMore," ");
   useEffect(()=>{
     setPage(0);
     dispatch(clearPollInfo());
     setHasMore(true);
-    getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,setHasMore,0,title)
-},[title,data,joined,privateRoom])
+    setTimeout(() => {
+      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,isLoading,setHasMore,0,title);
+    }, 500); 
+},[title])
 
   useEffect(() => {
     console.log(page," ",joined);
-    if (joined || !privateRoom) getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,setHasMore,page,title);
+    if (joined || !privateRoom) 
+    {
+      if(page>0)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,isLoading,setHasMore,page,title);
+    }  
   }, [page])
   const fetchMoreData = () => {
+    console.log("InPolls ",page,isLoading,hasMore);
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
@@ -649,15 +667,15 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}
-            next={fetchMoreData}
+            next={()=>{ fetchMoreData }}
             hasMore={hasMore}
-            loader={<Postskelton />}
+            loader={<PollSkelton />}
             endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No Polls available to display!</p>}
           >
 
             <div className="post">
               {(isLoading && (hotposts.length)==0) ? (
-                <Postskelton />
+                <PollSkelton />
               ):(
                 hotposts.map((post) => (
                   <Polls 
