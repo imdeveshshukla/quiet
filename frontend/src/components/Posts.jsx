@@ -250,7 +250,6 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
 
   };
   const shareFunction = async(id,room)=>{
-    console.log("Clicked Share Button")
     if(inRoom)
     {
       if(!joined){

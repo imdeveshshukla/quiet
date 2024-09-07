@@ -141,7 +141,7 @@ const HotTopicPosts = ({ title, topic, dp, bg }) => {
     return () => clearTimeout(timeoutId);  // Cleanup the timeout
   }, [topic, title]);
 
-  // Handle fetching more data (pagination)
+
   useEffect(() => {
     if (page > 1) {
       getPost(false, page);  // Fetch posts for the current page

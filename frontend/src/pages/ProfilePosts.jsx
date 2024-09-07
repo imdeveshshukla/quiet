@@ -4,7 +4,7 @@ import Postskelton, { PollSkelton } from '../components/Postskelton';
 import { useSelector, useDispatch } from 'react-redux';
 import InfiniteScroll from 'react-infinite-scroll-component';
 import { setSkeltonLoader } from '../redux/skelton';
-import userposts, {  clearUserPostsInfo, setPost } from '../redux/userposts';
+import userposts, { clearUserPostsInfo, setPost } from '../redux/userposts';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
 import { useOutletContext, useParams } from 'react-router-dom';
@@ -31,7 +31,7 @@ const ProfilePosts = () => {
 
 
     const getUserPost = async (reset = false) => {
-      
+
         setisLoading(true)
         try {
             if (reset) {
@@ -51,8 +51,8 @@ const ProfilePosts = () => {
                 },
                 withCredentials: true,
             });
-           
-            
+
+
 
             if (res.status === 200) {
                 if (res.data.posts.length < 10) {
@@ -64,10 +64,10 @@ const ProfilePosts = () => {
         } catch (error) {
             console.log(error);
         }
-      
+
         setisLoading(false)
     };
-    
+
 
     useEffect(() => {
         getUserPost(true);
@@ -82,9 +82,9 @@ const ProfilePosts = () => {
 
 
     const fetchMoreData = () => {
-        if (isLoading || !hasMore) return;
+        if ( !hasMore) return;
         setPage(prevPage => prevPage + 1);
-        
+
     };
 
 
@@ -111,7 +111,7 @@ const ProfilePosts = () => {
 
 export default ProfilePosts;
 
-export const ProfilePoll= ()=>{
+export const ProfilePoll = () => {
     const userPoll = useSelector(state => state.userpoll.polls);
     const isSkelton = useSelector(state => state.skelton.value);
     const dispatch = useDispatch();
@@ -121,34 +121,36 @@ export const ProfilePoll= ()=>{
     const { username } = useParams();
     const [isLoading, setisLoading] = useState(false)
 
-    const getPoll =async(reset= false)=>{
+    const getPoll = async (reset = false) => {
+        // if(isLoading) return
         setisLoading(true)
         dispatch(setSkeltonLoader())
-        if(reset){
+        if (reset) {
             dispatch(clearPollInfo())
             setPage(1);
             setHasMore(true)
         }
         try {
-            const res= await axios.get(`${baseAddress}search/getuserpolls`, {
-                params:{
+            const res = await axios.get(`${baseAddress}search/getuserpolls`, {
+                params: {
                     userId: user.userID,
                     page,
-                    limit: 15,
+                    limit: 10,
                 }
             })
 
-            console.log(res);
-            if(res.status==200){
+
+            if (res.status == 200) {
                 dispatch(setPoll(res.data))
 
-                if(res.data.length<10){
+                if (res.data.length < 10) {
                     setHasMore(false)
                 }
             }
 
-            
+
         } catch (error) {
+            console.log(error);
             
         }
         setisLoading(false)
@@ -165,22 +167,27 @@ export const ProfilePoll= ()=>{
         if (page > 1) {
             getPoll();
         }
-    }, [page]);
+    }, [page, ]);
 
 
     const fetchMoreData = () => {
-        console.log("Inside Profile Polls ",isLoading)
-        if (isLoading || !hasMore) return;
+
+        if ( !hasMore) return;
         setPage(prevPage => prevPage + 1);
 
     };
+
+
+
+    
     
 
 
-    
+
+
 
     return (
-            <InfiniteScroll
+        <InfiniteScroll
             dataLength={userPoll?.length}
             next={fetchMoreData}
             hasMore={hasMore}
@@ -199,49 +206,49 @@ export const ProfilePoll= ()=>{
     )
 }
 
-export const ProfilePostOrPoll= ()=>{
+export const ProfilePostOrPoll = () => {
     const [disVal, setdisVal] = useState("post")
-    return(
+    return (
         <div>
             <div className='flex gap-2 justify-end mx-4 xxs:mx-8 mt-6'>
-                
-    <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'}  rounded-md`}>
-        <input 
-            className='size-4 hidden' 
-            onChange={() => setdisVal("post")} 
-            checked={disVal === "post"} 
-            type="radio" 
-            value="post" 
-            name="post_poll" 
-            id="post" 
-        />
-        <label 
-            className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'post' ? 'text-white' : 'text-gray-700'}`} 
-            htmlFor="post">
-            Post
-        </label>
-    </div>
-    <div className={`flex items-center ${disVal === 'poll' ? 'bg-[#65692375]' : 'bg-gray-200'}  rounded-md`}>
-        <input 
-            className=' hidden' 
-            onChange={() => setdisVal("poll")} 
-            checked={disVal === "poll"} 
-            type="radio" 
-            value="poll" 
-            name="post_poll" 
-            id="poll" 
-        />
-        <label 
-            className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'poll' ? 'text-white' : 'text-gray-700'}`} 
-            htmlFor="poll">
-            Poll
-        </label>
-    </div>
-</div>
+
+                <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'}  rounded-md`}>
+                    <input
+                        className='size-4 hidden'
+                        onChange={() => setdisVal("post")}
+                        checked={disVal === "post"}
+                        type="radio"
+                        value="post"
+                        name="post_poll"
+                        id="post"
+                    />
+                    <label
+                        className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'post' ? 'text-white' : 'text-gray-700'}`}
+                        htmlFor="post">
+                        Post
+                    </label>
+                </div>
+                <div className={`flex items-center ${disVal === 'poll' ? 'bg-[#65692375]' : 'bg-gray-200'}  rounded-md`}>
+                    <input
+                        className=' hidden'
+                        onChange={() => setdisVal("poll")}
+                        checked={disVal === "poll"}
+                        type="radio"
+                        value="poll"
+                        name="post_poll"
+                        id="poll"
+                    />
+                    <label
+                        className={`font-semibold px-3 py-1 font-roboto cursor-pointer ${disVal === 'poll' ? 'text-white' : 'text-gray-700'}`}
+                        htmlFor="poll">
+                        Poll
+                    </label>
+                </div>
+            </div>
 
 
-            {disVal==="post" && <ProfilePosts/>}
-            {disVal==="poll" && <ProfilePoll/>}
+            {disVal === "post" && <ProfilePosts />}
+            {disVal === "poll" && <ProfilePoll />}
 
 
         </div>
