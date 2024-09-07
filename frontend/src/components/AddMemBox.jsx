@@ -54,7 +54,6 @@ export default function AddMemBox({ setShow, id, update }) {
     setFetching(true)
 
     const res = await axios.get(baseAddress + "rooms/titleNameIsUnique?filter=" + title2);
-    console.log(res);
 
     if (res.data.msg == true) {
       setColor("green");
@@ -141,7 +140,7 @@ export default function AddMemBox({ setShow, id, update }) {
       const res = await axios.post(`${baseAddress}rooms/addUserinRoom/${title}`, {
         title: id
       });
-      console.clear();
+      
       // console.log(res);
       const msg = res?.data.msg;
       // console.log(msg);

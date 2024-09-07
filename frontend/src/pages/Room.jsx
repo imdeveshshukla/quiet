@@ -518,7 +518,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   const [cancelTokenSource, setCancelTokenSource] = useState(null);
   const getPost = async (initial) => {
     if (cancelTokenSource) {
-      // cancelTokenSource.cancel('Previous request canceled due to new topic.');
+      cancelTokenSource.cancel('Previous request canceled due to new topic.');
     }
 
     const source = axios.CancelToken.source();
@@ -534,8 +534,8 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
     }
     else {
       if (page == 0 || initial) {
-        setPage(0);
         dispatch(clearHotPostsInfo())
+        setPage(0);
       }
       try {
         // dispatch(setSkeltonLoader())
@@ -572,11 +572,11 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   
   useEffect(()=>{
       // console.log("Inside useeffect")
-      setPage(0);
       dispatch(clearHotPostsInfo());
+      setPage(0);
       setHasMore(true);
       setisLoading(true);
-      const timeID = setTimeout(getPost(true),500);
+      const timeID = setTimeout(getPost(true),1500);
       return ()=> clearTimeout(timeID);
   },[title,data,joined,privateRoom])
 
@@ -658,16 +658,17 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
       if(page>0)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,isLoading,setHasMore,page,title);
     }  
   }, [page])
+
   const fetchMoreData = () => {
     console.log("InPolls ",page,isLoading,hasMore);
-    if (isLoading || !hasMore) return;
+    if (!hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
   return <div className=' min-h-fit xs:pl-8 sm:pl-16'>
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}
-            next={()=>{ fetchMoreData }}
+            next={fetchMoreData }
             hasMore={hasMore}
             loader={<PollSkelton />}
             endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No Polls available to display!</p>}

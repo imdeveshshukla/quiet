@@ -340,7 +340,6 @@ export const CreatePoll = () => {
       title,
       options: options.filter(option => option.trim() !== ''),
     };
-    console.log("Handle SUbmit",roomTitle);
     try {
       const res = await axios.post(`${baseAddress}poll/createpoll`, {
         title: poll.title,

@@ -172,7 +172,6 @@ const deletePoll=async(id)=>{
             return;
         }
         Navigate(`/poll/${id}`)
-        console.log("click");
 
     };
 
