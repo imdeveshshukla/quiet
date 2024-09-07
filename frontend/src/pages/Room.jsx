@@ -41,6 +41,7 @@ import { addRoomCreatorId, addRoomTitle } from "../redux/RoomCreatePosts";
 import getRoomsPolls from "../utils/getRoomPolls";
 import { clearPollInfo, setPoll } from '../redux/userpolls';
 import Polls from "../components/Polls";
+import ConfirmWindow from "../components/ConfirmWindow";
 
 
 
@@ -86,12 +87,23 @@ const Room = function () {
   function handleToggle() {
     setisOpen((isOpen) => !isOpen)
   }
+
+  const [openConfirm, setOpenConfirm] = useState(false)
+  const [ifDelete, setifDelete] = useState(false);
+
+  const handleDeleteRoom=(id)=>{
+      setOpenConfirm(true)   
+  }
+
+  useEffect(() => {
+      if(ifDelete){
+          deleteRoom()
+      }
+  }, [ifDelete])
+
+
   async function deleteRoom() {
 
-    if (!window.confirm("Are you sure?")) {
-      setisOpen((isOpen) => !isOpen);
-      return
-    }
 
 
     toast.loading("Processing...");
@@ -354,6 +366,8 @@ const Room = function () {
 
   return (
     <>
+    {openConfirm && isOwner && <ConfirmWindow msg={"Are you certain you want to delete this Room? This can't be undone."} setOpenConfirm={setOpenConfirm} setifDelete={setifDelete}/>}
+    {openConfirm  && !isOwner && <ConfirmWindow msg={"Are you certain you want to leave this room?"} setOpenConfirm={setOpenConfirm} setifDelete={setifDelete}/>}
       {showAddMem && <AddMemBox setShow={setShowAddMem} id={title} />}
       {showChangeTitleBox && <AddMemBox setShow={setBox} id={roomDetail?.title} update={roomDetail?.title} />}
       <div className="w-full">
@@ -416,7 +430,7 @@ const Room = function () {
                     <ul className=" bg-[#6c712eb7] rounded-md ">
                       {isOwner ? <>
                         <li className=" text-white rounded-md hover:bg-gray-700">
-                          <button onClick={() => deleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
+                          <button onClick={() => handleDeleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
                             <span>Delete</span> <MdDelete />
                           </button>
                         </li>
@@ -428,7 +442,7 @@ const Room = function () {
                         </li>
                       </> : <>
                         <li className=" text-white hover:bg-grey">
-                          <button onClick={() => deleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
+                          <button onClick={() => handleDeleteRoom()} to={"/"} className="px-4 py-1 flex items-center gap-1 ">
                             <span>Leave</span> <MdExitToApp />
                           </button>
                         </li>
@@ -446,7 +460,7 @@ const Room = function () {
         <div className='h-[1.5px] bg-gray-800 mt-6'></div>
 
       </div>
-      <div className='flex gap-2 justify-end mx-4 xxs:mx-8 mt-6'>
+      <div className='flex gap-2 justify-end mx-4 xxs:mx-8 my-6'>
                 
                 <div className={`flex items-center gap-1 ${disVal === 'post' ? 'bg-[#65692375] ' : 'bg-gray-200'}  rounded-md`}>
                     <input 
@@ -559,7 +573,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
-  return <div className=' min-h-screen xs:pl-8 sm:pl-16'>
+  return <div className=' min-h-fit xs:pl-8 sm:pl-16'>
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}
@@ -624,7 +638,7 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
     if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
-  return <div className=' min-h-screen xs:pl-8 sm:pl-16'>
+  return <div className=' min-h-fit xs:pl-8 sm:pl-16'>
         {privateRoom && !joined ? <ForbiddenPage /> :
           <InfiniteScroll
             dataLength={hotposts.length}

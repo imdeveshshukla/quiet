@@ -235,46 +235,52 @@ export const getPopularPosts = async (req, res) => {
 
   try {
     const result = await prisma.$queryRaw`
-      SELECT 
-      p.id,
-      p.topic,
-      p.title,
-      p.body,
-      p.img,
-      p."userId",
-      u."username",
-      u."dp",
-      p."createdAt",
-      p."updatedAt",
-      r."privateRoom",
-      COALESCE((
-        SELECT COUNT(*) 
-        FROM "Upvote" up 
-        WHERE up."postId" = p.id AND up."commentId" IS NULL
-      ), 0) AS "upvoteCount",
-      COALESCE((
-        SELECT COUNT(*) 
-        FROM "Comment" c 
-        WHERE c."postId" = p.id
-      ), 0) AS "commentCount",
-      (COALESCE((
-        SELECT COUNT(*) 
-        FROM "Upvote" up 
-        WHERE up."postId" = p.id AND up."commentId" IS NULL
-      ), 0) + COALESCE((
-        SELECT COUNT(*) 
-        FROM "Comment" c 
-        WHERE c."postId" = p.id
-      ), 0)) AS "popularityScore"
-    FROM "Post" p
-    LEFT JOIN "User" u ON u."userID" = p."userId"
-    LEFT JOIN "Rooms" r ON r."title" = p."subCommunity"
-    ORDER BY "popularityScore" DESC, p."createdAt" DESC
-    LIMIT ${limit} OFFSET ${offset};
+  SELECT 
+    p.id,
+    p.topic,
+    p.title,
+    p.body,
+    p.img,
+    p."userId",
+    u."username",
+    u."dp",
+    p."createdAt",
+    p."updatedAt",
+    p."subCommunity",
+    r."privateRoom",
+    r."title" AS "title",
+    r."CreatorId" AS "CreatorId",
+    COALESCE((
+      SELECT COUNT(*) 
+      FROM "Upvote" up 
+      WHERE up."postId" = p.id AND up."commentId" IS NULL
+    ), 0) AS "upvoteCount",
+    COALESCE((
+      SELECT COUNT(*) 
+      FROM "Comment" c 
+      WHERE c."postId" = p.id
+    ), 0) AS "commentCount",
+    (COALESCE((
+      SELECT COUNT(*) 
+      FROM "Upvote" up 
+      WHERE up."postId" = p.id AND up."commentId" IS NULL
+    ), 0) + COALESCE((
+      SELECT COUNT(*) 
+      FROM "Comment" c 
+      WHERE c."postId" = p.id
+    ), 0)) AS "popularityScore"
+  FROM "Post" p
+  LEFT JOIN "User" u ON u."userID" = p."userId"
+  LEFT JOIN "Rooms" r ON r."title" = p."subCommunity"
+  ORDER BY "popularityScore" DESC, p."createdAt" DESC
+  LIMIT ${limit} OFFSET ${offset};
 `;
+
 
   
 let posts = JSON.parse(stringify(result));
+
+
 
   posts = posts.filter((p)=>{
     return (p.privateRoom == null || p.privateRoom!=true)
@@ -308,9 +314,15 @@ let posts = JSON.parse(stringify(result));
       username: post.username,
       dp:post.dp,
     },
+    room:{
+      title:post.title,
+      CreatorId: post.CreatorId,
+    },
     upvotes: upvotesByPostId[post.id] || [],
   }));
 
+  console.log(formattedPosts);
+  
     res.status(200).send(formattedPosts);
   } catch (error) {
     console.log(error);

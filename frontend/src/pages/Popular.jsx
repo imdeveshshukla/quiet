@@ -75,7 +75,7 @@ const Popular = () => {
 
     return (
         <>
-            <div className=' min-h-screen xxs:pl-0 xs:pl-8 sm:pl-16'>
+            <div className=' min-h-fit xxs:pl-0 xs:pl-8 sm:pl-16'>
                 <InfiniteScroll
                     dataLength={posts.length}
                     next={fetchMoreData}
@@ -86,7 +86,7 @@ const Popular = () => {
                     <div className='py-8'>
                         {
                             posts.map(post => (
-                                <Posts key={uuidv4()} id={post.id} title={post.title} body={post.body} media={post.img} countComment={String(post.commentCount).substring(0, post.commentCount.length - 1)} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} deletePopularPost={deletePopularPost}/>
+                                <Posts key={uuidv4()} inRoom={post.subCommunity} room={post.room} id={post.id} title={post.title} body={post.body} media={post.img} countComment={String(post.commentCount).substring(0, post.commentCount.length - 1)} createdAt={post.createdAt} user={post.user} upvotes={post.upvotes} deletePopularPost={deletePopularPost}/>
                             ))
                         }
                     </div>

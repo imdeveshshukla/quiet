@@ -23,13 +23,14 @@ import ConfirmWindow from './ConfirmWindow';
 
 
 
+
 const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room, createdAt, user,profilepost, upvotes,joined,postDetails,insideOverView, deleteOverPost, deletePopularPost }) => {
   const userInfo = useSelector(state => state.user.userInfo);
   const isLogin = useSelector(state => state.login.value);
   const posts = useSelector(state => state.post.posts);
   const dispatch = useDispatch();
   const Navigate = useNavigate();
-
+  const userRoom= useSelector(state=> state.rooms.rooms);
   const [upvoteNumber, setUpvote] = useState(0);
   const [upvoted, setUpvoted] = useState(false);
   const [downvoteNum, setDownvotenum] = useState(0);
@@ -142,9 +143,14 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
   };
 
   const upvote = async (key) => {
+
+    
+    
+    
     if(inRoom)
-    {
-      if(!joined){
+      {    
+      let res =  userRoom.some(e=> e.room.title== room.title)
+      if(!res){
         toast.error("First Join The Room");
         return;
       }
@@ -194,9 +200,11 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
   };
 
   const downVoteFunc = async (key) => {
+
     if(inRoom)
     {
-      if(!joined){
+      let res =  userRoom.some(e=> e.room.title== room.title)
+      if(!res){
         toast.error("First Join The Room");
         return;
       }
@@ -258,13 +266,13 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
         await navigator.share({
           title: title,
           text: `Check out ${user?.username}'s latest post on our site!`,
-          url: inRoom?`${window.location.origin}/post/${room?.id}/${id}`:`${window.location.origin}/post/${id}`,
+          url: `${window.location.origin}/post/${id}`,
         });
       } catch (error) {
         console.error('Error in post sharing', error);
       }
     } else {
-      navigator.clipboard.writeText(inRoom?`${window.location.origin}/post/${room?.id}/${id}`:`${window.location.origin}/post/${id}`)
+      navigator.clipboard.writeText(inRoom?`${window.location.origin}/post/${id}/`:`${window.location.origin}/post/${id}`)
         .then(() => {
           alert('Post link copied to clipboard');
         })
@@ -282,7 +290,7 @@ const Posts = ({ id, post, title,topic, body, media, countComment, inRoom, room,
         <header className='flex gap-2 items-center my-2'>
           <img onClick={()=> Navigate(`/u/${user?.username}`)} src={user && user.dp ? user.dp : dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
           <div className=' flex flex-wrap gap-1 xs:gap-2 md:gap-4 items-center'>
-              <span onClick={()=> Navigate(`/u/${user?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{user?.username}</span>•{(inRoom && <><span onClick={()=> Navigate(`/room/${user.userID}/${room.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room.title}</span> <span>•</span></>)
+              <span onClick={()=> Navigate(`/u/${user?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{user?.username}</span>•{(inRoom && <><span onClick={()=> Navigate(`/room/${room.CreatorId}/${room.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room.title}</span> <span>•</span></>)
               || (topic && <><span onClick={()=> Navigate(`/q/${topic}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(createdAt)} ago`}</span>
             
           </div>

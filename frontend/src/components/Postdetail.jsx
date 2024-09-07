@@ -105,7 +105,7 @@ const Postdetail = ({ myRooms }) => {
     }
   if(!displayPost && !loading)return <ForbiddenPage/>
   else return (<>
-    <div className=' min-h-screen overflow-auto xs:pl-4 sm:pl-16 1_5md:pl-2  2_md:pl-16'>
+    <div className=' min-h-fit overflow-auto xs:pl-4 sm:pl-16 1_5md:pl-2  2_md:pl-16'>
       {post?<Posts key={post?.id} id={post?.id} title={post?.title} inRoom={roomid?true:false} room={room} joined={roomid?true:false} body={post?.body} media={post?.img} countComment={post?.comments?.length} createdAt={post?.createdAt} user={post?.user} upvotes={post?.upvotes} postDetails={true}/>:<Postskelton/>}
      
       <div className=' m-4'>

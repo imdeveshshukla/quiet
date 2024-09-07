@@ -93,7 +93,7 @@ const HotTopicPosts = ({ title, topic, dp, bg }) => {
   return (<>
 
       <Hottopic topic={title} dp={dp} bg={bg} />
-    <div className=' min-h-screen xs:pl-8 sm:pl-16'>
+    <div className=' min-h-fit xs:pl-8 sm:pl-16'>
 
       <InfiniteScroll
         dataLength={hotposts.length}

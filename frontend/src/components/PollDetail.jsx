@@ -79,7 +79,7 @@ const PollDetail = () => {
 
     return (
         <div>
-            <div className=' min-h-screen overflow-auto xs:pl-4 sm:pl-16 1_5md:pl-2  2_md:pl-16'>
+            <div className=' min-h-fit overflow-auto xs:pl-4 sm:pl-16 1_5md:pl-2  2_md:pl-16'>
                 {loading ? <PollSkelton /> : <Polls poll={poll} setPollVote={setPollVote} />}
             </div>
         </div>

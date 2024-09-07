@@ -11,7 +11,7 @@ const ConfirmWindow = ({ setifDelete,msg, setOpenConfirm }) => {
 
     return (
         <div>
-            <div className=' fixed z-50 top-0 left-0 w-screen h-screen bg-black bg-opacity-20 backdrop-blur-md '>
+            <div className=' fixed z-50 top-0 left-0 w-screen h-screen bg-black bg-opacity-60 backdrop-blur-sm '>
 
                 <div className=' bg-[#e3e7a7b8] border-[#595f0c] absolute py-8 space-y-8 top-1/2 z-50 w-[420px] left-1/2 translate-y-[-50%] translate-x-[-50%] px-6 flex flex-col justify-center items-center border-2 rounded-lg'>
                     <div className='text-[#535800] break-words text-lg font-ubuntu font-semibold '>
