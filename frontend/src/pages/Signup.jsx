@@ -267,14 +267,17 @@ const Signup = () => {
     return (
         <>
             <div className='w-full flex justify-center items-center h-[89.5vh] m-auto '>
-                <div className=' w-[95%] xxs:w-[90%]  sm:w-[75%]  md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[50%] sm:h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
+                <div className=' w-[95%] relative xxs:w-[90%]  sm:w-[75%]  md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[80%] h-sm:h-[60%] bg-gray-200  rounded-2xl shadow-2xl shadow-current  overflow-auto '>
 
-                    <form autoComplete='off' className='flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
+                <div className="w-full h-full bg-[#6c712e82] rounded-2xl"></div>
+
+
+                    <form autoComplete='off' className=' py-4 absolute flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl bg-white/30 backdrop-blur-md backdrop-brightness-110 border border-white/40 inset-0 gap-4 h-full' onSubmit={(e) => { handleSubmit(e) }}>
 
 
                         {otpsent ? <><div className=' flex flex-col gap-5'><div className='relative flex flex-col justify-center items-center'>
                             <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdPassword className=' text-xl' /></span>
-                            <input spellCheck="false" autoFocus value={otp} className='text-white focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
+                            <input spellCheck="false" autoFocus value={otp} className=' focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
                             <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
                         </div>
                             <div className='flex justify-center cursor-pointer'><button disabled={loading} onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >{loading ? <SmallLoader /> : <span>Varify OTP</span>}</button></div>
@@ -286,7 +289,7 @@ const Signup = () => {
 
                             <div className='relative flex flex-col'>
                                 <span className='absolute  left-2 top-[50%] translate-y-[-50%]'><FaRegUserCircle className=' text-xl' /></span>
-                                <input spellCheck="false" ref={usernameRef} value={form.username} className='text-white focus:border-white transition-all ease-in delay-200 outline-none  px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="text" name="username" id="username" placeholder='Select Username' readOnly />
+                                <input spellCheck="false" ref={usernameRef} value={form.username} className=' focus:border-white transition-all ease-in delay-200 outline-none  px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="text" name="username" id="username" placeholder='Select Username' readOnly />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorUsername}</div>
 
                             </div>
@@ -305,12 +308,12 @@ const Signup = () => {
 
                             <div className='relative flex flex-col'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdOutlineMailLock className=' text-xl' /></span>
-                                <input value={form.email} spellCheck="false" className='text-white focus:border-white transition-all ease-in delay-200 outline-none cursor-text px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
+                                <input value={form.email} spellCheck="false" className=' focus:border-white transition-all ease-in delay-200 outline-none cursor-text px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="email" name="email" id="email" placeholder='Enter Email' />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorEmail}</div>
                             </div>
                             <div className='relative flex flex-col'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><RiLockPasswordFill className=' text-xl' /></span>
-                                <input ref={passref} spellCheck="false" value={form.password} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} placeholder='Enter Password' type="password" name="password" id="password" />
+                                <input ref={passref} spellCheck="false" value={form.password} className=' focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} placeholder='Enter Password' type="password" name="password" id="password" />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorPass}</div>
                                 <span id='eye' onMouseDown={() => handleEye()} onMouseUp={() => handleCloseEye()} className=' cursor-pointer absolute right-2 top-[50%] translate-y-[-50%] '>{!eye ? <VscEye className='text-xl' /> : <VscEyeClosed />}</span>
                             </div>

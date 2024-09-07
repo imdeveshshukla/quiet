@@ -6,7 +6,7 @@ import { VscEye } from "react-icons/vsc";
 import { VscEyeClosed } from "react-icons/vsc";
 import { Link } from 'react-router-dom';
 import axios from 'axios';
-import {  useDispatch } from 'react-redux'
+import { useDispatch } from 'react-redux'
 import { login } from "../redux/login";
 import { useNavigate } from "react-router-dom";
 import { loading } from '../redux/loading';
@@ -24,18 +24,18 @@ const Signin = () => {
     const Navigate = useNavigate()
 
     const [form, setForm] = useState({ user: "", password: "" });
-  
-  
+
+
     const [onSave, setOnSave] = useState(true);
 
-    
+
 
 
     const [eye, setEye] = useState(false);
     const passref = useRef();
 
 
-    
+
 
 
     const sendRequest = async () => {
@@ -47,7 +47,7 @@ const Signin = () => {
                 if (res.status == 202) {
                     toast.dismiss()
                     Navigate("/")
-                    await getUserData({email:res.data, dispatch});
+                    await getUserData({ email: res.data, dispatch });
                     toast.dismiss()
                     toast.success("Logged In succesfully!")
                     dispatch(login())
@@ -55,11 +55,11 @@ const Signin = () => {
             }
             else {
                 const res = await axios.post(`${baseAddress}auth/signin`, { username: form.user, password: form.password });
-                
+
                 if (res.status == 202) {
                     toast.dismiss()
                     Navigate("/")
-                    await getUserData({email:res.data, dispatch});
+                    await getUserData({ email: res.data, dispatch });
                     toast.dismiss()
                     toast.success("Logged In succesfully!")
                     dispatch(login())
@@ -68,14 +68,13 @@ const Signin = () => {
         } catch (error) {
             toast.dismiss()
             console.log(error);
-            if(error.response.status==401){
+            if (error.response.status == 401) {
                 toast.error("Invalid Credentials")
-            }else if(error.response.status==404){
+            } else if (error.response.status == 404) {
                 toast.error("User doesn't exists. Please Sign Up")
                 Navigate("/signup")
-            } 
-            else if(error.response.status == 425)
-            {
+            }
+            else if (error.response.status == 425) {
                 toast.error("TimeOut!! Please try again after some times")
                 Navigate("/");
             }
@@ -88,7 +87,7 @@ const Signin = () => {
         setForm({ ...form, [e.target.name]: e.target.value });
     }
 
-    const handleSubmit = async(e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         // dispatch(loading());
         await sendRequest();
@@ -111,14 +110,15 @@ const Signin = () => {
 
         <>
             <div className='w-full flex justify-center items-center h-[89.5vh] m-auto  '>
-                <div className=' w-[95%] xxs:w-[90%]  sm:w-[75%]  md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[50%] sm:h-[60%] bg-[#6c712e79] rounded-2xl shadow-2xl shadow-current '>
+                <div className="w-[95%] relative xxs:w-[90%] sm:w-[75%] md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[50%]  sm:h-[60%] bg-gray-200 rounded-2xl shadow-2xl shadow-current">
+                    <div className="w-full h-full bg-[#6c712e82] rounded-2xl"></div>
 
-                    <form noValidate autoComplete='off' className='flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl backdrop-blur-3xl   gap-4 h-[100%]' onSubmit={(e) => { handleSubmit(e) }}>
-                         <><div className='flex flex-col gap-8'>
+                    <form noValidate autoComplete="off" className="absolute flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl bg-white/30 backdrop-blur-md backdrop-brightness-110 border border-white/40 inset-0 gap-4 h-full" onSubmit={(e) => { handleSubmit(e) }}>
+                        <><div className='flex flex-col gap-8'>
 
                             <div className='relative flex flex-col'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><FaRegUserCircle className=' text-xl' /></span>
-                                <input spellCheck={"false"} value={form.user} className='text-white focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="text" name="user" id="user" placeholder='Enter Username / Email' />
+                                <input spellCheck={"false"} value={form.user} className=' focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="text" name="user" id="user" placeholder='Enter Username / Email' />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}></div>
                             </div>
 
@@ -126,7 +126,7 @@ const Signin = () => {
 
                             <div className='relative flex flex-col'>
                                 <span className='absolute left-2 top-[50%] translate-y-[-50%]'><RiLockPasswordFill className=' text-xl' /></span>
-                                <input ref={passref} spellCheck="false" value={form.password} className='text-white focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} placeholder='Enter Password' type="password" name="password" id="password" />
+                                <input ref={passref} spellCheck="false" value={form.password} className=' focus:border-white transition-all ease-in delay-200 outline-none px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} placeholder='Enter Password' type="password" name="password" id="password" />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}></div>
                                 <span id='eye' onMouseDown={() => handleEye()} onMouseUp={() => handleCloseEye()} className=' cursor-pointer absolute right-2 top-[50%] translate-y-[-50%] '>{!eye ? <VscEye className='text-xl' /> : <VscEyeClosed />}</span>
                             </div>
