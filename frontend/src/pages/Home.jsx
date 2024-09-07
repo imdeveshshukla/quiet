@@ -154,6 +154,7 @@ const Home = () => {
                   createdAt={post.createdAt}
                   user={post?.user}
                   upvotes={post?.upvotes}
+                  topic={post?.topic}
                 />
               ) : (
                 <Polls key={uuidv4()} poll={post} />

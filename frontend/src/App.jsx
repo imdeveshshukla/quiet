@@ -220,7 +220,6 @@ function App() {
 
 
               <Route path='/popular' element={<Popular />} />
-              <Route path='/confirm' element={<ConfirmWindow />} />
 
 
               <Route path='create' element={<CreatePostorPoll/>}>
@@ -244,7 +243,7 @@ function App() {
 
               <Route path='/q/sports' element={<HotTopicPosts topic={"sports"} title={"Sports"} dp={sportsdp} bg={sportsbg} />} />
               <Route path='/q/lucknow' element={<HotTopicPosts topic={"lucknow"} title={"Lucknow"} dp={lkodp} bg={lkobg} />} />
-              <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"IET-Lucnow"} dp={ietdp} bg={ietbg} />} />
+              <Route path='/q/iet' element={<HotTopicPosts topic={"iet"} title={"I.E.T"}  dp={ietdp} bg={ietbg} />} />
               <Route path='/q/lifestyle' element={<HotTopicPosts topic={"lifestyle"} title={"LifeStyle"} dp={lifedp} bg={lifebg} />} />
               <Route path='/q/entertainment' element={<HotTopicPosts topic={"entertainment"} title={"Entertainment"} dp={enterdp} bg={enterbg} />} />
               <Route path='/q/dsa' element={<HotTopicPosts topic={"dsa"} title={"DS&A"} dp={dsadp} bg={dsabg} />} />

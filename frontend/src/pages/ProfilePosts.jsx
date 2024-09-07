@@ -168,6 +168,7 @@ export const ProfilePoll= ()=>{
 
 
     const fetchMoreData = () => {
+        console.log("Inside Profile Polls ",isLoading)
         if (isLoading || !hasMore) return;
         setPage(prevPage => prevPage + 1);
     };
