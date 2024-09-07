@@ -1,11 +1,12 @@
 import axios from "axios";
 import baseAddress from "./localhost";
 
-const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPostsInfo,setSkeltonLoader,setHasMore,page,title)=>{
-    
+const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPostsInfo,setisLoading,setHasMore,page,title)=>{
+    setisLoading(true);
     if (!joined && privateRoom) {
         setHasMore(false);
         dispatch(setHotPost([]))
+        setisLoading(false);
         return;
       }
       else {
@@ -24,20 +25,17 @@ const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPosts
           
           if (res.status === 200) {
             const fetchedPosts = res.data;
-  
+            dispatch(setHotPost(fetchedPosts));
             if (fetchedPosts?.length < 10) {
-              console.log('hasmore2 ',false);
               setHasMore(false);
             }
 
-            // console.log("polls ",fetchedPosts);
-            // dispatch(setSkeltonLoader())
-            dispatch(setHotPost(fetchedPosts));
+            setisLoading(false);
           }
         } catch (error) {
           console.log(error);
           setHasMore(false); // Stop fetching if there's an error
-        //   dispatch(setSkeltonLoader())
+          setisLoading(false);
         }
   
       }
