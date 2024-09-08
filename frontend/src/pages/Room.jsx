@@ -490,7 +490,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
             dataLength={hotposts.length}
             next={fetchMoreData}
             hasMore={hasMore}
-            loader={<Postskelton />}
+            loader={<PollSkelton />}
             endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No posts available to display!</p>}
           >
 
@@ -498,9 +498,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
 
             <div className="post">
               { 
-                (isLoading && (hotposts.length)==0) ? (
-                <Postskelton />
-              ):(
+                (
                 hotposts.map((post) => (
                   <Posts
                     key={post.id}
@@ -534,18 +532,20 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
   const dispatch = useDispatch();
 
   useEffect(()=>{
+    setisLoading(true)
     setPage(0);
     dispatch(clearPollInfo());
     setHasMore(true);
-    setTimeout(() => {
-      getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,isLoading,setHasMore,0,title);
+    setTimeout(async() => {
+     await getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,isLoading,setHasMore,0,title);
+     setisLoading(false)
     }, 500); 
 },[title])
 
   useEffect(() => {
     if (joined || !privateRoom) 
     {
-      if(page>0)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setisLoading,isLoading,setHasMore,page,title);
+      if(page>0)getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,isLoading,setHasMore,page,title);
     }  
   }, [page])
 
@@ -565,9 +565,7 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
           >
 
             <div className="post">
-              {(isLoading && (hotposts.length)==0) ? (
-                <PollSkelton />
-              ):(
+              {(
                 hotposts.map((post) => (
                   <Polls 
                   key={post?.id}

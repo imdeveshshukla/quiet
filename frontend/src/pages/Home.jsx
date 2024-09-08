@@ -16,6 +16,8 @@ import Polls from '../components/Polls';
 import { clearOffset, setPollOffset, setPostOffset } from '../redux/offset';
 import { addRoomCreatorId, addRoomTitle, setOnNewRoomPost } from '../redux/RoomCreatePosts';
 import SmoothLoader from '../assets/SmoothLoader';
+import { VscFoldDown } from "react-icons/vsc";
+import SmoothLoaderHome, { AnimatedFoldDownArrow } from '../assets/SmoothLoaderHome';
 
 
 const Home = () => {
@@ -117,53 +119,68 @@ const Home = () => {
     getPost(); // Fetch next set of data
   };
 
-  return (
-    <div className='min-h-fit xs:pl-8 sm:pl-16'>
-      <InfiniteScroll
-        dataLength={posts.length}
-        next={fetchMoreData}
-        hasMore={hasMore}
-        loader={<div className='py-2'><Postskelton/></div>}
-        endMessage={
-          <p className='text-center break-words font-semibold p-4'>
-            {`${posts.length === 0 ? "It looks like there's no posts to display." : "You've reached the end of the page!"}`}
-          </p>
-        }
-      >
-        {isLogin && <Createpost />}
-        <div className='flex items-center justify-end mx-4 mt-3'>
-          <span onClick={() => handleNewPost()} className='bg-[#eff1d3] rounded-full p-1'>
-            {isLoading ? <SmoothLoader /> : <GrRefresh className='cursor-pointer text-blue-500 text-xl font-extrabold' />}
-          </span>
-        </div>
+  // Refresh function for pull down to refresh
+  const refresh = async () => {
+    console.log("refresh");
+    
+    setHasMore(true);
+    await handleNewPost(); // Clear posts and reset offsets
+  };
 
-        <div className="post">
-          { (posts.length === 0) ? (
-            <Postskelton />
-          ) :(
-            posts?.map((post) => (
-              'body' in post ? (
-                <Posts
-                  key={post.id}
-                  id={post.id}
-                  post={post}
-                  title={post.title}
-                  body={post.body}
-                  media={post.img}
-                  countComment={post.comments?.length}
-                  createdAt={post.createdAt}
-                  user={post?.user}
-                  upvotes={post?.upvotes}
-                  topic={post?.topic}
-                />
-              ) : (
-                <Polls key={uuidv4()} poll={post} />
-              )
-            ))
-          )}
-        </div>
-      </InfiniteScroll>
+  return (<>
+
+        <div id="scrollableDiv" className=' overflow-auto h-fit'>
+  <InfiniteScroll
+    dataLength={posts.length}
+    next={fetchMoreData}
+    hasMore={hasMore}
+    loader={<div className='py-2'><Postskelton/></div>}
+    endMessage={
+      <p className='text-center break-words font-semibold p-4'>
+        {`${posts.length === 0 ? "It looks like there's no posts to display." : "You've reached the end of the page!"}`}
+      </p>
+    }
+    refreshFunction={refresh}
+    pullDownToRefresh={true}
+    pullDownToRefreshThreshold={100}
+    pullDownToRefreshContent={
+      <div className=' flex justify-center'><AnimatedFoldDownArrow className=' text-2xl'/></div>
+    }
+    releaseToRefreshContent={
+      <div className=' grid justify-center'><SmoothLoaderHome/></div>
+    }
+    scrollableTarget="scrollableDiv" // Specify the scrollable div
+    >
+    {isLogin && <Createpost />}
+    <div className="post">
+      {posts.length === 0 ? (
+        <Postskelton />
+      ) : (
+        posts.map(post =>
+          'body' in post ? (
+            <Posts
+              key={post.id}
+              id={post.id}
+              post={post}
+              title={post.title}
+              body={post.body}
+              media={post.img}
+              countComment={post.comments?.length}
+              createdAt={post.createdAt}
+              user={post?.user}
+              upvotes={post?.upvotes}
+              topic={post?.topic}
+            />
+          ) : (
+            <Polls key={uuidv4()} poll={post} topic={post?.topic} />
+          )
+        )
+      )}
     </div>
+  </InfiniteScroll>
+</div>
+
+            </>
   );
 };
 

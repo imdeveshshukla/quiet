@@ -43,37 +43,36 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic, joined }) => {
     const [loading, setloading] = useState(false)
     const dropdownRef = useRef(null);
 
-    
-    
-    
+
+
+
     const [hasVoted, setHasVoted] = useState(false);
     const [loadingOptionId, setLoadingOptionId] = useState(null);
 
 
-    
-    
-    const [totalVotes, setTotalVotes] = useState(0);
-    
-    useEffect(() => {
-        
-        const totalVotesPerPoll = poll?.options?.reduce((total, option) => total + option.votes.length, 0);
-        
-        setTotalVotes(totalVotesPerPoll)
-        
-    }, [poll]); // Run this effect when options change
-    
 
-    
+
+    const [totalVotes, setTotalVotes] = useState(0);
+
+    useEffect(() => {
+
+        const totalVotesPerPoll = poll?.options?.reduce((total, option) => total + option.votes.length, 0);
+
+        setTotalVotes(totalVotesPerPoll)
+
+    }, [poll]); // Run this effect when options change
+
+
+
     const handleVote = async (selectedOption) => {
-        if(!isLogin){
+        if (!isLogin) {
             toast("Login to vote", {
                 icon: 'ℹ️',
             })
             return;
         }
-        if(inRoom)
-        {
-            if(!joined){
+        if (inRoom) {
+            if (!joined) {
                 toast("First Join Room", {
                     icon: 'ℹ️',
                 })
@@ -102,8 +101,8 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic, joined }) => {
         setloading(false)
         setLoadingOptionId(null)
     };
-    
-    
+
+
     const handleToggle = () => {
         setOpen((v) => !v)
     }
@@ -111,52 +110,52 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic, joined }) => {
         if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
             setOpen(false);
         }
-        
+
     };
-    
+
     const [itemId, setitemId] = useState(null);
     const [openConfirm, setOpenConfirm] = useState(false)
     const [ifDelete, setifDelete] = useState(false);
 
-    const handleDeletePoll=(id)=>{
+    const handleDeletePoll = (id) => {
         setitemId(id);
-        setOpenConfirm(true)   
+        setOpenConfirm(true)
     }
 
     useEffect(() => {
-        if(ifDelete){
+        if (ifDelete) {
             deletePoll(itemId)
         }
     }, [ifDelete])
-    
 
 
-const deletePoll=async(id)=>{
 
-    
+    const deletePoll = async (id) => {
 
-    setLoading(true)
 
-    try {
+
         setLoading(true)
-        const res= await axios.delete(`${baseAddress}poll/deletepoll`,{
-            params:{
-                id,
+
+        try {
+            setLoading(true)
+            const res = await axios.delete(`${baseAddress}poll/deletepoll`, {
+                params: {
+                    id,
+                }
+            })
+            if (res.status == 202) {
+                toast.success("Poll Deleted!")
+                dispatch(deleteUserPoll(id))
+                dispatch(deleteHomePost(id))
+                if (inRoom) dispatch(decreaseRoomPolls())
             }
-        })
-        if(res.status==202){
-            toast.success("Poll Deleted!")
-            dispatch(deleteUserPoll(id))
-            dispatch(deleteHomePost(id))
-            if(inRoom)dispatch(decreaseRoomPolls())
+            setLoading(false);
+        } catch (error) {
+            console.log(error);
+            toast.error("Server Issue");
         }
-        setLoading(false);
-    } catch (error) {
-        console.log(error);
-        toast.error("Server Issue");
+        setLoading(false)
     }
-    setLoading(false)
-}
 
 
     useEffect(() => {
@@ -175,39 +174,40 @@ const deletePoll=async(id)=>{
 
     };
 
-    const handleShare = async(poll)=>{
-        
+    const handleShare = async (poll) => {
+
         if (navigator.share) {
-          try {
-            await navigator.share({
-              title: poll?.title,
-              text: `Check out ${poll?.createdBy?.username}'s latest poll on our site!`,
-              url: `${window.location.origin}/poll/${poll?.id}`,
-            });
-          } catch (error) {
-            console.error('Error in post sharing', error);
-          }
+            try {
+                await navigator.share({
+                    title: poll?.title,
+                    text: `Check out ${poll?.createdBy?.username}'s latest poll on our site!`,
+                    url: `${window.location.origin}/poll/${poll?.id}`,
+                });
+            } catch (error) {
+                console.error('Error in post sharing', error);
+            }
         } else {
-          navigator.clipboard.writeText(`${window.location.origin}/poll/${poll?.id}/$`)
-            .then(() => {
-              alert('Post link copied to clipboard');
-            })
-            .catch((error) => {
-              console.error('Error in Post copying link to clipboard', error);
-            });
+            navigator.clipboard.writeText(`${window.location.origin}/poll/${poll?.id}/$`)
+                .then(() => {
+                    alert('Post link copied to clipboard');
+                })
+                .catch((error) => {
+                    console.error('Error in Post copying link to clipboard', error);
+                });
         }
-    
-      }
+
+    }
 
 
     return (<>
-            {openConfirm && <ConfirmWindow msg={"Are you certain you want to delete this poll? This can't be undone."} setOpenConfirm={setOpenConfirm} setifDelete={setifDelete}/>}
+        {openConfirm && <ConfirmWindow msg={"Are you certain you want to delete this poll? This can't be undone."} setOpenConfirm={setOpenConfirm} setifDelete={setifDelete} />}
         <div onClick={(e) => handleClick(e, poll?.id)} key={poll.id}>
             <div className='px-4 py-2 xxs:px-8 cursor-default xxs:py-4 border-2 border-[#f9ff86] rounded-2xl animate-glow m-4 xxs:m-8'>
                 <header className='flex gap-2 items-center my-2 exclude-click'>
                     <img onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} src={poll?.createdBy?.dp || dp} alt="Profile" className="w-8 h-8 rounded-full cursor-pointer bg-white" />
                     <div className=' flex flex-wrap gap-1 xs:gap-2 md:gap-4 items-center'>
-                        <span onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{poll?.createdBy?.username}</span>•{(inRoom && <><span onClick={() => Navigate(`/room/${user.userID}/${room?.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room?.title}</span> <span>•</span></>)
+
+                        <span onClick={() => Navigate(`/u/${poll?.createdBy?.username}`)} className='font-semibold cursor-pointer hover:text-green-900'>u/{poll?.createdBy?.username}</span>•{(inRoom && <><span onClick={() => Navigate(`/room/${room?.CreatorId}/${room?.title}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{room?.title}</span> <span>•</span></>)
                             || (topic && <><span onClick={() => Navigate(`/q/${topic}`)} className=' cursor-pointer hover:text-rose-900 text-sm font-semibold'>q/{topic}</span> <span>•</span></>)}<span className='text-xs text-gray-700'>{`${getTime(poll?.createdAt)} ago`}</span>
 
                     </div>
@@ -215,19 +215,19 @@ const deletePoll=async(id)=>{
                         <div className="exclude-click relative flex items-center gap-8 ml-auto" ref={dropdownRef} >
 
                             <button onClick={handleToggle} className="flex  items-center hover:focus:outline-none">
-                                {delLoading ? <SmoothLoader /> :<BsThreeDotsVertical />}
+                                {delLoading ? <SmoothLoader /> : <BsThreeDotsVertical />}
                             </button>
                             {isOpen && (
                                 <div className=" absolute right-4 bottom-4  bg-white rounded-md shadow-lg z-10">
                                     <ul className=" bg-[#6d712eb8] rounded-md ">
-                                        {poll?.userId === userInfo?.userID  && <li className=" text-white hover:text-black">
+                                        {poll?.userId === userInfo?.userID && <li className=" text-white hover:text-black">
                                             <button onClick={() => handleDeletePoll(poll?.id)} className="px-4 py-1 w-full flex items-center justify-center gap-1 ">
-                                                { <><span>Delete</span> <MdDelete /></>}</button>
+                                                {<><span>Delete</span> <MdDelete /></>}</button>
                                         </li>}
                                         <hr />
                                         <li className=" text-white hover:text-black">
-                                            <button onClick={()=>handleShare(poll)} className='px-4 py-1 flex items-center justify-center gap-2 '>
-                                                Share<IoMdShare/>
+                                            <button onClick={() => handleShare(poll)} className='px-4 py-1 flex items-center justify-center gap-2 '>
+                                                Share<IoMdShare />
                                             </button>
                                         </li>
                                     </ul>
@@ -285,7 +285,7 @@ const deletePoll=async(id)=>{
             <div className=' bg-gray-700 h-[1px]'></div>
 
         </div>
-</>
+    </>
     )
 }
 

@@ -149,7 +149,7 @@ const HotTopicPosts = ({ title, topic, dp, bg }) => {
   }, [page]);
 
   const fetchMoreData = () => {
-    if (isLoading || !hasMore) return;
+    if (!hasMore || isLoading) return;
     setPage((prevPage) => prevPage + 1);  // Increment page number for infinite scroll
   };
 
@@ -175,7 +175,7 @@ const HotTopicPosts = ({ title, topic, dp, bg }) => {
           }
         >
           <div className="post">
-            { intLoading ? <Postskelton/>: hotposts.map((post) => (
+            { hotposts.map((post) => (
               <Posts
                 key={post.id}
                 id={post.id}
@@ -252,7 +252,7 @@ export const HotTopicPolls = ({ title, topic })=>{
   }, [page]);
 
   const fetchMoreData = () => {
-    if (!hasMore) return;
+    if (!hasMore || isLoading) return;
     setPage((prevPage) => prevPage + 1); 
   };
 
