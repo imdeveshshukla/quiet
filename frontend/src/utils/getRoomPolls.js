@@ -30,6 +30,7 @@ const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPosts
             if (fetchedPosts?.length < 10) {
               setHasMore(false);
             }
+            console.log("Inside function ",isLoading);
 
             setisLoading(false);
             console.log("InsidegetPolls ",isLoading)
