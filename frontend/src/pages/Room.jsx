@@ -2,19 +2,12 @@ import axios from "axios";
 import { useEffect, useRef, useState } from "react";
 import baseAddress from "../utils/localhost";
 import { Link, Navigate, useAsyncError, useLocation, useNavigate, useParams } from 'react-router-dom'
-import bg from '../assets/unnamed.png'
-import NotUploaded from '../assets/NotUploaded.jpg'
-import { MdFileUpload } from "react-icons/md";
 import q from '../assets/q.svg'
 import { setRoomDetail, changeBgImg, changeDpImg } from "../redux/roomSlice";
 import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import SmoothLoader from "../assets/SmoothLoader";
-import Loader from "../components/Loader";
-import { addNewRoom, setRooms } from "../redux/userRooms";
-import CreatePost from "./CreatePost";
-import { clearHotPostsInfo, setHotPost } from "../redux/Hotposts";
-import { setSkeltonLoader } from "../redux/skelton";
+import { addNewRoom, setRooms } from "../redux/userRooms"
 import Postskelton, { PollSkelton } from "../components/Postskelton";
 import Posts from "../components/Posts";
 import InfiniteScroll from "react-infinite-scroll-component";
@@ -42,6 +35,7 @@ import getRoomsPolls from "../utils/getRoomPolls";
 import { clearPollInfo, setPoll } from '../redux/userpolls';
 import Polls from "../components/Polls";
 import ConfirmWindow from "../components/ConfirmWindow";
+import { clearRoomPostsInfo, setRoomPost } from "../redux/RoomPosts";
 
 
 
@@ -82,7 +76,6 @@ const Room = function () {
   
   
   
-  // console.log("Out Side ",hasMore," ",hasMore2);
   const [showChangeTitleBox, setBox] = useState(false);
   function handleToggle() {
     setisOpen((isOpen) => !isOpen)
@@ -157,67 +150,11 @@ const Room = function () {
     }
   }
 
-
-
-  const getPost = async () => {
-    // console.log("In Side getPost ",hasMore," ",hasMore2," ",joined," ",privateRoom);
-    if (!joined && privateRoom) {
-      // setHasMore(false);
-      setisLoading2(false);
-      dispatch(setHotPost([]))
-      return;
-    }
-    else {
-      if (page == 0) {
-        dispatch(clearHotPostsInfo())
-      }
-      try {
-        // dispatch(setSkeltonLoader())
-        const res = await axios.get(`${baseAddress}posts/getPost?title=${title}`, {
-          params: {
-            offset: page,
-            limit: 10,
-          },
-        });
-
-        if (res.status === 200) {
-          const fetchedPosts = res.data.posts;
-
-          dispatch(setHotPost(fetchedPosts));
-
-          if (fetchedPosts.length < 10) {
-            setHasMore(false);
-          }
-          // dispatch(setSkeltonLoader())
-          setisLoading2(false);
-        }
-      } catch (error) {
-        console.log(error);
-        setHasMore(false); // Stop fetching if there's an error
-        setisLoading2(false); 
-        // dispatch(setSkeltonLoader())
-      }
-      
-    }
-  };
-
-  // console.clear();
-
   async function refresh() {
     dispatch(roomsApi.util.invalidateTags([{ type: 'Room', id: title }]));
-    if (joined || !privateRoom) 
-    {
-      setPage(0);
-      setPage2(0);
-      setHasMore(true);
-      setHasMore2(true);
-      // getPost();
-      // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
-    }
   }
 
   async function onStart() {
-    // console.log("Mai aa gaya on start par lol ",isLoading);
     if (isLoading) return;
     setisLoading2(true);
     dispatch(setRoomDetail(data?.room));
@@ -225,52 +162,17 @@ const Room = function () {
 
     setJoined(data?.joined);
     if (data?.joined || !(data?.room?.privateRoom)) {
-      // dispatch(clearPollInfo());
-      // dispatch(clearHotPostsInfo());
       setdisVal("post");
-      // getPost();
-      // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
     }
     setisLoading2(false);
   }
   useEffect(() => {
-    // console.log("Main data and title value useEffect");
     setisLoading2(true);
-    setPage2(0)
-    setPage(0);
-    // dispatch(clearPollInfo());
-    // dispatch(clearHotPostsInfo());
-    setHasMore(true);
-    setHasMore2(true);
     onStart();
     setisLoading2(false);
-    return () => {
-      setPage(0);
-      setPage2(0);
-      setHasMore(true);
-      setHasMore2(true);
-      // dispatch(clearHotPostsInfo());
-      // dispatch(clearPollInfo());
-    }
+    
   }, [data, title])
 
-  // useEffect(()=>{
-  //   // console.log("Mai dis Value wala use Effect " ,disVal);
-  //   if(disVal==='poll') console.log("Changed To Poll LOL");
-  //   else console.log("Changed To Post LOL");//getPost(true);
-  // },[disVal])
-
-  useEffect(() => {
-    // console.log("Mai joined or privateROom val useEffect",joined, privateRoom);
-    if (joined || !privateRoom) {
-      setPage(0);
-      setPage2(0);
-      setHasMore(true);
-      setHasMore2(true);
-      // getPost();
-      // getRoomsPolls(joined,privateRoom,dispatch,setPoll,clearPollInfo,setSkeltonLoader,setHasMore2,page2,title);
-    }
-  }, [joined, privateRoom])
 
 
   const handleClickOutside = (event) => {
@@ -279,27 +181,20 @@ const Room = function () {
     }
   };
   useEffect(() => {
-    // console.log("Mai Khali useEffect");
 
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
-      setPage(0);
-      setPage2(0);
-      setHasMore(true);
-      setHasMore2(true);
+      dispatch(clearRoomPostsInfo());
+      dispatch(clearPollInfo());
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, []);
 
 
   function onNewPost(){
-    setPage(0);
-    setPage2(0);
-    dispatch(clearHotPostsInfo())
+    dispatch(clearRoomPostsInfo())
     dispatch(clearPollInfo())
-    setHasMore(true);
-    dispatch(roomsApi.util.invalidateTags([{ type: 'Room', id: title }]));
-    // refresh();
+    //refresh()
   }
 
   useEffect(()=>{
@@ -509,7 +404,7 @@ export default Room;
 
 export const RoomPost = ({title,privateRoom,joined,data})=>{
 
-  const hotposts = useSelector((state) => state.hotpost.hotposts);
+  const hotposts = useSelector((state) => state.roomPosts.hotposts);
   const [hasMore,setHasMore] = useState(true);
   const [isLoading,setisLoading] = useState(false)
   const [page,setPage] = useState(0);
@@ -521,20 +416,19 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
       cancelTokenSource.cancel('Previous request canceled due to new topic.');
     }
 
-    const source = axios.CancelToken.source();
+    const source =axios.CancelToken.source();
     setCancelTokenSource(source);
 
     setisLoading(true);
     if (!joined && privateRoom) {
-      // console.log("setHasMOre ",joined,privateRoom);
       setHasMore(false);
       setisLoading(false);
-      dispatch(setHotPost([]))
+      dispatch(setRoomPost([]))
       return;
     }
     else {
       if (page == 0 || initial) {
-        dispatch(clearHotPostsInfo())
+        dispatch(clearRoomPostsInfo())
         setPage(0);
       }
       try {
@@ -550,10 +444,9 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
         if (res.status === 200) {
           const fetchedPosts = res.data.posts;
 
-          dispatch(setHotPost(fetchedPosts));
+          dispatch(setRoomPost(fetchedPosts));
 
           if (fetchedPosts.length < 10) {
-            // console.log("setHasMOre ",fetchedPosts.length)
             setHasMore(false);
           }
           setisLoading(false);
@@ -571,12 +464,11 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   };
   
   useEffect(()=>{
-      // console.log("Inside useeffect")
-      dispatch(clearHotPostsInfo());
+      dispatch(clearRoomPostsInfo());
       setPage(0);
       setHasMore(true);
       setisLoading(true);
-      const timeID = setTimeout(getPost(true),1500);
+      const timeID = setTimeout(() => {getPost(true)} , 1500);
       return ()=> clearTimeout(timeID);
   },[title,data,joined,privateRoom])
 
@@ -588,7 +480,7 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
   }, [page])
 
   const fetchMoreData = () => {
-    if (!hasMore || isLoading) return;
+    if (isLoading || !hasMore) return;
     
     setPage((prevPage) => prevPage + 10);
   };
@@ -658,9 +550,7 @@ export const RoomPolls = ({title,privateRoom,joined,data})=>{
   }, [page])
 
   const fetchMoreData = () => {
-    console.log(page, isLoading,hasMore);
-    
-    if (!hasMore || isLoading) return;
+    if (isLoading || !hasMore) return;
     setPage((prevPage) => prevPage + 10);
   };
   return <div className='min-h-fit xs:pl-8 sm:pl-16'>

@@ -22,7 +22,7 @@ import offsetReducer from './offset'
 import userPollReducer  from './userpolls'
 import roomCreatePostReducer from './RoomCreatePosts'
 import roomOffsetReducer from './roomOffset'
-
+import roomPostsReducer from './RoomPosts'
 
 
 export const store = configureStore({
@@ -48,7 +48,8 @@ export const store = configureStore({
     onNewPost: onNewPostReducer,
     offset: offsetReducer,
     roomCreatePost:roomCreatePostReducer,
-    roomOffset : roomOffsetReducer
+    roomOffset : roomOffsetReducer,
+    roomPosts : roomPostsReducer
   },
 
   middleware: (getDefaultMiddleware) =>

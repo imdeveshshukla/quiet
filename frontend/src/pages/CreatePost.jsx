@@ -309,7 +309,7 @@ export const CreatePoll = () => {
   const dispatch = useDispatch()
   const Navigate = useNavigate()
   const { roomTitle,roomCreatorId } = useOutletContext()
-  const [selectedOption, setSelectedOption] = useState("");
+  const [selectedOption, setSelectedOption] = useState('');
 
   const handleSelectChange = (event) => {
     setSelectedOption(event.target.value);
