@@ -140,16 +140,16 @@ const Home = () => {
         {`${posts.length === 0 ? "It looks like there's no posts to display." : "You've reached the end of the page!"}`}
       </p>
     }
-    refreshFunction={refresh}
-    pullDownToRefresh={true}
-    pullDownToRefreshThreshold={100}
-    pullDownToRefreshContent={
-      <div className=' flex justify-center'><AnimatedFoldDownArrow className=' text-2xl'/></div>
-    }
-    releaseToRefreshContent={
-      <div className=' grid justify-center'><SmoothLoaderHome/></div>
-    }
-    scrollableTarget="scrollableDiv" // Specify the scrollable div
+    // refreshFunction={refresh}
+    // pullDownToRefresh={true}
+    // pullDownToRefreshThreshold={100}
+    // pullDownToRefreshContent={
+    //   <div className=' flex justify-center'><AnimatedFoldDownArrow className=' text-2xl'/></div>
+    // }
+    // releaseToRefreshContent={
+    //   <div className=' grid justify-center'><SmoothLoaderHome/></div>
+    // }
+    // scrollableTarget="scrollableDiv" // Specify the scrollable div
     >
     {isLogin && <Createpost />}
     <div className="post">

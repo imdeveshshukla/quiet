@@ -73,7 +73,7 @@ function Settings() {
   const nav = useNavigate();
   const validatePassword = (password) => {
 
-    const specialSymbolRegex = /[!@#$%^&*(),.?":{}|<>]/;
+    const specialSymbolRegex = /[!@#$%^&*(),._?":{}|<>]/;
     const letterRegex = /[a-zA-Z]/;
     const numberRegex = /[0-9]/;
     const minLength = 8;
