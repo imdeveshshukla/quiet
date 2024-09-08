@@ -1,22 +1,22 @@
 const SmoothLoaderHome = () => {
     return (
       <svg
-        width="36px"
-        height="36px"
-        viewBox="0 0 50 50"
+        width="24px"
+        height="24px"
+        viewBox="0 0 100 100"
         xmlns="http://www.w3.org/2000/svg"
         fill="currentColor"
+        color='#6c712eb8'
       >
         <circle
-          cx="25"
-          cy="25"
-          r="20"
+          cx="50"
+          cy="50"
+          r="32"
+          strokeWidth="8"
           stroke="currentColor"
-          strokeWidth="5"
+          strokeDasharray="50.26548245743669 50.26548245743669"
           fill="none"
           strokeLinecap="round"
-          strokeDasharray="100"
-          strokeDashoffset="0"
         >
           <animate
             attributeName="stroke-dashoffset"
@@ -25,10 +25,12 @@ const SmoothLoaderHome = () => {
             repeatCount="indefinite"
           />
           <animate
-            attributeName="stroke"
-            values="#727a06;#8b9322;#959b41;#afb467;#e2e4c6"
-            dur="1s"
+            attributeName="transform"
+            type="rotate"
             repeatCount="indefinite"
+            dur="1s"
+            values="0 50 50;360 50 50"
+            keyTimes="0;1"
           />
         </circle>
       </svg>

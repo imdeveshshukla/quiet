@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { v4 as uuidv4 } from 'uuid';
@@ -30,7 +30,6 @@ const Home = () => {
   const onNewPost = useSelector(state => state.onNewPost.value);
   const [reset, setReset] = useState(false);
   const [hasMore, setHasMore] = useState(true);
-
   // Function to get posts and polls
   const getPost = async (reset = false) => {
     setisLoading(true);
@@ -121,15 +120,14 @@ const Home = () => {
 
   // Refresh function for pull down to refresh
   const refresh = async () => {
-    console.log("refresh");
     
     setHasMore(true);
     await handleNewPost(); // Clear posts and reset offsets
   };
-
+  
   return (<>
 
-        <div id="scrollableDiv" className=' xs:pl-8 sm:pl-16 overflow-auto h-fit'>
+<div id="scrollableDiv" className='xs:pl-8 sm:pl-16 overflow-auto h-fit'>
   <InfiniteScroll
     dataLength={posts.length}
     next={fetchMoreData}
@@ -140,19 +138,14 @@ const Home = () => {
         {`${posts.length === 0 ? "It looks like there's no posts to display." : "You've reached the end of the page!"}`}
       </p>
     }
-    refreshFunction={refresh}
-    pullDownToRefresh={true}
-    pullDownToRefreshThreshold={100}
-    pullDownToRefreshContent={
-      <div className=' flex justify-center'><AnimatedFoldDownArrow className=' text-2xl'/></div>
-    }
-    releaseToRefreshContent={
-      <div className=' grid justify-center'><SmoothLoaderHome/></div>
-    }
-    scrollableTarget="scrollableDiv" // Specify the scrollable div
     >
     {isLogin && <Createpost />}
-    <div className="post">
+    <div className='flex items-center justify-end mx-4 mt-3'>
+          <span onClick={() => refresh()} className='bg-[#eff1d3] rounded-full p-1'>
+            {isLoading ? <SmoothLoaderHome /> : <GrRefresh className='cursor-pointer text-[#6c712eb8] text-xl font-extrabold' />}
+          </span>
+        </div>
+    <div className="post" id='post'>
       {posts.length === 0 ? (
         <Postskelton />
       ) : (
