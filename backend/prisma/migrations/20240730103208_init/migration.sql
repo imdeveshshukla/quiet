@@ -1,52 +1,16 @@
 -- CreateTable
 CREATE TABLE "User" (
     "dp" TEXT,
-    "bgImg" TEXT,
     "bio" TEXT,
     "userID" TEXT NOT NULL,
     "username" TEXT NOT NULL,
     "email" TEXT NOT NULL,
     "password" TEXT NOT NULL,
     "isVarified" BOOLEAN NOT NULL DEFAULT false,
-    "leetcode" TEXT,
-    "showLC" BOOLEAN NOT NULL DEFAULT false,
-    "codeforces" TEXT,
-    "showCf" BOOLEAN NOT NULL DEFAULT false,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
     "updatedAt" TIMESTAMP(3) NOT NULL,
 
     CONSTRAINT "User_pkey" PRIMARY KEY ("userID")
-);
-
--- CreateTable
-CREATE TABLE "Poll" (
-    "id" TEXT NOT NULL,
-    "title" TEXT NOT NULL,
-    "description" TEXT,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-    "updatedAt" TIMESTAMP(3) NOT NULL,
-    "userId" TEXT NOT NULL,
-
-    CONSTRAINT "Poll_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "PollOption" (
-    "id" TEXT NOT NULL,
-    "text" TEXT NOT NULL,
-    "pollId" TEXT NOT NULL,
-
-    CONSTRAINT "PollOption_pkey" PRIMARY KEY ("id")
-);
-
--- CreateTable
-CREATE TABLE "Vote" (
-    "id" TEXT NOT NULL,
-    "userId" TEXT NOT NULL,
-    "optionId" TEXT NOT NULL,
-    "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
-
-    CONSTRAINT "Vote_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
@@ -163,18 +127,6 @@ CREATE UNIQUE INDEX "Rooms_id_title_key" ON "Rooms"("id", "title");
 
 -- CreateIndex
 CREATE UNIQUE INDEX "EnrolledRooms_userId_RoomId_key" ON "EnrolledRooms"("userId", "RoomId");
-
--- AddForeignKey
-ALTER TABLE "Poll" ADD CONSTRAINT "Poll_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "PollOption" ADD CONSTRAINT "PollOption_pollId_fkey" FOREIGN KEY ("pollId") REFERENCES "Poll"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Vote" ADD CONSTRAINT "Vote_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE RESTRICT ON UPDATE CASCADE;
-
--- AddForeignKey
-ALTER TABLE "Vote" ADD CONSTRAINT "Vote_optionId_fkey" FOREIGN KEY ("optionId") REFERENCES "PollOption"("id") ON DELETE RESTRICT ON UPDATE CASCADE;
 
 -- AddForeignKey
 ALTER TABLE "Post" ADD CONSTRAINT "Post_userId_fkey" FOREIGN KEY ("userId") REFERENCES "User"("userID") ON DELETE CASCADE ON UPDATE CASCADE;

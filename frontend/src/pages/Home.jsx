@@ -129,7 +129,7 @@ const Home = () => {
 
   return (<>
 
-        <div id="scrollableDiv" className=' overflow-auto h-fit'>
+        <div id="scrollableDiv" className=' xs:pl-8 sm:pl-16 overflow-auto h-fit'>
   <InfiniteScroll
     dataLength={posts.length}
     next={fetchMoreData}

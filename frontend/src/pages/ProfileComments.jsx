@@ -305,7 +305,7 @@ export const UserComment = ({ comment }) => {
 
 
     </div>
-    <div className=' bg-gray-700 h-[1px]'></div>
+    <div className='ml-4 xs:ml-0 mr-4 bg-gray-700 h-[1px]'></div>
 
   </div>)
 }
