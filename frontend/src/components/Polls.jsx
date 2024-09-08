@@ -282,7 +282,7 @@ const Polls = ({ poll, setPollVote, user, inRoom, room, topic, joined }) => {
 
 
             </div>
-            <div className=' bg-gray-700 h-[1px]'></div>
+            <div className=' ml-4 xs:ml-0 bg-gray-700 h-[1px] mr-4'></div>
 
         </div>
     </>
