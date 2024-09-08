@@ -2,6 +2,8 @@ import prisma from "../../db/db.config.js";
 
 export const createPoll = async (req, res) => {
   const { title, options,subCommunity,topic } = req.body;
+  console.log( title, options,subCommunity,topic);
+  
   try {
     const poll = await prisma.poll.create({
       data: {

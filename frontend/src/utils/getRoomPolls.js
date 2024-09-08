@@ -1,12 +1,12 @@
 import axios from "axios";
 import baseAddress from "./localhost";
 
-const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPostsInfo,setisLoading,isLoading,setHasMore,page,title)=>{
-    setisLoading(true);
+const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPostsInfo,isLoading,setHasMore,page,title)=>{
+    
     if (!joined && privateRoom) {
         setHasMore(false);
         dispatch(setHotPost([]))
-        setisLoading(false);
+       
         return;
       }
       else {
@@ -31,13 +31,11 @@ const getRoomsPolls = async(joined,privateRoom,dispatch,setHotPost,clearHotPosts
               setHasMore(false);
             }
 
-            setisLoading(false);
             console.log("InsidegetPolls ",isLoading)
           }
         } catch (error) {
           console.log(error);
           setHasMore(false); // Stop fetching if there's an error
-          setisLoading(false);
           console.log("InsidegetPolls ",isLoading)
         }
   
