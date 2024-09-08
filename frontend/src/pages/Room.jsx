@@ -456,8 +456,8 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
           console.log('Request canceled:', error.message);
         } else {
           console.error(error);
-          setHasMore(false);  // Disable further fetching in case of error
-        } // Stop fetching if there's an error
+          setHasMore(false);
+        }
       }
       
     }
@@ -493,8 +493,6 @@ export const RoomPost = ({title,privateRoom,joined,data})=>{
             loader={<PollSkelton />}
             endMessage={hotposts.length > 0 ? <p className=' text-center font-semibold p-4'>{"You've reached the end of the page!"}</p> : <p className=' text-center font-semibold p-4'>No posts available to display!</p>}
           >
-
-            
 
             <div className="post">
               { 
