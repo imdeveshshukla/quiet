@@ -118,16 +118,18 @@ const signup = async (req, res) => {
       },
     });
     let newUser;
-    if ((isuser &&  isuser.isVarified)|| (isuser && !isuser.isVarified && isuser.email!=email)) {
+    // || (isuser && !isuser.isVarified && isuser.email!=email)
+    if ((isuser &&  isuser.isVarified)) {
       res.status(400).json({ res: "User Already Exists" });
       return;
-    } else if (isuser && !isuser.isVarified && isuser.email==email) {
+    } else if (isuser) {
       newUser = await prisma.user.update({
         where:{
           username: isuser.username
         },
         data:{
           username,
+          email,
           password: hashPass,
         }
       })
@@ -163,7 +165,7 @@ const varifyOtp = async (req, res) => {
     }
     const { userID, otp, email } = req.body;
     if (userID == "" || otp == "") {
-      throw Error(" credetials cannot be empty");
+      return res.status(401).json({ msg: "Invalid Otp" });
     } else {
       const varData = await prisma.userVarify.findUnique({
         where: { userID: userID },
@@ -226,7 +228,8 @@ const varifyOtp = async (req, res) => {
 };
 
 const resendOtp = async (req, res) => {
-  // console.log(req.body);
+   console.log(req.body);
+
   try {
     await sendEmailVarification(req.body, res);
   } catch (error) {

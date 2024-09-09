@@ -18,6 +18,8 @@ import { login } from '../redux/login';
 import { getUserData } from '../App';
 import { show } from '../redux/welcome';
 import { v4 as uuidv4 } from 'uuid';
+import SmoothLoaderN from '../assets/SmoothLoaderN';
+import SmoothLoaderHome from '../assets/SmoothLoaderHome';
 
 
 
@@ -45,6 +47,8 @@ const Signup = () => {
     const passref = useRef();
     const [isLoading, setisLoading] = useState(false)
     const [loading, setLoading] = useState(false)
+    const [sendOtpLoading, setsendOtpLoading] = useState(false);
+    const [verifyLoading, setverifyLoading] = useState(false)
 
 
     const usernameRef = useRef(null);
@@ -109,10 +113,14 @@ const Signup = () => {
 
     const sendOtp = async () => {
         setLoading(true)
+        setsendOtpLoading(true)
+
         try {
             toast.loading("Sending OTP")
             const res = await axios.post(`${baseAddress}auth/signup`, form);
             if (res.status == 202) {
+                setdisable(true);
+                setTimeLeft(60)
                 toast.dismiss();
                 setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email });
                 toast.success("Your OTP is on its way !");
@@ -128,6 +136,7 @@ const Signup = () => {
             }
             console.log(error)
         }
+        setsendOtpLoading(false)
         setLoading(false)
     }
 
@@ -150,46 +159,29 @@ const Signup = () => {
         else {
 
             await sendOtp();
-            setdisable(true);
-            setTimeLeft(60)
 
-            setForm({ username: "", email: "", password: "" })
+
+            // setForm({ username: "", email: "", password: "" })
         }
     }
 
     const resendOTP = async () => {
-        dispatch(loading());
+        console.log("resend");
+
+
         setErrorOtp(null)
-
-        try {
-
-            const res = await axios.post(`${baseAddress}auth/resendotp"`, varifyOtpData);
-            if (res.status == 202) {
-                setTimeLeft(60);
-                setdisable(true)
-                setOnSave(true)
-                setVarifyOtpData({ ...varifyOtpData, userID: res.data.userID, email: res.data.email });
-                toast.success("Your OTP is on its way !");
-            } else if (res.status == 500) {
-                toast.error("Some error occured! Try Again.")
-            }
-
-        } catch (error) {
-            if (error.response.status == 500) {
-                toast.error("Some error occured! Try Again.")
-            }
-            console.log(error);
-        }
-        dispatch(loading());
+        sendOtp()
+       
 
     }
 
     const varifyOtp = async () => {
-        setLoading(true)
+        setverifyLoading(true)
+        toast.loading("Verifying OTP...")
         try {
 
             const res = await axios.post(`${baseAddress}auth/varifyotp`, varifyOtpData);
-            
+
 
 
             if (res.status == 202) {
@@ -200,6 +192,7 @@ const Signup = () => {
                 dispatch(login())
             }
         } catch (error) {
+            toast.dismiss()
             console.log(error);
             if (error.response.status === 401) {
                 toast.error("Invalid OTP!");
@@ -214,7 +207,7 @@ const Signup = () => {
 
 
         }
-        setLoading(false)
+        setverifyLoading(false)
     }
 
 
@@ -257,6 +250,10 @@ const Signup = () => {
     }
 
 
+    const changeEmail = () => {
+        setOtpsent(false)
+    }
+
 
 
 
@@ -269,20 +266,31 @@ const Signup = () => {
             <div className='w-full flex justify-center items-center h-[89.5vh] m-auto '>
                 <div className=' w-[95%] relative xxs:w-[90%]  sm:w-[75%]  md:w-[85%] 2_md:w-[70%] xl:w-[90%] 1_5xl:w-[70%] h-[80%] h-sm:h-[60%] bg-gray-200  rounded-2xl shadow-2xl shadow-current  overflow-auto '>
 
-                <div className="w-full h-full bg-[#6c712e82] rounded-2xl"></div>
+                    <div className="w-full h-full bg-[#6c712e82] rounded-2xl"></div>
 
 
                     <form autoComplete='off' className=' py-4 absolute flex flex-col justify-evenly px-3 xxs:px-6 xs:px-8 sm:px-20 md:px-8 lg:px-16 rounded-2xl bg-white/30 backdrop-blur-md backdrop-brightness-110 border border-white/40 inset-0 gap-4 h-full' onSubmit={(e) => { handleSubmit(e) }}>
 
 
-                        {otpsent ? <><div className=' flex flex-col gap-5'><div className='relative flex flex-col justify-center items-center'>
-                            <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdPassword className=' text-xl' /></span>
-                            <input spellCheck="false" autoFocus value={otp} className=' focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
-                            <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
-                        </div>
-                            <div className='flex justify-center cursor-pointer'><button disabled={loading} onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >{loading ? <SmallLoader /> : <span>Varify OTP</span>}</button></div>
-                            <button disabled={disable} type='button' className=' underline  self-center text-blue-800 text-sm cursor-pointer' onClick={() => resendOTP()}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>
-                        </div>
+                        {otpsent ? <>
+                            <div className=' flex flex-col gap-5'>
+                                <div className='relative flex flex-col justify-center items-center'>
+
+                                    <div className=' relative w-full'>
+                                        <input spellCheck="false" autoFocus value={otp} className=' focus:border-white transition-all ease-in delay-200 outline-none pl-10  pr-4 xxs:px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleOtp(e) }} type='text' name="otp" id="otp" placeholder='Enter OTP' />
+
+                                        <span className='absolute left-2 top-[50%] translate-y-[-50%]'><MdPassword className=' text-xl' /></span>
+                                    </div>
+
+
+                                    <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorOtp}</div>
+
+                                    <button onClick={() => changeEmail()} className=' self-end text-sm text-blue-800 underline'>Change email</button>
+                                </div>
+                                <div className='flex justify-center cursor-pointer'><button disabled={verifyLoading} onClick={() => { varifyOtp() }} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' >{<span>Confirm OTP</span>}</button></div>
+
+                                {sendOtpLoading ? <div className=' self-center'><SmoothLoaderHome /></div> : <button disabled={disable} type='button' className={` underline  self-center ${disable && 'text-gray-500'} text-blue-800 text-sm cursor-pointer`} onClick={() => resendOTP()}>Resend OTP <span className={!disable ? 'hidden' : ''}>({timeLeft}s)</span></button>}
+                            </div>
 
 
                         </> : <><div className='flex flex-col gap-4'>
@@ -292,14 +300,16 @@ const Signup = () => {
                                 <input spellCheck="false" ref={usernameRef} value={form.username} className=' focus:border-white transition-all ease-in delay-200 outline-none  px-10 w-full  bg-transparent border-b-2 border-black py-2 placeholder:text-gray-800' onChange={(e) => { handleChange(e) }} type="text" name="username" id="username" placeholder='Select Username' readOnly />
                                 <div role="alert" style={{ color: "red", fontSize: "12px" }}>{errorUsername}</div>
 
+                                <div className=' absolute right-1 top-3'>{isLoading ? <SmoothLoaderHome /> : <FiRefreshCcw cursor={"pointer"} onClick={() => handleClick()} className=' font-semibold text-xl' />}</div>
+
                             </div>
 
-                            <div className=' flex gap-2 flex-wrap items-center justify-stretch'>
-                                {Array.from(usrnmList).map(username =>(
-                                     <div key={`${uuidv4}@@${username}`} onClick={() => handleSelect(username)} className=' rounded-xl px-2 cursor-pointer bg-[#b1b390] text-gray-900'>{username}</div>
+                            <div className=' w-full flex gap-2 flex-wrap items-center justify-stretch'>
+                                {Array.from(usrnmList).map(username => (
+                                    <div key={`${uuidv4}@@${username}`} onClick={() => handleSelect(username)} className=' rounded-xl text-sm px-2 cursor-pointer bg-[#bdbf99] text-gray-900'>{username}</div>
                                 )
                                 )}
-                                <div className=''>{isLoading ? <SmallLoader /> : <FiRefreshCcw cursor={"pointer"} onClick={() => handleClick()} className=' font-semibold text-xl' />}</div>
+
                             </div>
 
 
@@ -319,7 +329,7 @@ const Signup = () => {
                             </div>
                         </div>
                             <div className='flex justify-center items-center flex-col gap-4'>
-                                {onSave ? <button disabled={loading} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' type="submit">{loading ? <SmallLoader /> : <span>Sign Up</span>}</button> : <button disabled className=' cursor-not-allowed disabled:opacity-60 rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' type="submit">Sign Up</button>}
+                                {onSave ? <button disabled={loading} className=' rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' type="submit">{<span>Sign Up</span>}</button> : <button disabled className=' cursor-not-allowed disabled:opacity-60 rounded-full bg-black text-white px-4 py-2 hover:bg-gray-800' type="submit">Sign Up</button>}
                                 <div> <span>Already an user? <Link to={"/signin"}><span className='underline text-blue-800'>Sign In</span></Link></span> </div>
 
                             </div></>}
