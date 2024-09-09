@@ -144,13 +144,18 @@ export const getUserPolls = async (req, res) => {
           },
         },
         createdBy: true,
+        room:true
       },
       skip:offset,
       take:limit,
     });
-     res.status(200).send(poll);
+    const val = poll.filter((p)=>{
+      return !(p.room?.privateRoom)
+    })
+     return res.status(200).send(val);
   } catch (error) {
-     res.staus(401).send(error);
+      console.log(error);
+     return res.status(401).send(error.message);
   }
 };
 
@@ -232,9 +237,14 @@ export const getUserUpvotes = async (req, res) => {
 
     data.forEach((data) => {
       data.post.upvotes = data.post.upvotes.filter(
-        (upvote) => upvote.commentId === null
+        (upvote) => {
+          return (upvote.commentId === null)
+        }
       );
     });
+    data = data.filter((data)=>{
+      return !(data.post.room?.privateRoom);
+    })
 
     res.status(200).send(data);
   } catch (error) {
