@@ -236,7 +236,7 @@ export const getPopularPosts = async (req, res) => {
 
   try {
     const result = await prisma.$queryRaw`
-  SELECT 
+  SELECT
     p.id,
     p.topic,
     p.title,
@@ -249,7 +249,7 @@ export const getPopularPosts = async (req, res) => {
     p."updatedAt",
     p."subCommunity",
     r."privateRoom",
-    r."title" AS "title",
+    r."title" AS "roomTitle",
     r."CreatorId" AS "CreatorId",
     COALESCE((
       SELECT COUNT(*) 
@@ -280,6 +280,8 @@ export const getPopularPosts = async (req, res) => {
 
   
 let posts = JSON.parse(stringify(result));
+console.log(posts);
+
 
 
 
@@ -316,13 +318,13 @@ let posts = JSON.parse(stringify(result));
       dp:post.dp,
     },
     room:{
-      title:post.title,
+      title:post.roomTitle,
       CreatorId: post.CreatorId,
     },
     upvotes: upvotesByPostId[post.id] || [],
   }));
 
-  console.log(formattedPosts);
+  // console.log(formattedPosts);
   
     res.status(200).send(formattedPosts);
   } catch (error) {

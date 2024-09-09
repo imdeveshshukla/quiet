@@ -32,7 +32,7 @@ const Sidenav = () => {
   const [notJoinedRooms, setNotJoinedRooms] = useState([]);
   const [roomLoader2, setRoomLoader2] = useState(false);
 
-  const [openBar, setOpenBar] = useState(false);
+  const [openBar, setOpenBar] = useState(true);
   const [openBar2, setOpenBar2] = useState(true);
 
   const handleClickOutside = (event) => {
@@ -121,7 +121,7 @@ const Sidenav = () => {
               <div className='flex justify-center gap-2'>
                 <FaHouseUser className=' text-2xl' /><span className=' text-lg font-semibold'>My Rooms</span>
               </div>
-              <span className=''>{openBar2 ? <CiCircleChevDown size={25} /> : <CiCircleChevUp size={25} />}</span>
+              <span className=''>{openBar2 ? <CiCircleChevUp size={25} /> :<CiCircleChevDown size={25} /> }</span>
             </div>
           </button>
 
@@ -149,11 +149,11 @@ const Sidenav = () => {
             <div className='flex items-center gap-2'>
               <RiHomeWifiFill className=' text-2xl' /><span className=' text-lg font-semibold'>Public Rooms</span>
             </div>
-            <span>{openBar ? <CiCircleChevDown size={25} /> : <CiCircleChevUp size={25} />}</span>
+            <span>{openBar ?  <CiCircleChevUp size={25} /> :<CiCircleChevDown size={25} />}</span>
           </div>
         </button>
         <div className={`pl-6 m-4 gap-1 flex flex-col ${!openBar ? `hidden` : ``}`}>
-          {roomLoader2 ? <div className="mx-auto"><SmoothLoader /></div> : (notJoinedRooms?.map(function (val) {
+          {roomLoader2 ? <div className="mx-auto"><SmoothLoader /></div> : (notJoinedRooms.length==0? <div className=' font-ubuntu font-medium text-red-950' >Room not available!</div>: notJoinedRooms?.map(function (val) {
             return <NavLink onClick={() => dispatch(setShowSideNav(false))} key={val.id} to={`/room/${val?.CreatorId}/${val?.title}`} className={({ isActive }) =>
               `w-full flex rounded-xl items-center gap-2 pl-4 py-1 hover:bg-[#65692375] 
               ${isActive ? 'bg-[#65692375] font-semibold' : ''}`
