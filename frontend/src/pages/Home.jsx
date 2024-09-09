@@ -15,8 +15,7 @@ import { setOnNewPost } from '../redux/onNewPost';
 import Polls from '../components/Polls';
 import { clearOffset, setPollOffset, setPostOffset } from '../redux/offset';
 import { addRoomCreatorId, addRoomTitle, setOnNewRoomPost } from '../redux/RoomCreatePosts';
-import SmoothLoader from '../assets/SmoothLoader';
-import { VscFoldDown } from "react-icons/vsc";
+
 import SmoothLoaderHome, { AnimatedFoldDownArrow } from '../assets/SmoothLoaderHome';
 
 
