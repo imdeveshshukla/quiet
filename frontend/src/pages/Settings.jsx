@@ -24,6 +24,7 @@ import { PiCameraPlusLight } from "react-icons/pi";
 import banner from '../assets/banner.png'
 import { updateBgImg } from '../components/Profilecard.jsx';
 import { setBgImg } from '../redux/profile.js';
+import SmoothLoaderN from '../assets/SmoothLoaderN.jsx';
 
 
 
@@ -394,7 +395,7 @@ function Settings() {
                     />
                   </div>
                   <button onClick={() => addLC()} className=' flex  items-center justify-center px-4 bg-[#e3a300] font-medium rounded-md shadow-sm ring-1 ring-inset ring-gray-300 text-sm '>
-                    {isLoading ? <SmoothLoader /> : <span>Add</span>}
+                    {isLoading ? <SmoothLoaderN /> : <span>Add</span>}
                   </button>
                 </div>
                 <div className='mt-1 ml-2' role="alert" style={{ color: "red", fontSize: "12px" }}>{error}</div>
@@ -454,7 +455,7 @@ function Settings() {
                     />
                   </div>
                   <button onClick={() => addCF()} className=' flex  items-center justify-center px-4 bg-[#e3a300] font-medium rounded-md shadow-sm ring-1 ring-inset ring-gray-300 text-sm '>
-                    {isLoading2 ? <SmoothLoader /> : <span>Add</span>}
+                    {isLoading2 ? <SmoothLoaderN /> : <span>Add</span>}
                   </button>
                 </div>
                 <div className='mt-1 ml-2' role="alert" style={{ color: "red", fontSize: "12px" }}>{error2}</div>

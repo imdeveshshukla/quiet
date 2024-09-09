@@ -17,6 +17,7 @@ import { clearOffset, setPollOffset, setPostOffset } from '../redux/offset';
 import { addRoomCreatorId, addRoomTitle, setOnNewRoomPost } from '../redux/RoomCreatePosts';
 
 import SmoothLoaderHome, { AnimatedFoldDownArrow } from '../assets/SmoothLoaderHome';
+import SmoothLoaderN from '../assets/SmoothLoaderN';
 
 
 const Home = () => {
@@ -139,7 +140,7 @@ const Home = () => {
     }
     >
     {isLogin && <Createpost />}
-    <div className='flex items-center justify-end mx-4 mt-3'>
+    <div className='flex items-center justify-end  mx-4 mt-3'>
           <span onClick={() => refresh()} className='bg-[#eff1d3] rounded-full p-1'>
             {isLoading ? <SmoothLoaderHome /> : <GrRefresh className='cursor-pointer text-[#6c712eb8] text-xl font-extrabold' />}
           </span>
