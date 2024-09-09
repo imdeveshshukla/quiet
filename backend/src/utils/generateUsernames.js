@@ -3,6 +3,8 @@ import prisma from "../../db/db.config.js";
 
 
 function generateRandomUsername() {
+  console.log(Math.floor(Math.random() * usernames.length));
+  
     const randomWord = usernames[Math.floor(Math.random() * usernames.length)];
     const randomNumber = Math.floor(1000 + Math.random() * 9000); 
     return `${randomWord}_${randomNumber}`;
