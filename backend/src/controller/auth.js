@@ -359,10 +359,11 @@ const refreshSignIn = async (req, res) => {
         res.status(401).send({ msg: "Invalid Token" });
       }
     } else {
-      res.status(404).send({ msg: "token not found" });
+      res.status(201).send({ msg: "token not found" });
     }
   } catch (error) {
     console.log(error);
+    res.status(500).send({ msg: "Server Issue" });
   }
 };
 

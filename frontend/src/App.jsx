@@ -82,8 +82,8 @@ function App() {
   const navigate = useNavigate();
 
 
+  const visited = localStorage.getItem('visited');
   useEffect(() => {
-    const visited = localStorage.getItem('visited');
     if (!visited) {
       setIsFirstVisit(true);
       localStorage.setItem('visited', 'true');
@@ -132,12 +132,10 @@ function App() {
 
   const sendReq = async () => {
     dispatch(setSkeltonLoader());
+    if(!visited)return;
     try {
       const res = await axios.post(`${baseAddress}auth/refreshsignin`, { withCredentials: true });
       if (res.status == 200) {
-
-
-
         await getUserData({ email: res.data, dispatch });
         toast("Loggin Session Restored", {
           icon: 'ℹ️',
@@ -145,12 +143,16 @@ function App() {
         dispatch(login());
         getUserNotification();
       }
+      else{
+        console.log("token not found");
+      }
     } catch (error) {
       console.log(error);
-      if (error.response?.status == 404) {
-        console.log("token not found");
-      } else if (error.response?.status == 401) {
+      if (error.response?.status == 401) {
         console.log("Invalid token");
+      }
+      else{
+        console.log("Server Issue");
       }
     }
     dispatch(setSkeltonLoader());

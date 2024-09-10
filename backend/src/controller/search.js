@@ -82,7 +82,9 @@ export const getUser = async (req, res) => {
     });
 
     res.status(200).send(user);
-  } catch (error) {}
+  } catch (error) {
+    res.status(400).send("User Not Found");
+  }
 };
 
 export const getUserPosts = async (req, res) => {
