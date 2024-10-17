@@ -101,7 +101,7 @@ function App() {
       navigate("/");
       toast('You are already logged in!', {
         icon: 'ℹ️',
-      });
+      })
     }
   }, [isLogin, location.pathname]);
 
