@@ -25,7 +25,7 @@ Quiet is an anonymous social media platform designed for college users to post t
 ## 🌐 Live Demo
 ### [**bequiet.live**](https://www.bequiet.live/)
 
-## CI/CD
+## Continuous Deployment
 
 ![CICD](https://github.com/user-attachments/assets/f5b0a676-954d-4c82-acbe-a0e14a7aab90)
 
