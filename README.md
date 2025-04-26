@@ -17,8 +17,19 @@ Quiet is an anonymous social media platform designed for college users to post t
 
 - **Cloud Deployment**: Backend hosted on Azure (Dockerized), frontend on Render.
 
+  ## LLD
+
+  ![LLD2](https://github.com/user-attachments/assets/316bec11-b6ba-4a66-b8ba-b123ff4272ac)
+
+
 ## 🌐 Live Demo
 ### [**bequiet.live**](https://www.bequiet.live/)
+
+## CI/CD
+
+![CICD](https://github.com/user-attachments/assets/f5b0a676-954d-4c82-acbe-a0e14a7aab90)
+
+
 
 ## 🛠️ Setup Instructions
 
