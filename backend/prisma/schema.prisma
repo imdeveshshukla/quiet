@@ -91,7 +91,7 @@ model Post{
   topic String?
   title String 
   body String
-  img String?
+  img Json?
   userId String
   user User @relation(fields: [userId], references: [userID],onDelete: Cascade,onUpdate: Cascade)
 
