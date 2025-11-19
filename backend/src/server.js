@@ -18,7 +18,8 @@ const app = express()
 const port = 3000
 const allowedOrigins = [
   'https://www.bequiet.live', 
-  'https://quiet-6jrn.onrender.com'
+  'https://quiet-6jrn.onrender.com',
+  'https://quiet-9tua.onrender.com/'
 ];
 
 const corsOptions = {
