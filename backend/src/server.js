@@ -26,7 +26,7 @@ const corsOptions = {
   credentials: true,
   origin: (origin, callback) => {
     if (process.env.NODE_ENV === 'development') {
-      if (origin === 'http://localhost:5173' || origin==='https://quiet-6jrn.onrender.com') {
+      if (origin === 'http://localhost:5173' || origin==='https://quiet-6jrn.onrender.com' || origin==='https://quiet-9tua.onrender.com') {
         callback(null, true);
       } else {
         callback(new Error('Not allowed by CORS'));
