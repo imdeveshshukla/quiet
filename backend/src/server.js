@@ -17,8 +17,8 @@ dotenv.config({
 const app = express() 
 const port = 3000
 const allowedOrigins = [
-  'https://quiet-9tua.onrender.com/',
-  'https://www.bequiet.live', 
+  'https://quiet-9tua.onrender.com',
+  'https://www.bequiet.live',
   'https://quiet-6jrn.onrender.com',
 ];
 
@@ -49,6 +49,7 @@ const corsOptions = {
     "X-Requested-With",
   ],
 };
+app.use(cors(corsOptions));
 app.use('*',cors(corsOptions));
 app.use(bodyParser.json())
 app.use(express.json());
