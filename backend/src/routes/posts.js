@@ -19,7 +19,7 @@ postRoutes.get("/",(req,res)=>{
 //Post Routes 
 postRoutes.get("/getPost",getPost);
 postRoutes.get("/getaPost",getAPost);
-postRoutes.post("/postWithImg",verifyToken,upload.single('postImg'),createPost);
+postRoutes.post("/postWithImg",verifyToken,upload.array('postImg'),createPost);
 postRoutes.post("/post",verifyToken,createPost);
 postRoutes.delete("/delete",verifyToken,deletePost);
 

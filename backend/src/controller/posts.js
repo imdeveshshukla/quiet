@@ -14,10 +14,14 @@ export const createPost = async (req, res) => {
 
   const userId = req.userId;
 
-  let url = null;
+  let urls = [];
+  console.log(req.files);
   if (req.file) {
     try {
-      url = await uploadOnCloudinary(req.file.path);
+      for (const file of req.files) {
+        const url = await uploadOnCloudinary(file.path);
+        urls.push(url)
+      }
       // console.log("file Object = " + url);
     } catch (err) {
       console.log("Failed To Upload Image\n",err);
@@ -42,7 +46,7 @@ export const createPost = async (req, res) => {
         title: parsedBody.data.title,
         topic: parsedBody.data.topic,
         body: parsedBody.data.body,
-        img: url,
+        img: urls,
         userId: userId, //from middleware
         subCommunity: parsedBody.data.subCommunity || null,
       },
